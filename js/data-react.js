@@ -22,6 +22,80 @@ DEVDOCS.react = {
       icon: 'widgets',
       fiches: [
         {
+          id: 'react-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'Node.js, npm, Vite : pose un environnement React moderne en dix minutes — en comprenant chaque ligne.',
+          intro: 'On ne code pas dans React « à l\'arrache » : le JSX que tu écriras n\'est pas du JavaScript valide pour le navigateur, il faut donc un petit atelier qui le transforme à la volée. Cet atelier, c\'est **Node.js + Vite** — et l\'installer correctement, une fois, est la condition de tout le reste de ce module. Bonne nouvelle : en dix minutes c\'est posé, et cette fiche te fait comprendre chaque commande au lieu de les copier.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi React exige-t-il un « environnement » avant la première ligne ?' },
+            { t: 'p', h: 'Une question juste : le HTML/JS du module précédent s\'ouvrait directement dans le navigateur, pourquoi pas React ? Deux raisons. D\'abord, **JSX** — la syntaxe `<CarteGari />` que tu vas adorer — n\'existe pas dans la loi du navigateur : il faut un traducteur qui la transforme en vrai JavaScript avant d\'envoyer. Ensuite, un projet React s\'assemble en dizaines de fichiers : un **bundler** (Vite) résout les imports, recompile, recharge la page tout seul (HMR), et construit la version de production. Tout l\'« environnement » sert ces deux tâches — traduire et assembler.' },
+            { t: 'p', h: 'Retiens la carte du territoire : **Node.js** est le moteur qui exécute du JavaScript HORS du navigateur — c\'est l\'atelier où tourne Vite (le navigateur, lui, reste la salle d\'exposition). **npm** est le magasin d\'outillage de Node : il télécharge React, Vite et leurs milliers de dépendances. Tu n\'interagiras jamais directement avec Node en développement — tu parles à npm, et npm parle à Node.' },
+            { t: 'h3', h: 'Prérequis : une seule installation, mais critique' },
+            { t: 'table', head: ['Outil', 'Version requise', 'Vérification', 'Rôle'], rows: [
+              ['Node.js LTS', '≥ 18 (idéal : 20 ou 22)', '`node -v` doit répondre `v20.x` ou plus', 'Fait tourner Vite et npm'],
+              ['npm (fourni avec Node)', '≥ 9', '`npm -v`', 'Installe les paquets, lance les scripts'],
+              ['VS Code (recommandé)', 'dernière stable', 'lancer `code .` dans le projet', 'Éditeur + terminal intégré'],
+              ['Git', 'toute version récente', '`git --version`', 'Sauvegardes et GitHub']
+            ] },
+            { t: 'p', h: 'Installer Node depuis nodejs.org (bouton LTS) pose automatiquement npm avec. Si ta machine accueillera plusieurs projets aux exigences différentes, les pros passent plutôt par **nvm** (Node Version Manager) : `nvm install --lts` installe, `nvm use 20` bascule — tu changes de version de Node comme de chaussures. Sans besoin multiple, l\'installateur classique suffit parfaitement.' },
+            { t: 'h3', h: 'Créer le projet : Vite en trois commandes commentées' },
+            { t: 'p', h: 'Pourquoi Vite et pas l\'historique Create React App ? CRA est aujourd\'hui abandonné : lent, non maintenu. Vite fait la même chose en instantané — démarrage en millisecondes, rechargement à chaud immédiat, configuration lisible en un fichier. C\'est la norme communautaire actuelle pour React comme pour Vue.' },
+            { t: 'code', lang: 'bash', label: 'Terminal — création et premier lancement', code:
+'# 1) Créer le projet « boutique-awa » avec le gabarit React officiel\nnpm create vite@latest boutique-awa -- --template react\n#    « npm create » télécharge l\'assistant Vite et génère le squelette\n#\n# 2) Entrer dans le dossier créé\ncd boutique-awa\n#\n# 3) Télécharger React, Vite & co dans node_modules/ (lecture de package.json)\nnpm install\n#\n# 4) Démarrer le serveur de développement\nnpm run dev\n#    → « Local: http://localhost:5173/ » — ouvre cette adresse :\n#      la page Vite + React s\'affiche. L\'atelier fonctionne.' },
+            { t: 'p', h: 'Relis chaque geste : `create vite` ne contient PAS React — c\'est un gabarit qui dit « voici la liste des outils nécessaires » ; `npm install` est le seul moment où les kilos de librairies arrivent vraiment, dans `node_modules/` ; et `npm run dev` lance un PETIT SERVEUR LOCAL qui traduit ton JSX à la volée. Tant que ce serveur tourne, chaque sauvegarde de fichier recharge ton app en millisecondes (c\'est le HMR — Hot Module Replacement).' },
+            { t: 'h3', h: 'La structure générée, dossier par dossier' },
+            { t: 'code', lang: 'text', label: 'boutique-awa/ — après npm create vite', code:
+'boutique-awa/\n├── index.html           # la SEULE page du site : un <div id="root"></div>\n│                        #   vide où React viendra monter l\'app (l\'entrée !)\n├── package.json         # la FICHE D\'IDENTITÉ : scripts + liste des dépendances\n├── vite.config.js       # le réglage de l\'atelier (plugins, alias, proxy API)\n├── .gitignore           # node_modules/ y figure DÉJÀ : jamais versionné\n├── public/              # fichiers servis TELS QUELS (favicon, images fixes)\n└── src/                 # TON travail vit ici\n    ├── main.jsx         # le point d\'entrée JS : monte <App /> dans #root\n    ├── App.jsx          # le composant racine — ta première édition sera là\n    ├── App.css / index.css\n    └── assets/          # images importées (traitées par le build)' },
+            { t: 'table', head: ['Fichier de config', 'À quoi il sert', 'Quand le toucher'], rows: [
+              ['`package.json`', 'Scripts (`dev`, `build`, `preview`) + dépendances exactes', 'Jamais à la main : `npm install` et `npm run` l\'écrivent/lisent pour toi'],
+              ['`vite.config.js`', 'Plugins (React), alias de chemins, proxy vers ton API', 'Quand tu ajoutes un plugin ou dois joindre un backend Laravel'],
+              ['`package-lock.json`', 'Versions EXACTES installées — le contrat du projet', 'Se COMMIT toujours : les autres installent la même chose que toi']
+            ] },
+            { t: 'h3', h: 'npm install, dependencies et devDependencies' },
+            { t: 'p', h: '`npm install` lit `package.json` et remplit `node_modules/` — un dossier qui fait facilement 200 Mo et que tu ne dois JAMAIS copier, envoyer ni commiter (le `.gitignore` le sait déjà). Ce dossier est jetable : supprimé ? `npm install` le recrée à l\'identique grâce au lockfile. Deux familles de paquets : **dependencies** (ce que l\'app utilise en production — `react`, `react-dom`) et **devDependencies** (ce que l\'ATELIER utilise — `vite`, `eslint`). En d\'autres termes : le client final ne reçoit jamais Vite, il ne reçoit que le résultat du build.' },
+            { t: 'h3', h: 'React Developer Tools : l\'extension qui voit l\'arbre' },
+            { t: 'p', h: 'Installe l\'extension « React Developer Tools » (Chrome/Firefox) dès aujourd\'hui : elle ajoute deux onglets aux outils développeur — **Components** (l\'arbre réel de tes composants, avec leurs props et leur state en direct) et **Profiler** (qui re-rend quoi, et pourquoi c\'est lent). Tu n\'en auras besoin qu\'à la fiche State — mais l\'avoir installée t\'évitera de déboguer à l\'aveugle dès les premières listes dynamiques.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`node -v` affiche `v18` minimum — sinon installe/bascule d\'abord (voir l\'erreur n°1 en bas).',
+              '`npm create vite@latest boutique-awa -- --template react` se termine sans message rouge.',
+              '`npm install` termine sur « added N packages » — `node_modules/` existe désormais.',
+              '`npm run dev` affiche l\'URL : `http://localhost:5173/` montre la page Vite + React.',
+              'Dans `src/App.jsx`, change un mot → la page se met à jour SEULE en une fraction de seconde : le HMR prouve que l\'atelier traduit.'
+            ] },
+            { t: 'callout', kind: 'info', h: 'Différences selon l\'OS : les commandes sont IDENTIQUES partout (Node uniformise tout). Deux notes : sur **Windows**, si PowerShell refuse les scripts npm, utilise `npm.cmd run dev` ou règle la politique d\'exécution ; sur **macOS/Linux**, nvm est l\'installation la plus propre. Et si le port 5173 est déjà occupé, Vite en propose un autre automatiquement (5174…) — lis simplement l\'URL affichée.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« React s\'installe comme un logiciel. »** Non : React n\'est que DEUX paquets npm (`react`, `react-dom`) dans ton projet. C\'est Vite qu\'on « installe » une fois par projet — et Node une fois par machine.',
+              '**« `node_modules` fait partie du code, il faut le sauvegarder. »** C\'est le contraire : il est régénéré mot pour mot par `npm install` — le projet voyage sans lui, avec `package.json` + lockfile.',
+              '**« L\'app vit dans `index.html`. »** Le HTML ne contient qu\'une boîte vide `#root`; TOUT le reste est bâti par `src/main.jsx` et React au runtime.',
+              '**« Il faut relancer le serveur à chaque modification. »** Non : le HMR recharge seul, même en conservant l\'état en cours. On ne relance que pour changer la configuration Vite.',
+              '**« npm et npx font la même chose. »** npm installe durablement dans le projet ; npx EXÉCUTE un paquet à la volée sans l\'installer (ex : `npx create-expo-app`, fiche React Native).'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux blocages du premier jour : un Node trop ancien que Vite refuse poliment, et le serveur qui ne trouve pas `vite`… parce que `npm install` n\'a jamais été lancé après la récupération du projet.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Ce chantier posé, tout le module React s\'y déploie : la fiche **Composants & JSX** t\'expliquera pourquoi `App.jsx` retourne ce « HTML dans le JS » que Vite traduit ; la fiche **State & événements** te fera lancer React DevTools pour voir l\'arbre bouger ; et quand tu voudras les données de la Boutique Awa depuis une API, la fiche **Installation de TanStack Query** ajoutera sa couche DANS ce même projet — même `npm install`, même serveur. Garde aussi en tête que `package.json`/`node_modules` sont les mêmes idées que `composer.json`/`vendor` côté **Laravel** : un manifeste, un dossier jetable, un verrou de versions.' },
+          ],
+          errors: [
+            {
+              title: 'Node.js trop vieux pour Vite',
+              bad: 'npm create vite@latest boutique-awa -- --template react\n# …\nnpm run dev\n# →  error: crypto.randomUUID is not a function\n# →  ou avertissement : EBADENGINE  Unsupported engine\n#     wanted: { node: ">=18" }  current: { node: "14.21.3" }\n# Vite refuse de démarrer : le chantier est planté AVANT\n# la première ligne de code.',
+              good: 'node -v            # lire la version réelle : v14 ? trop vieux\nnvm install --lts   # installer la LTS actuelle\nnvm use --lts\nnode -v            # → v20.x : repartir\ncd boutique-awa && npm run dev\n# → la page se lance. La version de Node, c\'est le socle :\n#   on le met à jour AVANT de toucher au projet.',
+              why: 'Les outils front modernes avancent vite, et chaque Vite exige un Node minimum (API crypto, ESM natif…). Un vieux Node — souvent un reste d\'un ancien cours ou d\'un installateur d\'il y a des années — plante avec des messages qui n\'évoquent rien de familier. Le bon geste n\'est jamais de contourner l\'erreur mais de mettre le socle à jour : `node -v`, comparer, `nvm install --lts`. Sur un poste qui trimbale plusieurs projets, nvm rend ce changement indolore.'
+            },
+            {
+              title: 'Oublier npm install après le clone',
+              bad: 'git clone https://github.com/toi/boutique-awa.git\ncd boutique-awa\nnpm run dev\n# →  "vite" n\'est pas reconnu comme une commande interne\n# →  ou : Error: Cannot find module \'vite\'\n# …et pourtant « ça marchait sur l\'autre machine » !',
+              good: 'git clone https://github.com/toi/boutique-awa.git\ncd boutique-awa\nnpm install        # TOUJOURS, après le clone (et après chaque\n                   # pull qui a touché package.json)\nnpm run dev        # → le serveur démarre immédiatement',
+              why: '`node_modules` n\'est JAMAIS versionné (trop gros, régénérable) : le dépôt voyage avec le manifeste (`package.json`) et le verrou (`package-lock.json`), mais sans les paquets eux-mêmes. Toute machine nouvelle commence donc par un projet VIDE d\'outillage — d\'où « vite: command not found ». Le réflexe professionnel, identique au `composer install` de Laravel ou au `pip install -r requirements.txt` de Flask : **clone → install → run**, dans cet ordre, toujours.'
+            }
+          ],
+          related: ['rx-concepts', 'rx-composants-props', 'tq-installation']
+        },
+        {
           id: 'rx-concepts',
           title: 'Composants & JSX',
           icon: 'widgets',

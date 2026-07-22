@@ -27,6 +27,72 @@ DEVDOCS.django = {
       icon: 'flag',
       fiches: [
         {
+          id: 'jd-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'venv, pip install django, startproject, migrations : le projet Django qui démarre sur de bonnes bases.',
+          intro: 'Django arrive « batteries incluses » : admin, ORM, sécurité — mais ces batteries s\'installent proprement, dans une bulle. La recette est la même gymnastique que Flask (venv + pip), avec deux particularités à connaître DÈS le premier jour : le générateur `startproject` qui fabrique la structure, et les **migrations initiales** qui préparent la base — l\'oubli de l\'une ou l\'autre des deux est la première panne classique.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi Django exige un PROJET généré, pas un fichier écrit à la main ?' },
+            { t: 'p', h: 'Flask se résume à quatre lignes dans un `app.py` — Django, non : il pré-suppose une structure (settings, urls, wsgi, apps) cohérente entre une dizaine de fichiers, et une BASE de données prête à recevoir ses tables (sessions, utilisateurs de l\'admin). Écrire cette structure à la main serait dix minutes d\'erreurs garanties. Le générateur officiel `django-admin startproject` la produit en une seconde, testé par des millions de projets. Ton travail n\'est pas de taper cette structure — c\'est de la COMPRENDRE, puis de l\'habiter.' },
+            { t: 'p', h: 'La mécanique reprend les gestes de la fiche **Installation & configuration** du module Flask : une bulle venv (l\'isolement continue d\'exister), `pip install django` dedans, puis les commandes spécifiques Django : `django-admin` pour créer le projet, `manage.py` pour le piloter au quotidien (serveur, migrations, apps). Deux outils distincts, à ne pas mélanger : `django-admin` crée et administre des PROJETS ; `manage.py` est la télécommande du projet courant, qui connaît où est son settings.' },
+            { t: 'h3', h: 'Prérequis : la bulle Python, encore une fois' },
+            { t: 'table', head: ['Outil', 'Version requise', 'Vérification'], rows: [
+              ['Python', '≥ 3.10 (idéal : 3.12)', '`python3 --version`'],
+              ['venv activé', 'La parenthèse `(.venv)` dans l\'invite', '`pip list` est quasi vide AVANT install'],
+              ['Django', '5.x (LTS de préférence)', '`python -m django --version` ou `django-admin --version`']
+            ] },
+            { t: 'code', lang: 'bash', label: 'Terminal — la bulle, réutilisée mot pour mot', code:
+'mkdir boutique-awa && cd boutique-awa\npython3 -m venv .venv\nsource .venv/bin/activate        :: Windows : .venv\\Scripts\\activate\n# l\'invite affiche (.venv) — LA preuve que tu es DANS la bulle.\n\npip install django\n# → « Successfully installed django-5.x asgiref-… sqlparse-… »\n# (asgiref/sqlparse : les dépendances que Django emporte — normales.)\npython -m django --version\n# → 5.0.x : Django est prêt, DANS la bulle uniquement.' },
+            { t: 'h3', h: 'Créer le projet : startproject, puis les migrations oubliées par tous' },
+            { t: 'code', lang: 'bash', label: 'Création, base initiale, premier lancement', code:
+'# 1) Générer le projet « config » dans le dossier COURANT (le point final !)\ndjango-admin startproject config .\n#    le « . » final = ici même (évite le sous-dossier redondant config/config)\n#\n# 2) PRÉPARER LA BASE — l\'étape sauté par tous les tutoriels pressés :\npython manage.py migrate\n#    → crée ~15 tables (users, sessions, admin…) dans db.sqlite3\n#\n# 3) Créer votre première APP métier (l\'unité « boutique »)\npython manage.py startapp catalogue\n#    puis dans config/settings.py, INSTALLED_APPS → ajouter :\n#    "catalogue",   # …sinon ses modèles seront TOUJOURS ignorés !\n#\n# 4) Lancer le serveur de développement\npython manage.py runserver\n#    → « Starting development server at http://127.0.0.1:8000/ »\n#      La page fusée « The install worked successfully! » s\'affiche.' },
+            { t: 'p', h: 'Trois gestes méritent une pause. Le **point final** de `startproject config .` : sans lui, Django crée un sous-dossier redondant — avec lui, le projet vit directement dans ton dossier. Les **migrations initiales** : Django embarque des apps (admin, sessions…) qui ont BESOIN de tables pour fonctionner — `migrate` sans argument les crée toutes dans `db.sqlite3`, SQLite fourni avec Python (zéro installation de base, comme dans Laravel). Et la différence **projet/app** : le PROJET (`config/`) est la configuration du site ; chaque APP est un module métier (catalogue, tontine, livraison) — la fiche **Projet vs apps** la distingue en détail.' },
+            { t: 'h3', h: 'Les fichiers générés, en deux familles' },
+            { t: 'code', lang: 'text', label: 'après startproject + startapp (extrait)', code:
+'boutique-awa/\n├── .venv/              # la bulle (jamais commitée)\n├── db.sqlite3          # la base — UN fichier, créé par migrate\n├── manage.py           # la télécommande du projet (serveur, migrations, apps)\n├── config/             # le PROJET : réglages & URLs racine\n│   ├── settings.py     #   CENTRE DE CONTRÔLE : INSTALLED_APPS, DB, templates…\n│   ├── urls.py         #   la table des matières des routes du site\n│   ├── wsgi.py / asgi.py  # les portes d\'entrée de PRODUCTION\n│   └── __init__.py\n└── catalogue/          # la première APP métier\n    ├── models.py       #   tes tables décrites en classes Python\n    ├── views.py        #   ta logique de pages\n    ├── admin.py        #   l\'enregistrement dans l\'admin gratuit\n    └── migrations/     #   l\'historique du schéma de l\'app' },
+            { t: 'p', h: 'Retiens deux mots et tu ne te perdras jamais : `config/` = le CERVEAU du site (settings, urls racine) ; chaque app (`catalogue/`) = un ORGANE (ses modèles, vues, migrations — indépendantes celles du projet). `manage.py` est la seule commande à connaître : tout part de lui, il sait où est ton `settings.py`. Et `db.sqlite3` se recrée via `migrate` si tu le supprimes par accident — mais les DONNÉES, elles, ne reviennent pas : backup régulier dès que ça compte.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`python3 --version` ≥ 3.10, bulle créée, parenthèse `(.venv)` visible.',
+              '`pip install django` OK, et `python -m django --version` répond 5.x.',
+              '`django-admin startproject config .` fabrique `manage.py` et `config/` sans erreur.',
+              '`python manage.py migrate` crée les tables (« Applying … OK » lignes multiples) — `db.sqlite3` existe.',
+              '`python manage.py startapp catalogue` + `INSTALLED_APPS` modifié (sinon = l\'erreur n°2 en bas).',
+              '`python manage.py runserver` ouvre la page fusée Django sur 8000 — le chantier est prêt, l\'admin sur `/admin/` répond (page de login, pas encore de compte : `createsuperuser` viendra).'
+            ] },
+            { t: 'callout', kind: 'warn', h: 'Piège du port déjà utilisé : un autre `runserver` (ou un `php artisan serve` de Laravel !) occupe 8000 ? `python manage.py runserver 8080`. Et note bien : le serveur de dev est MONOPOLISTE de son terminal — laisse-le tourner dans sa fenêtre, ouvre un SECOND terminal pour les `migrate`/`startapp`. La bulle, elle, s\'active à chaque nouveau terminal (parenthèse, toujours).' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Le venv de Flask ne sert pas pour Django. »** Il ne sert pas POUR DJANGO — mais il sert EXACTEMENT PAREIL : même création, même activation, seul `pip install django` change. La gymnastique est commune aux deux modules.',
+              '**« startproject crée l\'application complète. »** Non : il crée le projet CONFIG (le contenant). Les MORCEAUX métier (catalogue, compte…) sont des APPS à créer séparément — la séparation est voulue.',
+              '**« migrate s\'exécute une fois et jamais plus. »** Tu le relanceras APRÈS chaque modification de `models.py` — c\'est la fiche Migrations toute entière. Ici, il sert simplement à initialiser la base.',
+              '**« db.sqlite3 doit être commité. »** Non (`.gitignore`) : la base locale est un artifact de dev ; elle se recrée via `migrate`. Les MODÈLES et les fichiers de migrations, eux, se committent TOUJOURS.',
+              '**« runserver est le serveur de production. »** Non : il recharge et n\'est pas sécurisé pour du public — il sert le dev uniquement. wsgi.py/asgi.py sont les portes de sortie vers Gunicorn/nginx le jour du déploiement.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux oublis structurants qui ressemblent à des bugs Django : la base jamais initialisée (`no such table` au premier login/admin), et l\'app métier créée mais jamais déclarée dans `INSTALLED_APPS` — ses modèles, invisibles pour toujours.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Tu arrives avec le venv de **Flask** et de **Python** dans les poches — la bulle n\'était qu\'un déplacement. Le projet généré reçoit sa dissection complète dans la fiche **Premier projet & manage.py** (settings, urls, DEBUG), la distinction site/app s\'approfondit dans **Projet vs apps**, et les migrations initiales prennent leur suite logique dans **Migrations & modèles**. Note le parallélisme avec **Laravel** : `startproject` = `composer create-project`, `manage.py` = `php artisan`, `INSTALLED_APPS` = les `ServiceProvider` enregistrés — la structure varie, le mécanisme reste le même.' },
+          ],
+          errors: [
+            {
+              title: 'Migrations initiales jamais lancées',
+              bad: 'django-admin startproject config .\npython manage.py runserver\n# page fusée OK, mais au premier accès à /admin/ ou à une session :\n# →  django.db.utils.OperationalError: no such table: django_session\n# …ou : no such table: auth_user\n# la base SQLite est VIDE : Django a ses tables prévues mais tu n\'as\n# jamais demandé leur création.',
+              good: 'django-admin startproject config .\npython manage.py migrate        # ← L\'étape CRITIQUE d\'initialisation\n#   → Applying contenttypes.0001_initial… OK\n#   → Applying sessions.0001_initial… OK   (≈15 lignes)\npython manage.py runserver\n# → l\'admin répond, les sessions fonctionnent : la base est meublée.',
+              why: 'startproject ne prépare QUE des fichiers — il ne touche JAMAIS la base de données. Or les apps internes de Django (admin, sessions, contenttypes…) SUPPOSENT leurs tables : sans la première `migrate`, chaque appel échoue sur `no such table`. L\'erreur est si fréquente qu\'elle a son folklore (« tu as oublié migrate »), et la règle est absolue : après startproject, puis après chaque `startapp` utilisant des modèles, puis après chaque modification de `models.py` — les Migrations couvriront la suite.'
+            },
+            {
+              title: 'App créée mais oubliée d\'INSTALLED_APPS',
+              bad: 'python manage.py startapp catalogue\n# (fichiers créés, OK) — mais settings.py n\'est PAS touché :\n# config/settings.py → INSTALLED_APPS = [ "django.contrib.admin", … ]\n#                                        catalogue est ABSENT de la liste\npython manage.py makemigrations\n# →  No changes detected\n# pourtant catalogue/models.py décrit des tables — Django ne\n# regarde que les apps DÉCLARÉES. Les modèles restent à jamais virtuels.',
+              good: 'python manage.py startapp catalogue\n# puis ENROLL l\'app — config/settings.py :\nINSTALLED_APPS = [\n    # …contrib django…\n    "catalogue",          # ← la déclaration qui la REND VISIBLE\n]\npython manage.py makemigrations\n#   → migrations/0001_initial pour catalogue : enfin vu. Puis migrate.',
+              why: '`startapp` fabrique les FICHIERS de l\'app, mais Django n\'exécute que ce qui figure dans `INSTALLED_APPS` (la liste des apps « allumées » du projet). L\'oubli est silencieux : aucun message rouge, juste `No changes detected` à vie, et des modèles qui n\'existent que sur papier. Le réflexe est mécanique et sans exception : **tout startapp est suivi immédiatement d\'une ligne dans INSTALLED_APPS** — et de `makemigrations` + `migrate` pour concrétiser.'
+            }
+          ],
+          related: ['jd-demarrage', 'jd-apps', 'jd-settings']
+        },
+        {
           id: 'jd-demarrage',
           title: 'Premier projet & manage.py',
           icon: 'foundation',
@@ -130,7 +196,7 @@ DEVDOCS.django = {
           title: 'URLs : path(), include() & namespaces',
           icon: 'alt_route',
           level: 'Débutant',
-          tagline: 'La cartographie URL → vue, les paramètres typés <int:id>, et {% url %} qui ne casse jamais un lien.',
+          tagline: 'La cartographie URL → vue, les paramètres typés `<int:id>`, et {% url %} qui ne casse jamais un lien.',
           intro: 'Chez Django, le routage est **explicite et centralisé** : pas de décorateur magique sur les vues comme `@app.route` en Flask — un fichier `urls.py` déclare une **liste `urlpatterns`** qui associe chaque motif d\'URL à une vue. C\'est verbeux au premier contact, et c\'est une force : on voit toute la cartographie d\'un coup d\'œil, on la découpe par app avec `include()`, et on la consomme à l\'envers avec le tag `{% url %}`.',
           blocks: [
             { t: 'h3', h: 'La table de routage' },
@@ -153,7 +219,7 @@ DEVDOCS.django = {
             { t: 'callout', kind: 'tip', h: 'Convention `get_absolute_url()` sur les modèles : chaque objet sait où il vit (`return reverse("blog:detail", kwargs={"pk": self.pk})`). Les vues génériques, l\'admin et `redirect(objet)` s\'en servent tous — ajoute-la à chaque modèle principal.' }
           ],
           errors: [
-            { title: 'Deux patterns qui se "volent" les requêtes', bad: 'path("<str:x>/", views.detail),\npath("nouveau/", views.creer),\n# /blog/nouveau/ tombe sur DETAIL (x="nouveau") — jamais sur creer !', good: 'path("nouveau/", views.creer),   # le SPÉCIFIQUE d\'abord\npath("<str:x>/", views.detail),    # le GÉNÉRIQUE ensuite\n# ou typé : path("<int:pk>/" …) qui ne peut pas manger "nouveau"', why: 'urlpatterns est évaluée DANS L\'ORDRE, premier motif gagnant. Un motif large placé avant un motif précis le masque en silence. Règle : du plus spécifique au plus général — et des convertisseurs typés (<int:>, <slug:>) qui limitent naturellement le vol.' },
+            { title: 'Deux patterns qui se "volent" les requêtes', bad: 'path("<str:x>/", views.detail),\npath("nouveau/", views.creer),\n# /blog/nouveau/ tombe sur DETAIL (x="nouveau") — jamais sur creer !', good: 'path("nouveau/", views.creer),   # le SPÉCIFIQUE d\'abord\npath("<str:x>/", views.detail),    # le GÉNÉRIQUE ensuite\n# ou typé : path("<int:pk>/" …) qui ne peut pas manger "nouveau"', why: 'urlpatterns est évaluée DANS L\'ORDRE, premier motif gagnant. Un motif large placé avant un motif précis le masque en silence. Règle : du plus spécifique au plus général — et des convertisseurs typés (`<int:>`, `<slug:>`) qui limitent naturellement le vol.' },
             { title: 'Lien en dur dans les templates', bad: '<a href="/blog/{{ a.pk }}/">Lire</a>\n# casse au premier changement de préfixe, et {% url %} inutilisé', good: '<a href="{% url "blog:detail" pk=a.pk %}">Lire</a>', why: 'Le chemin n\'existe qu\'une fois : dans urls.py. Le dupliquer dans les templates le rend fragile (préfixes, include() déplacés, i18n des URLs). {% url %} + namespaces = la seule source de vérité.' }
           ],
           related: ['jd-vues', 'jd-apps', 'fk-routing', 'jd-templates']
@@ -291,7 +357,7 @@ DEVDOCS.django = {
           ],
           errors: [
             { title: 'Oublier les migrations après modification du modèle', bad: '# ajout d\'un champ dans models.py, puis :\nArticle.objects.create(..., bio="…")\n# django.db.utils.OperationalError: no such column: blog_article.bio', good: 'python manage.py makemigrations blog   # 1. décrire le changement\npython manage.py migrate                # 2. l\'appliquer en base', why: 'Le modèle Python et le SCHÉMA SQL sont deux mondes : seuls makemigrations + migrate les synchronisent. C\'est LE réflexe Django n°1 : tout changement de modèle = les deux commandes, immédiatement (fiche Migrations).' },
-            { title: 'Deux FK vers User sans related_name', bad: 'class Commentaire(models.Model):\n    auteur = models.ForeignKey(User, on_delete=models.CASCADE)\n    approuve_par = models.ForeignKey(User, null=True,\n                                     on_delete=models.SET_NULL)\n# Reverse accessor clash ! (les deux feraient user.commentaire_set)', good: 'auteur = models.ForeignKey(User, related_name="commentaires", …)\napprouve_par = models.ForeignKey(User, related_name="validations", …)', why: 'Le chemin inverse par défaut (<modele>_set) se duplique dès que deux relations visent le même modèle : Django refuse de démarrer avec une erreur "clash". related_name distincts = fin du problème — et des chemins lisibles.' }
+            { title: 'Deux FK vers User sans related_name', bad: 'class Commentaire(models.Model):\n    auteur = models.ForeignKey(User, on_delete=models.CASCADE)\n    approuve_par = models.ForeignKey(User, null=True,\n                                     on_delete=models.SET_NULL)\n# Reverse accessor clash ! (les deux feraient user.commentaire_set)', good: 'auteur = models.ForeignKey(User, related_name="commentaires", …)\napprouve_par = models.ForeignKey(User, related_name="validations", …)', why: 'Le chemin inverse par défaut (`<modele>_set`) se duplique dès que deux relations visent le même modèle : Django refuse de démarrer avec une erreur "clash". related_name distincts = fin du problème — et des chemins lisibles.' }
           ],
           related: ['jd-orm', 'jd-migrations', 'fk-sqlalchemy', 'py-classes']
         },

@@ -25,7 +25,7 @@ DEVDOCS.tailwind = {
         {
           id: 'tw-installation',
           title: 'Installation & configuration',
-          icon: 'tune',
+          icon: 'download',
           level: 'Débutant',
           tagline: 'tailwind.config.js, content paths, @tailwind : le socle à poser UNE fois, correctement.',
           intro: 'Tailwind ne s\'installe pas comme le CSS qu\'on écrit à la main : c\'est un **générateur**. Tu déclares où sont tes fichiers, il scanne chaque classe utilitaire que tu utilises réellement, puis produit une feuille CSS qui ne contient qu\'elles — ni plus, ni moins. Comprendre ce mécanisme (scan, génération, purge) lève 90 % des mystères de l\'installation, et tout le reste du module repose dessus.',
@@ -52,6 +52,11 @@ DEVDOCS.tailwind = {
 '/** @type {import(\'tailwindcss\').Config} */\nmodule.exports = {\n  content: [\n    "./src/**/*.{html,js}",   // TOUS les fichiers où tu écris des classes\n    "./index.html"            // n\'en oublie aucun, sinon : CSS incomplet !\n  ],\n  theme: {\n    extend: {},               // tes personnalisations (fiche « Personnaliser le thème »)\n  },\n  plugins: [],                // les extensions officielles (fiche « Plugins »)\n}' },
             { t: 'p', h: 'La clé `content` est **la ligne vitale** de tout le fichier : elle liste, avec des patterns glob, les fichiers que Tailwind lit pour repérer les classes utilisées. `./src/**/*.{html,js}` se lit « tout fichier `.html` ou `.js`, dans `src` et tous ses sous-dossiers ». Si une classe n\'apparaît littéralement dans aucun de ces fichiers, son CSS ne sera **jamais généré** — c\'est le mécanisme de purge travaillant pour toi, et simultanément la source de l\'erreur n°1 des débutants (voir en bas de fiche).' },
             { t: 'callout', kind: 'warn', h: 'Le scan est **textuel**, pas intelligent : Tailwind cherche des chaînes de caractères complètes, sans exécuter ton code. `const cls = "bg-" + couleur + "-500"` n\'existe nulle part comme chaîne complète → aucune classe `bg-red-500` ne sera générée. Écris toujours les noms de classes EN ENTIER quelque part dans un fichier scanné (la fiche Bonnes pratiques donne les trois solutions pour les cas dynamiques, dont la safelist).' },
+            { t: 'h3', h: 'Le pipeline au quotidien : les scripts npm' },
+            { t: 'p', h: 'Dans un projet sérieux, la longue commande `npx tailwindcss -i … --watch` ne se retape jamais à la main : elle devient un SCRIPT dans `package.json`, mémorisée une fois, appelée par son petit nom. Le duo rituel : `dev` qui surveille pendant que tu écris, `build` qui produit le fichier minifié le jour J. Et si ton pipeline passe par PostCSS (Laravel Mix, certains bundlers Vue), le principe reste le même : Tailwind s\'y enregistre comme plugin, la cascade `input → output` ne change pas.' },
+            { t: 'code', lang: 'json', label: 'package.json — le rituel mémorisé', code:
+'{\n  "scripts": {\n    "dev":   "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",\n    "build": "tailwindcss -i ./src/input.css -o ./dist/output.css --minify"\n  }\n}\n// usage quotidien : npm run dev     (pendant que tu écris)\n// jour de livraison : npm run build  (le fichier de production)' },
+            { t: 'callout', kind: 'info', h: 'Par OS : npm et npx s\'exécutent pareil sur Windows, macOS et Linux — c\'est Node qui uniformise. Seule note : après l\'installation de Node, ROUVRE le terminal pour que le PATH se relise (un terminal ne recharge jamais le PATH à chaud). Un `npx tailwindcss` « commande introuvable » alors que Node vient d\'être installé se résout presque toujours par une NOUVELLE fenêtre de terminal.' },
             { t: 'h3', h: 'Vérifier que tout est branché : le rituel de démarrage' },
             { t: 'ol', items: [
               'Crée `src/input.css` avec les trois lignes `@tailwind base;` `@tailwind components;` `@tailwind utilities;` — c\'est le « plan de fabrication » du fichier final (détail dans la fiche Directives).',

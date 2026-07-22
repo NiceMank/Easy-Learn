@@ -20,6 +20,76 @@ DEVDOCS.laravel = {
       icon: 'architecture',
       fiches: [
         {
+          id: 'lv-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'PHP, Composer, create-project, .env, base de données et artisan serve : l\'atelier Laravel, posé proprement.',
+          intro: 'Avant la première route, il faut l\'atelier : PHP pour exécuter le code, Composer pour télécharger le framework, un projet créé par l\'assistant officiel, un `.env` rempli et une base pour parler données. Cette fiche pose tout, dans l\'ordre, en expliquant le RÔLE de chaque outil — parce que 80 % des « Laravel ne marche pas » des débutants sont en réalité des problèmes d\'environnement, pas de code.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi Laravel ne « se télécharge » pas-t-il comme un simple fichier ?' },
+            { t: 'p', h: 'Une application Laravel n\'est pas un fichier qu\'on pose : c\'est un ASSEMBLAGE — le cœur du framework (des dizaines de paquets), TON code métier au milieu (routes, contrôleurs, vues), et des réglages qui changent d\'une machine à l\'autre (base de données, clés). Télécharger un « laravel.zip » figerait tout ça en bloc. La bonne méthode procède en deux temps : **Composer** crée le squelette frais depuis le gabarit officiel, puis **artisan** (la console intégrée) l\'initialise pour TA machine (clé de chiffrement, base). C\'est le même contrat que npm côté JavaScript : un manifeste, des dépendances versionnées, un dossier `vendor/` jetable.' },
+            { t: 'p', h: 'La carte des outils, une bonne fois : **PHP** est le moteur qui exécute tout (le « Node » du monde PHP). **Composer** est son npm : il lit `composer.json`, télécharge `vendor/`, verrouille les versions dans `composer.lock`. **artisan** est le terminal bilingue de Laravel : il crée projets, contrôleurs, migrations… — tu t\'en serviras à chaque séance. Et le **serveur Web** ? Pendant le développement, c\'est `php artisan serve` qui joue ce rôle — Apache/Nginx n\'interviennent qu\'en production.' },
+            { t: 'h3', h: 'Prérequis : PHP et Composer, dans le bon sens' },
+            { t: 'table', head: ['Outil', 'Version requise', 'Vérification', 'Rôle'], rows: [
+              ['PHP (CLI)', '≥ 8.2 (Laravel 11/12)', '`php -v` DOIT répondre 8.2+', 'Exécute le framework et ton code'],
+              ['Extensions PHP usuelles', 'mbstring, xml, sqlite3/pdo, curl, openssl', '`php -m` les liste', 'Sans elles : erreurs cryptiques à l\'install'],
+              ['Composer', '2.x', '`composer --version`', 'Télécharge et verrouille les paquets'],
+              ['Une base (pour débuter)', 'SQLite — zéro installation', '`php -m` liste `sqlite3`', 'Fichier unique, parfait en dev']
+            ] },
+            { t: 'callout', kind: 'info', h: 'Par OS — la méthode qui coûte le moins de larmes. **Windows/macOS : Laravel Herd** (installateur de la famille Laravel — PHP, Composer, tout pré-câblé en 5 min, l\'équivalent moderne de XAMPP sans les maux de tête PATH). **Linux Ubuntu/Debian : `sudo apt install php-cli php-mbstring php-xml php-sqlite3 php-curl composer`** — chaque extension s\'installe en un paquet séparé, ne les oublie pas. **Windows, sans Herd :** XAMPP marche aussi — mais attends-toi à ajouter PHP au PATH toi-même (l\'erreur n°1 en bas).' },
+            { t: 'h3', h: 'Créer le projet : l\'assistant officiel fait le gros du travail' },
+            { t: 'code', lang: 'bash', label: 'Terminal — de zéro au projet qui tourne', code:
+'# 1) Vérifier le socle — ces deux lignes DOIVENT répondre avant tout :\nphp -v                # → PHP 8.2.x ou plus\ncomposer --version    # → Composer 2.x\n\n# 2) Créer le projet « boutique-awa » (télécharge le framework + le squelette)\ncomposer create-project laravel/laravel boutique-awa\ncd boutique-awa\n\n# 3) La clé de chiffrement (OBLIGATOIRE — sessions, cookies chiffrés)\nphp artisan key:generate\n\n# 4) Créer la base SQLite (un simple fichier) et la préparer\ntype nul > database\\database.sqlite   :: Windows\ntouch database/database.sqlite        # macOS / Linux\nphp artisan migrate                   # crée users, cache, jobs…\n\n# 5) Lancer le serveur de développement\nphp artisan serve\n#   → « Server running on http://127.0.0.1:8000 » —\n#     la page d\'accueil Laravel s\'affiche : l\'atelier fonctionne.' },
+            { t: 'p', h: 'Relis chaque geste : `create-project` télécharge le framework dans `vendor/` ET le squelette applicatif (routes/, app/, config/) — c\'est l\'équivalent de `npm create vite@latest` + `npm install` réunis. `key:generate` écrit une clé dans `.env` : sans elle, tout le chiffrement (sessions !) refuse de tourner — l\'erreur n°2 en bas. `migrate` construit les tables de base (users, cache, jobs) dans ta base fraîche. Et `serve` lance un serveur PHP intégré — pratique en dev, jamais en prod.' },
+            { t: 'h3', h: 'Le fichier .env et la connexion à la base' },
+            { t: 'p', h: '`.env` est le TROUSSEAU de réglages par machine : identifiants de base, clé secrète, URL — différent en dev, en staging, en prod, et JAMAIS commité (`.gitignore` le sait). Laravel le lit à chaque démarrage, et `config/database.php` s\'y réfère. Pour débuter, SQLite est le bonheur : pas de serveur MySQL à installer, un fichier à sauvegarder avec le projet. La fiche **Configuration** du module détaillera `config:cache` et le piège associé ; ici retiens seulement : tu changes `.env`, tu relances `php artisan serve`.' },
+            { t: 'code', lang: 'bash', label: '.env — les lignes qui comptent aujourd\'hui', code:
+'APP_NAME="Boutique Awa"\nAPP_ENV=local              # « local » en dev : erreurs détaillées affichées\nAPP_DEBUG=true             # JAMAIS true en production !\nAPP_KEY=base64:…           # rempli par php artisan key:generate\n\nDB_CONNECTION=sqlite       # la base d\'un fichier — parfait pour débuter\n# (plus tard, MySQL : DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME…)' },
+            { t: 'h3', h: 'Les dossiers que create-project a posés' },
+            { t: 'code', lang: 'text', label: 'boutique-awa/ — le squelette Laravel (extrait)', code:
+'boutique-awa/\n├── artisan              # la console : tout part de « php artisan … »\n├── composer.json        # le manifeste des dépendances (le « package.json » PHP)\n├── composer.lock        # les versions EXACTES installées — à commiter\n├── .env                 # le trousseau de réglages de TA machine — JAMAIS commité\n├── .env.example         # sa version vierge, pour les nouvelles machines\n├── .gitignore           # ignore vendor/ et .env — déjà prêt\n├── app/                 # TON code : Models, Http/Controllers, Policies…\n├── config/              # les réglages du framework (database, session, app…)\n├── database/\n│   ├── migrations/      # les fichiers de schéma (versionnés, comme Git)\n│   └── database.sqlite  # la base d\'un fichier — créée par toi (étape 4)\n├── public/              # la SEULE porte d\'entrée web : index.php\n├── routes/\n│   └── web.php          # tes pages commencent ICI\n├── storage/ + bootstrap/cache/   # logs, caches — doivent rester inscriptibles\n└── vendor/              # le framework téléchargé — jetable, jamais commité' },
+            { t: 'p', h: 'La fiche **Structure, cycle de vie & artisan** dissèque chaque dossier en profondeur — retiens pour l\'instant l\'essentiel : ton code vit dans `app/` et `routes/`, tes RÉGLAGES dans `config/` + `.env`, la base dans `database/`, et `vendor/` se régénère avec `composer install` si tu le supprimes. `public/index.php` est la seule URL que le serveur sert physiquement — tout le reste de l\'application reste INVISIBLE du web, c\'est une sécurité de conception.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`php -v` ≥ 8.2 et `composer --version` répondent tous les deux — sinon l\'OS est le problème, pas Laravel (erreur n°1).',
+              '`composer create-project laravel/laravel boutique-awa` se termine sans rouge — `vendor/` existe.',
+              '`php artisan key:generate` affiche « Application key set successfully » (et `.env` contient `APP_KEY=base64:…`).',
+              '`php artisan migrate` crée les tables sans erreur de connexion (sinon : le fichier `database/database.sqlite` manque, ou `DB_CONNECTION` n\'est pas `sqlite`).',
+              '`php artisan serve` tourne, et `http://127.0.0.1:8000` affiche la page d\'accueil Laravel avec son lien « Documentation ».',
+              'Le terminal où tourne `serve` ne sert à RIEN d\'autre : c\'est la fenêtre du serveur. Ouvrez un SECOND terminal pour jouer avec `php artisan` — et gardez le premier ouvert.'
+            ] },
+            { t: 'callout', kind: 'warn', h: 'Port 8000 déjà pris (un autre serve tourne ailleurs) ? `php artisan serve --port=8080`. Un autre réflexe qui évite 90 % des mystères : quand tu modifies `.env`, REDÉMARRE le serveur (Ctrl+C puis `php artisan serve`) — le fichier n\'est relu qu\'au démarrage.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Composer est un logiciel à ouvrir, comme une application. »** Non : c\'est une COMMANDE de terminal. Tu ne « lances » pas Composer, tu lui donnes des ordres (`create-project`, `install`, `require`) — et il retourne dormir.',
+              '**« `vendor/` fait partie du code, il faut le commiter. »** Non : régénéré par `composer install` — exactement comme `node_modules`. Le dépôt voyage avec `composer.json` + `composer.lock`, jamais avec le fatras.',
+              '**« `php artisan serve` est LE serveur de production. »** Non : c\'est le petit serveur de DEV (mono-processus, PHP embarqué). En production, on passe par Nginx/Apache + PHP-FPM — tu n\'y penseras qu\'au déploiement.',
+              '**« `.env` peut être poussé sur GitHub « vite fait ». »** JAMAIS : il contient la clé de chiffrement et les identifiants de base. C\'est le premier fichier du `.gitignore`. La bonne pratique : committe `.env.example` (vide des secrets), garde le vrai pour toi.',
+              '**« key:generate est optionnel. »** Non : sans APP_KEY, les sessions et les cookies chiffrés plantent (« No application encryption key ») — l\'erreur n°2 ci-dessous, garantie sur tout nouveau clone.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Deux blocages avant tout code : le terminal qui ne connaît pas PHP (le PATH de l\'OS n\'a pas été mis à jour), et le projet clone parfaitement cloné… sauf la clé d\'application jamais régénérée.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Ce chantier est le point de départ physique de tout le module : les dossiers que tu viens de voir apparaître (`routes/`, `app/`, `config/`, `database/`) sont cartographiés un par un dans la fiche **Structure, cycle de vie & artisan** ; le `.env` et son rapport à `config/` fondent la fiche **Configuration** ; et `php artisan migrate` que tu as lancé « pour voir » deviendra une science dans **Migrations**. Composer, lui, a le même vocabulaire que le npm de la fiche **Installation React** — manifeste, lock, dossier jetable — : le modèle mental est déjà fait.' },
+          ],
+          errors: [
+            {
+              title: 'PHP non reconnu dans le terminal (PATH)',
+              bad: 'php -v\n# →  "php" n\'est pas reconnu comme une commande interne ou externe\n# →  ou : command not found: php\n# …alors que XAMPP/Herd EST installé ! Le programme existe sur le\n# disque, Windows/macOS ne sait juste pas où le chercher.',
+              good: '# 1) Windows : ajouter le dossier PHP au PATH\n#    (XAMPP : C:\\xampp\\php ; Herd le fait tout seul)\n#    Panneau de config → Variables d\'environnement → Path → Nouveau\n# 2) FERMER et ROUVRIR le terminal (obligatoire : le PATH est lu\n#    au démarrage du terminal !) puis :\nphp -v\n# → « PHP 8.3.x (cli)… » : enfin reconnu. Sur Linux/macOS, le\n# gestionnaire de paquets (apt/brew/Herd) fait ce travail pour vous.',
+              why: 'Un terminal ne trouve une commande que si son dossier figure dans la variable PATH — liste d\'annuaires où chercher les exécutables. Quand PHP est installé « quelque part » (XAMPP, Herd, apt), il faut : 1) vérifier que ce dossier EST dans le PATH, 2) rouvrir le terminal (il ne relit jamais le PATH à chaud — 9 débutants sur 10 modifient la variable puis testent dans la VIEILLE fenêtre). Dernier piège de la famille : `php` et `php8.3` sont parfois deux noms différents sur Linux — `php -v` répond sur l\'un, pas l\'autre.'
+            },
+            {
+              title: 'APP_KEY manquant (key:generate jamais lancé)',
+              bad: 'git clone https://github.com/equipe/boutique-awa.git\ncd boutique-awa && composer install && php artisan serve\n# page d\'accueil OK, puis au premier login :\n# →  RuntimeException: No application encryption key has been specified.\n# …parce que `.env` n\'est PAS versionné (normal !), et que la clé\n# de CHIFFREMENT n\'a jamais été régénérée sur cette machine.',
+              good: '# après CHAQUE clone, le quartet complet :\ncomposer install\ncp .env.example .env        # recrée le trousseau vide\nphp artisan key:generate    # écrit APP_KEY=base64:… dans .env\nphp artisan migrate         # prépare la base locale\nphp artisan serve           # l\'app tourne, sessions OK',
+              why: 'La clé APP_KEY chiffre sessions et cookies ; sans elle, toute la mécanique d\'authentification s\'arrête net — et l\'erreur n\'apparaît qu\'au premier usage CHIFFRÉ (typiquement le login), pas à la page d\'accueil, d\'où l\'illusion « le clone marche ». `.env` n\'étant jamais versionné, CHAQUE machine (collègue, serveur, ton autre PC) doit refaire le rituel : `.env.example` copié, `key:generate`, `migrate`. C\'est d\'ailleurs exactement ce que font les kits de démarrage Laravel — le rituel n\'est pas une corvée, c\'est le contrat.'
+            }
+          ],
+          related: ['lv-fondamentaux', 'lv-configuration', 'lv-migrations']
+        },
+        {
           id: 'lv-fondamentaux',
           title: 'Structure, cycle de vie & artisan',
           icon: 'account_tree',

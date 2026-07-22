@@ -26,6 +26,77 @@ DEVDOCS.flask = {
       icon: 'flag',
       fiches: [
         {
+          id: 'fk-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'Python, venv, pip install flask : l\'environnement isolé qui rend chaque projet portable.',
+          intro: 'Flask est un module Python parmi d\'autres — son installation tient en une ligne. Toute la professionnalité se joue AVANT : créer un **environnement virtuel** (venv) qui isole ce projet de tous les autres, puis installer dedans. Cette fiche te fait fabriquer cet environnement une bonne fois, le comprendre, et vérifier qu\'il fonctionne — la même gymnastique servira pour **Django**, qui la réutilisera à l\'identique.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi un « environnement virtuel » avant même d\'installer Flask ?' },
+            { t: 'p', h: 'Imagine : la Boutique Awa tourne sous Flask 2.3, et demain tu démarres un scraper qui exige Flask 3.0. Si tout s\'installe « en global » (dans TON Python système), la seconde installation ÉCRASE la première — et la boutique casse le jour où tu la relances, pour une dépendance que tu ne regardais même pas. En Python, on ne partage pas : chaque projet reçoit SA bulle — un dossier avec sa copie de pip et ses paquets à lui. C\'est le `node_modules` local du monde Python, sauf qu\'il faut l\'ACTIVER pour y entrer.' },
+            { t: 'p', h: 'La mécanique tient en trois mots : le venv est un DOSSIER (`.venv/`) créé par le projet, qui contient son Python et sa bibliothèque ; « activer » modifie temporairement TON TERMINAL pour que `python` et `pip` pointent vers ce dossier au lieu du système ; à la fermeture du terminal, tout redevient normal. Rien n\'est « installé » sur ta machine — juste un dossier que tu peux supprimer d\'un coup.' },
+            { t: 'h3', h: 'Prérequis : un Python propre' },
+            { t: 'table', head: ['Outil', 'Version requise', 'Vérification'], rows: [
+              ['Python', '≥ 3.10 (idéal : 3.12)', '`python3 --version` doit répondre'],
+              ['pip (fourni avec Python)', '≥ 23', '`python3 -m pip --version`'],
+              ['Le module venv (intégré)', 'natif depuis Python 3.3', '`python3 -m venv --help` affiche l\'aide']
+            ] },
+            { t: 'p', h: 'Si `python3 --version` ne répond pas, retourne à la fiche **Installation, interpréteur & premier script** du module Python — deux minutes d\'installateur, et pense à cocher « Add Python to PATH » sous Windows. Sur Windows, la commande s\'appelle souvent `python` ; sur macOS/Linux, `python3` — dans cette fiche, `python3` désigne les DEUX selon ta machine.' },
+            { t: 'h3', h: 'Créer la bulle : venv, activer, installer flask' },
+            { t: 'code', lang: 'bash', label: 'Terminal — le trio à refaire dans CHAQUE projet Python', code:
+'# 1) Créer le dossier du projet et y entrer\nmkdir boutique-awa && cd boutique-awa\n\n# 2) Créer la bulle (le dossier .venv/ apparaît dans le projet)\npython3 -m venv .venv\n#    → « avec cet interpréteur (-m), fabrique un venv dans .venv »\n\n# 3) ACTIVER la bulle — l\'étape oubliée par 9 débutants sur 10 :\n.venv\\Scripts\\activate        :: Windows (PowerShell : .venv\\Scripts\\Activate.ps1)\nsource .venv/bin/activate    #  macOS / Linux\n#    → l\'invite change : « (.venv) boutique-awa> » — tu es DANS la bulle.\n\n# 4) Installer Flask DANS la bulle\npip install flask\n#    → téléchargé dans .venv/, le système reste intact.\n#      vérifier : pip show flask' },
+            { t: 'callout', kind: 'tip', h: 'Le marqueur fiable : l\'invite affiche `(.venv)` quand la bulle est active — pas de parenthèses = pas activée, JAMAIS installer dans ce cas. Et `pip install` sans activation vise le Python GLOBAL : on installe dans une bulle ou pas du tout. Astuce anti-galère : `python -m pip install flask` exécute pip via l\'interpréteur appelant — impossible de viser à côté.' },
+            { t: 'h3', h: 'La structure minimale d\'un projet Flask' },
+            { t: 'code', lang: 'text', label: 'boutique-awa/ — la structure de départ qu\'on recommande', code:
+'boutique-awa/\n├── .venv/              # la bulle — JAMAIS commitée (dans .gitignore)\n├── app.py              # le point d\'entrée de l\'application (UN fichier)\n├── requirements.txt    # la LISTE des paquets exacts (pip freeze > …)\n├── .gitignore          # .venv/ + __pycache__/ au minimum\n└── (templates/, static/… viendront quand le projet grandira)' },
+            { t: 'code', lang: 'py', label: 'app.py — le Flask minimal : quatre lignes, un serveur', code:
+'from flask import Flask\n\napp = Flask(__name__)\n\n@app.get("/")\ndef accueil():\n    return "Boutique Awa — bienvenue ! (le serveur répond)"\n\nif __name__ == "__main__":\n    app.run(debug=True)   # dev uniquement : recharge + page d\'erreur détaillée' },
+            { t: 'p', h: 'Le fichier le plus sous-estimé du lot est `requirements.txt` : c\'est le manifeste `package.json` du projet — la liste figée des paquets. On le produit par `pip freeze > requirements.txt` (après chaque install) et on le consomme par `pip install -r requirements.txt` (après chaque clone). Avec lui, n\'importe quelle machine reconstruit la bulle à l\'identique en deux commandes — le venv, lui, ne voyage jamais : chacun le recrée chez soi.' },
+            { t: 'h3', h: 'FLASK_APP & Cie : les variables d\'environnement' },
+            { t: 'p', h: 'Plutôt que `python app.py`, Flask offre sa propre commande `flask run` — plus propre en équipe (port, reload, debug réglables en ligne). Elle cherche l\'application via la variable d\'environnement `FLASK_APP` : pointe-la sur ton fichier (`app` ou `app.py`) une fois par terminal. Et pour les versions modernes de Flask (≥ 2.3), le mode debug de développement s\'active avec `flask --debug run` — `FLASK_ENV` de l\'ancien monde est **déprécié**, ne l\'utilise plus.' },
+            { t: 'code', lang: 'bash', label: 'La seconde façon (recommandée en cours)', code:
+'# une fois par terminal actif dans .venv :\nset FLASK_APP=app.py                     :: Windows\nexport FLASK_APP=app.py                  #  macOS / Linux\n\nflask run                # serveur standard\nflask --debug run        # serveur dev : rechargement auto + page d\'erreur riche\n# → « Running on http://127.0.0.1:5000 »\n# astuce : python-dotenv lit un fichier .env pour ces variables,\n# installé par défaut avec Flask récent → touche finale : oublier les export.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`python3 --version` ≥ 3.10 répond — sinon c\'est la fiche Python d\'abord.',
+              '`python3 -m venv .venv` crée le dossier sans erreur, et l\'activation fait apparaître `(.venv)` dans l\'invite.',
+              '`pip install flask` affiche « Successfully installed flask-3.x » — `pip show flask` le confirme.',
+              '`python app.py` OU `FLASK_APP=app.py` + `flask --debug run` démarre sans rouge.',
+              'Le navigateur sur `http://127.0.0.1:5000` affiche « Boutique Awa — bienvenue ! » : l\'environnement est opérationnel.',
+              '`pip freeze > requirements.txt` produit le manifeste — le projet est prêt à voyager (clone → venv → `-r requirements.txt`).'
+            ] },
+            { t: 'callout', kind: 'info', h: 'Par OS : sous **Windows**, la création du venv et `pip` s\'écrivent souvent sans le « 3 » (`python -m venv .venv`), et l\'activation PowerShell exige parfois `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` une fois. Sous **macOS/Linux**, garde le « 3 » partout (`python3`, même après activation — la bulle aliasera pour toi une fois activée, pas avant). Le port par défaut est **5000** partout : s\'il est pris, `flask run --port=5001`.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Le venv, c\'est optionnel, pour les puristes. »** C\'est le contraire : le jour où deux projets exigent des versions incompatibles du même paquet, sans bulle tu es coincé. Le venv est la norme de tout le monde Python — pas un luxe.',
+              '**« J\'ai créé le venv, donc c\'est bon. »** Créer ne suffit pas : il faut l\'ACTIVER à chaque nouveau terminal. La parenthèse `(.venv)` dans l\'invite est la preuve — pas la création.',
+              '**« Il faut recréer le venv à chaque démarrage de PC. »** Non : la bulle perdure dans `.venv/` — seule l\'activation est à refaire (elle ne survit qu\'à la vie du terminal).',
+              '**« `pip` installe « pour tout le monde ». »** pip installe là où pointe le Python actif : bulle active = dedans ; bulle inactive = système. D\'où le réflexe parenthèses-avant-install.',
+              '**« requirements.txt est à écrire à la main. »** Il s\'écrit tout seul : `pip freeze > requirements.txt` — écris la commande, pas le fichier.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux pièges qui font perdre une heure au nouveau venu : l\'installation partie en global faute d\'activation (flask « introuvable » au lancement — ou pire, en conflit six mois plus tard), et `flask run` qui ne trouve pas l\'application parce que la variable n\'est pas posée OU pas dans le bon dossier.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'L\'environnement est posé : la fiche **Première application, structure & debug** reprend exactement ton `app.py` pour l\'étoffer (routes, paramètres, la fameuse page de debug), la fiche **Routing** les disséquera, et **Requêtes & réponses** branchera tes formulaires. Le venv n\'était qu\'un avant-goût : la fiche **Modules & venv** du module **Python** le décortique (et explique pourquoi on préfère toujours `python -m pip`), et la fiche équivalente de **Django** réutilisera la bulle MOT POUR MOT — même activation, même freeze, seul `pip install django` change.' },
+          ],
+          errors: [
+            {
+              title: 'Oublier d\'activer le venv (install en global)',
+              bad: 'python3 -m venv .venv      # créée, OK…\npip install flask            #  — ATTENTION — SANS activer : installée dans le\n                             # Python SYSTÈME, pas dans .venv/ !\nsource .venv/bin/activate    # on active APRÈS : trop tard, flask\npython app.py                # est en global — la bulle reste vide.\n# → six mois de paquets mélangés en global = conflits garantis',
+              good: 'python3 -m venv .venv\nsource .venv/bin/activate    # ou .venv\\Scripts\\activate (Windows)\n# vérifier TOUT DE SUITE : l\'invite affiche « (.venv) »\npip install flask            # → dans .venv/lib/…, le système intact\npip freeze > requirements.txt\n# test : deactivate → flask introuvable ; ré-activer → flask revient.\n# la bulle fonctionne — et elle s\'appelle « .venv », qu\'on COMMIT JAMAIS.',
+              why: 'Sans activation, `pip` vise le Python SYSTÈME : les paquets s\'y empilent années après années, jusqu\'au conflit de versions insoluble (« projet A exige flask 2, projet B flask 3 »). La bulle évite cela, mais à un prix : l\'habitude musculaire « activation → vérifier la parenthèse → installer ». Deux garde-fous pro : le `.gitignore` qui exclut `.venv/` dès le premier jour, et la forme `python -m pip install …` qui impose l\'interpréteur exact quand le doute subsiste.'
+            },
+            {
+              title: 'FLASK_APP mal posé (ou depuis le mauvais dossier)',
+              bad: 'flask run\n# →  Error: Could not locate a Flask application.\n#     You did not provide the "FLASK_APP" environment variable…\n# alors que app.py existe ! La variable n\'est pas posée dans CE\n# terminal, ou le fichier s\'appelle application.py (pas app.py),\n# ou tu es lancé depuis le dossier PARENT du projet.',
+              good: 'cd boutique-awa                 # d\'abord : ENTRER dans le dossier projet\nsource .venv/bin/activate         # la bulle active\nexport FLASK_APP=app.py           # puis : pointer le BON fichier\nflask --debug run\n# → « Running on http://127.0.0.1:5000 »\n# (si le fichier s\'appelle autrement : FLASK_APP=application.py)\n# pro : python-dotenv (inclus) lit un .env contenant FLASK_APP=app.py\n# — plus d\'export à refaire, jamais.',
+              why: 'Les variables d\'environnement ne vivent que DANS le terminal où elles sont posées : un nouveau terminal repart à zéro. `flask run` cherche aussi l\'app RELATIVEMENT au dossier courant — lancé depuis le mauvais étage, il ne la trouve pas. Le trio fiable : bon dossier (`cd`), bulle active, variable posée — ou un fichier `.env` à la racine lu par python-dotenv, qui fige les trois dans le projet. Si ça rate encore, `flask --help` liste ce qui est cherché : l\'erreur nomme TOUJOURS la variable manquante.'
+            }
+          ],
+          related: ['fk-demarrage', 'fk-routing', 'py-modules-venv']
+        },
+        {
           id: 'fk-demarrage',
           title: 'Première application, structure & debug',
           icon: 'science',
@@ -70,7 +141,7 @@ DEVDOCS.flask = {
           title: 'Routes, URLs dynamiques & url_for',
           icon: 'alt_route',
           level: 'Débutant',
-          tagline: '@app.route, convertisseurs <int:id>, méthodes HTTP — et ne plus JAMAIS écrire une URL à la main.',
+          tagline: '@app.route, convertisseurs `<int:id>`, méthodes HTTP — et ne plus JAMAIS écrire une URL à la main.',
           intro: 'Le routing, c\'est la table des matières de ton application : chaque décorateur `@app.route("/chemin")` associe une URL à une **fonction vue**. Flask va plus loin que les chemins fixes : des segments **dynamiques capturés en arguments**, des filtres par **méthode HTTP**, et surtout `url_for`, qui génère les URLs à partir des noms de vues — fini les chemins bricolés en chaînes.',
           blocks: [
             { t: 'h3', h: 'Segments dynamiques & convertisseurs' },

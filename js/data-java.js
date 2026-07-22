@@ -1285,12 +1285,12 @@ DEVDOCS.java.categories.push(
           blocks: [
             { t: 'p', h: '**Le marqueur officiel** : `@FunctionalInterface` déclare et *fait vérifier par le compilateur* qu\'une interface n\'a qu\'une méthode abstraite. Les méthodes `default`, `static` (et celles héritées d\'`Object` comme `equals`) ne comptent pas. Une interface fonctionnelle peut donc être riche — tant qu\'elle ne demande qu\'UNE seule implémentation.' },
             { t: 'table', head: ['Interface', 'Méthode / signature', 'Question posée', 'Utilisation culte'], rows: [
-              ['Function<T,R>', 'R apply(T)', '« transformer T en R »', 'stream.map(...), andThen'],
-              ['Predicate<T>', 'boolean test(T)', '« faut-il garder T ? »', 'stream.filter(...), removeIf'],
-              ['Consumer<T>', 'void accept(T)', '« consommer T »', 'forEach(...), andThen'],
-              ['Supplier<T>', 'T get()', '« fournir T »', 'orElseGet(...), fabriques lazy'],
-              ['UnaryOperator<T>', 'T apply(T)', 'Function<T,T> (même type)', 'List.replaceAll(...)'],
-              ['BiFunction<T,U,R>', 'R apply(T, U)', '« combiner un couple »', 'Map.merge(...), reduce']
+              ['`Function<T,R>`', 'R apply(T)', '« transformer T en R »', 'stream.map(...), andThen'],
+              ['`Predicate<T>`', 'boolean test(T)', '« faut-il garder T ? »', 'stream.filter(...), removeIf'],
+              ['`Consumer<T>`', 'void accept(T)', '« consommer T »', 'forEach(...), andThen'],
+              ['`Supplier<T>`', 'T get()', '« fournir T »', 'orElseGet(...), fabriques lazy'],
+              ['`UnaryOperator<T>`', 'T apply(T)', '`Function<T,T>` (même type)', 'List.replaceAll(...)'],
+              ['`BiFunction<T,U,R>`', 'R apply(T, U)', '« combiner un couple »', 'Map.merge(...), reduce']
             ] },
             { t: 'h3', h: 'La composition : des petites pièces, des machines' },
             { t: 'code', lang: 'java', label: 'Assembler les comportements', code:

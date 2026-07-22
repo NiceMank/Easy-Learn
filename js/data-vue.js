@@ -27,6 +27,73 @@ DEVDOCS.vue = {
       icon: 'rocket_launch',
       fiches: [
         {
+          id: 'vue-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'npm create vue@latest : le gabarit officiel, ses questions, et le serveur Vite prêt à coder.',
+          intro: 'Vue se laisse essayer en une balise `script` (le CDN de la fiche suivante le prouve) — mais un vrai projet Vue, avec ses composants en fichiers `.vue`, exige le même atelier que React : Node, un bundler (Vite), un serveur de dev. La bonne nouvelle : c\'est EXACTEMENT le même geste, `npm create vue@latest` au lieu de `create vite` — et l\'assistant te pose quelques questions qui méritent d\'être comprises plutôt que validées au hasard.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi un gabarit officiel (et pas un .vue écrit à la main) ?' },
+            { t: 'p', h: 'Un composant Vue moderne vit dans un fichier `.vue` (template + script + style dans UN seul fichier — tu adoreras cette fiche SFC) — mais aucun navigateur ne lit les `.vue` : il faut un atelier qui les compile en JS. `npm create vue@latest` est le gabarit officiel : il prépare Vite (le compilateur/serveur), le routeur si tu le demandes, Pinia pour l\'état global, ESLint/Prettier pour la propreté — une architecture éprouvée en 30 secondes, sans que tu aies à assembler ces pièces à la main.' },
+            { t: 'p', h: 'Et l\'atelier est familier : c\'est le même Node, le même Vite, le même `npm run dev` que la fiche **Installation React** — parce que Vue ET React s\'appuient sur Vite comme moteur de dev. Seul le gabarit change ; le modèle mental (transpilation à la volée, rechargement à chaud, `node_modules` jetable) est identique. Sur une machine où React tourne déjà, tu es prêt en avance.' },
+            { t: 'h3', h: 'Prérequis : Node, toujours lui' },
+            { t: 'table', head: ['Outil', 'Version requise', 'Vérification'], rows: [
+              ['Node.js LTS', '≥ 18 (idéal : 20/22)', '`node -v`'],
+              ['npm (avec Node)', '≥ 9', '`npm -v`'],
+              ['VS Code + extension Vue (Volar)', 'dernière stable', 'l\'extension Vue - Official active'],
+              ['Vue DevTools (navigateur)', 'extension Chrome/Firefox', 'l\'onglet Vue apparaît en F12, sur la page de dev']
+            ] },
+            { t: 'p', h: 'Si `node -v` reste muet, retourne d\'abord à la fiche **Installation React** : elle installe Node de A à Z — la même installation sert ici, 1 pour 1. Et installe **Vue DevTools** dès aujourd\'hui : elle montre l\'arbre des composants, leurs données réactives en direct (les `ref` que tu découvriras) — l\'équivalent React a sa propre extension, celle-ci parle Vue.' },
+            { t: 'h3', h: 'Les questions du générateur : répondre en connaissance de cause' },
+            { t: 'p', h: '`npm create vue@latest` pose des questions interactives. Voici les réponses de raison pour un projet d\'apprentissage sérieux — et pourquoi : **Router ? OUI** (navigation entre pages — indispensable à toute boutique) ; **Pinia ? OUI** (l\'état global, le panier partagéé entre composants) ; **TypeScript ? NON pour débuter** (il s\'ajoutera plus tard sans douleur) ; **ESLint ? OUI** (la grammaire contrôlée — on ne négocie pas la propreté) ; **Prettier ? Oui** si proposé. Les autres (tests, E2E) se remettent à plus tard : tu peux toujours les ajouter, jamais les retirer facilement.' },
+            { t: 'code', lang: 'bash', label: 'Terminal — création et premier lancement', code:
+'# 1) Lancer le générateur officiel Vue\nnpm create vue@latest boutique-awa\n#    Questions posées (réponses recommandées pour débuter) :\n#      Add Vue Router ?        → Yes   (navigation catalogue → produit)\n#      Add Pinia ?             → Yes   (le panier partagé entre pages)\n#      Add TypeScript ?        → No    (tu l\'ajouteras quand tu voudras)\n#      Add ESLint ?            → Yes   (le correcteur intégré)\n#      Add Prettier ?          → Yes\n#      (Tests / E2E / JSX…)    → No    (plus tard, sans risque)\n\n# 2) Installer les dépendances — incontournable :\ncd boutique-awa\nnpm install\n\n# 3) Démarrer le serveur de développement\nnpm run dev\n# → « Local: http://localhost:5173/ » — la page Vue+Vite s\'affiche.' },
+            { t: 'p', h: 'Note le point commun avec React : le générateur ne fait que PRÉPARER `package.json` — c\'est `npm install` qui télécharge vraiment les kilos d\'outillage dans `node_modules/`. Et `npm run dev` = même serveur Vite, même port 5173, même rechargement à chaud : si les deux tournent ensemble, ils se décalent automatiquement (5174) — lis l\'URL affichée.' },
+            { t: 'h3', h: 'La structure générée, dossier par dossier' },
+            { t: 'code', lang: 'text', label: 'boutique-awa/ — après npm create vue', code:
+'boutique-awa/\n├── index.html           # une boîte vide <div id="app"> où Vue montera\n├── package.json         # scripts (dev/build) + dépendances\n├── vite.config.js       # l\'atelier : plugin Vue, alias « @ » vers src/\n├── public/              # fichiers servis tels quels (favicon…)\n└── src/\n    ├── main.js          # l\'entrée : crée l\'app, monte le routeur et Pinia\n    ├── App.vue          # le COMPOSANT RACINE (template+script+style en un)\n    ├── assets/          # images, CSS global\n    ├── components/      # TES petits composants réutilisables (.vue)\n    ├── views/           # les PAGES (accueil, catalogue…) — côté routeur\n    ├── router/          # index.js : la table des routes (si tu as dit oui)\n    └── stores/          # les stores Pinia (état global du panier, par ex.)' },
+            { t: 'p', h: 'Deux lignes d\'attention à `main.js` : il crée l\'application (`createApp(App)` — rencontré aussi au CDN de la fiche suivante), lui BRANCHE le routeur et Pinia (`app.use(router)`), et la monte sur `#app`. Tous les `app.use(…)` lu dans la suite du module s\'empilent ici, avant `app.mount()`. Et `App.vue` accueille `<RouterView />` : la pièce que le routeur change selon l\'URL — tes pages vivent dans `views/`, vos petits blocs réutilisables dans `components/`.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`node -v` ≥ 18 répond — sinon, installation du socle (fiche Installation React).',
+              '`npm create vue@latest boutique-awa` pose ses questions ; tu réponds en lisant pourquoi (routeur + Pinia oui).',
+              '`npm install` se termine sans rouge — `node_modules/` existe, `package-lock.json` est né.',
+              '`npm run dev` affiche l\'URL : http://localhost:5173 montre « Vite + Vue » avec le compteur cliquable.',
+              'Édite `src/App.vue` (un mot du titre) : la page se met à jour SEULE — l\'atelier compile tes `.vue`.',
+              'Vue DevTools (F12 → onglet Vue) montre l\'arbre `App → HelloWorld` : l\'inspecteur fonctionne.'
+            ] },
+            { t: 'callout', kind: 'info', h: 'Par OS : identique à React — les commandes sont celles de Node, PORTAGÉES par lui. Windows : si PowerShell bloque le script, `npm.cmd run dev`. macOS/Linux : nvm reste la voie propre. Et si le port est pris, Vite décale tout seul — un réflexe qui vaut pour tout l\'écosystème.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Vue et React ont des besoins totalement différents. »** Non : même Node, même Vite, même `npm create` — seul le GABARIT (les fichiers de départ) diffère. Apprendre l\'atelier d\'un framework, c\'est apprendre l\'atelier de tous les Vite-based.',
+              '**« Les questions du générateur sont accessoires — on dit oui à tout. »** Répondre au hasard c\'est payer plus tard : récupérer le routeur APRES coup coûte une installation manuelle (+ câbler main.js) ; dire oui à tout te noie dans des dossiers à ignorer. Réfléchis à chaque question.',
+              '**« `createApp` n\'arrive qu\'avec Vite. »** Non : c\'est l\'API officielle de Vue — la fiche suivante l\'utilise via CDN, sans aucun build. La différence : avec Vite, les COMPOSANTS vivent dans des fichiers `.vue` compilés ; sans, tout tient dans le script de la page.',
+              '**« Il faut relancer le serveur à chaque modification de code. »** Non : HMR recharge tout seul, état conservé. On ne relance qu\'après avoir touché `vite.config.js`.',
+              '**« npm create installe Vue sur la machine. »** Non : rien ne s\'installe « sur la machine » — tout vit dans le projet. Chaque projet porte son Vue, sa version, ses plugins : la portabilité parfaite.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Deux mésaventures de premier lancement : taper `npm run dev` hors du dossier du projet (le terminal ne trouve pas `package.json` — et hurle ENOENT), et cocher les options du gabarit au hasard puis regretter l\'absence du routeur le jour où la page « détail produit » arrive.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'L\'atelier posé, la fiche **Créer et monter une application** fait écho : le même `createApp`/`mount()` y est présenté en version CDN — tu comprendras la différence entre les deux mondes, et pourquoi Vite. La fiche **Composants monofichiers (SFC)** expliquera la magie `.vue` que Vite compile, **Vite & vue.config** approfondira la configuration, et **Le routing** ouvrira `router/index.js` que le gabarit vient de créer. Côté cousins, c\'est la même maison que React (**Installation & configuration**) — même serveur de dev, même `node_modules` jetable : le modèle ne s\'apprend qu\'une fois.' },
+          ],
+          errors: [
+            {
+              title: 'npm run dev lancé hors du dossier projet',
+              bad: 'npm create vue@latest boutique-awa\nnpm run dev\n# →  npm error code ENOENT\n#     npm error syscall open … package.json\n#     npm error enoent Could not read package.json\n# normal : le terminal cherche package.json DANS LE DOSSIER COURANT\n# — il n\'est pas où tu te trouves, il est dans boutique-awa/.',
+              good: 'cd boutique-awa      # d\'abord : ENTRER dans le projet\nnpm install          # (toujours, la première fois)\nnpm run dev          # → Local: http://localhost:5173/\n# réflexe universel : « cd dans le dossier du projet » AVANT\n# toute commande npm — npm travaille TOUJOURS là où tu es.',
+              why: 'npm n\'explore pas le disque : il travaille dans le dossier COURANT — un `package.json` s\'y trouve ou la commande échoue. L\'erreur ENOENT après création de projet est presque toujours un oubli de `cd` (la commande est affichée en fin de générateur, relisez !). C\'est LE réflexe universel du développement moderne : place-toi dans le projet, puis commande — identique chez React, Vite, npm, Composer, pip.'
+            },
+            {
+              title: 'Répondre au hasard aux questions du générateur',
+              bad: 'npm create vue@latest boutique-awa\n# Add Vue Router?        → <Entrée> (Non) — « on verra »\n# Add Pinia?             → <Entrée> (Non)\n# …une semaine plus tard : la page /produit/42 doit exister —\n# sans routeur, il faut TOUT installer manuellement :\n#  npm install vue-router + créer router/index.js + câbler\n#  main.js + reconfigurer App.vue (au prix de bugs d\'assemblage)',
+              good: 'npm create vue@latest boutique-awa\n# réponses réfléchies, pour un projet qui grandira :\n#   Router → Yes   Pinia → Yes   ESLint → Yes   Prettier → Yes\n#   TypeScript → No (pour l\'apprentissage ; ajout plus tard = 5 min)\n# c\'est gratuit au moment du scaffold — cher à installer après, quand\n# des dizaines de fichiers supposent déjà son absence.',
+              why: 'Le gabarit n\'est pas un quiz à passer vite : chaque question configure DE VRAIS fichiers (`router/index.js`, `stores/`, le câblage de `main.js`) qu\'il est long de reproduire cohérentement à la main. Dire « oui » coûte un dossier vide que tu ignoreras ; dire « non » au routeur t\'obligera à tout ajouter à la main au moment le plus chargé du projet. La règle pro des scaffolds : lis chaque question, et prends ce qui répond à « en aurai-je besoin dans 3 mois ? » — la réponse étant presque toujours oui pour le routeur.'
+            }
+          ],
+          related: ['vue-demarrage', 'vue-sfc', 'vue-vite']
+        },
+        {
           id: 'vue-demarrage',
           title: 'Créer et monter une application',
           icon: 'rocket_launch',
@@ -218,7 +285,7 @@ DEVDOCS.vue = {
             { t: 'callout', kind: 'tip', h: 'Un composant lourd (graphe, éditeur riche) affiché deux fois par session ? `v-if`, pour ne pas payer sa création inutilement. Un panneau qu\'on ouvre/ferme en boucle ? `v-show`, pour des bascules instantanées et un état conservé.' }
           ],
           errors: [
-            { title: 'v-if et v-for sur le MÊME élément', lang: 'html', bad: '<li v-for="t in taches" v-if="t.visible" :key="t.id">…</li>\n<!-- t n\'existe pas encore à l\'évaluation de v-if → erreur -->', good: '<template v-for="t in taches" :key="t.id">\n  <li v-if="t.visible">…</li>\n</template>\n<!-- ou mieux : filtrer la liste dans une computed (fiche v-for) -->', why: 'Quand les deux cohabitent sur un élément, v-if est évalué EN PREMIER et n\'a pas accès à la variable de boucle : bug garanti. Imbrique via <template>, ou filtre la liste en amont avec une propriété calculée.' },
+            { title: 'v-if et v-for sur le MÊME élément', lang: 'html', bad: '<li v-for="t in taches" v-if="t.visible" :key="t.id">…</li>\n<!-- t n\'existe pas encore à l\'évaluation de v-if → erreur -->', good: '<template v-for="t in taches" :key="t.id">\n  <li v-if="t.visible">…</li>\n</template>\n<!-- ou mieux : filtrer la liste dans une computed (fiche v-for) -->', why: 'Quand les deux cohabitent sur un élément, v-if est évalué EN PREMIER et n\'a pas accès à la variable de boucle : bug garanti. Imbrique via `<template>`, ou filtre la liste en amont avec une propriété calculée.' },
             { title: 'Croire que v-show retire du DOM (et y laisser un secret)', lang: 'html', bad: '<div v-show="estAdmin">Soldes internes, marges…</div>\n<!-- présent dans le code source, un simple F12 l\'affiche -->', good: '<div v-if="estAdmin">Soldes internes…</div>\n<!-- et surtout : vraie autorisation vérifiée CÔTÉ SERVEUR -->', why: 'v-show masque visuellement : le contenu reste inspectable dans le HTML. Tout ce qui est sensible exige v-if — et rien de confidentiel ne devrait de toute façon arriver au navigateur sans contrôle serveur.' }
           ],
           related: ['vue-v-for', 'vue-transitions', 'js-conditions']
@@ -359,7 +426,7 @@ DEVDOCS.vue = {
           ],
           errors: [
             { title: 'Utiliser this en Composition API', lang: 'js', bad: 'setup() {\n  this.compteur++;   // undefined : pas de this dans setup()\n}', good: 'setup() {\n  const compteur = ref(0);\n  compteur.value++;\n  return { compteur };\n}', why: 'this est la machine de l\'Options API ; setup() s\'exécute AVANT la création de l\'instance et n\'y a pas accès. En Composition, tout passe par des variables locales explicites — c\'est justement ce qui rend la logique extractible en composables.' },
-            { title: 'Oublier le return dans setup() (forme classique)', lang: 'js', bad: 'setup() {\n  const compteur = ref(0);\n  // template : {{ compteur }} → vide, warning "property not found"\n}', good: 'setup() {\n  const compteur = ref(0);\n  return { compteur };   // seul ce qui est retourné est exposé\n}\n// ou mieux : <script setup>, qui expose tout automatiquement', why: 'Seul l\'objet retourné par setup() est visible du template. Oublier le return donne des interpolations vides sans gros message d\'erreur — d\'où l\'attrait de <script setup>, qui ne connaît pas ce problème.' }
+            { title: 'Oublier le return dans setup() (forme classique)', lang: 'js', bad: 'setup() {\n  const compteur = ref(0);\n  // template : {{ compteur }} → vide, warning "property not found"\n}', good: 'setup() {\n  const compteur = ref(0);\n  return { compteur };   // seul ce qui est retourné est exposé\n}\n// ou mieux : <script setup>, qui expose tout automatiquement', why: 'Seul l\'objet retourné par setup() est visible du template. Oublier le return donne des interpolations vides sans gros message d\'erreur — d\'où l\'attrait de `<script setup>`, qui ne connaît pas ce problème.' }
           ],
           related: ['vue-script-setup', 'vue-ref', 'vue-composables', 'rx-hooks-custom']
         },
@@ -388,7 +455,7 @@ DEVDOCS.vue = {
           ],
           errors: [
             { title: 'Importer defineProps depuis "vue"', lang: 'js', bad: 'import { defineProps } from "vue";   // inutile — et trompeur\nconst props = defineProps({ titre: String });', good: 'const props = defineProps({ titre: String });\n// macro de compilation : s\'utilise telle quelle, sans import', why: 'defineProps/defineEmits/defineModel sont transformés à la compilation et n\'existent pas comme exports runtime. Les importer "au cas où" révèle — et entretient — la confusion entre macro et fonction ordinaire.' },
-            { title: 'Croire que le parent atteint tout via une ref de template', lang: 'js', bad: '// Parent : enfantRef.value.reset()\n// → TypeError : reset is not a function\n// Enfant en <script setup> : function reset() {…}  (non exposée)', good: '// Enfant :\nfunction reset() { formulaire.value = {}; }\ndefineExpose({ reset });   // la liste blanche explicite\n// Parent : enfantRef.value.reset()  → ok', why: '<script setup> rend le composant fermé par défaut : seules les fonctions passées à defineExpose franchissent la frontière. C\'est l\'encapsulation appliquée aux composants — documente ta surface publique avec defineExpose.' }
+            { title: 'Croire que le parent atteint tout via une ref de template', lang: 'js', bad: '// Parent : enfantRef.value.reset()\n// → TypeError : reset is not a function\n// Enfant en <script setup> : function reset() {…}  (non exposée)', good: '// Enfant :\nfunction reset() { formulaire.value = {}; }\ndefineExpose({ reset });   // la liste blanche explicite\n// Parent : enfantRef.value.reset()  → ok', why: '`<script setup>` rend le composant fermé par défaut : seules les fonctions passées à defineExpose franchissent la frontière. C\'est l\'encapsulation appliquée aux composants — documente ta surface publique avec defineExpose.' }
           ],
           related: ['vue-api-styles', 'vue-props', 'vue-emits', 'vue-sfc']
         }
@@ -595,7 +662,7 @@ DEVDOCS.vue.categories.push(
             { t: 'p', h: '`<KeepAlive>` en bonus : il suspend les composants inactifs au lieu de les détruire — l\'onglet quitté conserve son état (saisie, position de scroll) et revient instantanément. Le coût : de la mémoire pour les onglets dormants.' }
           ],
           errors: [
-            { title: 'Composant non résolu : import absent ou casse différente', lang: 'html', bad: '<template><liste-taches /></template>\n<!-- [Vue warn]: Failed to resolve component: liste-taches\n     → rien ne s\'affiche -->', good: '<script setup>\nimport ListeTaches from "./ListeTaches.vue";\n<\/script>\n<template><ListeTaches /></template>   <!-- ou <liste-taches /> -->', why: 'En <script setup>, un composant doit être IMPORTÉ pour exister dans le template. Le warning "failed to resolve component" signifie presque toujours : import oublié, ou orthographe/casse différente entre la balise et l\'import.' },
+            { title: 'Composant non résolu : import absent ou casse différente', lang: 'html', bad: '<template><liste-taches /></template>\n<!-- [Vue warn]: Failed to resolve component: liste-taches\n     → rien ne s\'affiche -->', good: '<script setup>\nimport ListeTaches from "./ListeTaches.vue";\n<\/script>\n<template><ListeTaches /></template>   <!-- ou <liste-taches /> -->', why: 'En `<script setup>`, un composant doit être IMPORTÉ pour exister dans le template. Le warning "failed to resolve component" signifie presque toujours : import oublié, ou orthographe/casse différente entre la balise et l\'import.' },
             { title: 'Découper trop tard : le composant-cathédrale', lang: 'js', bad: '// PageCommande.vue : 900 lignes — articles + client + paiement + récap\n// chaque modification casse trois sujets, tests impossibles', good: '// PageCommande.vue orchestre ;\n// LigneArticle.vue, AdresseClient.vue, RecapCommande.vue\n// portent chacun UN sujet, testable et réutilisable', why: 'Un composant devient pénible exactement quand on ne peut plus le décrire en une phrase. Découper tôt coûte peu (props/events) ; découper tard coûte une réécriture.' }
           ],
           related: ['vue-props', 'vue-emits', 'vue-slots', 'vue-pinia']
@@ -623,7 +690,7 @@ DEVDOCS.vue.categories.push(
           ],
           errors: [
             { title: 'Chercher une donnée de l\'enfant dans le contenu du slot', lang: 'html', bad: '<Liste :utilisateurs="users">\n  <p>{{ utilisateur.nom }}</p>\n  <!-- undefined : ce contenu vit dans la portée du PARENT -->\n</Liste>', good: '<Liste :utilisateurs="users">\n  <template #ligne="{ utilisateur }">\n    <p>{{ utilisateur.nom }}</p>   <!-- fourni par le slot de l\'enfant -->\n  </template>\n</Liste>', why: 'Le contenu placé entre les balises est compilé avec les données du parent. Les données internes de l\'enfant ne remontent que via les bindings du slot — c\'est exactement le rôle du scoped slot.' },
-            { title: 'Contenu qui atterrit dans le mauvais slot', lang: 'html', bad: '<Carte>\n  <h3>Titre</h3>            <!-- ira au slot PAR DÉFAUT, pas à "entete" -->\n  <template #pied>…</template>\n</Carte>', good: '<Carte>\n  <template #entete><h3>Titre</h3></template>\n  Contenu du slot par défaut…\n  <template #pied>…</template>\n</Carte>', why: 'Seul un <template #nom> vise un slot nommé ; tous les éléments « en vrac » alimentent le slot par défaut. Résultat classique de l\'erreur : un titre affiché au mauvais endroit — ou deux fois si le slot par défaut est aussi rendu.' }
+            { title: 'Contenu qui atterrit dans le mauvais slot', lang: 'html', bad: '<Carte>\n  <h3>Titre</h3>            <!-- ira au slot PAR DÉFAUT, pas à "entete" -->\n  <template #pied>…</template>\n</Carte>', good: '<Carte>\n  <template #entete><h3>Titre</h3></template>\n  Contenu du slot par défaut…\n  <template #pied>…</template>\n</Carte>', why: 'Seul un `<template #nom>` vise un slot nommé ; tous les éléments « en vrac » alimentent le slot par défaut. Résultat classique de l\'erreur : un titre affiché au mauvais endroit — ou deux fois si le slot par défaut est aussi rendu.' }
           ],
           related: ['vue-composants', 'vue-props', 'vue-emits']
         }
@@ -921,7 +988,7 @@ DEVDOCS.vue.categories.push(
             { t: 'p', h: '`<TransitionGroup>` exige des **clés** (comme v-for) et rend une vraie balise conteneur (`tag="ul"`). La classe `-move`, appliquée automatiquement aux éléments déplacés, donne l\'effet "réorganisation douce" des apps natives — c\'est de l\'animation FLIP calculée pour toi.' }
           ],
           errors: [
-            { title: 'Transition sans enfant conditionné (ou avec deux) : rien ne joue', lang: 'html', bad: '<Transition><div>Toujours là</div></Transition>          <!-- jamais de cycle -->\n<Transition><div v-if="a">A</div><div v-if="b">B</div></Transition> <!-- warning -->', good: '<Transition mode="out-in">\n  <div v-if="a" key="a">A</div>\n  <div v-else key="b">B</div>\n</Transition>', why: '<Transition> n\'orchestre que l\'entrée/sortie d\'UN enfant (v-if, v-show, :is). Sans variation, il ne se passe rien ; avec deux enfants, il refuse. Bascule unique + key distinctes lui permettent d\'identifier qui entre et qui sort.' },
+            { title: 'Transition sans enfant conditionné (ou avec deux) : rien ne joue', lang: 'html', bad: '<Transition><div>Toujours là</div></Transition>          <!-- jamais de cycle -->\n<Transition><div v-if="a">A</div><div v-if="b">B</div></Transition> <!-- warning -->', good: '<Transition mode="out-in">\n  <div v-if="a" key="a">A</div>\n  <div v-else key="b">B</div>\n</Transition>', why: '`<Transition>` n\'orchestre que l\'entrée/sortie d\'UN enfant (v-if, v-show, :is). Sans variation, il ne se passe rien ; avec deux enfants, il refuse. Bascule unique + key distinctes lui permettent d\'identifier qui entre et qui sort.' },
             { title: 'Entrée qui joue, sortie qui saute : durée mal placée', lang: 'css', bad: '.fondu-leave-active { opacity: .2s; }\n/* propriété inexistante : durée calculée = 0 → l\'élément est retiré net */', good: '.fondu-enter-active,\n.fondu-leave-active {\n  transition: opacity .3s ease;   /* Vue LIT la durée réelle pour la sortie */\n}', why: 'Vue détermine QUAND retirer l\'élément en lisant transition-duration / animation-duration calculées. Une faute de frappe (ou une durée sur la mauvaise classe) = sortie amputée : l\'entrée glisse, la sortie coupe.' }
           ],
           related: ['vue-v-if', 'vue-v-for', 'css-transitions-animations', 'vue-composants']

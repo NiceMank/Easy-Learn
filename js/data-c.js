@@ -991,7 +991,7 @@ DEVDOCS.c.categories.push(
           ] },
           { t: 'h3', h: 'Le piège feof() — le plus grand classique' },
           { t: 'p', h: '`feof(f)` ne devient vrai qu\'**APRÈS une lecture qui a échoué** sur la fin — pas avant. La boucle `while (!feof(f)) { fread(...); traiter(...); }` traite donc le dernier bloc UNE FOIS DE TROP (lecture infructueuse, données périmées). Le pattern correct : boucler SUR le retour de fread/fgets — la condition de sortie et la réussite sont la même information : `while (fread(&e, sizeof e, 1, f) == 1) { … }`.' },
-          { t: 'callout', kind: 'warn', h: 'Portabilité : une struct écrite brute avec fwrite n\'est relisible correctement que par un programme compilé pareil (même padding, même endianness, mêmes tailles — fiche packing). Un format échangé se spécifie octet par octet, types fixes <stdint.h>, jamais "dump de struct".' }
+          { t: 'callout', kind: 'warn', h: 'Portabilité : une struct écrite brute avec fwrite n\'est relisible correctement que par un programme compilé pareil (même padding, même endianness, mêmes tailles — fiche packing). Un format échangé se spécifie octet par octet, types fixes `<stdint.h>`, jamais "dump de struct".' }
         ],
         errors: [
           { title: 'Boucler sur feof() en tête', lang: 'c', bad:

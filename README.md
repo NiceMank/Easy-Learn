@@ -1,6 +1,6 @@
 # Easy Learn — Documentation Interactive (style iOS)
 
-Site de documentation personnelle pour **HTML, CSS, JavaScript, TypeScript, React JS, Tailwind CSS, PHP, Laravel, TanStack Query, Python, Flask, Django, Vue.js, React Native, Node.js & Express, Langage C et Java**, en pur HTML/CSS/JS vanilla, sans build ni dépendance (hors CDN des icônes Google Material Symbols Rounded). **364 fiches** au total.
+Site de documentation personnelle pour **HTML, CSS, JavaScript, TypeScript, React JS, Tailwind CSS, PHP, Laravel, TanStack Query, Python, Flask, Django, Vue.js, React Native, Node.js & Express, Langage C et Java**, en pur HTML/CSS/JS vanilla, sans build ni dépendance (hors CDN des icônes Google Material Symbols Rounded). **371 fiches** au total.
 
 ## Lancer le site
 
@@ -114,7 +114,7 @@ Adossé à la documentation : **85 exercices répartis sur les 17 modules** (5 p
 
 Le contenu et l'application sont validés par des harnais Node (dans `/tmp`, recréables à volonté) :
 
-- `validate.js` — 364 fiches sur 17 modules : IDs uniques, champs requis, blocs bien formés, liens `related` existants, highlighter non vide.
+- `validate.js` — 371 fiches sur 17 modules : IDs uniques, champs requis, blocs bien formés, liens `related` existants, highlighter non vide.
 - `exocheck.js` — 85 exercices : structure complète (énoncé, contraintes, 3 indices, solution + explication, critères, variantes, liens vers des fiches réelles), 1 gratuit Fondamentaux par module, garde-fous anti-emoji/CJK.
 - `exodom.js` — exécute les solutions des exercices front dans jsdom : 15/15 tests verts (15 autres skippés car ils exigent un CDN réseau).
 - `smoke.js` — 113 assertions jsdom sur le site assemblé : section théorique (non-régression complète) + parcours Exercices (hub 17 cartes, verrouillage, paywall, activation par clé démo, checklist, solution après tentative, révocation).

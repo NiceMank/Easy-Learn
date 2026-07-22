@@ -20,6 +20,70 @@ DEVDOCS.tanstack = {
       icon: 'cloud_sync',
       fiches: [
         {
+          id: 'tq-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: '@tanstack/react-query, QueryClient, Provider et DevTools : le socle qui rend vos données serveur civilisées.',
+          intro: 'TanStack Query ne remplace ni React ni votre API : c\'est une **couche de cache intelligente** posée ENTRE les deux — elle gère le chargement, le re-téléchargement, le partage des données entre composants. Mais cette couche n\'existe que si trois pièces sont posées correctement : le paquet, le `QueryClient` (le coffre), et le `QueryClientProvider` (la prise qui le rend accessible partout). Cette fiche les pose une fois, proprement, et explique pourquoi chaque détail compte.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi TanStack Query a-t-il besoin d\'une « mise en place » ?' },
+            { t: 'p', h: 'La bibliothèque tient une promesse énorme : « donne-moi une clé et une fonction de téléchargement, je gère cache, chargement, erreurs et synchronisation ». Pour tenir cette promesse, elle doit mémoriser les réponses quelque part — et ce « quelque part » doit être UNIQUE pour toute l\'application : quand le composant Panier demande les produits 3 500 F, il doit trouver le cache rempli par le composant Catalogue. D\'où l\'architecture : UN `QueryClient` (le coffre à cache), UN `QueryClientProvider` qui l\'offre en contexte React, et des composants en dessous qui puisent dedans.' },
+            { t: 'p', h: 'Analogie Boutique Awa : le `QueryClient`, c\'est le REGISTRE unique du marché où chaque échoppe note ses stocks — s\'il y en avait un par stand, deux échoppes afficheraient des prix différents. Le `Provider` est l\'affichage de ce registre à l\'entrée du marché : n\'importe quel stand (composant) peut le consulter. Installer TanStack Query, c\'est ouvrir ce registre avant d\'ouvrir les stands.' },
+            { t: 'h3', h: 'Prérequis : un projet React qui tourne' },
+            { t: 'table', head: ['Outil', 'Version conseillée', 'Vérification'], rows: [
+              ['Projet React (Vite recommandé)', 'React ≥ 18', 'le `npm run dev` de la fiche précédente affiche la page'],
+              ['Node.js LTS', '≥ 18', '`node -v`'],
+              ['Le paquet TanStack Query', '`@tanstack/react-query` v5', 'apparaît dans `package.json` après install']
+            ] },
+            { t: 'p', h: 'Cette fiche suppose le projet de la fiche **Installation React** (ou n\'importe quel projet React existant). Note version : le paquet s\'appelle bien `@tanstack/react-query` — l\'ancien nom `react-query` (v3) est mort, n\'installe jamais l\'ancien. La v5 est l\'API que tout ce module utilise.' },
+            { t: 'h3', h: 'Poser les trois pièces, une par une' },
+            { t: 'p', h: 'Pièce n°1, le paquet : une seule ligne de magasin. Pièce n°2, le `QueryClient` : l\'objet-cerveau où vit le cache. Et l\'habitude qui sauve des heures : on le crée HORS du composant (au niveau du module), sinon chaque re-rendu de `App` fabricait un coffre NEUF — cache vidé en silence. Pièce n°3, le `Provider` : il « branche » le coffre sur le contexte React, exactement comme un thème ou un routeur le feraient.' },
+            { t: 'code', lang: 'bash', label: 'Terminal — installation du paquet', code:
+'# depuis la racine du projet React (boutique-awa/)\nnpm install @tanstack/react-query\n# optionnel mais vivement recommandé : les DevTools\nnpm install -D @tanstack/react-query-devtools\n# npm installe, puis vérifie package.json :\n#   "dependencies":    { "@tanstack/react-query": "^5.x", … }\n#   "devDependencies": { "@tanstack/react-query-devtools": "^5.x", … }' },
+            { t: 'code', lang: 'jsx', label: 'src/main.jsx — le câblage complet, commenté ligne à ligne', code:
+'import React from "react";\nimport ReactDOM from "react-dom/client";\nimport { QueryClient, QueryClientProvider } from "@tanstack/react-query";\nimport { ReactQueryDevtools } from "@tanstack/react-query-devtools";\nimport App from "./App.jsx";\n\n// Pièce 2 : le coffre à cache — créé ICI, une fois, hors de tout composant\n// (créé dans App, il serait recréé → cache vidé à chaque re-rendu !)\nconst queryClient = new QueryClient({\n  defaultOptions: {\n    queries: {\n      staleTime: 60_000,        // une donnée « fraîche » pendant 1 min :\n                                // pas de re-téléchargement incessant entre vues\n      retry: 2                  // réseau capricieux (3G) : 2 essais avant erreur\n    }\n  }\n});\n\nReactDOM.createRoot(document.getElementById("root")).render(\n  <React.StrictMode>\n    {/* Pièce 3 : le registre est affiché à l\'entrée — TOUTE l\'app en dessous */}\n    <QueryClientProvider client={queryClient}>\n      <App />\n      {/* DevTools : l\'inspecteur du cache, visible en dev, absent de la prod */}\n      <ReactQueryDevtools initialIsOpen={false} />\n    </QueryClientProvider>\n  </React.StrictMode>\n);' },
+            { t: 'h3', h: 'Pourquoi le Provider doit-il être à la RACINE ?' },
+            { t: 'p', h: 'Le `Provider` n\'a d\'effet que sur sa DESCENDANCE : tout composant SOUS lui peut appeler `useQuery`, aucun composant au-dessus ou à côté. Le placer trop bas — autour d\'une seule page — c\'est fabriquer DEUX coffres : les données partagées entre la page Catalogue et la page Panier ne se rencontreraient jamais, et tu perdrais le bénéfice principal (le partage de cache). La règle sans exception : **directement autour de `<App />`**, au plus haut — avec le routeur en dessous, lui aussi a besoin du cache.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`npm install @tanstack/react-query` termine sans erreur rouge et ajoute la ligne au `package.json`.',
+              '`main.jsx` contient les trois pièces : imports, `const queryClient = new QueryClient()` HORS du composant, `<QueryClientProvider client={queryClient}>` autour de `App`.',
+              '`npm run dev` redémarre sans erreur — la page s\'affiche EXACTEMENT comme avant (le provider est invisible, c\'est normal).',
+              'Le petit logo TanStack Query flotte en bas de l\'écran (les DevTools) : un clic ouvre l\'inspecteur du cache — pour l\'instant vide, la fiche **useQuery** le remplira.',
+              'Test de l\'inspecteur : supprime volontairement le Provider → console rouge « No QueryClient set » ; remets-le → tout repartir. Tu as compris physiquement à quoi il sert.'
+            ] },
+            { t: 'callout', kind: 'info', h: 'DevTools et production : `ReactQueryDevtools` n\'est inclus que dans le bundle de développement — en build `npm run build`, Vite les retire (process.env.NODE_ENV), zéro poids pour le client final. Installe-les donc sans arrière-pensée : elles ne partiront jamais chez l\'utilisateur, et elles t\'expliqueront mieux que mille console.log pourquoi une requête se relance.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Le QueryClient, c\'est la base de données. »** Non : c\'est un CACHE en mémoire — il retient les réponses de VOTRE API entre deux composants/deux pages. Coupé la connexion, il ne fabrique rien.',
+              '**« Un seul provider pour toute l\'app, ça va à l\'encontre du découpage par page. »** C\'est précisément l\'inverse : le coffre DOIT être unique pour que la page Panier bénéficie du cache de la page Catalogue. Découper ici = deux registres discordants.',
+              '**« `new QueryClient()` dans le composant, « comme ça il reste à jour ». »** C\'est l\'anti-pattern n°1 : chaque re-rendu jette le coffre et en refabrique un NEUF — le cache se vide à chaque render, les requêtes repartent, et l\'app « clignote ».',
+              '**« Les DevTools alourdissent l\'utilisateur final. »** Non : elles n\'existent qu\'en build de développement ; le build de production les exclut.',
+              '**« react-query (sans @tanstack) est la bonne installation. »** Non : c\'est l\'ancienne v3. Le paquet actuel est `@tanstack/react-query`, v5 — vérifier dans `package.json` qu\'il commence bien par @tanstack.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Deux câblages qui semblent « aller » — jusqu\'à ce que le cache disparaisse silencieusement : le Provider planté trop bas dans l\'arbre, et le QueryClient recréé à chaque rendu faute d\'avoir été externalisé.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Tu as posé l\'infrastructure sur laquelle TOUT ce module se branche : la fiche **State serveur vs state client** explique pourquoi ce coffre remplace à lui seul moitié de ton `useState` ; **useQuery** remplira le cache vidé que tu observe dans les DevTools ; **Mutations & invalidation** fera circuler l\'ordre « invalide » du même coffre. Côté amont, tout part du projet de la fiche **Installation React** — même `npm install`, même `main.jsx`, même serveur Vite. Et note la symétrie : `QueryClientProvider` et `ThemeProvider`/`Router` se placent exactement au même endroit — tout ce qui doit « exister partout » monte à la racine de l\'arbre React.' },
+          ],
+          errors: [
+            {
+              title: 'Le QueryClientProvider planté trop bas (ou oublié)',
+              bad: 'function Catalogue() {\n  return (\n    <QueryClientProvider client={queryClient}>\n      <ListeProduits />  {/* useQuery marche ICI… */}\n    </QueryClientProvider>\n  );\n}\nfunction Panier() {\n  return <ResumePanier />;  {/* « No QueryClient set » KO écran rouge\n       ou pire : un DEUXIÈME coffre, jamais partagé avec Catalogue */}\n}',
+              good: '// main.jsx — le coffre est affiché UNE fois, à l\'entrée :\n<QueryClientProvider client={queryClient}>\n  <App />   {/* catalogue, panier, compte : tout le monde partage\n                 LE MÊME cache — c\'est la raison d\'être de l\'outil */}\n</QueryClientProvider>',
+              why: 'Le Provider agit par CONTEXTE : seuls ses descendants voient le cache. Placé autour d\'une page, tous les composants hors de cette branche héritent d\'un vide (« No QueryClient set, useQuery… ») — ou d\'un second coffre concurrent si on « répare » en dupliquant le Provider. Le partage du cache entre vues étant LE bénéfice central de TanStack Query, la règle est absolue : UN provider, à la racine, autour de tout — routeur inclus.'
+            },
+            {
+              title: 'Recréer le QueryClient à chaque rendu',
+              bad: 'function App() {\n  const queryClient = new QueryClient();   // DANS le composant !\n  return (\n    <QueryClientProvider client={queryClient}>\n      <Catalogue />\n    </QueryClientProvider>\n  );\n}\n// chaque re-rendu de App → un NOUVEAU coffre vide :\n// le cache clignote, les requêtes re-téléchargent en boucle,\n// les DevTools affichent un cache qui se remplit… et se vide.',
+              good: '// HORS du composant, au niveau du module :\nconst queryClient = new QueryClient();\n\nfunction App() {\n  return (\n    <QueryClientProvider client={queryClient}>\n      <Catalogue />\n    </QueryClientProvider>\n  );\n}\n// (variante pro : useState(() => new QueryClient()) si le client\n//  doit ABSOLUMENT vivre dans le composant — jamais neuf à l\'œil nu.)',
+              why: 'Un composant React est une fonction qui se ré-exécute à chaque rendu ; tout objet créé à l\'intérieur est JETÉ à chaque passage. Le `QueryClient` étant le contenant du cache, le recréer revient à vider le sac à dos à chaque pas de course. D\'où la règle intangible : le coffre vit au niveau du module (ou dans un `useState` initialisateur si le contexte l\'exige), et le Provider ne reçoit jamais qu\'une référence stable. Le symptôme fétiche, dans les DevTools : les données qui « sautent » dès qu\'un onglet change.'
+            }
+          ],
+          related: ['tq-concepts', 'tq-usequery', 'react-installation']
+        },
+        {
           id: 'tq-concepts',
           title: 'State serveur vs state client',
           icon: 'cloud_sync',

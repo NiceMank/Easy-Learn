@@ -30,6 +30,85 @@ DEVDOCS.rn = {
       icon: 'smartphone',
       fiches: [
         {
+          id: 'rn-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'Expo, create-expo-app, Expo Go : ton app sur ton PROPRE téléphone en dix minutes, sans installer un seul SDK.',
+          intro: 'Installer React Native « complet » (Android Studio, Xcode, SDK de 15 Go) est la première épreuve qui décourage la moitié des débutants. Expo est l\'autre voie : un cadre qui te dispense de tout ça — l\'app tourne dans **Expo Go**, une application gratuite installée sur ton téléphone, et tu codes depuis l\'ordinateur. Cette fiche te met debout avec Expo, t\'explique le choix Expo vs CLI, et te fait voir ton app sur TON écran de téléphone — à Dantokpa comme ailleurs, c\'est le déclic.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi deux voies — et pourquoi Expo d\'abord ?' },
+            { t: 'p', h: 'React Native compile du JavaScript vers les composants NATIFS du téléphone — et compiler pour Android exige traditionnellement l\'ensemble du SDK Android (Android Studio, émulateurs, GB de téléchargements), pour iOS un Mac + Xcode. Autant dire l\'Everest en tongs. **Expo** contourne le problème : son application **Expo Go** CONTIENT déjà ce qui est nécessaire pour faire tourner ton code — l\'ordinateur n\'a plus qu\'à servir le JavaScript au téléphone via le réseau. Tu codes, tu sauvegardes, le téléphone se met à jour. Tu gardes l\'envie d\'apprendre, c\'est le but.' },
+            { t: 'table', head: ['', 'Expo (recommandé pour débuter)', 'React Native CLI (« bare »)'], rows: [
+              ['Installation initiale', 'Node uniquement — zéro SDK', 'Android Studio + SDK (et Xcode sur Mac)'],
+              ['Voir l\'app', 'Expo Go sur TON téléphone (ou émulateur)', 'Émulateur Android / simulateur iOS d\'abord'],
+              ['Modules natifs avancés (Bluetooth spécifique…)', 'Via les librairies Expo (couvre 95 % des besoins)', 'Accès total, natif custom sans limites'],
+              ['Quand y aller', 'Tout le début + la plupart des apps pro', 'Quand un module natif indisponible l\'exige (ça peut ne JAMAIS arriver)']
+            ] },
+            { t: 'p', h: 'La fiche **Expo ou React Native CLI ?** reprendra ce choix en profondeur plus tard — pour l\'instant retiens la règle de départ : commence par Expo GO, tu pourras « éjecter » vers le CLI le jour où une librairie native introuvable dans Expo l\'exigera (et tu découvriras que ce jour n\'arrive presque jamais ; la majorité des applis pro restent sur Expo, builds compris).' },
+            { t: 'h3', h: 'Prérequis : ordinateur + téléphone + même Wi-Fi' },
+            { t: 'table', head: ['Côté', 'Il te faut', 'Vérification'], rows: [
+              ['Ordinateur', 'Node.js LTS ≥ 18 (même socle que React)', '`node -v`'],
+              ['Téléphone', 'L\'app **Expo Go** (Play Store / App Store)', 'L\'app s\'ouvre et affiche un scanner QR'],
+              ['Réseau', 'PC et téléphone sur le MÊME Wi-Fi', 'Le test ultime : le QR se scanne et l\'app se charge'],
+              ['Éditeur', 'VS Code (recommandé)', 'ouvrir le dossier du projet']
+            ] },
+            { t: 'p', h: 'Le point critique est le RÉSEAU : Expo Go télécharge ton code depuis TON ORDINATEUR — les deux doivent se voir sur le même réseau. Un problème typique des réseaux partagés (cybercafés, campus, certaines box) : l\'isolation des clients empêche les appareils de se parler — on contournera avec le mode tunnel, plus bas. Et l\'iPhone requiert Expo Go depuis l\'App Store + parfois un compte Apple actif pour la première ouverture.' },
+            { t: 'h3', h: 'Créer l\'app : trois commandes commentées' },
+            { t: 'code', lang: 'bash', label: 'Terminal — du zéro au QR code', code:
+'# 1) Créer le projet (gabarit par défaut, propre et simple)\nnpx create-expo-app zemidjan-livraison\n#    « npx » exécute l\'assistant Expo SANS l\'installer durablement\n#\n# 2) Entrer dans le projet\ncd zemidjan-livraison\n#\n# 3) Démarrer le serveur de développement Expo\nnpx expo start\n#    → Un grand QR CODE apparaît dans le terminal :\n#      c\'est le ADRESSE de ton code, à montrer au téléphone.\n#\n# (si le QR ne aboutit jamais — réseau bridé/isolé :\n#  npx expo start --tunnel   ← même chose via un tunnel Expo,\n#  marche sur à peu près TOUS les réseaux, un cran plus lent)' },
+            { t: 'h3', h: 'Faire apparaître ton application sur ton téléphone' },
+            { t: 'ol', items: [
+              'Ouvre **Expo Go** sur le téléphone (installée depuis le Play Store / App Store).',
+              'Touche « Scan QR code » (Android) ou ouvre l\'appareil photo natif (iOS) et vise le QR du terminal.',
+              'Expo Go télécharge et exécute ton code : l\'écran « Open up App.tsx to start working » apparaît SUR ton téléphone.',
+              'Édite `App.tsx` (change un mot du texte) et SAUVEGARDE : le téléphone se recharge TOUT SEUL en une seconde — la magie du Fast Refresh.',
+              'Secoue le téléphone (ou trois doigts) : le menu développeur d\'Expo (reload, debugger) apparaît — ton nouvel outil de diagnostic.'
+            ] },
+            { t: 'h3', h: 'La structure générée, dossier par dossier' },
+            { t: 'code', lang: 'text', label: 'zemidjan-livraison/ — après create-expo-app', code:
+'zemidjan-livraison/\n├── App.tsx (ou App.js)  # LE composant racine de ton app — ta première édition\n├── app.json             # la carte d\'identité Expo : nom, icône, splash, version\n├── package.json         # scripts (start) + dépendances (react, react-native, expo)\n├── assets/              # images embarquées DANS l\'app (icon, splash…)\n├── babel.config.js      # le traducteur JS (peu à toucher au début)\n└── node_modules/        # jetable, régénéré par npm install — jamais commité' },
+            { t: 'p', h: 'Le fichier qui surprend les gens : `app.json` — c\'est la CARTE D\'IDENTITÉ de l\'application mobile (nom affiché sous l\'icône, image du splash, orientation permise, numéro de version). Tu le retoucheras le jour où « Zemidjan Livraison » doit apparaître avec SON icône verte sous l\'icône Expo. Et si la navigation entre écrans arrive vite à l\'esprit : elle viendra d\'Expo Router (fiche dédiée du module) — le gabarit actuel laisse la porte ouverte.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`node -v` ≥ 18 sur l\'ordinateur.',
+              '`npx create-expo-app zemidjan-livraison` se termine sans rouge (premier run : il peut télécharger ~2 min, c\'est normal).',
+              '`npx expo start` affiche le QR — PAS d\'erreur « port already in use » (sinon ferme l\'autre projet Expo/React qui tourne).',
+              'Le téléphone scanne, **charge** la page (barre bleue), et montre l\'écran de l\'app — physiquement, entre tes mains.',
+              'Un changement dans `App.tsx` se reflète sur le téléphone en moins de 2 secondes : tu as ta boucle de dev complète.',
+              'Bonus pro : `npx expo start --tunnel` résout le « QR qui tourne dans le vide » sur Wi-Fi bridé.'
+            ] },
+            { t: 'callout', kind: 'warn', h: 'Le téléphone et le PC NE partagent le même réseau que si le box l\'autorise. Sur beaucoup de réseaux d\'entreprise/campus, l\'« isolation client » bloque la découverte : le QR se scanne mais la page n\'avance jamais. Deux issues : 1) le mode tunnel (`npx expo start --tunnel`) qui passe par les serveurs d\'Expo — votre solution de secours universelle ; 2) un point d\'accès mobile du téléphone vers lequel le PC se connecte.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Expo est un jouet, « le vrai React Native » c\'est le CLI. »** Faux : Expo EST React Native, plus une grande boîte à outils (Expo Go, EAS build, librairies packagées). La majorité des applis pro modernes partent d\'Expo ; le CLI ne s\'impose que pour un natif très spécifique.',
+              '**« Il faut un émulateur pour développer en mobile. »** Non : avec Expo Go, ton PROPRE téléphone est la cible. Les émulateurs (Android Studio/Xcode) deviennent utiles pour les cas d\'échec ou les tailles spécifiques — jamais obligatoires au départ.',
+              '**« Le QR code est une image qu\'on partage par WhatsApp. »** Non : il encode l\'ADRESSE de ton ordinateur sur le réseau local — hors du même Wi-Fi, il ne mène nulle part. Le tunnel change cette adresse en URL publique temporaire.',
+              '**« Android Studio est indispensable pour faire une vraie app Android. »** Non : il ne sert qu\'à compiler en local (CLI). Avec Expo, même le build final de l\'APK/AAB se fait dans le cloud (EAS) — ta machine n\'a besoin d\'aucun SDK.',
+              '**« iOS exige un Mac pour développer une app iPhone. »** Pour le dev Expo Go, non : le site et le QR suffisent avec un iPhone. (La publication App STORE, elle, demandera toujours un compte Apple payant — autre sujet, plus tard.)'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux enfers du premier jour mobile : l\'installation prématurée des 15 Go de SDK Android (alors qu\'Expo Go suffisait), et le QR code qui se scanne mais ne charge jamais — le téléphone et le PC ne parlant pas à travers le Wi-Fi, sans qu\'aucun message ne te le dise vraiment.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Le socle React revient en force : `App.tsx` reçoit le même JSX que la fiche **Composants & JSX** du module React, les props/state se comportent pareil. La fiche **Qu\'est-ce que React Native, vraiment ?** t\'expliquera pourquoi `<View>` remplace `<div>` et pourquoi il n\'y a pas de DOM ici ; la fiche **Expo ou React Native CLI ?** reprendra le choix de ce jour en profondeur avec les critères de migration ; et **Exécuter & déboguer** te servira quand le Fast Refresh t\'aura lâché la première fois. Tu as l\'atelier — la suite t\'apprendra à y construire une vraie app de livraison zémidjan.' },
+          ],
+          errors: [
+            {
+              title: 'Installer les SDK complets (Android Studio) trop tôt',
+              bad: '# « Pour faire du mobile, il faut Android Studio, non ? »\n# → Téléchargements : 4 Go d\'Android Studio + 11 Go de SDK/émulateurs,\n#   40 min de configuration JAVA_HOME/ANDROID_HOME, émulateur\n#   qui rame sur le laptop… et l\'app pas écrite AU BOUT DE 2 JOURS.\n# Le débutant croit que c\'est la voie normale ; c\'est la voie\n# historique, rendue optionnelle depuis Expo.',
+              good: 'npx create-expo-app zemidjan-livraison\ncd zemidjan-livraison\nnpx expo start\n# + Expo Go sur le téléphone → QR → app visible en 10 minutes,\n#   sans AUCUN SDK sur la machine. Le jour où un natif spécifique\n#   l\'exigera (rare), tu configureras le CLI avec des bases solides.',
+              why: 'La distinction Expo/CLI n\'est pas un détail de préférence : c\'est le choix entre « ton code JS servi sur un téléphone » et « compiler un binaire natif en local ». Android Studio répond au SECONDIÈME besoin — que tu n\'as pas pour apprendre, ni pour la plupart des applis. Installer ces 15 Go « au cas où » retarde le premier succès de plusieurs jours et c\'est la cause n°1 d\'abandon. Règle : Expo tant qu\'aucune librairie native indisponible ne l\'exige — le jour venu, l\'eject d\'Expo garde tout le code intact.'
+            },
+            {
+              title: 'Expo Go et le PC pas sur le même Wi-Fi',
+              bad: 'npx expo start\n# QR affiché → scan avec Expo Go → « something went wrong » ou\n# une barre de chargement qui n\'en finit pas.\n# causes typiques : le PC est en ethernet et la box a l\'isolation\n# client ; le téléphone est en 4G (pas le même réseau !) ;\n# le pare-feu Windows bloque le port 8081 d\'Expo.',
+              good: '# 1) Vérifier : téléphone sur le Wi-Fi de la BOX (pas en 4G),\n#    PC connecté à la MÊME box.\n# 2) Autoriser Node dans le pare-feu quand Windows le demande.\n# 3) Solution universelle si le réseau bloque :\nnpx expo start --tunnel\n#    → QR encodant une URL publique temporaire : fonctionne\n#      sur à peu près tous les réseaux (juste un cran plus lent).',
+              why: 'Expo Go télécharge ton JavaScript DEPUIS ton ordinateur : le QR n\'est qu\'une URL locale (192.168.…), inutile si les appareils ne se voient pas. L\'isolation client (box, cybercafé, entreprise) et la 4G du téléphone sont les deux grands coupables — la page « qui ne charge jamais » veut presque TOUJOURS dire ça, et aucun message ne le dit franchement. Le mode tunnel fait passer le lien par les serveurs d\'Expo : c\'est la solution qui sauve les démos en terrain mal équipé — et c\'est aussi pour ça qu\'on teste toujours sur SON data plan le lendemain.'
+            }
+          ],
+          related: ['rn-demarrage', 'rn-expo-vs-bare', 'rn-executer']
+        },
+        {
           id: 'rn-demarrage',
           title: 'Qu\'est-ce que React Native, vraiment ?',
           icon: 'smartphone',
@@ -52,7 +131,7 @@ DEVDOCS.rn = {
             { t: 'callout', kind: 'tip', h: 'Ne-migre-pas-tout réflexe : tout ce que tu sais de React (props, state, hooks, composition, Context) fonctionne à l\'identique. Quand un doute surgit, demande-toi "est-ce spécifique au rendu mobile ?" — si non, la réponse du module React JS s\'applique.' }
           ],
           errors: [
-            { title: 'Chercher le DOM : du HTML dans du JSX mobile', lang: 'js', bad: 'return (\n  <div className="carte">        {/* ERREUR : pas de DOM ici */}\n    Bonjour                       {/* ERREUR : texte hors <Text> */}\n  </div>\n);', good: 'return (\n  <View style={styles.carte}>\n    <Text>Bonjour</Text>          {/* tout texte vit dans un <Text> */}\n  </View>\n);', why: 'Il n\'existe aucun élément DOM côté natif : les balises HTML sont inconnues (crash "View config not found"), et un texte nu hors d\'un <Text> ne peut pas être rendu par les vues natives. C\'est LE premier réflexe à désapprendre.' },
+            { title: 'Chercher le DOM : du HTML dans du JSX mobile', lang: 'js', bad: 'return (\n  <div className="carte">        {/* ERREUR : pas de DOM ici */}\n    Bonjour                       {/* ERREUR : texte hors <Text> */}\n  </div>\n);', good: 'return (\n  <View style={styles.carte}>\n    <Text>Bonjour</Text>          {/* tout texte vit dans un <Text> */}\n  </View>\n);', why: 'Il n\'existe aucun élément DOM côté natif : les balises HTML sont inconnues (crash "View config not found"), et un texte nu hors d\'un `<Text>` ne peut pas être rendu par les vues natives. C\'est LE premier réflexe à désapprendre.' },
             { title: 'Écrire du CSS web en chaîne de caractères', lang: 'js', bad: '<View style="margin: 8px; background-color: red">\n// "margin: 8px" : string illégale, px inconnu → crash au rendu', good: '<View style={{ margin: 8, backgroundColor: "red" }}>\n// objets JS, camelCase, nombres = unités indépendantes de la densité', why: 'Le style React Native est un objet JavaScript (propriétés camelCase), en "density-independent pixels" : pas de px, pas de string CSS, pas de cascade. La fiche Styles reprend ça en détail.' }
           ],
           related: ['rx-concepts', 'rn-expo-vs-bare', 'rn-composants-base', 'rn-styles']
@@ -206,7 +285,7 @@ DEVDOCS.rn = {
           ],
           errors: [
             { title: 'Écrire du CSS en chaîne (avec des px)', lang: 'js', bad: '<View style="display: flex; margin: 8px;">\n// style attend un OBJET : "Invalid style property" → crash', good: '<View style={{ display: "flex", margin: 8 }}>\n// objet JS, camelCase, nombres sans unité', why: 'La prop style ne prend pas de string CSS : c\'est un objet JavaScript. Les nombres sont des unités indépendantes de la densité (dp/pt) — le "px" n\'a ni sens ni existence ici.' },
-            { title: 'Croire que les styles héritent comme en CSS', lang: 'js', bad: '<View style={{ color: "red" }}>\n  <Text>On croirait rouge… reste noir : color ne cascade pas.</Text>\n</View>', good: '<Text style={{ color: "red" }}>Rouge pour de vrai.</Text>\n// ou transmettre un style via props / Context / composant Titre maison', why: 'Seule exception au monde RN : un <Text> DANS un <Text> hérite des styles de texte. Partout ailleurs, chaque composant porte les siens — c\'est volontaire, ça rend les composants prévisibles et déplaçables.' }
+            { title: 'Croire que les styles héritent comme en CSS', lang: 'js', bad: '<View style={{ color: "red" }}>\n  <Text>On croirait rouge… reste noir : color ne cascade pas.</Text>\n</View>', good: '<Text style={{ color: "red" }}>Rouge pour de vrai.</Text>\n// ou transmettre un style via props / Context / composant Titre maison', why: 'Seule exception au monde RN : un `<Text>` DANS un `<Text>` hérite des styles de texte. Partout ailleurs, chaque composant porte les siens — c\'est volontaire, ça rend les composants prévisibles et déplaçables.' }
           ],
           related: ['rn-flexbox', 'rn-composants-base', 'css-flexbox', 'rn-plateforme']
         },
