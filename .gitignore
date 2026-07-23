@@ -4,4 +4,17 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Dépendances & builds
 node_modules/
+dist/
+build/
+out/
+
+# Secrets & environnement (jamais commités)
+.env
+.env.*
+*.local
+
+# Laravel / backend (si restructuration future)
+vendor/

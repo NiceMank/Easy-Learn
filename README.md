@@ -112,10 +112,14 @@ Adossé à la documentation : **85 exercices répartis sur les 17 modules** (5 p
 
 ## Tests
 
-Le contenu et l'application sont validés par des harnais Node (dans `/tmp`, recréables à volonté) :
+Le contenu et l'application sont validés par la suite de harnais Node du dossier **`tests/`** (persistante, versionnée dans le dépôt). Prérequis unique : jsdom (v29) — `mkdir -p /tmp/nm && cd /tmp/nm && npm i jsdom` (les scripts le chargent depuis `/tmp/nm/node_modules/jsdom`, à réinstaller si `/tmp` a été vidé).
 
-- `validate.js` — 371 fiches sur 17 modules : IDs uniques, champs requis, blocs bien formés, liens `related` existants, highlighter non vide.
-- `exocheck.js` — 85 exercices : structure complète (énoncé, contraintes, 3 indices, solution + explication, critères, variantes, liens vers des fiches réelles), 1 gratuit Fondamentaux par module, garde-fous anti-emoji/CJK.
-- `exodom.js` — exécute les solutions des exercices front dans jsdom : 15/15 tests verts (15 autres skippés car ils exigent un CDN réseau).
-- `smoke.js` — 113 assertions jsdom sur le site assemblé : section théorique (non-régression complète) + parcours Exercices (hub 17 cartes, verrouillage, paywall, activation par clé démo, checklist, solution après tentative, révocation).
-- `smoke-design.js` — 44 assertions sur le design du module (héros colorés, familles de modules, filtre, atelier en deux colonnes, panneaux).
+- `tests/validate.js` — 371 fiches sur 17 modules : IDs uniques, champs requis, blocs bien formés (types connus, contenus obligatoires), liens `related` existants, `read` non codé en dur.
+- `tests/scan-all-tags.js` — aucune balise HTML brute hors backticks dans les champs passés par `md()` (régression du bug `<template>`/`<script>` avalant la fin des fiches, corrigé en juillet 2026).
+- `tests/census.js` — recensement factuel : fiches par module, tailles, première fiche, fiche d'installation présente ou non, totaux exercices.
+- `tests/smoke.js` — une instance jsdom, puis la navigation réelle par hash : accueil + 17 sommaires + 371 fiches ; vérifie `#view`, h1, blocs de code et le `pager` de chaque fiche.
+- `tests/exocheck.js` — 85 exercices (30 `dom` / 55 `checklist`) : panneaux éditables + tests fonctionnels pour les `dom`, checklist/contraintes/indices/solutions présents, puis rendu réel d'une page exercice.
+- `tests/smoke-design.js` — 24 assertions statiques sur le design (classes clés, thème `[data-theme]`, overlay de recherche, Material Symbols, media queries, accolades équilibrées).
+- `tests/render-html.js` — rendu jsdom d'une page précise (`node tests/render-html.js /fiche/<id> [fiche|sommaire|home]`), utilisé par smoke.js et exocheck.js.
+
+Dernier passage (23 juillet 2026) : **tout au vert** — 389 pages visitées, 371 pagers présents, 0 lien `related` cassé, 0 balise brute, 85/85 exercices, 24/24 design.
