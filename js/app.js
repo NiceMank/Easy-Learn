@@ -7,7 +7,7 @@
 
   /* ---------- Registre de contenu ---------- */
   const DB = window.DEVDOCS || {};
-  const LANGS = ['html', 'css', 'js', 'ts', 'react', 'tailwind', 'php', 'laravel', 'tanstack', 'python', 'flask', 'django', 'vue', 'rn', 'node', 'c', 'java'].filter((l) => DB[l]);
+  const LANGS = ['algo', 'html', 'css', 'js', 'ts', 'react', 'tailwind', 'php', 'laravel', 'tanstack', 'python', 'flask', 'django', 'vue', 'rn', 'node', 'c', 'java'].filter((l) => DB[l]);
 
   /* ---------- Persistance ---------- */
   const store = {
@@ -379,7 +379,7 @@
   }
 
   /* ---------- Routeur ---------- */
-  const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés', exercices: 'Exercices' };
+  const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés' };
 
   function route() {
     const hash = location.hash.replace(/^#\/?/, '');
@@ -392,10 +392,6 @@
       const e = ficheIndex.get(parts[1]);
       title = e ? e.fiche.title : 'Introuvable'; key = e ? e.lang : '';
     }
-    else if (parts[0] === 'exercices' && window.ExoApp) {
-      const r = window.ExoApp.route(parts);
-      html = r.html; key = 'exercices'; title = r.title || 'Exercices';
-    }
     else if (DB[parts[0]]) { html = viewLang(parts[0]); key = parts[0]; title = DB[parts[0]].name; }
     else if (parts[0] === 'favoris') { html = viewFavoris(); key = 'favoris'; title = 'Favoris'; }
     else if (parts[0] === 'historique') { html = viewHistorique(); key = 'historique'; title = 'Récemment consultés'; }
@@ -404,7 +400,6 @@
     view.innerHTML = html;
     observeReveals();
     window.scrollTo(0, 0);
-    if (key === 'exercices' && window.ExoApp) window.ExoApp.bind(view);
     $('#topbar-title').textContent = TITLES[key] || title;
     document.title = title + ' — Easy Learn';
 
@@ -539,4 +534,31 @@
   /* ---------- Init ---------- */
   refreshCounts();
   route();
+
+  /* ---------- Capacitor : bouton retour Android ---------- */
+  // En environnement Capacitor, le bouton retour matériel doit naviguer
+  // dans l'historique de l'app au lieu de la fermer.
+  if (typeof window !== 'undefined' && window.Capacitor) {
+    try {
+      var App = window.Capacitor.Plugins.App || window.CapacitorApp;
+      if (App) {
+        App.addListener('backButton', function (e) {
+          // Si la recherche est ouverte → fermer la recherche
+          var overlay = document.getElementById('search-overlay');
+          if (overlay && !overlay.hasAttribute('hidden')) {
+            closeSearch();
+            return;
+          }
+          // Si on peut revenir dans l'historique navigateur → go back
+          if (window.history.length > 1) {
+            window.history.back();
+          } else {
+            // Sinon, on est à la racine → laisser le comportement par défaut (quitter)
+            // En décommentant la ligne ci-dessous, on peut forcer à rester :
+            // e && e.preventDefault && e.preventDefault();
+          }
+        });
+      }
+    } catch (ignored) { /* Capacitor non disponible — navigation web classique */ }
+  }
 })();
