@@ -1,0 +1,14 @@
+{
+  "appId": "com.easylearn.docs",
+  "appName": "Easy Learn",
+  "webDir": "www",
+  "plugins": {
+    "App": {
+      "appUrlOpen": true
+    }
+  },
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": []
+  }
+}

@@ -1,20 +1,37 @@
-# Fichiers système / éditeur
+# Système / éditeur
 .DS_Store
 Thumbs.db
 *.log
 .vscode/
 .idea/
+*.iml
 
-# Dépendances & builds
+# Node / npm
 node_modules/
 dist/
 build/
 out/
 
-# Secrets & environnement (jamais commités)
+# Capacitor
+android/app/build/
+android/.gradle/
+android/build/
+android/captures/
+android/local.properties
+
+# Secrets
 .env
 .env.*
 *.local
-
-# Laravel / backend (si restructuration future)
 vendor/
+
+# Fichiers exclus de la version mobile (exercices, premium)
+css/exo.css
+js/premium.js
+js/exo-app.js
+js/exo-runner.js
+js/exo-*.js
+
+# Backup
+*.orig
+devdocs-backup-*
