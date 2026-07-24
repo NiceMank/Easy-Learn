@@ -102,7 +102,7 @@ DEVDOCS.django = {
           blocks: [
             { t: 'h3', h: 'Créer le projet (dans un venv !)' },
             { t: 'code', lang: 'bash', code:
-'python -m pip install django\n\n# Un PROJET = le site entier (settings, URLs racine, WSGI…)\ndjango-admin startproject monsite\n\ncd monsite\npython manage.py runserver\n# → http://127.0.0.1:8000  (fusée Django 🚀 — "The install worked successfully!")' },
+'python -m pip install django\n\n# Un PROJET = le site entier (settings, URLs racine, WSGI…)\ndjango-admin startproject monsite\n\ncd monsite\npython manage.py runserver\n# → http://127.0.0.1:8000  (fusée Django  — "The install worked successfully!")' },
             { t: 'h3', h: 'Ce que startproject a créé' },
             { t: 'code', lang: 'bash', code:
 'monsite/                  ← la RACINE (nom libre, juste un dossier)\n├── manage.py             ← ton couteau suisse : toutes les commandes\n└── monsite/              ← le PAQUET projet (ce nom-là compte)\n    ├── __init__.py\n    ├── settings.py       ← LA configuration (fiche Settings)\n    ├── urls.py           ← la table de routage RACINE (fiche URLs)\n    ├── wsgi.py           ← point d\'entrée serveur WSGI (déploiement)\n    └── asgi.py           ← point d\'entrée ASGI (async, websockets…)' },
@@ -386,7 +386,7 @@ DEVDOCS.django = {
 'from django.db.models import Count, Avg\n\n# chaque auteur avec le NOMBRE d\'articles — calculé PAR LA BASE :\nauteurs = (Auteur.objects\n           .annotate(nb_articles=Count("articles"))   # related_name !\n           .order_by("-nb_articles"))\nfor a in auteurs:\n    print(a.nom, a.nb_articles)\n\nprix_moyen = Article.objects.aggregate(Avg("prix"))   # {"prix__avg": …}' },
             { t: 'h3', h: 'Le N+1 : le meurtrier silencieux' },
             { t: 'code', lang: 'py', code:
-'# ❌ classique : 1 requête pour les articles… puis 1 PAR article :\nfor a in Article.objects.all():        # 1 requête\n    print(a.auteur.nom)                # +1 requête À CHAQUE tour ! (lazy)\n\n# ✅ select_related : la JOINTURE dans la requête initiale (FK, 1:1)\nfor a in Article.objects.select_related("auteur"):\n    print(a.auteur.nom)                # 1 requête au TOTAL\n\n# ✅ prefetch_related : relation M:N / inverse — 2 requêtes au total\nfor a in Article.objects.prefetch_related("tags"):\n    print([t.nom for t in a.tags.all()])' },
+'# ✗ classique : 1 requête pour les articles… puis 1 PAR article :\nfor a in Article.objects.all():        # 1 requête\n    print(a.auteur.nom)                # +1 requête À CHAQUE tour ! (lazy)\n\n# ✓ select_related : la JOINTURE dans la requête initiale (FK, 1:1)\nfor a in Article.objects.select_related("auteur"):\n    print(a.auteur.nom)                # 1 requête au TOTAL\n\n# ✓ prefetch_related : relation M:N / inverse — 2 requêtes au total\nfor a in Article.objects.prefetch_related("tags"):\n    print([t.nom for t in a.tags.all()])' },
             { t: 'p', h: 'En dev, garde un œil sur la page de debug Django (onglet SQL) ou le package `django-debug-toolbar` : ils comptent les requêtes par page. Une page à 150 requêtes = un N+1 caché, quasiment toujours soigné par `select_related`/`prefetch_related`. Même leçon que pour l\'Eager Loading de Laravel et le `joinedload` de SQLAlchemy.' },
             { t: 'callout', kind: 'tip', h: 'Le QuerySet SE COMPOSE : écris `qs = Article.objects.filter(publie=True)` puis `qs = qs.order_by("-date_pub")`, branche avec des `if` (formulaire de filtres !) — tant que tu n\'itères pas, tu ne paies rien. C\'est l\'arme des vues de recherche/filtres.' }
           ],

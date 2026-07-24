@@ -244,7 +244,7 @@ DEVDOCS.tanstack = {
           ],
           errors: [
             { title: 'Retry désactivé globalement', bad: 'new QueryClient({ defaultOptions: {\n  queries: { retry: 0 },\n} })', good: '// Garder le retry par défaut des requêtes, ne désactiver\n// que ponctuellement (form sensible, debug).', why: 'Retry 0 transforme chaque microcoupure réseau — omniprésentes en mobilité — en écran d\'erreur. Le retry par défaut existe parce que la majorité des échecs HTTP sont transitoires : tu veux ce filet.' },
-            { title: 'Retenter les écritures comme les lectures', bad: 'useMutation({\n  mutationFn: creerCommande,\n  retry: 3,   // ⚠️ potentiellement TROIS commandes en base\n});', good: '// Mutations : retry 0 par défaut (à garder), ou idempotence\n// serveur garantie avant tout retry custom.', why: 'Une lecture retentée est bénigne ; une écriture retentée peut DUPLIQUER la donnée (le premier POST a peut-être réussi avant la coupure). Sans endpoint idempotent conçu pour, on ne retry pas les mutations.' }
+            { title: 'Retenter les écritures comme les lectures', bad: 'useMutation({\n  mutationFn: creerCommande,\n  retry: 3,   //  potentiellement TROIS commandes en base\n});', good: '// Mutations : retry 0 par défaut (à garder), ou idempotence\n// serveur garantie avant tout retry custom.', why: 'Une lecture retentée est bénigne ; une écriture retentée peut DUPLIQUER la donnée (le premier POST a peut-être réussi avant la coupure). Sans endpoint idempotent conçu pour, on ne retry pas les mutations.' }
           ],
           related: ['tq-etats', 'tq-cache', 'tq-mutations', 'js-erreurs']
         }

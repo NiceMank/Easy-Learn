@@ -62,7 +62,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 ],errors:[
 {title:"var puis changement de type",lang:"dart",bad:"var x = \"Bonjour\";\nx = 42;  // Error: can't assign int to String",good:"Object y = \"Bonjour\";  // type large\ny = 42;  // OK\n// Mieux : deux variables distinctes",why:"var fixe le type à la 1ère affectation — inférence, pas dynamic."},
 {title:"Attribuer null à une non-nullable",lang:"dart",bad:"String nom = null;  // Compile error",good:"String? nom = null;   // nullable\nString nom = \"\";        // défaut vide",why:"La null safety est le garde-fou de Dart. Par défaut, un type NE PEUT PAS être null. Marque avec ? et gère avec ?. ?? ou if."}
-],related:["flutter-dart-poo","flutter-widgets","ts-types","java-variables"]},
+],related:["flutter-dart-poo","flutter-widgets","ts-types-scalaires","java-primitifs-wrappers"]},
 {id:"flutter-dart-poo",title:"Dart : classes, héritage et POO",icon:"account_tree",level:"Intermédiaire",tagline:"class, extends, implements, mixin : la programmation orientée objet en Dart, socle de tous les widgets Flutter.",intro:"En Flutter, TOUT est classe — chaque widget, state, contrôleur. Dart propose une POO moderne : constructeurs nommés, paramètres `required`, initializer lists, héritage simple, interfaces implicites et **mixins** pour la composition sans héritage multiple.",blocks:[
 {t:"h3",h:"La classe Produit — complet"},
 {t:"code",lang:"dart",label:"lib/modeles/produit.dart",code:"class Produit {\n  final String nom;\n  final int prix;\n  int _stock;                        // _ = privé (portée fichier)\n\n  Produit({required this.nom, required this.prix, int stock = 0})\n      : _stock = stock;              // initializer list\n\n  Produit.gratuit(String nom)         // constructeur nommé\n      : nom = nom, prix = 0, _stock = 999;\n\n  int get stock => _stock;           // getter\n  set stock(int v) { if (v < 0) throw ArgumentError(); _stock = v; }\n\n  String afficher() => \"$nom — $prix FCFA (stock: $_stock)\";\n  @override String toString() => \"Produit($nom)\";\n}\n\nfinal gari = Produit(nom: \"Gari Ijebu\", prix: 500, stock: 120);\nfinal promo = Produit.gratuit(\"Échantillon\");"},
@@ -80,7 +80,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 ],errors:[
 {title:"Oublier required sur un paramètre nommé obligatoire",lang:"dart",bad:"class P { String nom; P({this.nom}); }\n// P() → nom reste non initialisé",good:"class P { String nom; P({required this.nom}); }\n// P() → refuse de compiler",why:"Sans required, un paramètre nommé est optionnel. required force l'appelant."},
 {title:"Confondre extends et implements",lang:"dart",bad:"class W extends A, B {} // Un seul extends autorisé",good:"class W extends A with Mixin1, Mixin2 {}",why:"Dart = héritage simple. Pour composer : with + mixins. implements = contrat uniquement."}
-],related:["flutter-dart-bases","flutter-widgets","java-classes"]}
+],related:["flutter-dart-bases","flutter-widgets","java-encapsulation"]}
 ]},
 {id:"widgets",name:"Widgets",icon:"widgets",fiches:[
 {id:"flutter-widgets",title:"Widgets : tout est widget",icon:"widgets",level:"Débutant",tagline:"StatelessWidget, StatefulWidget, arbre de widgets : pourquoi Flutter réinvente tout avec ce concept unificateur.",intro:"En Flutter, **tout est widget** — bouton, texte, marge, alignement, l'app entière. Un widget est un objet Dart **immuable** décrivant une partie de l'UI. Flutter ne modifie JAMAIS un widget — il en crée de nouveaux, compare l'ancien arbre au nouveau, et ne repeint que ce qui a changé. Modèle inspiré de React (`build()` = `render()`, `setState` = `useState`), avec une différence : l'arbre contrôle aussi mise en page, style, animations.",blocks:[
@@ -173,7 +173,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 ],errors:[
 {title:"context.read dans build()",lang:"dart",bad:"build(c) { final p = context.read<Panier>(); return Text('${p.nombre}'); } // Figé à 0",good:"build(c) { final p = context.watch<Panier>(); return Text('${p.nombre}'); } // Réactif ✓",why:"« watch pour voir, read pour agir ». read() ne crée pas d'abonnement."},
 {title:"Provider hors arbre Navigator",lang:"dart",bad:"runApp(MaterialApp(home: Home()));\n// Poussé via Navigator → ProviderNotFoundException",good:"runApp(ChangeNotifierProvider(create: (_) => Panier(), child: MaterialApp(home: Home())));",why:"Provider doit être AU-DESSUS de MaterialApp pour que les écrans Navigator le voient."}
-],related:["flutter-setstate","flutter-navigation","rx-contexte","vue-pinia"]}
+],related:["flutter-setstate","flutter-navigation","rx-contexte","flutter-setstate"]}
 ]},
 {id:"navigation",name:"Navigation",icon:"explore",fiches:[
 {id:"flutter-navigation",title:"Navigator : écrans, routes et passage de données",icon:"explore",level:"Intermédiaire",tagline:"Navigator.push, routes nommées, et le pattern « retour avec résultat » — la pile d'écrans mobile sans URL.",intro:"Navigator gère une **pile de routes**. `push()` ajoute un écran (glisse depuis la droite), `pop()` le retire. Même principe que React Navigation Stack. Particularité Flutter : Navigator est INTÉGRÉ, et chaque `push` peut renvoyer un résultat au `pop()` — idéal pour création/édition.",blocks:[
@@ -207,7 +207,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 ],errors:[
 {title:"TextEditingController non disposé",lang:"dart",bad:"class _State extends State<W> { final _c = TextEditingController(); /* pas de dispose() */ }",good:"@override void dispose() { _c.dispose(); super.dispose(); }",why:"TextEditingController enregistre des listeners. Sans dispose(), fuite mémoire."},
 {title:"validator retourne false",lang:"dart",bad:"validator: (v) => (v?.isEmpty ?? true) ? 'Requis' : false;  // 'false' affiché comme erreur",good:"validator: (v) => (v?.isEmpty ?? true) ? 'Requis' : null;  // null = pas d'erreur",why:"validator : String = erreur, null = valide. false est une String → affichée."}
-],related:["flutter-setstate","flutter-theme","vue-validation"]}
+],related:["flutter-setstate","flutter-theme","flutter-formulaires"]}
 ]},
 {id:"reseau",name:"Réseau & API",icon:"cloud_download",fiches:[
 {id:"flutter-reseau",title:"http, FutureBuilder et async/await",icon:"cloud_download",level:"Intermédiaire",tagline:"Le package http, async/await, et FutureBuilder pour transformer une réponse API en UI réactive sans effort.",intro:"`http.get(Uri.parse(\"...\"))` → `Future<Response>`, `await` attend. **FutureBuilder** : widget qui prend un Future et rebuild automatiquement — plus besoin de `setState` pour gérer chargement/erreur/données.",blocks:[
@@ -257,7 +257,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 ],errors:[
 {title:"Theme.of(context) avant MaterialApp",lang:"dart",bad:"void main() { final c = Theme.of(context).colorScheme.primary; runApp(…); }  // crash",good:"runApp(MaterialApp(home: Builder(builder: (ctx) => Text('${Theme.of(ctx).colorScheme.primary}'))));",why:"Theme.of remonte l'arbre. Avant runApp(), pas d'arbre, pas de thème."},
 {title:"Scaffold dans CupertinoPageScaffold",lang:"dart",bad:"CupertinoPageScaffold(navigationBar: …, child: Scaffold(body: …))  // doubles barres",good:"// Choisir UN écosystème par page : tout Material OU tout Cupertino",why:"Deux conteneurs de page avec leur propre navigation → conflits visuels."}
-],related:["flutter-widgets","flutter-layout","css-variables-custom"]}
+],related:["flutter-widgets","flutter-layout","flutter-theme"]}
 ]},
 {id:"lifecycle",name:"Cycle de vie",icon:"replay",fiches:[
 {id:"flutter-lifecycle",title:"initState, dispose et le cycle de vie",icon:"replay",level:"Intermédiaire",tagline:"Quand initialiser, quand nettoyer, quand réagir aux changements : le cycle de vie d'un StatefulWidget.",intro:"Cycle de vie d'un `State` Flutter : `initState()` (1×), `build()` (chaque rebuild), `didChangeDependencies()`, `didUpdateWidget()`, `dispose()` (1×). Comprendre ces 5 méthodes = 50 % de bugs de timing évités.",blocks:[

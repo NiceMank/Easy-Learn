@@ -415,7 +415,7 @@ DEVDOCS.rn.categories.push(
             { title: 'Oublier les dépendances natives (screens / safe-area)', lang: 'js', bad: 'npm install @react-navigation/native @react-navigation/native-stack\n// …puis crash au démarrage :\n// "Unrecognized native module: RNScreens" / "RNCSafeAreaContext"', good: 'npx expo install react-native-screens react-native-safe-area-context\n# Versions alignées à ton SDK + pods/gradle liés automatiquement', why: 'Le cœur JS de React Navigation appelle des modules NATIFS (gestion des écrans, zones sûres). Sans eux, l\'import fonctionne et tout explose au premier rendu — l\'erreur la plus classique du premier jour.' },
             { title: 'Confondre navigate et push', lang: 'js', bad: 'navigation.push("Details", { id });\n// depuis une liste infinie de détails :\n// pile Details→Details→Details… le bouton retour devient un couloir sans fin', good: 'navigation.navigate("Details", { id });\n// navigate réutilise l\'instance existante de "Details" si elle est déjà\n// sur le sommet — push() se réserve aux vrais empilements intentionnels', why: 'push() empile À CHAQUE FOIS une nouvelle instance ; navigate() est idempotent au sommet de pile. Dans le doute, navigate — et push uniquement quand le modèle "encore un niveau de détail" est réellement voulu.' }
           ],
-          related: ['rn-navigation-params', 'rn-navigation-avance', 'vue-router', 'rn-executer']
+          related: ['rn-navigation-params', 'rn-navigation-avance', 'rn-navigation-setup', 'rn-executer']
         },
 
         {
@@ -781,7 +781,7 @@ DEVDOCS.rn.categories.push(
             { title: 'Premier tap "mangé" par la fermeture du clavier', lang: 'js', bad: '<ScrollView>   {/* keyboardShouldPersistTaps par défaut : "never" */}\n  <TextInput />\n  <Pressable onPress={envoyer}><Text>Envoyer</Text></Pressable>\n  {/* tap sur Envoyer → ferme le clavier ; il faut taper une 2e fois */}\n</ScrollView>', good: '<ScrollView keyboardShouldPersistTaps="handled">\n  {/* le bouton reçoit le tap, le clavier reste ou se ferme intelligemment */}\n  <TextInput />\n  <Pressable onPress={envoyer}><Text>Envoyer</Text></Pressable>\n</ScrollView>', why: 'Par défaut, ScrollView consomme le premier tap pour rejeter le clavier : l\'utilisateur croit que le bouton est cassé. "handled" transmet le tap aux enfants interactifs tout en gardant le rejet normal ailleurs.' },
             { title: 'autoCapitalize et autoCorrect sur un e-mail', lang: 'js', bad: '<TextInput placeholder="E-mail" />\n// le clavier met "Awa@…" → serveur rejette, utilisateur ne comprend pas', good: '<TextInput\n  placeholder="E-mail"\n  keyboardType="email-address"\n  autoCapitalize="none"\n  autoCorrect={false}\n/>', why: 'Un e-mail est insensible à la casse théoriquement, mais les corrections/capitalisations automatiques sabotent la saisie. Pour e-mail, URL, mot de passe : autoCapitalize="none" + autoCorrect désactivé, systématiquement.' }
           ],
-          related: ['rn-interactions', 'rn-etat', 'vue-validation', 'rn-plateforme']
+          related: ['rn-interactions', 'rn-etat', 'rn-formulaires', 'rn-plateforme']
         }
       ]
     },

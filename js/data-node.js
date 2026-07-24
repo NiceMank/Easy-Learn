@@ -90,7 +90,7 @@ DEVDOCS.node = {
               why: '`node_modules/` n\'est JAMAIS versionné dans Git (trop gros, régénérable). Le dépôt voyage avec le manifeste (`package.json`) et le verrou (`package-lock.json`), mais sans les paquets eux-mêmes. Toute machine nouvelle commence donc avec un projet VIDE d\'outillage. Le réflexe professionnel, identique au `composer install` de PHP : **clone → install → run**, dans cet ordre, toujours.'
             }
           ],
-          related: ['nd-single-thread', 'nd-npm-package-json', 'nd-http-natif', 'nd-express-bases', 'php-installation']
+          related: ['nd-single-thread', 'nd-npm-package-json', 'nd-http-natif', 'nd-express-bases', 'nd-installation']
         },
         {
           id: 'nd-single-thread',
@@ -855,7 +855,7 @@ DEVDOCS.node.categories.push(
 'const AUTORISEES = [\'https://dantokpa.bj\'];\napp.use(cors({\n  origin: (origine, cb) => cb(null, !origine || AUTORISEES.includes(origine)),\n  credentials: true\n}));',
             why: 'Avec credentials, le navigateur envoie les cookies du site ciblé : si l\'origine est "tout le monde", n\'importe quel site malveillant peut appeler ton API AVEC la session de ta cliente. CORS se gère par liste blanche, jamais par écho.' }
         ],
-        related: ['nd-middlewares', 'nd-jwt', 'php-xss']
+        related: ['nd-middlewares', 'nd-jwt', 'nd-gestion-erreurs']
       }
     ]
   },
@@ -953,7 +953,7 @@ DEVDOCS.node.categories.push(
 '// Le bon outil pour CE besoin :\n// sessions (express-session + store Redis quand ça grandit).\n// JWT se justifie quand le stateless est un vrai besoin\n// (mobile, services tiers), pas une mode.',
             why: 'Le stateless déplace le problème : impossible d\'invalider un jeton volé avant son expiration sans tenir une liste de révocation — c\'est-à-dire un état serveur, ce qu\'on voulait éviter. Choisir son mécanisme d\'auth, c\'est choisir ses compromis en connaissance de cause.' }
         ],
-        related: ['nd-jwt', 'nd-bcrypt', 'php-sessions']
+        related: ['nd-jwt', 'nd-bcrypt', 'nd-sessions-vs-jwt']
       },
 
       {
@@ -1033,7 +1033,7 @@ DEVDOCS.node.categories.push(
 'console.log(\'tentative pour\', req.body.telephone);\n// Le mot de passe n\'apparaît JAMAIS : ni logs, ni erreurs, ni réponses.\n// Masque aussi req.body dans les erreurs de validation (zod le fait).',
             why: 'Les logs finissent archivés, sauvegardés undécrits, consultés par des outils tiers : un mot de passe en clair dedans vaut faille d\'authentification définitive. La règle est absolue : ce secret n\'existe que pendant le hash et le compare.' }
         ],
-        related: ['nd-jwt', 'php-mots-de-passe', 'nd-blocage-event-loop']
+        related: ['nd-jwt', 'nd-bcrypt', 'nd-blocage-event-loop']
       }
     ]
   },
@@ -1166,7 +1166,7 @@ DEVDOCS.node.categories.push(
 'const { rows } = await query(\n  \'SELECT * FROM commandes ORDER BY creee_le DESC LIMIT $1 OFFSET $2\',\n  [parPage, (page - 1) * parPage]\n);',
             why: 'La base est faite pour filtrer et borner ; la ramener entière chez Node pour trancher est du gaspillage au cube — ça marchait avec 50 lignes de test, ça écroule la prod à 200 000. Paginer du côté BD, toujours.' }
         ],
-        related: ['nd-orm', 'php-requetes-preparees', 'nd-gestion-erreurs']
+        related: ['nd-orm', 'nd-bd-async', 'nd-gestion-erreurs']
       },
 
       {
