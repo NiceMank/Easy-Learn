@@ -25,6 +25,79 @@ DEVDOCS.java = {
       icon: 'developer_board',
       fiches: [
         {
+          id: 'java-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'JDK Temurin, JAVA_HOME, PATH : pose un environnement Java complet et compile ton premier programme en cinq minutes.',
+          intro: 'Java est à la fois un **langage** et une **plateforme** : pour développer, tu as besoin du **JDK** (Java Development Kit) qui contient le compilateur `javac`, la machine virtuelle Java et les bibliothèques standard. Cette fiche te guide dans l\'installation du JDK (Temurin, la distribution open source recommandée), la configuration de `JAVA_HOME` et du PATH, et la compilation de ton premier programme — le classique « Bonjour Dantokpa » en version Java. En cinq minutes, le socle est prêt pour tout le module.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi Java a-t-il besoin d\'un JDK complet ?' },
+            { t: 'p', h: 'Java est **compilé** (comme le C) vers un format intermédiaire appelé **bytecode**, puis **exécuté** par une machine virtuelle (la **JVM**). Le JDK contient les DEUX outils : `javac` (le compilateur, qui traduit `.java` → `.class`) et `java` (la JVM, qui exécute le `.class`). Contrairement au C où le compilateur produit un binaire natif pour ton processeur, `javac` produit un `.class` portable — la MÊME classe tourne sous Windows, macOS et Linux sans recompilation. Mais pour cela, il faut installer un JDK complet, pas juste un JRE (qui ne contient pas le compilateur).' },
+            { t: 'h3', h: 'Quelle distribution choisir ? Eclipse Temurin (recommandé)' },
+            { t: 'p', h: 'Plusieurs distributions du JDK existent — toutes basées sur le même code source OpenJDK. **Eclipse Temurin** (anciennement AdoptOpenJDK) est la recommandation de cette fiche : gratuite, open source, disponible sur tous les OS, maintenue professionnellement. Oracle JDK, Amazon Corretto et Azul Zulu sont des alternatives tout aussi valables — choisis-en une et garde-la pour tous tes projets.' },
+            { t: 'table', head: ['Version', 'Type', 'Recommandée pour'], rows: [
+              ['Java 21 LTS', 'Support long terme', 'La référence actuelle — installe celle-ci'],
+              ['Java 17 LTS', 'Support long terme', 'Encore très répandue en entreprise'],
+              ['Java 25 LTS', 'Support long terme (sept. 2025)', 'La plus récente, parfaitement utilisable']
+            ] },
+            { t: 'h3', h: 'Installation pas à pas — toutes plateformes' },
+            { t: 'code', lang: 'bash', label: 'Linux (Ubuntu/Debian)', code:
+'# Installer Temurin JDK 21 (LTS) :\nsudo apt install wget -y\nwget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -\necho "deb https://packages.adoptium.net/artifactory/deb $(awk -F= \'/^UBUNTU_CODENAME/{print $2}\' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list\nsudo apt update && sudo apt install temurin-21-jdk -y\n\n# Vérifier :\njava -version   # OpenJDK 21.0.x LTS\njavac -version  # javac 21.0.x' },
+            { t: 'code', lang: 'bash', label: 'macOS (Homebrew)', code:
+'# Installer Temurin JDK 21 :\nbrew install --cask temurin@21\n\n# Vérifier :\njava -version\njavac -version' },
+            { t: 'code', lang: 'bash', label: 'Windows', code:
+'# 1. Aller sur https://adoptium.net/download/\n# 2. Choisir : Version = 21 (LTS), JVM = HotSpot\n# 3. Télécharger le .msi et lancer l\'installation\n# 4. Accepter \"Ajouter au PATH\" et \"Définir JAVA_HOME\"\n#\n# 5. Ouvrir PowerShell ou cmd et vérifier :\njava -version\njavac -version\n# → Doivent répondre avec la version 21' },
+            { t: 'h3', h: 'JAVA_HOME et PATH : les deux variables qui gouvernent Java' },
+            { t: 'p', h: '**`JAVA_HOME`** est une variable d\'environnement qui pointe vers le dossier racine de ton JDK — c\'est l\'adresse que Maven, Gradle, les IDE et les serveurs lisent pour savoir quel JDK utiliser. **`PATH`** doit contenir `$JAVA_HOME/bin` pour que les commandes `java` et `javac` soient accessibles depuis n\'importe quel terminal. L\'installateur Temurin configure les deux automatiquement sous Windows ; sous macOS/Linux, vérifie.' },
+            { t: 'code', lang: 'bash', label: 'Vérifier et corriger — Linux / macOS', code:
+'# Lire les valeurs actuelles :\necho $JAVA_HOME\necho $PATH | tr \':\' \'\\n\' | grep -i java\n\n# Si JAVA_HOME est vide ou pointe ailleurs, le corriger :\n# Linux :\nexport JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64\nexport PATH="$JAVA_HOME/bin:$PATH"\n# (Ajouter ces lignes au ~/.bashrc pour qu\'elles persistent)\n\n# macOS :\nexport JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home\nexport PATH="$JAVA_HOME/bin:$PATH"' },
+            { t: 'h3', h: 'Hello, Dantokpa : premier programme Java' },
+            { t: 'code', lang: 'java', label: 'HelloDantokpa.java', code:
+'public class HelloDantokpa {\n    public static void main(String[] args) {\n        String marche = "Dantokpa";\n        int vendeuses = 12;\n        System.out.println("Bonjour du marché " + marche + " !");\n        System.out.println("Vendeuses enregistrées : " + vendeuses);\n    }\n}' },
+            { t: 'code', lang: 'bash', label: 'Compiler et exécuter', code:
+'# 1. Compiler : javac produit HelloDantokpa.class\njavac HelloDantokpa.java\n# → aucun message = succès (vérifie : ls HelloDantokpa.class)\n\n# 2. Exécuter : java lance la JVM sur la classe compilée\njava HelloDantokpa\n# → Bonjour du marché Dantokpa !\n# → Vendeuses enregistrées : 12\n\n# ⚠ Attention : java HelloDantokpa (pas .class !) — la JVM\n# attend un NOM DE CLASSE, pas un nom de fichier.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`java -version` et `javac -version` répondent TOUS LES DEUX avec la même version — si `javac` est introuvable, tu n\'as pas un JDK mais un simple JRE.',
+              '`echo $JAVA_HOME` (ou `echo %JAVA_HOME%` sous Windows) affiche un chemin valide — sinon le configurer.',
+              'Créer `HelloDantokpa.java` avec le code ci-dessus, puis `javac HelloDantokpa.java` — vérifier que `HelloDantokpa.class` a été créé.',
+              '`java HelloDantokpa` affiche le message — la JVM a chargé le bytecode et l\'a exécuté.',
+              'Modifier le message dans le `.java`, recompiler (`javac`), relancer (`java`) : le changement apparaît. Ne pas oublier de recompiler !'
+            ] },
+            { t: 'callout', kind: 'info', h: 'Différences selon l\'OS : les commandes `javac` et `java` sont IDENTIQUES partout — c\'est la promesse \"Write Once, Run Anywhere\". Le bytecode produit par `javac` sous Windows tourne sans modification sur un serveur Linux. Une seule subtilité : le séparateur de classpath est `:` sous Linux/macOS et `;` sous Windows — mais pour tes premiers pas, tu n\'en as pas besoin.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Java et JavaScript, c\'est la même famille. »** Non — le nom est un accident marketing de 1995. Java est un langage compilé, fortement typé, qui tourne sur une machine virtuelle ; JavaScript est un langage interprété, faiblement typé, qui tourne dans un navigateur. Ils partagent une syntaxe superficiellement proche (les accolades, les `for`) mais leurs philosophies sont opposées.',
+              '**« J\'ai installé Java, donc j\'ai le JDK. »** Vérifie : `javac -version`. Beaucoup d\'ordinateurs ont uniquement un JRE (Java Runtime Environment) qui permet d\'EXÉCUTER des programmes Java mais pas de les COMPILER. Le JDK contient les deux. Si `javac` est introuvable, tu n\'as pas installé un JDK.',
+              '**« Je lance java HelloDantokpa.class. »** Non — `java` attend le NOM de la classe, pas un chemin de fichier. `java HelloDantokpa` (sans `.class`) est la forme correcte. L\'extension `.class` fait partie du nom de FICHIER, pas du nom de CLASSE.',
+              '**« JAVA_HOME, c\'est pour les serveurs. »** Non — Maven, Gradle, IntelliJ et même certains paquets npm qui appellent Java lisent `JAVA_HOME`. Sans elle, tu auras des « java not found » alors que `java -version` répond dans le terminal. La définir maintenant t\'épargne des heures de débogage.',
+              '**« Une fois compilé, je peux effacer le .java. »** Techniquement oui, en pratique non — le `.java` est ton source, le seul que tu peux modifier. Le `.class` est jetable (le recompiler prend une seconde). Versionne le `.java`, ignore le `.class`.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux blocages du premier jour : `javac` introuvable parce que seul un JRE est installé, et `java HelloDantokpa.class` qui échoue parce que la JVM attend un nom de classe, pas un fichier.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Cet environnement posé, tout le module Java s\'y déploie : la fiche **JDK, JRE et JVM** t\'expliquera en détail les trois boîtes que tu viens d\'installer ; la fiche **La compilation et le bytecode** te montrera ce que contient vraiment le `.class` que `javac` produit ; et quand tu voudras industrialiser ton projet, la fiche **Maven** viendra automatiser la compilation. Garde en tête le parallèle avec le C : `javac` est le `gcc` de Java, et `java` est… ce que le C n\'a pas — une machine virtuelle qui rend le même `.class` exécutable partout.' },
+          ],
+          errors: [
+            {
+              title: 'javac: command not found — JRE installé au lieu du JDK',
+              lang: 'bash',
+              bad: 'java -version     # répond \"OpenJDK 21\"\njavac -version    # javac: command not found\n# → Tu as un JRE, pas un JDK. Tu peux EXÉCUTER\n# du Java mais pas en COMPILER.',
+              good: '# Désinstaller le JRE, installer le JDK :\n# Linux : sudo apt install temurin-21-jdk\n# macOS : brew install --cask temurin@21\n# Windows : télécharger le JDK (pas JRE) sur adoptium.net\n# Vérifier : javac -version doit répondre.',
+              why: 'Le JRE (Java Runtime Environment) est le minimum pour faire tourner des programmes Java — il contient `java` (la JVM) mais pas `javac` (le compilateur). Beaucoup d\'installations par défaut (anciens postes, certains serveurs) proposent le JRE. Le développeur, lui, a besoin du JDK complet.'
+            },
+            {
+              title: 'java HelloDantokpa.class au lieu de java HelloDantokpa',
+              lang: 'bash',
+              bad: 'java HelloDantokpa.class\n# Erreur : impossible de trouver ou de charger\n# la classe principale HelloDantokpa.class',
+              good: 'java HelloDantokpa\n# ✓ La JVM attend le NOM DE CLASSE, pas un nom de fichier.\n# Pas d\'extension, pas de chemin.' ,
+              why: 'La JVM raisonne en noms de classes, pas en fichiers. Donner `HelloDantokpa.class`, c\'est lui demander de trouver une classe nommée « class » dans un package « HelloDantokpa » — qui n\'existe pas. C\'est l\'erreur qui fait perdre 20 minutes à TOUS les débutants Java — tu sais maintenant l\'éviter.'
+            }
+          ],
+          related: ['java-jdk-jre-jvm', 'java-bytecode', 'java-maven', 'c-installation']
+        },
+        {
           id: 'java-jdk-jre-jvm',
           title: 'JDK, JRE et JVM : qui fait quoi ?',
           icon: 'coffee',

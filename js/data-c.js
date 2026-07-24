@@ -24,6 +24,73 @@ DEVDOCS.c = {
       icon: 'build',
       fiches: [
         {
+          id: 'c-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'GCC, Clang, MinGW : installe un compilateur C sur ta machine et compile ton premier programme en trois commandes.',
+          intro: 'Le C est un langage **compilé** : ton code source `.c` doit être traduit en binaire exécutable par un **compilateur** avant de pouvoir tourner. Cette fiche t\'installe le compilateur adapté à ton système — GCC sous Linux, Clang sous macOS, MinGW sous Windows — et te fait écrire, compiler et exécuter ton premier programme. En dix minutes, l\'atelier est prêt.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi le C exige-t-il un compilateur ?' },
+            { t: 'p', h: 'Contrairement à JavaScript ou Python qui sont lus ligne par ligne par un interpréteur, le C est TRADUIT une fois pour toutes en langage machine — des instructions directement exécutables par ton processeur. Le traducteur s\'appelle un **compilateur** : il lit ton `.c`, vérifie la syntaxe, optimise, et produit un fichier binaire que tu lances d\'un double-clic ou d\'un `./monprogramme`. Pas d\'interpréteur à installer à chaque exécution — le binaire se suffit à lui-même. Mais pour le PRODUIRE, il faut le compilateur.' },
+            { t: 'h3', h: 'Linux : GCC, le compilateur historique' },
+            { t: 'p', h: '**GCC** (GNU Compiler Collection) est le compilateur standard du monde Linux — il compile le noyau Linux lui-même. Installer GCC installe aussi tous les outils de compilation (headers, linker, make). Une seule commande apt.' },
+            { t: 'code', lang: 'bash', label: 'Installation — Ubuntu/Debian', code:
+'# 1. Installer GCC + les outils de base :\nsudo apt update && sudo apt install build-essential -y\n# build-essential = gcc + g++ (C++) + make + libc headers\n\n# 2. Vérifier :\ngcc --version   # gcc (Ubuntu 13.x…) \n\n# Tout est prêt !' },
+            { t: 'h3', h: 'macOS : Clang via Xcode Command Line Tools' },
+            { t: 'p', h: 'Sous macOS, le compilateur natif est **Clang** (LLVM), fourni avec les Xcode Command Line Tools. La commande `gcc` existe aussi — c\'est en réalité un lien vers Clang. L\'installation est légère (pas besoin du gigantesque Xcode complet).' },
+            { t: 'code', lang: 'bash', label: 'Installation — macOS', code:
+'# 1. Installer les Command Line Tools (si pas déjà fait) :\nxcode-select --install\n# Une fenêtre popup propose \"Installer\" → accepter\n\n# 2. Vérifier :\ncc --version    # Apple clang version 16.x…\ngcc --version   # même chose (lien symbolique vers clang)\n\n# Tout est prêt !' },
+            { t: 'h3', h: 'Windows : MinGW-w64, GCC pour Windows' },
+            { t: 'p', h: 'Sous Windows, le compilateur Microsoft (MSVC) nécessite Visual Studio. L\'alternative légère et ouverte est **MinGW-w64** : un portage de GCC qui produit des exécutables Windows natifs. Télécharge-le depuis le site officiel ou via MSYS2 pour une expérience complète.' },
+            { t: 'code', lang: 'bash', label: 'Installation — Windows (MSYS2, recommandé)', code:
+'# 1. Télécharger l\'installateur MSYS2 depuis msys2.org\n# 2. Lancer l\'installation (accepter les défauts)\n# 3. Ouvrir le terminal MSYS2 (UCRT64) qui s\'est installé\n#\n# 4. Dans ce terminal, installer GCC :\npacman -S mingw-w64-ucrt-x86_64-gcc\n#\n# 5. Vérifier :\ngcc --version   # gcc (Rev…) 14.x…\n#\n# Alternative rapide : télécharger WinLibs (winlibs.com)\n# → archive à décompresser, puis ajouter le dossier bin/ au PATH.' },
+            { t: 'h3', h: 'Hello, Dantokpa : premier programme, première compilation' },
+            { t: 'code', lang: 'c', label: 'hello.c', code:
+'#include <stdio.h>\n\nint main(void)\n{\n    printf(\"Bonjour du marché Dantokpa !\\\\n\");\n    printf(\"Vendeuses enregistrées : %d\\\\n\", 12);\n    return 0;\n}' },
+            { t: 'code', lang: 'bash', label: 'Compiler et exécuter — toutes plateformes', code:
+'# Compiler (produit un exécutable nommé \"hello\") :\ngcc -std=c11 -Wall -Wextra hello.c -o hello\n\n# Options expliquées :\n# -std=c11   → norme C11 (moderne et supportée)\n# -Wall      → active les avertissements principaux (TOUJOURS !)\n# -Wextra    → avertissements supplémentaires\n# -o hello   → nom du binaire produit\n\n# Exécuter :\n./hello           # Linux / macOS / MSYS2\n# hello.exe       # sous Windows cmd/PowerShell\n\n# Sortie attendue :\n# Bonjour du marché Dantokpa !\n# Vendeuses enregistrées : 12' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`gcc --version` dans le terminal affiche la version (≥ 11 recommandé) — sinon revoir l\'installation.',
+              'Créer un fichier `hello.c` avec le code ci-dessus.',
+              '`gcc -std=c11 -Wall -Wextra hello.c -o hello` se termine SANS message — pas de news = bonnes nouvelles en C.',
+              '`./hello` (ou `hello.exe`) affiche le message — le programme tourne SUR ton processeur, pas dans un interpréteur.',
+              'Modifier le nombre de vendeuses, recompiler, relancer : chaque changement exige une recompilation (le C n\'est pas interprété !).'
+            ] },
+            { t: 'callout', kind: 'info', h: 'GCC vs Clang : les flags de compilation sont IDENTIQUES (`-Wall`, `-std=c11`, `-o`). GCC est le défaut Linux, Clang le défaut macOS, les deux tournent partout. Pour les curieux : compiler le même code avec LES DEUX est gratuit et attrape plus d\'avertissements — chacun voit des défauts que l\'autre ignore.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Le C, c\'est un langage de vieux, je devrais plutôt apprendre Rust. »** Le C est le socle sur lequel sont construits Windows, Linux, macOS, Python, Node.js, PostgreSQL… Le comprendre, c\'est comprendre comment un ordinateur fonctionne VRAIMENT — dessous tous les langages modernes. Ce n\'est pas un langage \"dépassé\", c\'est la langue maternelle de la machine.',
+              '**« GCC = le compilateur C. »** GCC compile aussi C++, Objective-C, Fortran… C\'est une collection de compilateurs (GNU Compiler Collection). Mais `gcc` tout court compile bien du C.',
+              '**« Je peux exécuter mon .c directement. »** Non — le `.c` est du TEXTE, pas un programme. Tu DOIS le compiler d\'abord (`gcc … -o monprog`) puis exécuter le binaire produit (`./monprog`). Pas d\'exception.',
+              '**« -Wall, c\'est pour les perfectionnistes. »** Non — c\'est ta ceinture de sécurité. Le C te laisse écrire des choses dangereuses sans rien dire ; les avertissements (-Wall -Wextra) sont la SEULE chose qui t\'alerte. Compiler sans -Wall, c\'est conduire sans tableau de bord.',
+              '**« Sous Windows, je dois installer Visual Studio. »** Non — MinGW-w64 (via MSYS2 ou WinLibs) te donne un GCC complet sans IDE lourd. Visual Studio reste une option valide, mais pas une obligation.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux blocages du premier jour : `gcc` introuvable dans le terminal, et l\'oubli de recompiler après modification du code source.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Ce socle posé, tout le module C s\'y déploie : la fiche **Les 4 étapes de la compilation** t\'expliquera ce qui se cache derrière la commande `gcc` que tu viens de lancer (prétraitement → compilation → assemblage → édition de liens) ; la fiche **GCC & Clang : les flags** détaillera les options de compilation ; et la fiche **main(), #include et codes de retour** reprendra la structure de ton premier programme pour en expliquer chaque ligne. Garde aussi en tête le parallèle avec Java : `gcc` est le `javac` du C — un compilateur qui produit un binaire natif au lieu d\'un bytecode pour machine virtuelle. La différence est fondamentale mais le geste est le même : écrire, compiler, exécuter.' },
+          ],
+          errors: [
+            {
+              title: 'gcc: command not found',
+              lang: 'bash',
+              bad: 'gcc hello.c -o hello\n# bash: gcc: command not found\n# → Pas de compilateur installé, ou pas dans le PATH.',
+              good: '# Linux   : sudo apt install build-essential\n# macOS   : xcode-select --install\n# Windows : exécuter MSYS2 et pacman -S mingw-w64-ucrt-x86_64-gcc\n# Puis rouvrir un terminal et réessayer.\n# → gcc --version doit répondre.',
+              why: 'Le compilateur n\'est pas installé par défaut sur la plupart des systèmes — contrairement à Python ou Node.js. C\'est normal et voulu : le C cible aussi des environnements sans compilateur (serveurs, embarqué). La vérification `gcc --version` est ton test de bonne installation.'
+            },
+            {
+              title: 'Modifier le code sans recompiler',
+              lang: 'bash',
+              bad: '# Tu changes le message dans hello.c :\n# \"Bonjour du marché Dantokpa !\" → \"Bienvenue à Cotonou !\"\n./hello\n# Affiche TOUJOURS l\'ancien message !',
+              good: '# Chaque modification du code source exige une recompilation :\ngcc -std=c11 -Wall -Wextra hello.c -o hello\n./hello\n# → \"Bienvenue à Cotonou !\" — le binaire reflète enfin le source ✓',
+              why: 'Le binaire `hello` est une PHOTOGRAPHIE du code source au moment de la compilation. Modifier le `.c` ne change RIEN au binaire déjà produit — il faut recompiler pour que la modification prenne effet. C\'est le prix de la performance : le binaire est un produit fini, pas une lecture en direct du source.'
+            }
+          ],
+          related: ['c-compilation', 'c-gcc-flags', 'c-structure-main', 'java-installation']
+        },
+        {
           id: 'c-compilation',
           title: 'Les 4 étapes de la compilation',
           icon: 'build',

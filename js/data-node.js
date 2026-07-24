@@ -26,6 +26,73 @@ DEVDOCS.node = {
       icon: 'sync',
       fiches: [
         {
+          id: 'nd-installation',
+          title: 'Installation & configuration',
+          icon: 'download',
+          level: 'Débutant',
+          tagline: 'nvm pour gérer les versions, node/npm/npx expliqués, et le premier serveur en dix lignes — le socle de tout le module.',
+          intro: 'Node.js fait tourner du JavaScript HORS du navigateur — sur ta machine, sur un serveur, partout où il y a un système d\'exploitation. Avant d\'écrire la moindre API Express, tu dois installer **Node** et comprendre les trois outils qui l\'accompagnent : `node` (le moteur), `npm` (le magasin de paquets) et `npx` (l\'exécuteur jetable). Cette fiche pose le socle, en commençant par le choix décisif : installer Node directement… ou passer par **nvm**, le gestionnaire de versions.',
+          blocks: [
+            { t: 'h3', h: 'Pourquoi Node.js a-t-il besoin d\'une installation ?' },
+            { t: 'p', h: 'Contrairement au JavaScript du navigateur (inclus dans Chrome/Firefox), Node.js est un programme indépendant — un exécutable qui lit ton fichier `.js` et le fait tourner. Il embarque le moteur **V8** (le même que Chrome) et une bibliothèque de modules natifs (`fs`, `http`, `path`…) pour interagir avec le système de fichiers, le réseau, les processus. Tu l\'installes une fois, et tous tes projets Node l\'utilisent.' },
+            { t: 'h3', h: 'nvm : le gestionnaire de versions (recommandé)' },
+            { t: 'p', h: '**nvm** (Node Version Manager) est la méthode professionnelle : il installe PLUSIEURS versions de Node côte à côte, et tu bascules de l\'une à l\'autre en une commande. Pourquoi c\'est utile ? Ton projet hébergé tourne peut-être sous Node 20 LTS alors que ton nouveau projet utilise Node 24. Sans nvm, changer de version = désinstaller/réinstaller. Avec nvm : `nvm use 20` ou `nvm use 24` — une seconde.' },
+            { t: 'code', lang: 'bash', label: 'Installer nvm et Node.js — macOS / Linux', code:
+'# 1. Installer nvm (script officiel) :\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash\n# Redémarrer le terminal ou : source ~/.bashrc\n\n# 2. Installer la LTS (Long-Term Support) recommandée :\nnvm install --lts\n# Télécharge, compile si besoin, active automatiquement\n\n# 3. Vérifier :\nnode -v   # v22.17.0 (ou la LTS du moment)\nnpm -v    # 10.x (fourni avec Node)\n\n# 4. Installer une version spécifique si besoin :\nnvm install 20      # Node 20 LTS (\"Iron\")\nnvm use 20          # bascule sur cette version\nnvm alias default 22  # version par défaut à l\'ouverture du terminal' },
+            { t: 'h3', h: 'Windows : l\'installateur officiel ou nvm-windows' },
+            { t: 'p', h: 'Sous Windows, deux chemins : l\'**installateur officiel** (nodejs.org → bouton LTS, un `.exe`, suivant → suivant → terminé) — parfait pour débuter sans complexité ; ou **nvm-windows** (github.com/coreybutler/nvm-windows) si tu gères plusieurs projets aux exigences différentes. L\'installateur classique ajoute Node au PATH automatiquement et installe npm avec.' },
+            { t: 'code', lang: 'bash', label: 'Vérifier l\'installation — Windows / macOS / Linux', code:
+'# Ces trois commandes doivent répondre sans erreur :\nnode -v      # version de Node.js (ex: v22.17.0)\nnpm -v       # version de npm (ex: 10.9.2)\nnpx -v       # version de npx (fournie avec npm)\n\n# Si \"command not found\" :\n# - le PATH ne contient pas Node → réinstaller ou corriger la variable d\'environnement\n# - sous Windows : fermer et rouvrir le terminal après installation' },
+            { t: 'h3', h: 'node, npm, npx : les trois outils, chacun son rôle' },
+            { t: 'p', h: '**`node`** est le moteur : `node server.js` exécute ton fichier. C\'est lui qui fait tourner V8, la Event Loop, libuv — tout l\'environnement d\'exécution. Tu l\'utilises pour LANCER un programme. **`npm`** (Node Package Manager) est le gestionnaire de paquets : `npm install express` télécharge la bibliothèque Express et ses dépendances dans le dossier `node_modules/`. C\'est le magasin — tu ne lances pas ton app avec, tu l\'utilises pour préparer le terrain. **`npx`** est l\'exécuteur jetable : `npx create-react-app` télécharge ET exécute un paquet en une fois, sans l\'installer durablement.' },
+            { t: 'code', lang: 'bash', label: 'Leurs signatures dans la vraie vie', code:
+'node script.js           # exécute un fichier JavaScript\nnode                     # ouvre le REPL (console interactive JS)\n\nnpm init -y              # crée un package.json dans le dossier courant\nnpm install express      # ajoute express à node_modules/ et package.json\nnpm run dev              # exécute le script \"dev\" déclaré dans package.json\n\nnpx nodemon server.js    # exécute nodemon sans l\'avoir installé globalement\nnpx tsc --init           # exécute le compilateur TypeScript à la volée' },
+            { t: 'h3', h: 'npm init : ton premier projet Node' },
+            { t: 'p', h: 'Un projet Node, c\'est d\'abord un dossier avec un fichier **`package.json`** — sa carte d\'identité. `npm init -y` le crée avec des valeurs par défaut. Ce fichier contient le nom du projet, sa version, et bientôt la liste de ses dépendances (`express`, `pg`…) et ses scripts (`\"dev\": \"nodemon server.js\"`). Tu peux l\'éditer à la main — c\'est du JSON lisible. La fiche « npm & package.json » du module détaille tout ; ici, l\'essentiel est de savoir le créer et comprendre que **tout projet Node commence par `npm init`**.' },
+            { t: 'code', lang: 'js', label: 'server.js — premier serveur, dix lignes', code:
+'// Fichier : server.js — à créer dans un dossier après npm init -y\nimport { createServer } from \'node:http\';\n\nconst serveur = createServer((req, res) => {\n  res.writeHead(200, { \'Content-Type\': \'application/json; charset=utf-8\' });\n  res.end(JSON.stringify({\n    message: \'Bonjour du marché Dantokpa !\',\n    vendeuses: [\'Awa Mensah\', \'Koffi Adjoa\'],\n    heure: new Date().toLocaleTimeString(\'fr-FR\')\n  }));\n});\n\nserveur.listen(3000, () => console.log(\'API prête : http://localhost:3000\'));\n\n// Lancer avec : node server.js\n// Navigateur → http://localhost:3000 → tu vois le JSON !' },
+            { t: 'p', h: 'Dix lignes, et tu as un SERVEUR HTTP qui répond du JSON. Pas de framework, pas de magie — juste le module natif `node:http`. `createServer` reçoit une fonction appelée à chaque requête ; `writeHead` pose le code HTTP et les en-têtes ; `end` envoie la réponse. Plus tard, Express remplacera cette mécanique par du routing, des middlewares, du confort — mais sous le capot, c\'est EXACTEMENT ce code qui tourne. Avoir écrit ces dix lignes une fois change la façon de lire tout le module.' },
+            { t: 'h3', h: 'La vérification qui calme (le rituel complet)' },
+            { t: 'ol', items: [
+              '`node -v` affiche la version LTS (≥ 20 recommandé) — sinon installer/basculer avec nvm (voir l\'erreur n°1 en bas).',
+              '`npm init -y` dans un dossier vide crée `package.json` — le projet existe.',
+              'Créer un fichier `server.js` avec le code ci-dessus, puis `node server.js` → le terminal affiche « API prête : http://localhost:3000 ».',
+              'Navigateur → `http://localhost:3000` → le JSON s\'affiche. Modifie le message dans `server.js`, relance (`Ctrl+C` puis `node server.js`), recharge : le changement apparaît.',
+              '`Ctrl+C` arrête le serveur proprement — le terminal redevient disponible.'
+            ] },
+            { t: 'callout', kind: 'info', h: 'Différences selon l\'OS : les commandes `node`, `npm` et `npx` sont STRICTEMENT identiques sous Windows, macOS et Linux — Node uniformise tout. Deux notes : sous **Windows**, si PowerShell refuse d\'exécuter `node`, vérifie que le PATH contient le dossier d\'installation (l\'installateur le fait normalement). Sous **macOS/Linux**, nvm est l\'installation la plus propre. Et si le port 3000 est déjà occupé, change `3000` en `3001` dans `server.js` — n\'importe quel numéro entre 1024 et 65535 fonctionne.' },
+            { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+            { t: 'ul', items: [
+              '**« Node.js est un framework comme Laravel ou Django. »** Non — Node est UN MOTEUR d\'exécution JavaScript, comme PHP est un langage. Express est au Node ce que Laravel est au PHP : un cadre de travail par-dessus. Tu peux parfaitement écrire un serveur sans Express (on vient de le faire), comme tu peux écrire du PHP sans Laravel.',
+              '**« npm = Node. »** Non — npm est le GESTIONNAIRE DE PAQUETS fourni AVEC Node. `node` fait tourner le code ; `npm` télécharge les bibliothèques. Les deux voyagent ensemble mais ont des rôles distincts.',
+              '**« Une fois installé globalement, c\'est bon pour tous mes projets. »** En partie seulement : Node est bien global, mais chaque PROJET a ses propres dépendances locales dans `node_modules/`. Tu installes Node une fois, Express dans chaque projet.',
+              '**« nvm, c\'est pour les experts Linux. »** Non — c\'est l\'outil qui t\'évite justement les galères d\'experts. Une commande pour installer, une pour basculer. Sur un projet qui exige Node 20 et un autre qui veut Node 24, nvm rend la cohabitation triviale.',
+              '**« npm install -g express rend Express disponible partout. »** Non — n\'installe JAMAIS les dépendances de PROJET en global. Chaque projet déclare ses propres dépendances (`npm install express` dans SON dossier), ce qui garantit que deux projets peuvent utiliser deux versions différentes sans se marcher dessus.'
+            ] },
+            { t: 'h3', h: 'Les erreurs typiques à ne plus commettre' },
+            { t: 'p', h: 'Les deux blocages du premier jour : un Node trop ancien que les outils modernes refusent, et un `npm install` oublié après avoir cloné un projet.' },
+            { t: 'h3', h: 'Lien avec les notions déjà vues' },
+            { t: 'p', h: 'Ce socle posé, tout le module Node s\'y déploie : la fiche **Un seul thread** t\'expliquera pourquoi ce serveur tient des milliers de clients sans ralentir ; la fiche **npm & package.json** détaillera le manifeste que tu viens de créer avec `npm init` ; et la fiche **Premier serveur Express** remplacera `createServer` par `express()` — mais la mécanique sous-jacente (`listen`, `req`, `res`) ne changera pas d\'un octet. Garde aussi en tête le parallèle avec PHP : `node server.js` est au Node ce que `php -S localhost:8000` est au PHP — le serveur de développement en une commande. Et `npm` est le cousin de Composer côté PHP : un gestionnaire de dépendances, un fichier manifeste, un dossier de paquets à ne pas committer.' },
+          ],
+          errors: [
+            {
+              title: 'Node.js trop ancien pour les outils modernes',
+              lang: 'bash',
+              bad: 'node -v\n# v14.21.3  ← installé il y a 3 ans, jamais mis à jour\nnpm create vite@latest mon-app\n# → error: EBADENGINE - Unsupported engine\n# Vite exige Node ≥ 18 ; ton Node 14 le fait planter net.',
+              good: 'nvm install --lts    # installe la dernière LTS\nnvm use --lts        # active cette version\nnode -v              # v22.x → reprendre\n# Si pas de nvm : désinstaller Node, réinstaller depuis nodejs.org\n# (télécharger la version LTS, pas la \"Current\")',
+              why: 'L\'écosystème Node avance vite : les outils récents (Vite, Express 5, certains paquets npm) exigent des versions minimales. Node 14 est en fin de vie depuis avril 2023. Le bon geste n\'est jamais de contourner l\'erreur en cherchant une vieille version du paquet — c\'est de mettre Node à jour. nvm rend cette opération indolore et réversible.'
+            },
+            {
+              title: 'Oublier npm install après avoir cloné un projet',
+              lang: 'bash',
+              bad: 'git clone https://github.com/toi/api-dantokpa.git\ncd api-dantokpa\nnode server.js\n# → Error: Cannot find module \'express\'\n# …et pourtant « ça marchait sur l\'autre machine » !',
+              good: 'git clone https://github.com/toi/api-dantokpa.git\ncd api-dantokpa\nnpm install      # TOUJOURS après le clone (et après chaque pull qui a touché package.json)\nnode server.js   # → le serveur démarre immédiatement',
+              why: '`node_modules/` n\'est JAMAIS versionné dans Git (trop gros, régénérable). Le dépôt voyage avec le manifeste (`package.json`) et le verrou (`package-lock.json`), mais sans les paquets eux-mêmes. Toute machine nouvelle commence donc avec un projet VIDE d\'outillage. Le réflexe professionnel, identique au `composer install` de PHP : **clone → install → run**, dans cet ordre, toujours.'
+            }
+          ],
+          related: ['nd-single-thread', 'nd-npm-package-json', 'nd-http-natif', 'nd-express-bases', 'php-installation']
+        },
+        {
           id: 'nd-single-thread',
           title: 'Un seul thread, des milliers de clients',
           icon: 'speed',
