@@ -269,6 +269,99 @@
     'UNSIGNED', 'AUTOINCREMENT', 'NOTNULL'
   ].join('|');
 
+  /* ----- Dart / Flutter ----------------------------------------- */
+  const DART_KW = [
+    'abstract', 'as', 'assert', 'async', 'await', 'base', 'break', 'case',
+    'catch', 'class', 'const', 'continue', 'covariant', 'default', 'deferred',
+    'do', 'dynamic', 'else', 'enum', 'export', 'extends', 'extension',
+    'external', 'factory', 'false', 'final', 'finally', 'for', 'Function',
+    'get', 'hide', 'if', 'implements', 'import', 'in', 'interface', 'is',
+    'late', 'library', 'mixin', 'new', 'null', 'on', 'operator', 'part',
+    'required', 'rethrow', 'return', 'sealed', 'set', 'show', 'static',
+    'super', 'switch', 'sync', 'this', 'throw', 'true', 'try', 'typedef',
+    'var', 'void', 'when', 'while', 'with', 'yield'
+  ].join('|');
+
+  const DART_TYPES = [
+    'int', 'double', 'num', 'String', 'bool', 'void', 'Object', 'Never',
+    'Null', 'Function', 'Symbol', 'Type', 'dynamic', 'Future', 'FutureOr',
+    'Stream', 'Iterable', 'Iterator', 'List', 'Map', 'Set', 'Record',
+    'Comparable', 'DateTime', 'Duration', 'RegExp', 'Match', 'Uri',
+    'BigInt', 'StackTrace', 'Stopwatch', 'Timer', 'Zone'
+  ].join('|');
+
+  const DART_BUILTINS = [
+    'print', 'debugPrint', 'runApp', 'main',
+    'StatelessWidget', 'StatefulWidget', 'State', 'InheritedWidget',
+    'BuildContext', 'Key', 'GlobalKey', 'ValueKey', 'UniqueKey',
+    'Widget', 'Element', 'RenderObject', 'ComponentElement',
+    'MaterialApp', 'CupertinoApp', 'Scaffold', 'ScaffoldMessenger',
+    'AppBar', 'FloatingActionButton', 'BottomNavigationBar', 'TabBar',
+    'Drawer', 'NavigationBar', 'NavigationRail', 'SliverAppBar',
+    'Container', 'Row', 'Column', 'Stack', 'Wrap', 'Flow',
+    'Expanded', 'Flexible', 'Spacer', 'SizedBox', 'Align', 'Center',
+    'Padding', 'Positioned', 'AspectRatio', 'FractionallySizedBox',
+    'LimitedBox', 'ConstrainedBox', 'UnconstrainedBox', 'OverflowBox',
+    'FittedBox', 'Transform', 'RotatedBox', 'Opacity', 'ClipRRect',
+    'Text', 'RichText', 'Icon', 'Image', 'CircleAvatar', 'Placeholder',
+    'Card', 'ListTile', 'Divider', 'VerticalDivider', 'DataTable',
+    'SingleChildScrollView', 'ListView', 'GridView', 'PageView',
+    'ReorderableListView', 'CustomScrollView', 'SliverList', 'SliverGrid',
+    'TextField', 'TextFormField', 'Form', 'FormField', 'FormState',
+    'DropdownButtonFormField', 'Checkbox', 'Radio', 'Slider', 'Switch',
+    'SwitchListTile', 'CheckboxListTile', 'RadioListTile', 'DatePicker',
+    'ElevatedButton', 'FilledButton', 'OutlinedButton', 'TextButton',
+    'IconButton', 'FloatingActionButton', 'InkWell', 'GestureDetector',
+    'MaterialPageRoute', 'Navigator', 'NavigatorState', 'Route',
+    'Router', 'GoRouter', 'ShellRoute', 'Hero', 'WillPopScope',
+    'Theme', 'ThemeData', 'ThemeMode', 'MediaQuery', 'Directionality',
+    'DefaultTextStyle', 'IconTheme', 'MaterialColor', 'ColorScheme',
+    'TextTheme', 'Brightness', 'MaterialStateProperty', 'ElevationOverlay',
+    'initState', 'dispose', 'build', 'setState', 'didChangeDependencies',
+    'didUpdateWidget', 'deactivate', 'reassemble',
+    'addPostFrameCallback', 'mounted', 'context', 'widget',
+    'FutureBuilder', 'StreamBuilder', 'AnimatedBuilder', 'LayoutBuilder',
+    'OrientationBuilder', 'ValueListenableBuilder', 'Consumer',
+    'ChangeNotifier', 'ValueNotifier', 'ListenableBuilder',
+    'Provider', 'MultiProvider', 'ChangeNotifierProvider',
+    'FutureProvider', 'StreamProvider', 'context.read', 'context.watch',
+    'context.select', 'ProviderNotFoundException',
+    'NotifyListener', 'Listenable', 'AnimationController',
+    'Tween', 'Animation', 'CurvedAnimation', 'AnimatedWidget',
+    'AnimatedContainer', 'AnimatedOpacity', 'AnimatedCrossFade',
+    'Hero', 'FadeTransition', 'ScaleTransition', 'SlideTransition',
+    'RotationTransition', 'SizeTransition', 'FadeInImage',
+    'http', 'Response', 'Request', 'Client',
+    'HttpClient', 'HttpRequest', 'HttpResponse', 'HttpHeaders',
+    'jsonDecode', 'jsonEncode', 'json', 'utf8',
+    'File', 'Directory', 'FileSystemEntity', 'Platform',
+    'AssetBundle', 'AssetImage', 'NetworkImage', 'FileImage',
+    'MemoryImage', 'ExactAssetImage', 'CachedNetworkImage',
+    'precacheImage', 'ImageCache', 'SharedPreferences',
+    'sqflite', 'WebSocket', 'Timer', 'PeriodicTimer',
+    'Diagnosticable', 'DiagnosticPropertiesBuilder',
+    'AsyncSnapshot', 'ConnectionState', 'TextEditingController',
+    'FocusNode', 'ScrollController', 'PageController', 'TabController',
+    'RepaintBoundary', 'CustomPainter', 'Canvas', 'Paint',
+    'Offset', 'Size', 'Rect', 'Color', 'Colors', 'FontWeight',
+    'EdgeInsets', 'BorderRadius', 'BoxDecoration', 'TextStyle',
+    'Border', 'BoxShadow', 'BoxShape', 'LinearGradient', 'Gradient',
+    'MainAxisAlignment', 'CrossAxisAlignment', 'MainAxisSize',
+    'TextOverflow', 'TextAlign', 'TextDirection', 'Overflow',
+    'Clip', 'StackFit', 'BlendMode', 'ImageFit', 'BoxFit',
+    'Curves', 'Duration', 'Interval', 'TickerProvider',
+    'SingleTickerProviderStateMixin', 'TickerProviderStateMixin',
+    'testWidgets', 'pumpWidget', 'pump', 'find', 'expect',
+    'expectLater', 'matchesGoldenFile', 'WidgetTester',
+    'MockClient', 'when', 'verify', 'captureAny', 'any',
+    'Riverpod', 'StateProvider', 'StateNotifierProvider',
+    'NotifierProvider', 'AsyncNotifierProvider', 'AutoDispose',
+    'ref', 'Ref', 'WidgetRef', 'ConsumerWidget', 'ConsumerStatefulWidget',
+    'BLoC', 'Cubit', 'BlocProvider', 'BlocBuilder', 'BlocListener',
+    'BlocConsumer', 'RepositoryProvider', 'MultiBlocProvider',
+    'flutter_test', 'mockito'
+  ].join('|');
+
   /* ==============================================================
      MOTEURS PAR LANGAGE
      ============================================================== */
@@ -559,10 +652,48 @@
     );
   }
 
+  /* ----- Dart ---------------------------------------------------
+     Coloration syntaxique Dart/Flutter : commentaires, chaines,
+     raw strings, annotations, mots-cles, types, APIs Flutter/Dart,
+
   /* ----- Fallback universel (tous langages inconnus) -------------
      Colorise au minimum les commentaires (slash-slash, hash, slash-étoile)
      et les chaînes de caractères (simples et doubles). Cela évite le rendu
      entièrement monochrome sur bash, xml, text, etc. */
+  /* ----- Dart ---------------------------------------------------
+     Coloration syntaxique Dart/Flutter : commentaires, chaines,
+     raw strings, annotations, mots-cles, types, APIs Flutter/Dart,
+     noms de classes et appels de fonction. */
+  function highlightDart(escaped) {
+    return escaped.replace(
+      new RegExp(
+        '(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)' +                       // commentaires
+        '|(r?"""[\\s\\S]*?"""|r?\'\'\'[\\s\\S]*?\'\'\'|r?"(?:[^"\\\\\\n]|\\\\.)*"|r?\'(?:[^\'\\\\\\n]|\\\\.)*\')' + // chaines
+        '|(@[A-Za-z_][\\w]*)' +                                        // annotations
+        '|\\b(' + DART_BUILTINS + ')\\b' +                      // APIs Flutter/Dart
+        '|\\b(' + DART_TYPES + ')\\b' +                          // types natifs
+        '|\\b(' + DART_KW + ')\\b' +                             // mots-cles
+        '|\\b([A-Z][A-Za-z_]\\w*)(?=\\s*\\.)' +                        // Classes MaClasse.
+        '|\\b([a-z_][A-Za-z_]\\w*)(?=\\s*\\()' +                       // appels de fonction
+        '|\\b((?:0[xX][0-9a-fA-F_]+)|(?:\\d[\\d_]*\\.?\\d*(?:[eE][+-]?\\d+)?))\\b', // nombres
+        'g'
+      ),
+      function (m, com, str, ann, builtin, typ, kw, cls, fn, num) {
+        if (com)     return '<span class="tk-com">'  + com + '</span>';
+        if (str)     return '<span class="tk-str">'  + str + '</span>';
+        if (ann)     return '<span class="tk-attr">' + ann + '</span>';
+        if (builtin) return '<span class="tk-val">'  + builtin + '</span>';
+        if (typ)     return '<span class="tk-val">'  + typ + '</span>';
+        if (kw)      return '<span class="tk-kw">'   + kw + '</span>';
+        if (cls)     return '<span class="tk-val">'  + cls + '</span>';
+        if (fn)      return '<span class="tk-fn">'   + fn + '</span>';
+        if (num)     return '<span class="tk-num">'  + num + '</span>';
+        return m;
+      }
+    );
+  }
+
+
   function highlightFallback(escaped) {
     return escaped.replace(
       /(\/\/[^\n]*|#[^\n]*|\/\*[\s\S]*?\*\/)|('(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*")/g,
@@ -640,6 +771,7 @@
       if (lang === 'xml')                           return highlightXML(escaped);
       if (lang === 'bash' || lang === 'sh' || lang === 'shell') return highlightBash(escaped);
       if (lang === 'sql')                           return highlightSQL(escaped);
+      if (lang === 'dart' || lang === 'flutter') return highlightDart(escaped);
       if (lang === 'text' || lang === 'txt' || lang === 'plaintext') return escaped;
       /* Fallback pour tout langage inconnu : au moins les commentaires et chaînes */
       return highlightFallback(escaped);

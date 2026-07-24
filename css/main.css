@@ -40,6 +40,7 @@
   --c-django: #0c4b33;
   --c-vue: #2f9e6c;
   --c-rn: #00a9ce;
+  --c-flutter: #0553B1;
 
   /* Accent courant (change selon la page via body[data-lang]) */
   --accent: #0a84ff;
@@ -64,6 +65,7 @@ body[data-lang="flask"] { --accent: var(--c-flask); --accent-soft: rgba(58, 58, 
 body[data-lang="django"] { --accent: var(--c-django); --accent-soft: rgba(12, 75, 51, .12); }
 body[data-lang="vue"] { --accent: var(--c-vue); --accent-soft: rgba(47, 158, 108, .14); }
 body[data-lang="rn"] { --accent: var(--c-rn); --accent-soft: rgba(0, 169, 206, .14); }
+body[data-lang="flutter"] { --accent: var(--c-flutter); --accent-soft: rgba(5, 83, 177, .13); }
 
 html[data-theme="dark"] body[data-lang="js"] { --accent: #ffd60a; --accent-soft: rgba(255, 214, 10, .14); }
 html[data-theme="dark"] body[data-lang="ts"] { --accent: #4c9fe0; --accent-soft: rgba(76, 159, 224, .15); }
@@ -81,6 +83,7 @@ html[data-theme="dark"] body[data-lang="django"] { --accent: #44b78b; --accent-s
 html[data-theme="dark"] body[data-lang="vue"] { --accent: #42b883; --accent-soft: rgba(66, 184, 131, .16); }
 html[data-theme="dark"] body[data-lang="algo"] { --accent: #a29bfe; --accent-soft: rgba(162, 155, 254, .16); }
 html[data-theme="dark"] body[data-lang="rn"] { --accent: #61dafb; --accent-soft: rgba(97, 218, 251, .16); }
+html[data-theme="dark"] body[data-lang="flutter"] { --accent: #60CAF6; --accent-soft: rgba(96, 202, 246, .15); }
 
 /* ---------- Thème clair & sombre ---------- */
 html[data-theme="light"] {
@@ -524,6 +527,7 @@ body:not(.sidebar-hidden) #sidebar .side-scroll .side-nav a:nth-child(17) { anim
 .ic-django { background: linear-gradient(135deg, #1f8a5f, #0c4b33); box-shadow: 0 6px 14px rgba(12,75,51,.42); }
 .ic-vue { background: linear-gradient(135deg, #42b883, #35495e); box-shadow: 0 6px 14px rgba(53,73,94,.42); }
 .ic-rn { background: linear-gradient(135deg, #61dafb, #2e4b66); box-shadow: 0 6px 14px rgba(70,150,190,.42); color: #083447; }
+.ic-flutter { background: linear-gradient(135deg, #60CAF6, #0553B1); box-shadow: 0 6px 14px rgba(5,83,177,.42); color: #fff; }
 .ic-neutral { background: linear-gradient(135deg, #8e8e93, #636366); box-shadow: 0 6px 14px rgba(99,99,102,.3); }
 
 .card-title { font-size: 17.5px; font-weight: 700; letter-spacing: -0.015em; }

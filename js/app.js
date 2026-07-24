@@ -7,7 +7,7 @@
 
   /* ---------- Registre de contenu ---------- */
   const DB = window.DEVDOCS || {};
-  const LANGS = ['algo', 'html', 'css', 'js', 'ts', 'react', 'tailwind', 'php', 'laravel', 'tanstack', 'python', 'flask', 'django', 'vue', 'rn', 'node', 'c', 'java'].filter((l) => DB[l]);
+  const LANGS = ['algo', 'html', 'css', 'js', 'ts', 'react', 'tailwind', 'php', 'laravel', 'tanstack', 'python', 'flask', 'django', 'vue', 'rn', 'flutter', 'node', 'c', 'java'].filter((l) => DB[l]);
 
   /* ---------- Catégories de modules (source unique) ---------- */
   const MODULE_CATEGORIES = [
@@ -15,7 +15,7 @@
     { id: 'langages', name: 'Langages de base', icon: 'code', modules: ['html', 'css', 'js', 'python', 'java', 'c', 'php', 'ts'] },
     { id: 'frontend', name: 'Frontend & Frameworks', icon: 'palette', modules: ['react', 'vue', 'tailwind', 'tanstack'] },
     { id: 'backend', name: 'Backend & Frameworks', icon: 'dns', modules: ['node', 'laravel', 'flask', 'django'] },
-    { id: 'mobile', name: 'Mobile', icon: 'smartphone', modules: ['rn'] }
+    { id: 'mobile', name: 'Mobile', icon: 'smartphone', modules: ['rn', 'flutter'] }
   ];
   // On ne garde que les catégories qui contiennent au moins un module présent dans DB
   const activeCats = MODULE_CATEGORIES.map((cat) => ({
@@ -213,7 +213,7 @@
 
   /* ---------- Badges / cartes réutilisables ---------- */
   const lvlClass = (lv) => 'lvl-' + norm(lv);
-  function langIconCls(langId) { return { algo: 'ic-algo', html: 'ic-html', css: 'ic-css', js: 'ic-js', ts: 'ic-ts', react: 'ic-react', tailwind: 'ic-tailwind', php: 'ic-php', laravel: 'ic-laravel', tanstack: 'ic-tanstack', python: 'ic-python', flask: 'ic-flask', django: 'ic-django', vue: 'ic-vue', rn: 'ic-rn', node: 'ic-node', c: 'ic-c', java: 'ic-java' }[langId] || 'ic-neutral'; }
+  function langIconCls(langId) { return { algo: 'ic-algo', html: 'ic-html', css: 'ic-css', js: 'ic-js', ts: 'ic-ts', react: 'ic-react', tailwind: 'ic-tailwind', php: 'ic-php', laravel: 'ic-laravel', tanstack: 'ic-tanstack', python: 'ic-python', flask: 'ic-flask', django: 'ic-django', vue: 'ic-vue', rn: 'ic-rn', flutter: 'ic-flutter', node: 'ic-node', c: 'ic-c', java: 'ic-java' }[langId] || 'ic-neutral'; }
 
   function ficheCard(f, langId) {
     return '<a class="fiche-card reveal" data-level="' + norm(f.level) + '" href="#/fiche/' + f.id + '">' +
