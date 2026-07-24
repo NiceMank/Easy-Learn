@@ -9,6 +9,20 @@
   const DB = window.DEVDOCS || {};
   const LANGS = ['algo', 'html', 'css', 'js', 'ts', 'react', 'tailwind', 'php', 'laravel', 'tanstack', 'python', 'flask', 'django', 'vue', 'rn', 'node', 'c', 'java'].filter((l) => DB[l]);
 
+  /* ---------- Catégories de modules (source unique) ---------- */
+  const MODULE_CATEGORIES = [
+    { id: 'fondations', name: 'Fondations', icon: 'school', modules: ['algo'] },
+    { id: 'langages', name: 'Langages de base', icon: 'code', modules: ['html', 'css', 'js', 'python', 'java', 'c', 'php', 'ts'] },
+    { id: 'frontend', name: 'Frontend & Frameworks', icon: 'palette', modules: ['react', 'vue', 'tailwind', 'tanstack'] },
+    { id: 'backend', name: 'Backend & Frameworks', icon: 'dns', modules: ['node', 'laravel', 'flask', 'django'] },
+    { id: 'mobile', name: 'Mobile', icon: 'smartphone', modules: ['rn'] }
+  ];
+  // On ne garde que les catégories qui contiennent au moins un module présent dans DB
+  const activeCats = MODULE_CATEGORIES.map((cat) => ({
+    ...cat,
+    modules: cat.modules.filter((m) => DB[m])
+  })).filter((cat) => cat.modules.length > 0);
+
   /* ---------- Persistance ---------- */
   const store = {
     get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
@@ -199,7 +213,7 @@
 
   /* ---------- Badges / cartes réutilisables ---------- */
   const lvlClass = (lv) => 'lvl-' + norm(lv);
-  function langIconCls(langId) { return { html: 'ic-html', css: 'ic-css', js: 'ic-js', ts: 'ic-ts', react: 'ic-react', tailwind: 'ic-tailwind', php: 'ic-php', laravel: 'ic-laravel', tanstack: 'ic-tanstack', python: 'ic-python', flask: 'ic-flask', django: 'ic-django', vue: 'ic-vue', rn: 'ic-rn', node: 'ic-node', c: 'ic-c', java: 'ic-java' }[langId] || 'ic-neutral'; }
+  function langIconCls(langId) { return { algo: 'ic-algo', html: 'ic-html', css: 'ic-css', js: 'ic-js', ts: 'ic-ts', react: 'ic-react', tailwind: 'ic-tailwind', php: 'ic-php', laravel: 'ic-laravel', tanstack: 'ic-tanstack', python: 'ic-python', flask: 'ic-flask', django: 'ic-django', vue: 'ic-vue', rn: 'ic-rn', node: 'ic-node', c: 'ic-c', java: 'ic-java' }[langId] || 'ic-neutral'; }
 
   function ficheCard(f, langId) {
     return '<a class="fiche-card reveal" data-level="' + norm(f.level) + '" href="#/fiche/' + f.id + '">' +
@@ -231,18 +245,20 @@
         '<span class="material-symbols-rounded chevron">chevron_right</span></a></section>';
     }
 
-    out += '<h2 class="section-title reveal">' + icon('layers') + 'Choisis un langage</h2><div class="card-grid">';
-    LANGS.forEach((l) => {
-      const L = DB[l];
-      const n = flatFiches(l).length;
-      out += '<a class="lang-card reveal" href="#/' + l + '">' +
-        '<span class="card-icon ' + langIconCls(l) + '">' + icon(L.icon) + '</span>' +
-        '<span class="card-title">' + L.name + '</span>' +
-        '<p class="card-desc">' + md(L.tagline) + '</p>' +
-        '<span class="card-meta"><span class="chip accent">' + icon('format_list_numbered') + n + ' fiches</span>' +
-        '<span class="chip">' + icon('folder') + L.categories.length + ' chapitres</span></span></a>';
+    activeCats.forEach((cat) => {
+      out += '<h2 class="section-title reveal">' + icon(cat.icon) + cat.name + '</h2><div class="card-grid">';
+      cat.modules.forEach((l) => {
+        const L = DB[l];
+        const n = flatFiches(l).length;
+        out += '<a class="lang-card reveal" href="#/' + l + '">' +
+          '<span class="card-icon ' + langIconCls(l) + '">' + icon(L.icon) + '</span>' +
+          '<span class="card-title">' + L.name + '</span>' +
+          '<p class="card-desc">' + md(L.tagline) + '</p>' +
+          '<span class="card-meta"><span class="chip accent">' + icon('format_list_numbered') + n + ' fiches</span>' +
+          '<span class="chip">' + icon('folder') + L.categories.length + ' chapitres</span></span></a>';
+      });
+      out += '</div>';
     });
-    out += '</div>';
 
     if (favs.length) {
       out += '<h2 class="section-title reveal">' + icon('favorite') + 'Tes favoris</h2><div class="list-group">';
