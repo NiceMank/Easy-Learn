@@ -401,8 +401,20 @@
   const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés' };
 
   function route() {
-    if (!view) return; // sécurité : #view pas encore monté (rare, refresh extrêmement rapide)
-    const hash = location.hash.replace(/^#\/?/, '');
+    if (!view) return;
+
+    /* Application est géré de façon autonome par exo-app.js :
+       si le hash commence par "application", on laisse exo-app
+       faire le rendu via son propre écouteur hashchange. */
+    var rawHash = location.hash.replace(/^#\/?/, '');
+    if (rawHash.startsWith('application')) {
+      if (typeof window.ExoApp !== 'undefined' && typeof window.ExoApp.rerender === 'function') {
+        window.ExoApp.rerender();
+      }
+      return;
+    }
+
+    const hash = rawHash;
     const parts = hash.split('/').filter(Boolean);
     let html, key = 'home', title = 'Easy Learn';
 
@@ -415,23 +427,6 @@
     else if (DB[parts[0]]) { html = viewLang(parts[0]); key = parts[0]; title = DB[parts[0]].name; }
     else if (parts[0] === 'favoris') { html = viewFavoris(); key = 'favoris'; title = 'Favoris'; }
     else if (parts[0] === 'historique') { html = viewHistorique(); key = 'historique'; title = 'Récemment consultés'; }
-    else if (parts[0] === 'application') {
-      // Délégué au module d'exercices (exo-app.js)
-      if (typeof window.ExoApp !== 'undefined' && window.ExoApp.route) {
-        var exoResult = window.ExoApp.route(parts);
-        if (exoResult && exoResult.html) {
-          html = exoResult.html;
-          title = exoResult.title || 'Application';
-          key = 'application';
-          // ExoApp.bind() sera appelé APRÈS l'injection HTML
-          // (il attache les runners DOM aux éléments #exo-runner)
-        } else {
-          html = viewHome();
-        }
-      } else {
-        html = viewHome();
-      }
-    }
     else { html = viewHome(); }
 
     view.innerHTML = html;
@@ -439,11 +434,6 @@
     window.scrollTo(0, 0);
     $('#topbar-title').textContent = TITLES[key] || title;
     document.title = title + ' — Easy Learn';
-
-    /* Si on vient d'afficher une page Application, attacher les runners DOM */
-    if (key === 'application' && typeof window.ExoApp !== 'undefined' && window.ExoApp.bind) {
-      window.ExoApp.bind(view);
-    }
 
     document.querySelectorAll('[data-nav]').forEach((el) => {
       el.classList.toggle('active', el.dataset.nav === key || (key === '' && el.dataset.nav === 'home'));

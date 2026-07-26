@@ -753,12 +753,19 @@
   }
 
   function rerender() {
-    var view = document.getElementById('view');
-    if (!view) return;
+    var viewEl = document.getElementById('view');
+    if (!viewEl) return;
     var parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     var r = route(parts);
-    view.innerHTML = r.html;
-    bind(view);
+    viewEl.innerHTML = r.html;
+    document.title = (r.title || 'Application') + ' — Easy Learn';
+    var tb = document.getElementById('topbar-title');
+    if (tb) tb.textContent = r.title || 'Application';
+    // Activer le lien Application dans la sidebar
+    document.querySelectorAll('[data-nav]').forEach(function (el) {
+      el.classList.toggle('active', el.dataset.nav === 'application');
+    });
+    bind(viewEl);
   }
 
   /* ---------- Init ---------- */
@@ -772,5 +779,15 @@
   var navCount = document.getElementById('exo-nav-count');
   if (navCount) navCount.textContent = total || '';
 
-  window.ExoApp = { route: route, bind: bind };
+  window.ExoApp = { route: route, bind: bind, rerender: rerender };
+
+  /* Écoute les changements de hash pour la navigation Application.
+     L'approche est autonome : exo-app.js gère ses propres routes
+     sans dépendre du routeur principal d'app.js. */
+  window.addEventListener('hashchange', function () {
+    var h = location.hash.replace(/^#\/?/, '');
+    if (h.startsWith('application')) {
+      rerender();
+    }
+  });
 })();
