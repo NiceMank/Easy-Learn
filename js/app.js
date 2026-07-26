@@ -193,6 +193,28 @@
     else { favs.push(id); toast('Ajouté aux favoris', 'favorite'); }
     store.set('dd-favs', favs);
     refreshCounts();
+    // Mettre à jour TOUS les boutons cœur pour cette fiche
+    document.querySelectorAll('[data-fav="' + id + '"]').forEach(function (btn) {
+      btn.classList.toggle('on', isFav(id));
+    });
+    // Si on est sur la page favoris, supprimer la ligne visuellement
+    var row = document.querySelector('.fav-row [data-fav="' + id + '"]');
+    if (row) {
+      var favRow = row.closest('.fav-row');
+      if (favRow) {
+        favRow.style.opacity = '0';
+        favRow.style.transform = 'translateX(24px)';
+        favRow.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        setTimeout(function () {
+          favRow.remove();
+          // Si plus aucune ligne, forcer le rendu de l'état vide
+          var list = document.querySelector('.list-group');
+          if (list && !list.querySelector('.fav-row')) {
+            route();
+          }
+        }, 260);
+      }
+    }
   }
   function pushHist(id) {
     hist = hist.filter((h) => h.id !== id);
@@ -359,6 +381,11 @@
 
   function viewFavoris() {
     document.body.removeAttribute('data-lang');
+    // Nettoie les favoris qui pointent vers des fiches supprimées
+    favs = favs.filter(function (id) { return ficheIndex.has(id); });
+    store.set('dd-favs', favs);
+    refreshCounts();
+
     if (!favs.length) {
       return '<div class="empty-state view-anim"><span class="big-ic material-symbols-rounded">heart_plus</span>' +
         '<h2>Aucun favori pour l\'instant</h2><p>Quand une notion mérite d\'être revue, touche l\'icône cœur en haut de sa fiche : elle t\'attendra ici.</p>' +
@@ -366,7 +393,18 @@
     }
     let out = '<section class="hero view-anim"><span class="hero-eyebrow">' + icon('favorite') + ' Bibliothèque</span><h1>Tes favoris</h1>' +
       '<p class="lead">' + favs.length + ' notion' + (favs.length > 1 ? 's' : '') + ' à revoir. C\'est ton plan de révision personnalisé.</p></section><div class="list-group">';
-    favs.forEach((id) => { const e = ficheIndex.get(id); if (e) out += listRow(e); });
+    favs.forEach(function (id) {
+      var e = ficheIndex.get(id);
+      if (!e) return;
+      out += '<div class="list-row reveal fav-row">' +
+        '<a class="list-row-link" href="#/fiche/' + id + '">' +
+        '<span class="card-icon ' + langIconCls(e.lang) + '">' + icon(e.fiche.icon) + '</span>' +
+        '<span class="list-row-text"><span class="list-row-title">' + High.esc(e.fiche.title) + '</span>' +
+        '<span class="list-row-sub">' + DB[e.lang].name + ' · ' + e.cat.name + '</span></span>' +
+        '<span class="material-symbols-rounded chevron">chevron_right</span></a>' +
+        '<button class="icon-btn fav-remove-btn" data-fav="' + id + '" aria-label="Retirer des favoris" title="Retirer des favoris">' +
+        icon('heart_minus') + '</button></div>';
+    });
     return out + '</div>';
   }
 
