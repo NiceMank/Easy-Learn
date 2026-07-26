@@ -412,6 +412,14 @@
     else if (DB[parts[0]]) { html = viewLang(parts[0]); key = parts[0]; title = DB[parts[0]].name; }
     else if (parts[0] === 'favoris') { html = viewFavoris(); key = 'favoris'; title = 'Favoris'; }
     else if (parts[0] === 'historique') { html = viewHistorique(); key = 'historique'; title = 'Récemment consultés'; }
+    else if (parts[0] === 'application') {
+      // Délégué au module d'exercices (exo-app.js)
+      if (typeof window.ExoApp !== 'undefined' && window.ExoApp.bind) {
+        window.ExoApp.bind();
+        return;
+      }
+      html = viewHome();
+    }
     else { html = viewHome(); }
 
     view.innerHTML = html;
