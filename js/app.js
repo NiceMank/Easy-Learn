@@ -283,7 +283,7 @@
 
   function viewLang(langId) {
     const L = DB[langId];
-    if (!L || !L.categories) return '<div class=\"empty-state\"><span class=\"big-ic material-symbols-rounded\">error</span><h2>Module introuvable</h2><p>Le module ' + langId + ' n\\'a pas pu être chargé.</p><a class=\"btn\" href=\"#/\">Retour à l\\'accueil</a></div>';
+    if (!L || !L.categories) return '<div class="empty-state"><span class="big-ic material-symbols-rounded">error</span><h2>Module introuvable</h2><p>Le module ' + langId + ' n\'a pas pu être chargé.</p><a class="btn" href="#/">Retour à l\'accueil</a></div>';
     document.body.setAttribute('data-lang', langId);
     let out = '<section class="hero view-anim">' +
       '<span class="hero-eyebrow">' + icon(L.icon) + ' ' + L.name + '</span>' +
