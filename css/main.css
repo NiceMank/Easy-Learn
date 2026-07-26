@@ -433,7 +433,7 @@ body:not(.sidebar-hidden) #sidebar .side-scroll .side-nav a:nth-child(17) { anim
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 5px 14px;
+  padding: 5px 8px;
   border: none;
   background: none;
   font: inherit;
@@ -443,6 +443,9 @@ body:not(.sidebar-hidden) #sidebar .side-scroll .side-nav a:nth-child(17) { anim
   cursor: pointer;
   border-radius: var(--radius-s);
   transition: color var(--speed), transform var(--speed) var(--ease-spring);
+  min-width: 0;
+  flex: 1;
+  max-width: 80px;
 }
 #tabbar a:active, #tabbar button:active { transform: scale(0.9); }
 #tabbar .active { color: var(--accent); }
@@ -475,8 +478,26 @@ body:not(.sidebar-hidden) #sidebar .side-scroll .side-nav a:nth-child(17) { anim
 /* ---------- Cartes ---------- */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  .fav-row {
+    flex-wrap: nowrap;
+  }
+  .copy-btn span {
+    display: none;
+  }
+  .copy-btn {
+    padding: 6px 9px;
+  }
+  .codeblock-label {
+    font-size: 10px;
+  }
 }
 
 .lang-card, .fiche-card {
@@ -1010,6 +1031,10 @@ html[data-theme="dark"] .chip.lvl-avance { color: #ff6f66; }
   .pager { flex-direction: column; }
   .pager a { max-width: 100%; }
   .pager a.next { text-align: left; }
+  .fiche-head { flex-direction: column; align-items: flex-start; }
+  .hero h1 { font-size: clamp(24px, 8vw, 36px); }
+  .codeblock pre { font-size: 12.5px; padding: 12px 14px; }
+  .breadcrumb { font-size: 12px; }
 }
 
 @media (min-width: 961px) {
