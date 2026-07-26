@@ -398,6 +398,7 @@
   const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés' };
 
   function route() {
+    if (!view) return; // sécurité : #view pas encore monté (rare, refresh extrêmement rapide)
     const hash = location.hash.replace(/^#\/?/, '');
     const parts = hash.split('/').filter(Boolean);
     let html, key = 'home', title = 'Easy Learn';
@@ -549,7 +550,22 @@
 
   /* ---------- Init ---------- */
   refreshCounts();
-  route();
+
+  /* Garantit que la route initiale s'exécute APRÈS que le DOM soit prêt,
+     même si les scripts chargent dans un ordre non déterministe
+     (cache navigateur, chargement différé, ordre réseau aléatoire).
+     Sans cette précaution, un refresh sur #/fiche/xxx peut afficher
+     une page noire car #view n'existe pas encore. */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', route);
+    // Double filet : si DOMContentLoaded a déjà eu lieu (bordure IE11/WebView),
+    // requestAnimationFrame garantit que le DOM est peint avant route()
+    requestAnimationFrame(function () {
+      if (!view || !view.innerHTML) route();
+    });
+  } else {
+    route();
+  }
 
   /* ---------- Capacitor : bouton retour Android ---------- */
   // En environnement Capacitor, le bouton retour matériel doit naviguer
