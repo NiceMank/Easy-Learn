@@ -11,14 +11,12 @@
    Même contrat de données (cf. README.md).
    ============================================================ */
 window.DEVDOCS = window.DEVDOCS || {};
-
 DEVDOCS.php = {
   id: 'php',
   name: 'PHP',
   icon: 'php',
   tagline: 'Le langage qui exécute le web côté serveur : du premier echo aux API JSON, en passant par la POO, PDO et Composer.',
   heroTitle: 'PHP, du premier echo à l\'API complète',
-
   categories: [
     /* ======================================================
        1. FONDAMENTAUX
@@ -143,7 +141,6 @@ DEVDOCS.php = {
           ],
           related: ['php-serveur-local', 'html-structure', 'php-variables', 'php-inclusion']
         },
-
         {
           id: 'php-serveur-local',
           title: 'Exécuter PHP : serveur local & cycle HTTP',
@@ -191,7 +188,6 @@ DEVDOCS.php = {
         }
       ]
     },
-
     /* ======================================================
        2. VARIABLES & TYPES
        ====================================================== */
@@ -211,9 +207,9 @@ DEVDOCS.php = {
             { t: 'h3', h: 'Déclarer, nommer' },
             { t: 'code', lang: 'php', code:
 '$vendeuse = "Awa Mensah";   // string\n$prix_sac = 500;            // int\n$taux_tva = 0.18;           // float\n$en_stock = true;           // bool\n\n// Règles de nom : lettre ou _ suivi de lettres, chiffres, _\n$_compteur = 1;             // OK\n$prixTotal = 1200;          // OK (convention camelCase courante)\n// $2sacs = 2;  ✗ invalide : commence par un chiffre\n// $prix-total = 5; ✗ le tiret est l\'opérateur moins ici !\n\n$ville = "Cotonou";\n$Ville = "Abomey-Calavi";   // ⚠ PHP distingue la casse : deux variables !' },
-            { t: 'callout', kind: 'warn', h: 'Les noms de variables sont **sensibles à la casse** (`$ville` ≠ `$Ville`), mais pas les noms de fonctions (`ECHO` marche — ne le fais pas). Pourquoi cette asymétrie ? Les variables sont dans TA mémoire, PHP doit pouvoir les distinguer finement. Les fonctions, elles, sont dans une table interne que PHP a toujours traitée en insensible à la casse — un héritage des années 90 où les systèmes de fichiers eux-mêmes ne distinguaient pas la casse. Aujourd'hui, cette différence est source de bugs : tu crois appeler `maFonction()` mais PHP exécute `mafonction()`. Convention : camelCase pour les variables, snake_case pour les fonctions — et surtout, ne compte JAMAIS sur l'insensibilité à la casse des fonctions. Conventions : `camelCase` ou `snake_case`, mais sois constant dans un projet.' },
+            { t: 'callout', kind: 'warn', h: 'Les noms de variables sont **sensibles à la casse** (`$ville` ≠ `$Ville`), mais pas les noms de fonctions (`ECHO` marche — ne le fais pas). Pourquoi cette asymétrie ? Les variables sont dans TA mémoire, PHP doit pouvoir les distinguer finement. Les fonctions, elles, sont dans une table interne que PHP a toujours traitée en insensible à la casse — un héritage des années 90 où les systèmes de fichiers eux-mêmes ne distinguaient pas la casse. Aujourd\'hui, cette différence est source de bugs : tu crois appeler `maFonction()` mais PHP exécute `mafonction()`. Convention : camelCase pour les variables, snake_case pour les fonctions — et surtout, ne compte JAMAIS sur l\'insensibilité à la casse des fonctions. Conventions : `camelCase` ou `snake_case`, mais sois constant dans un projet.' },
             { t: 'h3', h: 'Quotes simples vs doubles : l\'interpolation' },
-            { t: 'p', h: 'Entre **guillemets doubles**, PHP remplace les variables par leur valeur — c'est l'**interpolation**. Pourquoi deux types de guillemets ? Pour la performance : PHP ne regarde PAS l'intérieur des apostrophes. Une chaîne `'...'` est prise telle quelle, en une seule passe. Une chaîne `"..."` est PARSÉE pour y chercher des `$`. Sur du texte volumineux, choisir les apostrophes pour le contenu statique économise du travail inutile. Et les accolades `{\$variable}` délimitent clairement la variable : `"{\$produit}s"` affichera `garis`. La concaténation se fait avec l\'opérateur `.` (point) — point de détail : les accolades `{ }` autour du nom lèvent toute ambiguïté sur la fin de la variable.' },
+            { t: 'p', h: 'Entre **guillemets doubles**, PHP remplace les variables par leur valeur — c\'est l\'**interpolation**. Pourquoi deux types de guillemets ? Pour la performance : PHP ne regarde PAS l\'intérieur des apostrophes. Une chaîne `\'...\'` est prise telle quelle, en une seule passe. Une chaîne `"..."` est PARSÉE pour y chercher des `$`. Sur du texte volumineux, choisir les apostrophes pour le contenu statique économise du travail inutile. Et les accolades `{\$variable}` délimitent clairement la variable : `"{\$produit}s"` affichera `garis`. La concaténation se fait avec l\'opérateur `.` (point) — point de détail : les accolades `{ }` autour du nom lèvent toute ambiguïté sur la fin de la variable.' },
             { t: 'code', lang: 'php', code:
 '$produit = "gari";\n$prix = 500;\n\necho "Un sac de $produit coûte $prix FCFA.";       // interpolation ✓\necho "Un sac de {$produit}s ? {$prix} FCFA.";      // {...} : frontière claire\necho \'Un sac de $produit\';                        // AFFICHE $produit, tel quel !\necho \'Prix : \' . $prix . \' FCFA\';               // concaténation avec le point' },
             { t: 'h3', h: 'Le type suit la valeur' },
@@ -238,7 +234,6 @@ DEVDOCS.php = {
           ],
           related: ['php-types', 'php-casting', 'php-tableaux', 'php-conditions']
         },
-
         {
           id: 'php-types',
           title: 'Types : scalaires, composés & var_dump',
@@ -268,7 +263,7 @@ DEVDOCS.php = {
             { t: 'h3', h: 'Les prédicats is_* — et le trio isset / empty / is_null' },
             { t: 'code', lang: 'php', code:
 'is_int(500)          // true\nis_string("500")      // true\nis_numeric("500")     // true : chaîne numérique acceptée\nis_array([])          // true\nis_bool(false)        // true  ← attention, ça teste le TYPE, pas la vérité\n\n$nom = "Awa";\nisset($nom)      // true  → la variable EXISTE et n\'est pas null\nisset($rien)     // false → jamais déclarée\nempty($nom)      // false → non vide\nempty("")        // true  → vide ("" , "0", 0, [], null, false…)\nis_null(null)    // true  → exactement null' },
-            { t: 'callout', kind: 'warn', h: '`empty("0")` retourne **true** ! C'est le piège le plus célèbre de PHP : une quantité saisie `0` dans un formulaire est jugée « vide » par `empty()`. Pourquoi ? Parce que `empty()` vérifie si une valeur est « falsy » au sens PHP — et `"0"` est falsy. La solution : pour les champs numériques, n'utilise JAMAIS `empty()`. Préfère `$x !== ''` (la chaîne vide) suivi d'une validation numérique. Et ne confonds pas `empty()` avec `isset()` : le premier répond « est-ce vide ? », le second « existe-t-il et n'est-il pas null ? » Pour les nombres métier, préfère `$x === ""` ou `is_numeric($x)` à `empty()`.' },
+            { t: 'callout', kind: 'warn', h: '`empty("0")` retourne **true** ! C\'est le piège le plus célèbre de PHP : une quantité saisie `0` dans un formulaire est jugée « vide » par `empty()`. Pourquoi ? Parce que `empty()` vérifie si une valeur est « falsy » au sens PHP — et `"0"` est falsy. La solution : pour les champs numériques, n\'utilise JAMAIS `empty()`. Préfère `$x !== \'\'` (la chaîne vide) suivi d\'une validation numérique. Et ne confonds pas `empty()` avec `isset()` : le premier répond « est-ce vide ? », le second « existe-t-il et n\'est-il pas null ? » Pour les nombres métier, préfère `$x === ""` ou `is_numeric($x)` à `empty()`.' },
             { t: 'h3', h: 'Comparaison rapide' },
             { t: 'table', head: ['Expression', '"" ', ' "0" ', ' 0 ', ' null '], rows: [
               ['`isset($x)` si $x défini', 'true', 'true', 'true', '**false**'],
@@ -286,14 +281,13 @@ DEVDOCS.php = {
           ],
           related: ['php-variables', 'php-casting', 'php-tableaux', 'php-conditions']
         },
-
         {
           id: 'php-casting',
           title: 'Casting, jonglage de types & ===',
           icon: 'swap_horiz',
           level: 'Intermédiaire',
           tagline: 'PHP convertit tout seul… parfois contre ton gré. Apprends le casting explicite, et pourquoi === sauve des vies.',
-          intro: 'PHP a été conçu pour le web, où TOUT arrive sous forme de texte. Un formulaire envoie `"42"` (chaîne), pas `42` (entier). Une URL contient `"1"`, pas `true`. Le langage a donc appris à **convertir tout seul** — le « jonglage de types » — pour que `"5" + 3` donne `8` sans error. Pratique, mais dangereux : `"abc" + 3` donnait `3` en PHP 7 (et lève une TypeError en PHP 8). La stratégie de pro : **caster soi-même à l\'entrée**, **comparer strictement avec `===`**, et activer `strict_types` dans les nouveaux fichiers.' (« jonglage de types »). Pratique pour `"5" + 3`, dangereux pour les comparaisons. La stratégie de pro : **caster soi-même à l\'entrée**, **comparer strictement avec `===`**, et activer `strict_types` dans les nouveaux fichiers.',
+          intro: 'PHP a été conçu pour le web, où TOUT arrive sous forme de texte. Un formulaire envoie `"42"` (chaîne), pas `42` (entier). Une URL contient `"1"`, pas `true`. Le langage a donc appris à **convertir tout seul** — le « jonglage de types » — pour que `"5" + 3` donne `8` sans error. Pratique, mais dangereux : `"abc" + 3` donnait `3` en PHP 7 (et lève une TypeError en PHP 8). La stratégie de pro : **caster soi-même à l\'entrée**, **comparer strictement avec `===`**, et activer `strict_types` dans les nouveaux fichiers.\' (« jonglage de types »). Pratique pour `"5" + 3`, dangereux pour les comparaisons. La stratégie de pro : **caster soi-même à l\'entrée**, **comparer strictement avec `===`**, et activer `strict_types` dans les nouveaux fichiers.',
           blocks: [
             { t: 'h3', h: 'Le jonglage : ce que PHP fait dans ton dos' },
             { t: 'code', lang: 'php', code:
@@ -311,7 +305,7 @@ DEVDOCS.php = {
             { t: 'callout', kind: 'tip', h: '`strict_types` ne change que les **appels de fonctions faits depuis ce fichier**. Active-le dans tous tes nouveaux fichiers : les erreurs remontent au plus tôt, là où vit le bug.' }
           ],
           errors: [
-            { title: 'Le piège du `==` ne vient pas de PHP mais de ton cerveau : tu vois `==`, tu penses « égal ». Mais en PHP, `==` ne signifie pas « égal », il signifie « égal APRÈS JONGLAGE DE TYPES ». Et les règles de jonglage, personne ne les connaît par cœur — `0 == "a"` ? `"1" == true` ? `null == 0` ? La réponse dépend de la version de PHP et de la phase de la lune. `===` ne jongle pas : il vérifie le type ET la valeur. C'est un point tellement critique que toutes les normes de qualité PHP (PSR-12, outils comme PHPStan) exigent `===` par défaut. Le `==` est réservé à des cas très spécifiques où tu AS BESOIN du jonglage — et tu les documentes.', lang: 'php', bad:
+            { title: 'Le piège du `==` ne vient pas de PHP mais de ton cerveau : tu vois `==`, tu penses « égal ». Mais en PHP, `==` ne signifie pas « égal », il signifie « égal APRÈS JONGLAGE DE TYPES ». Et les règles de jonglage, personne ne les connaît par cœur — `0 == "a"` ? `"1" == true` ? `null == 0` ? La réponse dépend de la version de PHP et de la phase de la lune. `===` ne jongle pas : il vérifie le type ET la valeur. C\'est un point tellement critique que toutes les normes de qualité PHP (PSR-12, outils comme PHPStan) exigent `===` par défaut. Le `==` est réservé à des cas très spécifiques où tu AS BESOIN du jonglage — et tu les documentes.\', lang: \'php', bad:
 '$role = $_POST[\'role\'] ?? "";\nif ($role == 0) { accorder_admin(); }     // "0", 0, false, ""… passent !\nif ($statut == true) { }                  // n\'importe quelle chaîne non vide…', good:
 'if ($role === "0") { /* explicitement la chaîne "0" */ }\nif ($statut === true) { /* uniquement le booléen true */ }\nif ((int) $qte === 0) { /* cast maîtrisé puis === */ }', why: '== demande à PHP de jongler avec les types des deux côtés : les tables de conversion réservent des égalités contre-intuitives (et source de failles : "0" == false a déboursé des bypass d\'authentification). === compare type ET valeur : zéro surprise.' },
             { title: 'Caster pour valider une saisie', lang: 'php', bad:
@@ -322,7 +316,6 @@ DEVDOCS.php = {
         }
       ]
     },
-
     /* ======================================================
        3. TABLEAUX
        ====================================================== */
@@ -337,15 +330,15 @@ DEVDOCS.php = {
           icon: 'table_rows',
           level: 'Débutant',
           tagline: 'UN seul type array pour les listes ET les dictionnaires : la structure reine de PHP, avec [] et count().',
-          intro: 'Dans presque tous les langages, tu as DEUX structures : une pour les listes ordonnées (JS: `[]`, Python: `list`), une autre pour les paires clé→valeur (JS: `{}`, Python: `dict`). PHP a fait un choix radical : UN SEUL type `array` fait tout. Même syntaxe, mêmes fonctions — et c\'est pourquoi l\'array est la structure reine du langage : `$_GET`, les résultats SQL, les fichiers de config, tout est array. Ce choix unifié simplifie l\'apprentissage mais crée des subtilités (clés implicites, normalisation des indices) qu\'on va démonter.' — indexés par des entiers OU par des chaînes, et même mélangés. C\'est la structure de données la plus utilisée du langage ; les superglobales, les résultats SQL, les configs… sont des tableaux.',
+          intro: 'Dans presque tous les langages, tu as DEUX structures : une pour les listes ordonnées (JS: `[]`, Python: `list`), une autre pour les paires clé→valeur (JS: `{}`, Python: `dict`). PHP a fait un choix radical : UN SEUL type `array` fait tout. Même syntaxe, mêmes fonctions — et c\'est pourquoi l\'array est la structure reine du langage : `$_GET`, les résultats SQL, les fichiers de config, tout est array. Ce choix unifié simplifie l\'apprentissage mais crée des subtilités (clés implicites, normalisation des indices) qu\'on va démonter.\' — indexés par des entiers OU par des chaînes, et même mélangés. C\'est la structure de données la plus utilisée du langage ; les superglobales, les résultats SQL, les configs… sont des tableaux.',
           blocks: [
             { t: 'h3', h: 'Indexés : listes ordonnées' },
             { t: 'code', lang: 'php', code:
-'$marche = ["gari", "ignames", "piment", "huile de palme"];\n$legacy = array("gari", "ignames");   // syntaxe historique, identique\n\necho $marche[0];       // gari (l\'index commence à 0 ! Ce n'est pas une lubie de PHP — c'est un héritage du C, où `array[i]` est du sucre pour `*(array + i)`. Si l'index commençait à 1, l'adresse du premier élément serait `array + 1 * sizeof(element)` — on sauterait le premier. PHP n'utilise pas l'arithmétique de pointeurs du C, mais il a gardé la convention. C'est la même dans tous les langages dérivés du C (JS, Java, Python, Ruby). S'y habituer, c'est s'habituer à l'informatique tout entière.)\necho count($marche);   // 4\n\n$marche[] = "gombo";   // ajout en fin — index 5 ? non : 4\n$marche[] = "attiéké"; // index 5\n\n// foreach = LA boucle des tableaux (fiche Boucles)\nforeach ($marche as $i => $article) {\n    echo "$i : $article\\n";\n}' },
+'$marche = ["gari", "ignames", "piment", "huile de palme"];\n$legacy = array("gari", "ignames");   // syntaxe historique, identique\n\necho $marche[0];       // gari (l\'index commence à 0 ! Ce n\'est pas une lubie de PHP — c\'est un héritage du C, où `array[i]` est du sucre pour `*(array + i)`. Si l\'index commençait à 1, l\'adresse du premier élément serait `array + 1 * sizeof(element)` — on sauterait le premier. PHP n\'utilise pas l\'arithmétique de pointeurs du C, mais il a gardé la convention. C\'est la même dans tous les langages dérivés du C (JS, Java, Python, Ruby). S\'y habituer, c\'est s\'habituer à l\'informatique tout entière.)\necho count($marche);   // 4\n\n$marche[] = "gombo";   // ajout en fin — index 5 ? non : 4\n$marche[] = "attiéké"; // index 5\n\n// foreach = LA boucle des tableaux (fiche Boucles)\nforeach ($marche as $i => $article) {\n    echo "$i : $article\\n";\n}' },
             { t: 'h3', h: 'Associatifs : clé ⇒ valeur' },
             { t: 'code', lang: 'php', code:
 '$prix = [\n    "gari"   => 500,     // clé string => valeur\n    "igname" => 300,\n    "piment" => 200,\n];\n\necho $prix["gari"];            // 500\n$prix["gombo"] = 150;          // ajout/modif par clé\nunset($prix["piment"]);        // suppression\n\nforeach ($prix as $produit => $montant) {\n    echo "$produit : $montant FCFA\\n";\n}' },
-            { t: 'callout', kind: 'info', h: 'Les **clés sont uniquement `int` ou `string`**. PHP normalise les autres en silence : `"8"` devient `int(8)`, `true` devient `1`, `08.7` est tronqué en `8`. Ce n'est pas un bug — c'est documenté — mais c'est une source de confusion quand tu crois avoir une clé `"8"` et que `array_key_exists` te dit le contraire. Les tableaux PHP sont toujours **ordonnés par ordre d'insertion**, pas par clé. Si tu ajoutes `"gari" => 500` puis `"igname" => 300`, un `foreach` les lira TOUJOURS dans cet ordre. : `"8"` devient la clé int `8`, `true` devient `1`, `08.7` tronque à `8`. Les tableaux restent **ordonnés par ordre d\'insertion** — pas par clé.' },
+            { t: 'callout', kind: 'info', h: 'Les **clés sont uniquement `int` ou `string`**. PHP normalise les autres en silence : `"8"` devient `int(8)`, `true` devient `1`, `08.7` est tronqué en `8`. Ce n\'est pas un bug — c\'est documenté — mais c\'est une source de confusion quand tu crois avoir une clé `"8"` et que `array_key_exists` te dit le contraire. Les tableaux PHP sont toujours **ordonnés par ordre d\'insertion**, pas par clé. Si tu ajoutes `"gari" => 500` puis `"igname" => 300`, un `foreach` les lira TOUJOURS dans cet ordre. : `"8"` devient la clé int `8`, `true` devient `1`, `08.7` tronque à `8`. Les tableaux restent **ordonnés par ordre d\'insertion** — pas par clé.' },
             { t: 'h3', h: 'Boîte à outils de survie' },
             { t: 'table', head: ['Fonction', 'Rôle'], rows: [
               ['`count($t)`', 'nombre d\'éléments'],
@@ -368,7 +361,6 @@ DEVDOCS.php = {
           ],
           related: ['php-tableaux-multi', 'php-fonctions-tableaux', 'php-boucles', 'php-variables']
         },
-
         {
           id: 'php-tableaux-multi',
           title: 'Tableaux multidimensionnels',
@@ -399,7 +391,6 @@ DEVDOCS.php = {
           ],
           related: ['php-tableaux', 'php-fonctions-tableaux', 'php-api-rest', 'php-boucles']
         },
-
         {
           id: 'php-fonctions-tableaux',
           title: 'array_map, array_filter & compagnie',
@@ -442,7 +433,6 @@ DEVDOCS.php = {
         }
       ]
     },
-
     /* ======================================================
        4. STRUCTURES DE CONTRÔLE
        ====================================================== */
@@ -493,7 +483,6 @@ DEVDOCS.php = {
           ],
           related: ['php-boucles', 'php-casting', 'php-fonctions', 'js-conditions', 'php-types']
         },
-
         {
           id: 'php-boucles',
           title: 'for, while & foreach',
@@ -516,14 +505,7 @@ DEVDOCS.php = {
 'foreach ($commandes as $cmd) {\n    if ($cmd["statut"] === "annulee") { continue; }  // saute au suivant\n    if ($total > 100_000) { break; }                 // stoppe la boucle\n    $total += $cmd["montant"];\n}\n\n// Les deux acceptent un NIVEAU :\nforeach ($rayons as $rayon) {\n    foreach ($rayon as $produit) {\n        if ($produit === "contrefacon") { break 2; } // sort des DEUX\n    }\n}' },
             { t: 'h3', h: 'Le piège : foreach par référence' },
             { t: 'code', lang: 'php', code:
-'foreach ($prix as &$m) { $m = (int) round($m * 1.18); }\nunset($m);                       // ← LE RÉFLEXE QUI SAUVE
-//
-// Pourquoi ce piège existe-t-il ? Parce que PHP ne crée PAS une
-// nouvelle variable $m à chaque tour — il RÉUTILISE la même.
-// Après la boucle, $m est donc toujours un ALIAS vers le dernier
-// élément du tableau. Toute modification de $m (même accidentelle,
-// même dans une AUTRE boucle plus bas) écrit DANS ton tableau.
-// unset($m) détruit l\'alias sans toucher à la valeur pointée.\n\n// Sans unset($m), $m reste un ALIAS du dernier élément.\n// Une autre boucle plus bas = corruption silencieuse :\nforeach ($prix as $m) { }        // recopie l\'avant-dernier dans le dernier !' },
+'foreach ($prix as &$m) { $m = (int) round($m * 1.18); }' },
             { t: 'callout', kind: 'tip', h: 'Modifier pendant un parcours ? Écris via la clé (`$t[$k] = …`) plutôt qu\'avec `&$v` quand tu peux : c\'est explicite et sans effet de bord. La référence, c\'est pour les gros tableaux où la recopie coûte.' }
           ],
           errors: [
@@ -540,12 +522,10 @@ DEVDOCS.php = {
     }
   ]
 };
-
 /* ============================================================
    data-php.js — partie 2 : fonctions, superglobales,
    formulaires & HTTP, inclusion de fichiers.
    ============================================================ */
-
 DEVDOCS.php.categories.push(
     /* 5. FONCTIONS */
     {
@@ -559,7 +539,7 @@ DEVDOCS.php.categories.push(
           icon: 'functions',
           level: 'Débutant',
           tagline: 'function, return, types de paramètres et de retour, valeurs par défaut, strict_types — les briques réutilisables.',
-          intro: 'À la troisième fois que tu copies-colles les mêmes 15 lignes de calcul de TVA, une petite voix te dit « il doit y avoir un moyen de ne pas se répéter ». Ce moyen, c\'est la **fonction** : un bloc de code nommé, paramétrable, appelable depuis n\'importe où. PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien typer ses fonctions, c\'est transformer des bugs silencieux (`"10 sacs" + 2`) en `TypeError` immédiats — le bug est tué avant d\'atteindre la prod.' PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien déclarer ses fonctions, c\'est transformer des erreurs silencieuses en TypeError immédiats.',
+          intro: 'À la troisième fois que tu copies-colles les mêmes 15 lignes de calcul de TVA, une petite voix te dit « il doit y avoir un moyen de ne pas se répéter ». Ce moyen, c\'est la **fonction** : un bloc de code nommé, paramétrable, appelable depuis n\'importe où. PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien typer ses fonctions, c\'est transformer des bugs silencieux (`"10 sacs" + 2`) en `TypeError` immédiats — le bug est tué avant d\'atteindre la prod.\' PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien déclarer ses fonctions, c\'est transformer des erreurs silencieuses en TypeError immédiats.',
           blocks: [
             { t: 'h3', h: 'La forme complète' },
             { t: 'code', lang: 'php', code:
@@ -599,14 +579,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-fonctions-avancees', 'php-fonctions-anonymes', 'php-variables', 'php-casting', 'php-inclusion']
         },
-
         {
           id: 'php-fonctions-avancees',
           title: 'Références, variadiques & arguments nommés',
           icon: 'input',
           level: 'Intermédiaire',
           tagline: 'Modifier par &, accepter "un nombre quelconque" avec ...$args, et les arguments nommés lisibles de PHP 8.',
-          intro: 'Une fonction normale reçoit des COPIES de tes variables et ne peut pas les modifier. Mais parfois tu VEUX qu\'elle écrive dans ta variable (référence `&`), ou tu ne sais pas combien d\'arguments tu vas recevoir (`...$args`), ou tu veux que l\'appel soit auto-documenté (arguments nommés). Ces trois mécanismes ne sont pas des gadgets : ce sont les réponses de PHP à trois besoins réels du quotidien. Trois outils, trois intentions, et trois pièges qu\'on va démonter ensemble.' : la **référence** (la fonction écrit DANS ta variable), les **paramètres variadiques** (`...`) pour des signatures élastiques, et les **arguments nommés** de PHP 8 qui rendent les appels auto-documentés. Trois outils, trois intentions différentes.',
+          intro: 'Une fonction normale reçoit des COPIES de tes variables et ne peut pas les modifier. Mais parfois tu VEUX qu\'elle écrive dans ta variable (référence `&`), ou tu ne sais pas combien d\'arguments tu vas recevoir (`...$args`), ou tu veux que l\'appel soit auto-documenté (arguments nommés). Ces trois mécanismes ne sont pas des gadgets : ce sont les réponses de PHP à trois besoins réels du quotidien. Trois outils, trois intentions, et trois pièges qu\'on va démonter ensemble.\' : la **référence** (la fonction écrit DANS ta variable), les **paramètres variadiques** (`...`) pour des signatures élastiques, et les **arguments nommés** de PHP 8 qui rendent les appels auto-documentés. Trois outils, trois intentions différentes.',
           blocks: [
             { t: 'h3', h: 'Passage par référence : &' },
             { t: 'code', lang: 'php', code:
@@ -637,14 +616,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-fonctions', 'php-fonctions-anonymes', 'php-fonctions-tableaux', 'php-poo-classes']
         },
-
         {
           id: 'php-fonctions-anonymes',
           title: 'Closures & arrow functions fn',
           icon: 'bolt',
           level: 'Intermédiaire',
           tagline: 'Des fonctions sans nom, capturant leur environnement avec use — et la forme flèche fn qui capture toute seule.',
-          intro: 'Dans 90 % du code, tu donnes un nom à ta fonction et tu l\'appelles. Mais parfois tu as besoin d\'un comportement **jetable** — un comparateur de tri, un filtre « juste pour cette ligne » — qui ne mérite pas d\'exister en dehors de son contexte. Les fonctions anonymes sont des valeurs comme les autres : tu les stockes dans une variable, tu les passes en argument. Et avec `fn` (PHP 7.4), la syntaxe devient aussi concise qu\'une flèche JavaScript. La différence cruciale : une fonction anonyme PHP ne voit PAS automatiquement les variables extérieures — il faut le mot-clé `use` pour les y inviter.', passée à une autre fonction (un tri, un filtre, un map) : pas la peine de la nommer au niveau global. Les fonctions anonymes répondent à ce besoin ; la **closure** ajoute la capture de l\'environnement via `use`, et `fn` (PHP 7.4) la version éclair d\'une ligne qui capture automatiquement **par valeur**.',
+          intro: 'Dans 90 % du code, tu donnes un nom à ta fonction et tu l\'appelles. Mais parfois tu as besoin d\'un comportement **jetable** — un comparateur de tri, un filtre « juste pour cette ligne » — qui ne mérite pas d\'exister en dehors de son contexte. Les fonctions anonymes sont des valeurs comme les autres : tu les stockes dans une variable, tu les passes en argument. Et avec `fn` (PHP 7.4), la syntaxe devient aussi concise qu\'une flèche JavaScript. La différence cruciale : une fonction anonyme PHP ne voit PAS automatiquement les variables extérieures — il faut le mot-clé `use` pour les y inviter.\', passée à une autre fonction (un tri, un filtre, un map) : pas la peine de la nommer au niveau global. Les fonctions anonymes répondent à ce besoin ; la **closure** ajoute la capture de l\'environnement via `use`, et `fn` (PHP 7.4) la version éclair d\'une ligne qui capture automatiquement **par valeur**.',
           blocks: [
             { t: 'h3', h: 'Fonction anonyme : une valeur comme une autre' },
             { t: 'code', lang: 'php', code:
@@ -676,7 +654,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 6. SUPERGLOBALES */
     {
       id: 'superglobales',
@@ -689,7 +666,7 @@ DEVDOCS.php.categories.push(
           icon: 'public',
           level: 'Débutant',
           tagline: 'Les tableaux magiques toujours là : entrées HTTP, infos serveur, fichiers, sessions — tout ce que PHP sait de ta requête.',
-          intro: 'Quand un visiteur arrive sur ton site, sa requête transporte une foule d\'informations : l\'URL demandée, les données du formulaire, son adresse IP, ses cookies. PHP regroupe TOUT ça dans une poignée de tableaux magiques — les **superglobales** — que tu peux lire depuis n\'importe quel fichier sans les déclarer. C\'est le pont entre le protocole HTTP et ton code PHP. Principe absolu à graver : **tout ce qui vient d\'une superglobale est une ENTRÉE UTILISATEUR, donc potentiellement hostile**. La lecture est libre ; la confiance, jamais. Chaque `$_GET['\''id'\'']` que tu lis doit être validé avant usage.' sans déclaration (fonctions incluses — « autoglobals »). Ils forment le pont entre la requête HTTP et ton code : qui appelle, avec quelles données, quel fichier, quelle session. Principe absolu : **tout ce qui vient d\'eux est une ENTRÉE — donc non fiable**.',
+          intro: 'Quand un visiteur arrive sur ton site, sa requête transporte une foule d\'informations : l\'URL demandée, les données du formulaire, son adresse IP, ses cookies. PHP regroupe TOUT ça dans une poignée de tableaux magiques — les **superglobales** — que tu peux lire depuis n\'importe quel fichier sans les déclarer. C\'est le pont entre le protocole HTTP et ton code PHP. Principe absolu à graver : **tout ce qui vient d\'une superglobale est une ENTRÉE UTILISATEUR, donc potentiellement hostile**. La lecture est libre ; la confiance, jamais. Chaque `$_GET[\'\'\'id\'\'\']` que tu lis doit être validé avant usage.\' sans déclaration (fonctions incluses — « autoglobals »). Ils forment le pont entre la requête HTTP et ton code : qui appelle, avec quelles données, quel fichier, quelle session. Principe absolu : **tout ce qui vient d\'eux est une ENTRÉE — donc non fiable**.',
           blocks: [
             { t: 'h3', h: 'Le panorama' },
             { t: 'table', head: ['Tableau', 'Contenu', 'Fiche dédiée'], rows: [
@@ -728,7 +705,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 7. FORMULAIRES & REQUÊTES HTTP */
     {
       id: 'formulaires',
@@ -741,7 +717,7 @@ DEVDOCS.php.categories.push(
           icon: 'dynamic_form',
           level: 'Débutant',
           tagline: 'GET ou POST, name qui fait foi, traitement côté serveur, formulaires collants — le cycle complet côté PHP.',
-          intro: 'Tu sais déjà écrire un `<form>` en HTML (fiche Formulaires du module HTML). Mais cliquer sur « Envoyer » ne fait que la MOITIÉ du travail : les données partent vers le serveur… et quelqu\'un doit les RÉCEPTIONNER. Ce quelqu\'un, c\'est ton script PHP. Il lit `$_POST`, valide, enregistre en base, puis répond. Cette fiche est le chaînon manquant : le cycle complet HTML → PHP → réponse. On y apprend aussi le pattern POST/Redirect/GET — la parade définitive contre le double envoi quand l\'utilisateur rafraîchit la page — et la subtilité des formulaires « collants » qui gardent les valeurs saisies en cas d\'erreur.' : `<form>`, `method`, `action`, et l\'attribut **`name`** qui fait foi. Ici on voit l\'autre moitié du voyage : ce que PHP reçoit, comment distinguer affichage et soumission, et comment **ré-afficher les valeurs saisies** en cas d\'erreur (formulaire « collant », sticky).',
+          intro: 'Tu sais déjà écrire un `<form>` en HTML (fiche Formulaires du module HTML). Mais cliquer sur « Envoyer » ne fait que la MOITIÉ du travail : les données partent vers le serveur… et quelqu\'un doit les RÉCEPTIONNER. Ce quelqu\'un, c\'est ton script PHP. Il lit `$_POST`, valide, enregistre en base, puis répond. Cette fiche est le chaînon manquant : le cycle complet HTML → PHP → réponse. On y apprend aussi le pattern POST/Redirect/GET — la parade définitive contre le double envoi quand l\'utilisateur rafraîchit la page — et la subtilité des formulaires « collants » qui gardent les valeurs saisies en cas d\'erreur.\' : `<form>`, `method`, `action`, et l\'attribut **`name`** qui fait foi. Ici on voit l\'autre moitié du voyage : ce que PHP reçoit, comment distinguer affichage et soumission, et comment **ré-afficher les valeurs saisies** en cas d\'erreur (formulaire « collant », sticky).',
           blocks: [
             { t: 'h3', h: 'GET ou POST : le choix a du sens' },
             { t: 'table', head: ['', 'GET', 'POST'], rows: [
@@ -762,7 +738,7 @@ DEVDOCS.php.categories.push(
           ],
           errors: [
             { title: 'Oublier name (ou le confondre avec id)', lang: 'php', bad:
-'<input id="email" type="email" placeholder="Toi">\n<!-- $_POST["email"] … Undefined (id ne voyage JAMAIS — il appartient au DOM (label, CSS, JS). Seul `name` est envoyé au serveur. C'est la distinction la plus importante entre HTML et HTTP : le premier vit dans le navigateur (DOM, styles, JS), le second sur le réseau (formulaires, requêtes). Si tu confonds les deux, tu passes des heures à chercher pourquoi `$_POST['email']` est vide alors que ton champ a bien un `id="email"`.) -->', good:
+'<input id="email" type="email" placeholder="Toi">\n<!-- $_POST["email"] … Undefined (id ne voyage JAMAIS — il appartient au DOM (label, CSS, JS). Seul `name` est envoyé au serveur. C\'est la distinction la plus importante entre HTML et HTTP : le premier vit dans le navigateur (DOM, styles, JS), le second sur le réseau (formulaires, requêtes). Si tu confonds les deux, tu passes des heures à chercher pourquoi `$_POST[\'email\']` est vide alors que ton champ a bien un `id="email"`.) -->', good:
 '<input id="email" name="email" type="email">\n<!-- id = label/CSS/JS (DOM) · name = ce qui part au serveur -->', why: 'Le navigateur ne sérialise que les champs dot\u00e9s d\'un name non vide. id sert au DOM (label, CSS, JS), name sert au protocole HTTP. Les deux rôles cohabitent souvent — mais seul name fait foi côté PHP.' },
             { title: 'Action destructive en GET', lang: 'php', bad:
 '// <a href="/supprimer.php?id=12">Supprimer</a>\n// GET /supprimer.php?id=12 → préfetch, bots, historique → SUPPRIME', good:
@@ -770,14 +746,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['html-formulaires', 'php-superglobales', 'php-validation', 'php-csrf']
         },
-
         {
           id: 'php-validation',
           title: 'Valider & nettoyer avec filter_var',
           icon: 'checklist',
           level: 'Intermédiaire',
           tagline: 'La validation côté serveur est non négociable : filter_var, listes blanches, erreurs par champ — et nettoyer ≠ échapper.',
-          intro: '`<input required>` dans ton HTML, c\'est de la politesse — ça aide l\'utilisateur, mais ça ne protège RIEN. N\'importe qui peut désactiver JavaScript, utiliser curl, ou modifier le HTML dans les DevTools pour contourner ces vérifications en 10 secondes. La SEULE validation qui compte se fait **côté serveur**. PHP te donne `filter_var`/`filter_input` pour valider proprement (email, entier, URL, booléen…), et une règle cardinale à ne jamais violer : **on valide à l\'entrée, on échappe à la sortie**. Valider n\'est pas échapper — ce sont deux étapes distinctes, à des moments distincts, pour des raisons distinctes.'… contournable en 10 secondes (curl, DevTools). La seule validation qui compte se fait **côté serveur**. PHP offre `filter_var`/`filter_input` : des filtres de validation standardisés, bien préférables aux regex artisanales. Et une règle cardinale : **on valide à l\'entrée, on échappe à la sortie** — ce ne sont pas les mêmes étapes.',
+          intro: '`<input required>` dans ton HTML, c\'est de la politesse — ça aide l\'utilisateur, mais ça ne protège RIEN. N\'importe qui peut désactiver JavaScript, utiliser curl, ou modifier le HTML dans les DevTools pour contourner ces vérifications en 10 secondes. La SEULE validation qui compte se fait **côté serveur**. PHP te donne `filter_var`/`filter_input` pour valider proprement (email, entier, URL, booléen…), et une règle cardinale à ne jamais violer : **on valide à l\'entrée, on échappe à la sortie**. Valider n\'est pas échapper — ce sont deux étapes distinctes, à des moments distincts, pour des raisons distinctes.\'… contournable en 10 secondes (curl, DevTools). La seule validation qui compte se fait **côté serveur**. PHP offre `filter_var`/`filter_input` : des filtres de validation standardisés, bien préférables aux regex artisanales. Et une règle cardinale : **on valide à l\'entrée, on échappe à la sortie** — ce ne sont pas les mêmes étapes.',
           blocks: [
             { t: 'h3', h: 'filter_var : le couteau suisse' },
             { t: 'code', lang: 'php', code:
@@ -806,14 +781,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-formulaires', 'php-xss', 'php-casting', 'lv-validation']
         },
-
         {
           id: 'php-upload',
           title: 'Upload de fichiers & $_FILES',
           icon: 'upload_file',
           level: 'Intermédiaire',
           tagline: 'enctype multipart, $_FILES, move_uploaded_file, MIME vérifié côté serveur — sans ouvrir sa machine aux scripts uploadés.',
-          intro: 'Recevoir un fichier, c\'est ouvrir la porte de ton serveur à un inconnu. Ce fichier peut être une photo… ou un script PHP déguisé en `.jpg` qui exécute des commandes système. L\'upload est le cas d\'entrée le plus dangereux du web, et PHP te donne les outils pour le sécuriser — mais ne le fait pas à ta place. Le pipeline de sécurité : formulaire en `multipart/form-data`, lecture via `$_FILES`, vérification du VRAI type MIME (pas celui déclaré par le navigateur), extension en liste blanche, nom de fichier GÉNÉRÉ (jamais celui du client), et stockage hors de la racine web. Chaque étape sautée est une faille.' : un fichier arbitraire atterrit sur ton serveur. Le processus correct : formulaire en `multipart/form-data`, lecture via `$_FILES`, vérifications strictes (code d\'erreur, taille, **vrai type MIME**, extension en liste blanche), puis `move_uploaded_file` vers un **nom généré** — idéalement hors de la racine web.',
+          intro: 'Recevoir un fichier, c\'est ouvrir la porte de ton serveur à un inconnu. Ce fichier peut être une photo… ou un script PHP déguisé en `.jpg` qui exécute des commandes système. L\'upload est le cas d\'entrée le plus dangereux du web, et PHP te donne les outils pour le sécuriser — mais ne le fait pas à ta place. Le pipeline de sécurité : formulaire en `multipart/form-data`, lecture via `$_FILES`, vérification du VRAI type MIME (pas celui déclaré par le navigateur), extension en liste blanche, nom de fichier GÉNÉRÉ (jamais celui du client), et stockage hors de la racine web. Chaque étape sautée est une faille.\' : un fichier arbitraire atterrit sur ton serveur. Le processus correct : formulaire en `multipart/form-data`, lecture via `$_FILES`, vérifications strictes (code d\'erreur, taille, **vrai type MIME**, extension en liste blanche), puis `move_uploaded_file` vers un **nom généré** — idéalement hors de la racine web.',
           blocks: [
             { t: 'h3', h: 'Côté HTML : le contrat multipart' },
             { t: 'code', lang: 'html', code:
@@ -846,7 +820,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 8. INCLUSION DE FICHIERS */
     {
       id: 'inclusion',
@@ -859,7 +832,7 @@ DEVDOCS.php.categories.push(
           icon: 'folder_open',
           level: 'Débutant',
           tagline: 'include vs require, _once, __DIR__ partout — et le pattern header/footer qui structure un site sans framework.',
-          intro: 'Dès la deuxième page de ton site, tu te retrouves à copier-coller le même `<nav>`, les mêmes fonctions de connexion BDD, le même pied de page. Et le jour où tu changes le numéro de téléphone dans le footer, tu dois le faire dans HUIT fichiers — avec la garantie d\'en oublier au moins un. La solution : découper ton code en fichiers séparés et les **inclure** là où tu en as besoin. PHP propose quatre variantes (`include`, `require`, `include_once`, `require_once`) qui diffèrent sur DEUX questions seulement : le fichier est-il indispensable ? Et s\'il a déjà été inclus, faut-il le recharger ? Comprendre ces deux axes, c\'est ne plus jamais hésiter entre les quatre.' : PHP permet de **découper le code en fichiers** et de les assembler à l\'exécution. Quatre variantes — `include`, `require`, `include_once`, `require_once` — qui diffèrent sur **deux questions** : le fichier est-il indispensable ? et s\'il a déjà été inclus, le recharger ?',
+          intro: 'Dès la deuxième page de ton site, tu te retrouves à copier-coller le même `<nav>`, les mêmes fonctions de connexion BDD, le même pied de page. Et le jour où tu changes le numéro de téléphone dans le footer, tu dois le faire dans HUIT fichiers — avec la garantie d\'en oublier au moins un. La solution : découper ton code en fichiers séparés et les **inclure** là où tu en as besoin. PHP propose quatre variantes (`include`, `require`, `include_once`, `require_once`) qui diffèrent sur DEUX questions seulement : le fichier est-il indispensable ? Et s\'il a déjà été inclus, faut-il le recharger ? Comprendre ces deux axes, c\'est ne plus jamais hésiter entre les quatre.\' : PHP permet de **découper le code en fichiers** et de les assembler à l\'exécution. Quatre variantes — `include`, `require`, `include_once`, `require_once` — qui diffèrent sur **deux questions** : le fichier est-il indispensable ? et s\'il a déjà été inclus, le recharger ?',
           blocks: [
             { t: 'h3', h: 'Les deux axes de choix' },
             { t: 'table', head: ['', 'Fichier manquant', 'Double inclusion'], rows: [
@@ -870,7 +843,7 @@ DEVDOCS.php.categories.push(
             ] },
             { t: 'code', lang: 'php', code:
 'require_once __DIR__ . "/config.php";      // indispensable + anti-double\nrequire_once __DIR__ . "/fonctions.php";   // bibliothèque de fonctions\ninclude __DIR__ . "/partials/bandeau-promo.php";  // bonus optionnel' },
-            { t: 'callout', kind: 'tip', h: 'Règle simple à retenir : **require_once partout**. Certains diront que `require_once` est « plus lent » que `require` parce que PHP doit vérifier si le fichier a déjà été inclus. C'est vrai techniquement — mais la différence se mesure en microsecondes, et le bug « function already declared » que `_once` t'évite se mesure en heures de débogage. Utilise `require_once` par défaut, et ne descends à `include` que pour les fichiers optionnels (une bannière promo, un widget conditionnel).. Un fichier de config ou de fonctions manquant = l\'application ne peut pas tourner → fatal error immédiate, pas un site à moitié rendu avec un warning en haut. Le once élimine la classe entière de bugs « function already declared ».' },
+            { t: 'callout', kind: 'tip', h: 'Règle simple à retenir : **require_once partout**. Certains diront que `require_once` est « plus lent » que `require` parce que PHP doit vérifier si le fichier a déjà été inclus. C\'est vrai techniquement — mais la différence se mesure en microsecondes, et le bug « function already declared » que `_once` t\'évite se mesure en heures de débogage. Utilise `require_once` par défaut, et ne descends à `include` que pour les fichiers optionnels (une bannière promo, un widget conditionnel).. Un fichier de config ou de fonctions manquant = l\'application ne peut pas tourner → fatal error immédiate, pas un site à moitié rendu avec un warning en haut. Le once élimine la classe entière de bugs « function already declared ».' },
             { t: 'h3', h: 'Le problème des chemins : __DIR__ à la rescousse' },
             { t: 'code', lang: 'php', code:
 '// include "config.php";        ← relatif au DOSSIER COURANT de l\'appelant…\n// Si /admin/produits.php inclut ../lib/outils.php qui inclut "config.php",\n// le chemin se résout DEPUIS /admin : plantage intermittent !\n\nrequire_once __DIR__ . "/config.php";\n// __DIR__ = dossier du FICHIER où cette ligne est écrite : toujours juste,\n// quel que soit le script qui a déclenché la chaîne d\'inclusion.\n\nrequire_once dirname(__DIR__) . "/config.php";   // dossier parent' },
@@ -894,12 +867,10 @@ DEVDOCS.php.categories.push(
       ]
     }
 );
-
 /* ============================================================
    data-php.js — partie 3 : POO, gestion des erreurs,
    sessions & cookies.
    ============================================================ */
-
 DEVDOCS.php.categories.push(
     /* 9. PROGRAMMATION ORIENTÉE OBJET */
     {
@@ -913,7 +884,7 @@ DEVDOCS.php.categories.push(
           icon: 'widgets',
           level: 'Débutant',
           tagline: 'class, new, $this, __construct et la promotion PHP 8 — fabriquer des objets métiers au lieu de tableaux anonymes.',
-          intro: 'Un tableau associatif `["nom" => "Gari", "prix" => 500]` fonctionne… jusqu\'au jour où tu tapes `"pri"` au lieu de `"prix"` et que PHP te sert un warning au lieu de refuser. Pire : tu ajoutes une fonction `calculerTTC()` qui n\'a aucun lien formel avec tes données — elle flotte dans le fichier, et rien ne garantit qu\'elle reçoive le bon tableau. Une **classe** résout ces deux problèmes d\'un coup : les données (propriétés) et les comportements (méthodes) vivent ENSEMBLE, le compilateur refuse les clés inventées, et les types sont vérifiés. PHP 8 a même réduit le « bruit » d\'écriture avec la **promotion de propriétés** qui déclare et affecte en une ligne.'… jusqu\'au jour où tu tapes "pri" au lieu de "prix" et que PHP te sert un warning au lieu de refuser. Une **classe** est un moule qui garantit la forme et le comportement : les données (propriétés) et ce qu\'on peut leur faire (méthodes) vivent ensemble. PHP 8 a même réduit le bruit avec la **promotion de propriétés**.',
+          intro: 'Un tableau associatif `["nom" => "Gari", "prix" => 500]` fonctionne… jusqu\'au jour où tu tapes `"pri"` au lieu de `"prix"` et que PHP te sert un warning au lieu de refuser. Pire : tu ajoutes une fonction `calculerTTC()` qui n\'a aucun lien formel avec tes données — elle flotte dans le fichier, et rien ne garantit qu\'elle reçoive le bon tableau. Une **classe** résout ces deux problèmes d\'un coup : les données (propriétés) et les comportements (méthodes) vivent ENSEMBLE, le compilateur refuse les clés inventées, et les types sont vérifiés. PHP 8 a même réduit le « bruit » d\'écriture avec la **promotion de propriétés** qui déclare et affecte en une ligne.\'… jusqu\'au jour où tu tapes "pri" au lieu de "prix" et que PHP te sert un warning au lieu de refuser. Une **classe** est un moule qui garantit la forme et le comportement : les données (propriétés) et ce qu\'on peut leur faire (méthodes) vivent ensemble. PHP 8 a même réduit le bruit avec la **promotion de propriétés**.',
           blocks: [
             { t: 'h3', h: 'La classe minimale' },
             { t: 'code', lang: 'php', code:
@@ -933,7 +904,7 @@ DEVDOCS.php.categories.push(
             { t: 'p', h: 'Le tableau accepte tout : clés fautives, types bizarres, fonctions dispersées. L\'objet **refuse ce qui sort du contrat** : propriété inconnue = warning explicite, type faux = TypeError, et les règles métier (prix ≥ 0) vivent DANS la classe (fiche Visibilité). Lisibilité, autocomplétion, refacto : tout y gagne dès que le dépassement de 3-4 écrans est atteint.' },
             { t: 'h3', h: 'new sans parenthèses, clone & null' },
             { t: 'code', lang: 'php', code:
-'$a = new Produit("Piment", 200);\n$b = $a;                    // PAS une copie : même objet, deux noms ! Contrairement aux tableaux (COPIÉS à l'affectation), les objets PHP sont passés par RÉFÉRENCE-IDENTITÉ — c'est un héritage de Java, et c'est fait pour la performance : copier un gros objet à chaque `=` serait désastreux. Pour dupliquer vraiment, utilise `clone`.\n$b->prix = 250;\necho $a->prix;              // 250 🤯 — les objets passent par RÉFÉRENCE-IDENTITÉ\n\n$c = clone $a;              // vraie copie, indépendante\n\n$panier = null;\necho $panier?->libelle();   // ?-> : null silencieux, pas de fatal error' },
+'$a = new Produit("Piment", 200);\n$b = $a;                    // PAS une copie : même objet, deux noms ! Contrairement aux tableaux (COPIÉS à l\'affectation), les objets PHP sont passés par RÉFÉRENCE-IDENTITÉ — c\'est un héritage de Java, et c\'est fait pour la performance : copier un gros objet à chaque `=` serait désastreux. Pour dupliquer vraiment, utilise `clone`.\n$b->prix = 250;\necho $a->prix;              // 250 🤯 — les objets passent par RÉFÉRENCE-IDENTITÉ\n\n$c = clone $a;              // vraie copie, indépendante\n\n$panier = null;\necho $panier?->libelle();   // ?-> : null silencieux, pas de fatal error' },
             { t: 'callout', kind: 'warn', h: 'Affecter un objet ne le **copie pas** : `$b = $a` fait pointer deux noms vers le même exemplaire (contrairement aux tableaux, copiés par valeur !). Pour un duplicata : `clone`.' }
           ],
           errors: [
@@ -946,14 +917,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-poo-visibilite', 'php-poo-heritage', 'php-variables', 'php-exceptions-custom']
         },
-
         {
           id: 'php-poo-visibilite',
           title: 'Visibilité, static & constantes',
           icon: 'lock',
           level: 'Intermédiaire',
           tagline: 'public / private / protected, getters-setters, self:: et les constantes de classe : l\'encapsulation qui protège tes invariants.',
-          intro: 'Imagine un compte MoMo dont le solde est une propriété `public`. N\'importe quelle ligne du programme peut écrire `$compte->solde = -99999` — techniquement légal, métier absurde. L\'**encapsulation** est le premier pilier de la POO pour une raison simple : sans elle, aucun invariant ne tient. La visibilité (`public`/`protected`/`private`) fait de la classe la GARDIENNE de ses données — les modifications passent par des méthodes qui peuvent valider, logger, notifier. PHP ne force pas l\'encapsulation ; c\'est une discipline que TU imposes. Cette fiche te donne les trois niveaux et les conventions qui font qu\'un objet est un coffre-fort, pas une passoire.' Laisser tout public, c\'est permettre `$produit->prix = -50` depuis n\'importe où. La visibilité (`public`/`protected`/`private`) fait de la classe la gardienne de ses règles. Ajoute `static` (qui appartient à la classe, pas à l\'objet) et `const`, et tu tiens l\'essentiel de l\'armure objet PHP.',
+          intro: 'Imagine un compte MoMo dont le solde est une propriété `public`. N\'importe quelle ligne du programme peut écrire `$compte->solde = -99999` — techniquement légal, métier absurde. L\'**encapsulation** est le premier pilier de la POO pour une raison simple : sans elle, aucun invariant ne tient. La visibilité (`public`/`protected`/`private`) fait de la classe la GARDIENNE de ses données — les modifications passent par des méthodes qui peuvent valider, logger, notifier. PHP ne force pas l\'encapsulation ; c\'est une discipline que TU imposes. Cette fiche te donne les trois niveaux et les conventions qui font qu\'un objet est un coffre-fort, pas une passoire.\' Laisser tout public, c\'est permettre `$produit->prix = -50` depuis n\'importe où. La visibilité (`public`/`protected`/`private`) fait de la classe la gardienne de ses règles. Ajoute `static` (qui appartient à la classe, pas à l\'objet) et `const`, et tu tiens l\'essentiel de l\'armure objet PHP.',
           blocks: [
             { t: 'h3', h: 'Les trois niveaux' },
             { t: 'table', head: ['Visibilité', 'Depuis l\'extérieur', 'Depuis la classe', 'Depuis les enfants'], rows: [
@@ -964,7 +934,7 @@ DEVDOCS.php.categories.push(
             { t: 'h3', h: 'Encapsuler : l\'invariant gardé' },
             { t: 'code', lang: 'php', code:
 'class Produit\n{\n    // private en promotion : ni lisible ni modifiable de l\'extérieur\n    public function __construct(private string $nom, private float $prix) {\n        $this->setPrix($prix);          // validation DÈS la naissance\n    }\n\n    public function nom(): string { return $this->nom; }   // getter\n\n    public function setPrix(float $prix): void             // setter gardien\n    {\n        if ($prix <= 0) {\n            throw new InvalidArgumentException("Prix positif exigé.");\n        }\n        $this->prix = $prix;\n    }\n}\n\n$p = new Produit("Gari", 500);\n// $p->prix = -50;    ✗ Error : accès refusé (private)\n$p->setPrix(550);       // ✓ passe par le gardien' },
-            { t: 'callout', kind: 'tip', h: 'Convention saine : **propriétés privées par défaut**, exposition minimale. Beaucoup de débutants venant d'autres langages demandent : « pourquoi ne pas avoir de vrais getters/setters comme en C# ou Kotlin ? » PHP a choisi la voie explicite : une méthode `getSolde()` est une méthode comme une autre — pas de magie, pas de génération automatique. Tu contrôles EXACTEMENT ce qui est exposé. Les `__get()` et `__set()` magiques existent mais sont à réserver aux bibliothèques — dans ton code, préfère la transparence. Un getter explicite, c'est un contrat lisible ; un `__get()` magique, c'est un contrat qu'il faut deviner., exposition minimale (getters si lecture OK, setters seulement si modification acceptée). Chaque degré d\'ouverture est une promesse à tenir pour toujours.' },
+            { t: 'callout', kind: 'tip', h: 'Convention saine : **propriétés privées par défaut**, exposition minimale. Beaucoup de débutants venant d\'autres langages demandent : « pourquoi ne pas avoir de vrais getters/setters comme en C# ou Kotlin ? » PHP a choisi la voie explicite : une méthode `getSolde()` est une méthode comme une autre — pas de magie, pas de génération automatique. Tu contrôles EXACTEMENT ce qui est exposé. Les `__get()` et `__set()` magiques existent mais sont à réserver aux bibliothèques — dans ton code, préfère la transparence. Un getter explicite, c\'est un contrat lisible ; un `__get()` magique, c\'est un contrat qu\'il faut deviner., exposition minimale (getters si lecture OK, setters seulement si modification acceptée). Chaque degré d\'ouverture est une promesse à tenir pour toujours.' },
             { t: 'h3', h: 'static : à la classe, pas à l\'objet' },
             { t: 'code', lang: 'php', code:
 'class Vendeur\n{\n    public static int $compteur = 0;        // partagée par TOUS les vendeurs\n    public const TAXE_PALAIS = 0.05;        // constante de classe\n\n    public function __construct(public string $nom) {\n        self::$compteur++;                  // self:: = LA CLASSE\n    }\n\n    public static function effectif(): int  // méthode statique\n    {\n        return self::$compteur;             // pas de $this ici !\n    }\n}\n\nnew Vendeur("Awa"); new Vendeur("Koffi");\necho Vendeur::$compteur;      // 2 — accès par LA CLASSE, Opérateur ::\necho Vendeur::effectif();     // 2\necho Vendeur::TAXE_PALAIS;    // 0.05  (constante : jamais modifiable)' },
@@ -986,14 +956,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-poo-classes', 'php-poo-heritage', 'php-poo-interfaces-traits', 'php-exceptions-custom']
         },
-
         {
           id: 'php-poo-heritage',
           title: 'Héritage, abstract & final',
           icon: 'account_tree',
           level: 'Intermédiaire',
           tagline: 'extends, parent::, classes abstraites et final : factoriser ce qui est commun sans créer un arbre généalogique absurde.',
-          intro: 'Tu as écrit une classe `Paiement` avec toute la logique de validation de montant, de devise, de calcul de frais. Maintenant, tu veux un `PaiementMobile` qui AJOUTE la logique MoMo SANS réécrire tout ce que `Paiement` fait déjà. L\'**héritage** résout ça : l\'enfant reçoit GRATUITEMENT tout le code du parent (`extends`) et ne spécialise que ce qui diffère. Mais attention : l\'héritage est l\'outil le plus sur-utilisé de la POO. « Hériter pour récupérer du code » sans vraie relation « est-un » crée des hiérarchies fragiles. Cette fiche te donne la règle d\'or : un `Zémidjan est un Véhicule` → extends ✓ ; `Commande est un Produit` → non, composition ✗.' L\'enfant hérite des propriétés et méthodes du parent, peut les spécialiser (override) et en ajouter. Bien utilisé — peu de niveaux, classes abstraites qui posent le contrat, `final` qui ferme ce qui ne doit pas bouger — c\'est un outil de cohérence. Mal utilisé (tour de 6 niveaux), un cauchemar.',
+          intro: 'Tu as écrit une classe `Paiement` avec toute la logique de validation de montant, de devise, de calcul de frais. Maintenant, tu veux un `PaiementMobile` qui AJOUTE la logique MoMo SANS réécrire tout ce que `Paiement` fait déjà. L\'**héritage** résout ça : l\'enfant reçoit GRATUITEMENT tout le code du parent (`extends`) et ne spécialise que ce qui diffère. Mais attention : l\'héritage est l\'outil le plus sur-utilisé de la POO. « Hériter pour récupérer du code » sans vraie relation « est-un » crée des hiérarchies fragiles. Cette fiche te donne la règle d\'or : un `Zémidjan est un Véhicule` → extends ✓ ; `Commande est un Produit` → non, composition ✗.\' L\'enfant hérite des propriétés et méthodes du parent, peut les spécialiser (override) et en ajouter. Bien utilisé — peu de niveaux, classes abstraites qui posent le contrat, `final` qui ferme ce qui ne doit pas bouger — c\'est un outil de cohérence. Mal utilisé (tour de 6 niveaux), un cauchemar.',
           blocks: [
             { t: 'h3', h: 'extends et parent::' },
             { t: 'code', lang: 'php', code:
@@ -1007,7 +976,7 @@ DEVDOCS.php.categories.push(
 '$paiements = [\n    new PaiementMobile(500, "MTN"),\n    new PaiementMobile(300, "Moov"),\n    new Paiement(200),                 // espèces au comptoir\n];\n\nforeach ($paiements as $p) {           // même message, comportements propres\n    echo $p->libelle() . "\\n";         // chaque classe répond à sa façon\n}' },
             { t: 'h3', h: 'Règles de bonne famille' },
             { t: 'ul', items: [
-              'Le test décisif s'appelle le « LSP » (Liskov Substitution Principle) : si B hérite de A, alors PARTOUT où le code attend un A, tu dois pouvoir mettre un B sans que rien ne casse. Un `PaiementMobile` peut-il remplacer un `Paiement` partout ? Oui → héritage valide. Une `Commande` peut-elle remplacer un `Produit` ? Non → c'est de la composition. L'héritage pour « récupérer du code » sans vraie relation « est-un » crée des dépendances rigides ; la composition (`class Panier { private array $produits; }`) crée des relations souples. Règle mnémotechnique : **extends quand c'est une TAXONOMIE, propriété private quand c'est un OUTIL.** (un objet EN a un autre).',
+              'Le test décisif s\'appelle le « LSP » (Liskov Substitution Principle) : si B hérite de A, alors PARTOUT où le code attend un A, tu dois pouvoir mettre un B sans que rien ne casse. Un `PaiementMobile` peut-il remplacer un `Paiement` partout ? Oui → héritage valide. Une `Commande` peut-elle remplacer un `Produit` ? Non → c\'est de la composition. L\'héritage pour « récupérer du code » sans vraie relation « est-un » crée des dépendances rigides ; la composition (`class Panier { private array $produits; }`) crée des relations souples. Règle mnémotechnique : **extends quand c\'est une TAXONOMIE, propriété private quand c\'est un OUTIL.** (un objet EN a un autre).',
               'Un ou deux niveaux, rarement plus : la profondeur tue la lisibilité.',
               '`parent::__construct()` si l\'enfant redéfinit le constructeur — sinon l\'état du parent reste à zéro.',
               'Override = **signature compatible** (contravariance/liskov) : ne resserre pas les types, ne supprime pas de paramètres.',
@@ -1024,14 +993,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-poo-interfaces-traits', 'php-poo-visibilite', 'php-poo-classes', 'php-exceptions-custom']
         },
-
         {
           id: 'php-poo-interfaces-traits',
           title: 'Interfaces & traits',
           icon: 'merge_type',
           level: 'Avancé',
           tagline: 'Contracts sans code vs code sans contrat : implements pour le « peut-faire », trait pour la réutilisation horizontale.',
-          intro: 'PHP a fait un choix radical : une classe ne peut hériter que d\'UN seul parent (`extends`). C\'est une protection contre le « diamant » du C++ (deux parents qui définissent la même méthode). Mais alors, comment exprimer qu\'une classe « peut être payée » ET « peut être exportée en CSV » ? Deux outils complémentaires : l\'**interface** — un contrat sans code (« je promets de fournir une méthode `payer()` ») — et le **trait** — du code sans contrat (« voici une méthode `horodater()`, copie-la dans qui tu veux »). L\'interface est pour la PROMESSE, le trait pour la MÉCANIQUE. Ensemble : polymorphisme multiple sans ascendance commune.' — mais deux mécanismes cassent cette limite complémentairement. L\'**interface** décrit QUOI faire sans rien imposer du comment (contrat) ; le **trait** fournit le COMMENT à plusieurs classes sans lien de parenté (réutilisation horizontale). Ensemble : polymorphisme sans ascendance obligée.',
+          intro: 'PHP a fait un choix radical : une classe ne peut hériter que d\'UN seul parent (`extends`). C\'est une protection contre le « diamant » du C++ (deux parents qui définissent la même méthode). Mais alors, comment exprimer qu\'une classe « peut être payée » ET « peut être exportée en CSV » ? Deux outils complémentaires : l\'**interface** — un contrat sans code (« je promets de fournir une méthode `payer()` ») — et le **trait** — du code sans contrat (« voici une méthode `horodater()`, copie-la dans qui tu veux »). L\'interface est pour la PROMESSE, le trait pour la MÉCANIQUE. Ensemble : polymorphisme multiple sans ascendance commune.\' — mais deux mécanismes cassent cette limite complémentairement. L\'**interface** décrit QUOI faire sans rien imposer du comment (contrat) ; le **trait** fournit le COMMENT à plusieurs classes sans lien de parenté (réutilisation horizontale). Ensemble : polymorphisme sans ascendance obligée.',
           blocks: [
             { t: 'h3', h: 'Interface : un contrat signé' },
             { t: 'code', lang: 'php', code:
@@ -1063,7 +1031,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 10. GESTION DES ERREURS */
     {
       id: 'erreurs',
@@ -1076,7 +1043,7 @@ DEVDOCS.php.categories.push(
           icon: 'report',
           level: 'Intermédiaire',
           tagline: 'Niveaux d\'erreur, error_reporting, l\'arbre Error/Exception, et le trio try/catch/finally pour les dérapages prévus.',
-          intro: 'Il y a deux façons pour un programme PHP de mal tourner. Les **erreurs PHP** : le moteur lui-même signale un problème — variable inexistante, fichier introuvable, division par zéro. Et les **exceptions** : TON code signale une situation anormale (« stock insuffisant », « âge invalide ») que tu peux — ou pas — rattraper. La frontière est floue depuis PHP 7 : certaines erreurs sont devenues des exceptions (`TypeError`), et depuis PHP 8, beaucoup d\'erreurs historiques lèvent des exceptions au lieu d\'un simple warning. Comprendre cette cohabitation, c\'est configurer correctement ton environnement : TOUT voir en développement, RIEN afficher en production.' : les **erreurs PHP** (warning, notice, fatal — le moteur te parle de ton code) et les **exceptions** (ton code signale une situation anormale que tu peux rattraper). Bien développer, c\'est **voir toutes les erreurs en local**, **les logger — pas les afficher — en prod**, et utiliser try/catch pour les cas que tu anticipes.',
+          intro: 'Il y a deux façons pour un programme PHP de mal tourner. Les **erreurs PHP** : le moteur lui-même signale un problème — variable inexistante, fichier introuvable, division par zéro. Et les **exceptions** : TON code signale une situation anormale (« stock insuffisant », « âge invalide ») que tu peux — ou pas — rattraper. La frontière est floue depuis PHP 7 : certaines erreurs sont devenues des exceptions (`TypeError`), et depuis PHP 8, beaucoup d\'erreurs historiques lèvent des exceptions au lieu d\'un simple warning. Comprendre cette cohabitation, c\'est configurer correctement ton environnement : TOUT voir en développement, RIEN afficher en production.\' : les **erreurs PHP** (warning, notice, fatal — le moteur te parle de ton code) et les **exceptions** (ton code signale une situation anormale que tu peux rattraper). Bien développer, c\'est **voir toutes les erreurs en local**, **les logger — pas les afficher — en prod**, et utiliser try/catch pour les cas que tu anticipes.',
           blocks: [
             { t: 'h3', h: 'Les niveaux d\'erreur PHP' },
             { t: 'table', head: ['Niveau', 'Exemple', 'Conséquence'], rows: [
@@ -1110,14 +1077,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-exceptions-custom', 'php-pdo', 'js-erreurs', 'php-serveur-local']
         },
-
         {
           id: 'php-exceptions-custom',
           title: 'Exceptions personnalisées & chaînage',
           icon: 'priority_high',
           level: 'Avancé',
           tagline: 'Des erreurs-métiers nommées (StockInsuffisantException), le chaînage via previous, et quand créer sa propre classe.',
-          intro: '`throw new Exception("stock")` fonctionne… jusqu\'à ce que ton application ait 30 points de `throw` différents. À l\'arrivée, tout le monde catche `Exception` et personne ne peut distinguer une rupture de stock d\'une panne BDD. La solution n\'est pas d\'analyser le MESSAGE d\'erreur (fragile : change la ponctuation, le catch casse), mais de créer des **exceptions métiers** — une CLASSE par situation. `StockInsuffisantException` vs `PaiementRefuseException` vs `BaseDeDonneesException` : chaque `catch` devient chirurgical, le code raconte le domaine métier, et l\'IDE t\'aide à ne rien oublier.', tout le monde catche « Exception » et personne ne distingue une rupture de stock d\'une panne BDD. Créer ses **exceptions métiers** — une classe par situation, héritant d\'`Exception` ou d\'un marqueur commun — permet des `catch` chirurgicaux et un code qui raconte son domaine.',
+          intro: '`throw new Exception("stock")` fonctionne… jusqu\'à ce que ton application ait 30 points de `throw` différents. À l\'arrivée, tout le monde catche `Exception` et personne ne peut distinguer une rupture de stock d\'une panne BDD. La solution n\'est pas d\'analyser le MESSAGE d\'erreur (fragile : change la ponctuation, le catch casse), mais de créer des **exceptions métiers** — une CLASSE par situation. `StockInsuffisantException` vs `PaiementRefuseException` vs `BaseDeDonneesException` : chaque `catch` devient chirurgical, le code raconte le domaine métier, et l\'IDE t\'aide à ne rien oublier.\', tout le monde catche « Exception » et personne ne distingue une rupture de stock d\'une panne BDD. Créer ses **exceptions métiers** — une classe par situation, héritant d\'`Exception` ou d\'un marqueur commun — permet des `catch` chirurgicaux et un code qui raconte son domaine.',
           blocks: [
             { t: 'h3', h: 'Une classe par situation' },
             { t: 'code', lang: 'php', code:
@@ -1131,7 +1097,7 @@ DEVDOCS.php.categories.push(
             { t: 'h3', h: 'Marqueurs & sous-arbres métiers' },
             { t: 'code', lang: 'php', code:
 'interface BoutiqueException extends Throwable {}     // marqueur\n\nclass PaiementRefuseException extends RuntimeException implements BoutiqueException {}\nclass LivraisonImpossibleException extends LogicException implements BoutiqueException {}\n\ntry {\n    // …\n} catch (BoutiqueException $e) {   // attrape TOUTE la famille métier\n    // réponse 4xx ciblée\n}' },
-            { t: 'callout', kind: 'tip', h: 'Quand créer la classe ? Le test est simple : as-tu DEUX endroits dans ton code qui doivent RÉAGIR DIFFÉREMMENT à ce type d'erreur ? Si oui → exception personnalisée. Sinon, une SPL existante (`InvalidArgumentException`, `RuntimeException`) suffit. Autre règle : throw pour les situations ANORMALES que l'appelant PEUT gérer (stock vide = affiche « rupture »), exit/die pour les situations CATASTROPHIQUES que personne ne peut rattraper (fichier de config absent). Et surtout : une exception, ça se LANCE côté métier/service, ça s'ATTRAPE côté contrôleur — jamais l'inverse. Dès que deux endroits doivent **réagir différemment** au même message d\'erreur, ou qu\'un `catch` te force à lire `getMessage()` pour savoir de quoi il retourne (un code d\'erreur déguisé en texte — pire pratique).' },
+            { t: 'callout', kind: 'tip', h: 'Quand créer la classe ? Le test est simple : as-tu DEUX endroits dans ton code qui doivent RÉAGIR DIFFÉREMMENT à ce type d\'erreur ? Si oui → exception personnalisée. Sinon, une SPL existante (`InvalidArgumentException`, `RuntimeException`) suffit. Autre règle : throw pour les situations ANORMALES que l\'appelant PEUT gérer (stock vide = affiche « rupture »), exit/die pour les situations CATASTROPHIQUES que personne ne peut rattraper (fichier de config absent). Et surtout : une exception, ça se LANCE côté métier/service, ça s\'ATTRAPE côté contrôleur — jamais l\'inverse. Dès que deux endroits doivent **réagir différemment** au même message d\'erreur, ou qu\'un `catch` te force à lire `getMessage()` pour savoir de quoi il retourne (un code d\'erreur déguisé en texte — pire pratique).' },
             { t: 'p', h: 'Et les **SPL exceptions** ? PHP livre `InvalidArgumentException`, `DomainException`, `RuntimeException`, `LogicException`… pré-nommées. Réflexe : une SPL correspond-elle ? Hérite d\'elle. Sinon hérite d\'`Exception` — et n\'oublie jamais `parent::__construct($message, $code, $previous)`.' }
           ],
           errors: [
@@ -1146,7 +1112,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 11. SESSIONS & COOKIES */
     {
       id: 'sessions',
@@ -1159,7 +1124,7 @@ DEVDOCS.php.categories.push(
           icon: 'how_to_reg',
           level: 'Intermédiaire',
           tagline: 'PHPSESSID, $_SESSION, session_start avant toute sortie — et la régénération d\'ID qui stoppe la fixation.',
-          intro: 'HTTP a été conçu pour servir des documents, pas des applications. Chaque requête est AMNÉSIQUE : le serveur ne se souvient pas de toi d\'une page à l\'autre. Sans mémoire, impossible de garder un panier, de rester connecté, de suivre une conversation. Les **sessions** sont la réponse élégante de PHP : le serveur crée un dossier secret côté serveur, n\'envoie au navigateur qu\'une CLÉ (le `PHPSESSID` en cookie), et reconstruit tes données à chaque requête. Les données ne quittent JAMAIS le serveur : le cookie ne contient qu\'un identifiant opaque. C\'est le même principe qu\'une consigne à bagages : ton ticket ne vaut rien, tout dépend de ce que le gardien a rangé.' La session résout ça élégamment : PHP crée un **dossier côté serveur** (un identifiant + des données), n\'envoie au navigateur qu\'un **cookie d\'ID** (`PHPSESSID`), et à chaque requête, il retrouve le dossier. Les données, elles, ne quittent jamais le serveur.',
+          intro: 'HTTP a été conçu pour servir des documents, pas des applications. Chaque requête est AMNÉSIQUE : le serveur ne se souvient pas de toi d\'une page à l\'autre. Sans mémoire, impossible de garder un panier, de rester connecté, de suivre une conversation. Les **sessions** sont la réponse élégante de PHP : le serveur crée un dossier secret côté serveur, n\'envoie au navigateur qu\'une CLÉ (le `PHPSESSID` en cookie), et reconstruit tes données à chaque requête. Les données ne quittent JAMAIS le serveur : le cookie ne contient qu\'un identifiant opaque. C\'est le même principe qu\'une consigne à bagages : ton ticket ne vaut rien, tout dépend de ce que le gardien a rangé.\' La session résout ça élégamment : PHP crée un **dossier côté serveur** (un identifiant + des données), n\'envoie au navigateur qu\'un **cookie d\'ID** (`PHPSESSID`), et à chaque requête, il retrouve le dossier. Les données, elles, ne quittent jamais le serveur.',
           blocks: [
             { t: 'h3', h: 'Le mécanisme en trois coups' },
             { t: 'ol', items: [
@@ -1182,7 +1147,7 @@ DEVDOCS.php.categories.push(
               ['`session.cookie_lifetime`', 'durée du cookie navigateur (0 = jusqu\'à fermeture)'],
               ['ton propre horodatage', '`$_SESSION["derniere_activite"]` + test d\'inactivité (le plus fiable)']
             ] },
-            { t: 'callout', kind: 'tip', h: 'Par défaut, PHP stocke les sessions dans des FICHIERS sur le disque du serveur (dossier `session.save_path`). Pour un site à faible trafic, c'est parfait. Mais dès que tu as plusieurs serveurs (load balancing), le fichier de session du serveur A est invisible pour le serveur B → l'utilisateur est déconnecté à chaque requête. La solution : un stockage centralisé (Redis, base de données). Le garbage collector PHP nettoie les vieilles sessions de façon PROBABILISTE : il y a 1 chance sur 100 qu'il se déclenche à chaque requête. Pour une expiration fiable, stocke l'horodatage en session et vérifie-le toi-même. : pour une vraie règle d\'expiration (30 min d\'inactivité), stocke l\'horodatage d\'activité en session et vérifie-le toi-même à chaque requête sensible.' }
+            { t: 'callout', kind: 'tip', h: 'Par défaut, PHP stocke les sessions dans des FICHIERS sur le disque du serveur (dossier `session.save_path`). Pour un site à faible trafic, c\'est parfait. Mais dès que tu as plusieurs serveurs (load balancing), le fichier de session du serveur A est invisible pour le serveur B → l\'utilisateur est déconnecté à chaque requête. La solution : un stockage centralisé (Redis, base de données). Le garbage collector PHP nettoie les vieilles sessions de façon PROBABILISTE : il y a 1 chance sur 100 qu\'il se déclenche à chaque requête. Pour une expiration fiable, stocke l\'horodatage en session et vérifie-le toi-même. : pour une vraie règle d\'expiration (30 min d\'inactivité), stocke l\'horodatage d\'activité en session et vérifie-le toi-même à chaque requête sensible.' }
           ],
           errors: [
             { title: 'Session non régénérée après connexion', lang: 'php', bad:
@@ -1194,14 +1159,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-cookies', 'php-superglobales', 'php-mots-de-passe', 'lv-authentification']
         },
-
         {
           id: 'php-cookies',
           title: 'Cookies : durée & flags de sécurité',
           icon: 'cookie',
           level: 'Intermédiaire',
           tagline: 'setcookie, $_COOKIE à la requête suivante, expiration, et le triptyque HttpOnly / Secure / SameSite.',
-          intro: 'Un cookie, c\'est un post-it que le serveur colle sur le navigateur du visiteur — et que le navigateur lui remontre à CHAQUE requête suivante. Pratique pour se souvenir d\'une préférence (thème sombre, langue), d\'un panier visiteur, ou d\'un « garder ma session ouverte ». Mais fondamentalement différent d\'une session : un cookie vit CÔTÉ CLIENT — il est lisible ET modifiable par l\'utilisateur. Alors que `$_SESSION` garde les données au chaud sur ton serveur, un cookie les confie au visiteur. Règle d\'or : **jamais de secret dans un cookie**, et toujours poser les trois flags de sécurité modernes : `HttpOnly` (invisible au JavaScript), `Secure` (HTTPS uniquement), `SameSite` (protection anti-CSRF).', et que celui-ci **renvoie à chaque requête** vers le domaine. Parfait pour préférences et souvenirs (thème sombre, panier invité) — mais lisible et modifiable côté client : **jamais de données de confiance dedans**, et toujours les flags de sécurité modernes.',
+          intro: 'Un cookie, c\'est un post-it que le serveur colle sur le navigateur du visiteur — et que le navigateur lui remontre à CHAQUE requête suivante. Pratique pour se souvenir d\'une préférence (thème sombre, langue), d\'un panier visiteur, ou d\'un « garder ma session ouverte ». Mais fondamentalement différent d\'une session : un cookie vit CÔTÉ CLIENT — il est lisible ET modifiable par l\'utilisateur. Alors que `$_SESSION` garde les données au chaud sur ton serveur, un cookie les confie au visiteur. Règle d\'or : **jamais de secret dans un cookie**, et toujours poser les trois flags de sécurité modernes : `HttpOnly` (invisible au JavaScript), `Secure` (HTTPS uniquement), `SameSite` (protection anti-CSRF).\', et que celui-ci **renvoie à chaque requête** vers le domaine. Parfait pour préférences et souvenirs (thème sombre, panier invité) — mais lisible et modifiable côté client : **jamais de données de confiance dedans**, et toujours les flags de sécurité modernes.',
           blocks: [
             { t: 'h3', h: 'Poser, lire, supprimer' },
             { t: 'code', lang: 'php', code:
@@ -1238,12 +1202,10 @@ DEVDOCS.php.categories.push(
       ]
     }
 );
-
 /* ============================================================
    data-php.js — partie 4 : bases de données (PDO), sécurité,
    Composer/PSR-4, API REST, namespaces.
    ============================================================ */
-
 DEVDOCS.php.categories.push(
     /* 12. BASES DE DONNÉES (PDO) */
     {
@@ -1257,7 +1219,7 @@ DEVDOCS.php.categories.push(
           icon: 'storage',
           level: 'Intermédiaire',
           tagline: 'Un seul objet pour MySQL, PostgreSQL, SQLite… plus deux options vitales : exceptions et fetch associatif.',
-          intro: 'Avant, chaque base de données avait son propre mode d\'emploi en PHP. `mysql_query()` pour MySQL, `pg_query()` pour PostgreSQL, `sqlite_query()` pour SQLite — trois API différentes pour faire la même chose. **PDO** (PHP Data Objects) a unifié tout ça en 2005 : une interface unique, un seul jeu de méthodes (`prepare`, `execute`, `fetch`), et il suffit de changer UNE ligne (le DSN) pour passer de MySQL à PostgreSQL. Apprendre PDO une fois = savoir parler à 12 bases de données différentes. Mais PDO a un piège d\'héritage : par défaut, il avale les erreurs en silence. La configuration minimale — `ERRMODE_EXCEPTION` — n\'est pas optionnelle, c\'est la première ligne de tout projet.', et **PDO** (PHP Data Objects) : une interface unique qui dialogue avec la plupart des bases via des pilotes. Apprendre PDO une fois = savoir parler à MySQL, PostgreSQL ou SQLite avec le même code. Mais une PDO mal configurée **avale les erreurs en silence** — d\'où la liste d\'options non négociable.',
+          intro: 'Avant, chaque base de données avait son propre mode d\'emploi en PHP. `mysql_query()` pour MySQL, `pg_query()` pour PostgreSQL, `sqlite_query()` pour SQLite — trois API différentes pour faire la même chose. **PDO** (PHP Data Objects) a unifié tout ça en 2005 : une interface unique, un seul jeu de méthodes (`prepare`, `execute`, `fetch`), et il suffit de changer UNE ligne (le DSN) pour passer de MySQL à PostgreSQL. Apprendre PDO une fois = savoir parler à 12 bases de données différentes. Mais PDO a un piège d\'héritage : par défaut, il avale les erreurs en silence. La configuration minimale — `ERRMODE_EXCEPTION` — n\'est pas optionnelle, c\'est la première ligne de tout projet.\', et **PDO** (PHP Data Objects) : une interface unique qui dialogue avec la plupart des bases via des pilotes. Apprendre PDO une fois = savoir parler à MySQL, PostgreSQL ou SQLite avec le même code. Mais une PDO mal configurée **avale les erreurs en silence** — d\'où la liste d\'options non négociable.',
           blocks: [
             { t: 'h3', h: 'Se connecter : le DSN' },
             { t: 'code', lang: 'php', code:
@@ -1266,7 +1228,7 @@ DEVDOCS.php.categories.push(
             { t: 'h3', h: 'Lire et écrire : le premier aller-retour' },
             { t: 'code', lang: 'php', code:
 '// Lecture directe (POUR LES REQUÊTES SANS DONNÉES UTILISATEUR !)\n$produits = $pdo->query("SELECT id, nom, prix FROM produits")\n                ->fetchAll();                      // tableau de lignes\n\nforeach ($produits as $p) {\n    echo $p["nom"] . " : " . $p["prix"] . " FCFA\\n";\n}\n\n// fetch() = UNE ligne (ou false si plus rien) ; fetchAll() = tout\n$une = $pdo->query("SELECT COUNT(*) AS total FROM produits")->fetch();\necho $une["total"];\n\n// Écriture hors SELECT → exec() rend le nombre de lignes affectées\n$n = $pdo->exec("DELETE FROM produits WHERE stock = 0");' },
-            { t: 'h3', h: 'PDO vs MySQLi : que choisir ? En 2026, la réponse est simple : **PDO, toujours**. MySQLi n'apporte RIEN que PDO n'offre pas — sauf la possibilité d'utiliser l'API procédurale (`mysqli_query()`). Et PDO ferme automatiquement la connexion quand le script se termine (fin de requête HTTP) — tu n'as jamais besoin d'appeler une méthode `close()`. C'est le modèle shared nothing à l'œuvre : la connexion vit le temps de la requête, puis meurt proprement.' },
+            { t: 'h3', h: 'PDO vs MySQLi : que choisir ? En 2026, la réponse est simple : **PDO, toujours**. MySQLi n\'apporte RIEN que PDO n\'offre pas — sauf la possibilité d\'utiliser l\'API procédurale (`mysqli_query()`). Et PDO ferme automatiquement la connexion quand le script se termine (fin de requête HTTP) — tu n\'as jamais besoin d\'appeler une méthode `close()`. C\'est le modèle shared nothing à l\'œuvre : la connexion vit le temps de la requête, puis meurt proprement.' },
             { t: 'table', head: ['', 'PDO', 'MySQLi'], rows: [
               ['bases supportées', '12+ (MySQL, PgSQL, SQLite…)', 'MySQL/MariaDB seulement'],
               ['API', '100 % orientée objet', 'objet ET procédurale'],
@@ -1288,14 +1250,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-requetes-preparees', 'php-crud', 'php-erreurs', 'lv-eloquent']
         },
-
         {
           id: 'php-requetes-preparees',
           title: 'Requêtes préparées & injection SQL',
           icon: 'key',
           level: 'Intermédiaire',
           tagline: 'La requête et les données voyagent SÉPARÉMENT : prepare/execute, et l\'injection SQL qui disparaît par construction.',
-          intro: 'Imagine un champ « ville » dans ton formulaire. Un utilisateur tape `Cotonou` — ta requête devient `SELECT * FROM clients WHERE ville = 'Cotonou'`. Jusqu\'ici tout va bien. Mais imagine qu\'il tape `Cotonou' OR '1'='1` — le `OR` transforme la condition en « Cotonou OU 1=1 », et TA TABLE ENTIÈRE est renvoyée. C\'est l\'injection SQL, l\'attaque n°1 du web depuis 20 ans. La parade n\'est PAS d\'échapper les guillemets (on a essayé, ça fuit) : c\'est la **requête préparée**. Le SQL part D\'ABORD (avec des trous `?`), les données APRÈS — et le serveur ne les mélange JAMAIS. Par construction, l\'injection devient impossible : une quote dans la donnée reste une quote, jamais du code SQL.' PHP : concaténer une saisie dans une requête, c\'est laisser l\'utilisateur écrire du SQL. La réponse n\'est pas un échappement plus ou moins soigneux, mais la **requête préparée** : le serveur SQL reçoit d\'abord le plan de la requête (avec des trous `?` ou `:nom`), PUIS les données — qui ne sont jamais interprétées comme du code. Par construction, l\'injection devient impossible.',
+          intro: 'Imagine un champ « ville » dans ton formulaire. Un utilisateur tape `Cotonou` — ta requête devient `SELECT * FROM clients WHERE ville = \'Cotonou\'`. Jusqu\'ici tout va bien. Mais imagine qu\'il tape `Cotonou\' OR \'1\'=\'1` — le `OR` transforme la condition en « Cotonou OU 1=1 », et TA TABLE ENTIÈRE est renvoyée. C\'est l\'injection SQL, l\'attaque n°1 du web depuis 20 ans. La parade n\'est PAS d\'échapper les guillemets (on a essayé, ça fuit) : c\'est la **requête préparée**. Le SQL part D\'ABORD (avec des trous `?`), les données APRÈS — et le serveur ne les mélange JAMAIS. Par construction, l\'injection devient impossible : une quote dans la donnée reste une quote, jamais du code SQL.\' PHP : concaténer une saisie dans une requête, c\'est laisser l\'utilisateur écrire du SQL. La réponse n\'est pas un échappement plus ou moins soigneux, mais la **requête préparée** : le serveur SQL reçoit d\'abord le plan de la requête (avec des trous `?` ou `:nom`), PUIS les données — qui ne sont jamais interprétées comme du code. Par construction, l\'injection devient impossible.',
           blocks: [
             { t: 'h3', h: 'Le théâtre du crime (en milieu contrôlé)' },
             { t: 'code', lang: 'php', code:
@@ -1319,14 +1280,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-pdo', 'php-crud', 'php-validation', 'lv-eloquent']
         },
-
         {
           id: 'php-crud',
           title: 'CRUD complet avec PDO',
           icon: 'post_add',
           level: 'Intermédiaire',
           tagline: 'Créer, Lire, Mettre à jour, Supprimer : la machine complète, du formulaire à la base, sans une seule requête concaténée.',
-          intro: 'CRUD : quatre lettres, quatre opérations — Create, Read, Update, Delete — le squelette de 90 % des applications web. Un catalogue produit, un blog, une boutique, un back-office : tout se résume à créer des enregistrements, les lire, les modifier, les supprimer. Cette fiche est la machine complète sur un cas réel — les produits d\'une échoppe de Dantokpa — avec pour chaque opération : la **requête préparée** (non négociable), la **lecture du résultat**, et le **petit piège** qui mord tout le monde une fois. Bonus pro : les transactions, pour que « débiter le stock + enregistrer la commande » soit atomique — les deux réussissent ensemble, ou rien ne se passe.' web (catalogue, blog, boutique). Voyons la machine complète sur un cas réel — les produits d\'une échoppe de Dantokpa — avec pour chaque opération : la **requête préparée**, la **lecture du résultat**, et le **petit piège** qui l\'accompagne.',
+          intro: 'CRUD : quatre lettres, quatre opérations — Create, Read, Update, Delete — le squelette de 90 % des applications web. Un catalogue produit, un blog, une boutique, un back-office : tout se résume à créer des enregistrements, les lire, les modifier, les supprimer. Cette fiche est la machine complète sur un cas réel — les produits d\'une échoppe de Dantokpa — avec pour chaque opération : la **requête préparée** (non négociable), la **lecture du résultat**, et le **petit piège** qui mord tout le monde une fois. Bonus pro : les transactions, pour que « débiter le stock + enregistrer la commande » soit atomique — les deux réussissent ensemble, ou rien ne se passe.\' web (catalogue, blog, boutique). Voyons la machine complète sur un cas réel — les produits d\'une échoppe de Dantokpa — avec pour chaque opération : la **requête préparée**, la **lecture du résultat**, et le **petit piège** qui l\'accompagne.',
           blocks: [
             { t: 'h3', h: 'Le décor' },
             { t: 'code', lang: 'sql', code:
@@ -1360,7 +1320,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 13. SÉCURITÉ */
     {
       id: 'securite',
@@ -1373,7 +1332,7 @@ DEVDOCS.php.categories.push(
           icon: 'password',
           level: 'Intermédiaire',
           tagline: 'Jamais en clair, jamais en md5 : le couple password_hash / password_verify, le sel automatique, et le rehash.',
-          intro: 'La règle est absolue et ne supporte aucune exception : **un mot de passe ne se stocke JAMAIS**. Ni en clair (la base fuit ? tous les comptes sont pillés), ni « chiffré » (réversible = réversible par l\'attaquant aussi), ni en MD5/SHA1 (cassable en secondes sur un GPU moderne). On stocke une **empreinte** — le résultat d\'une fonction à sens unique, volontairement LENTE, qui rend impossible de retrouver l\'original. PHP fournit cette machine depuis 2014 avec **`password_hash`** (bcrypt, sel intégré, coût réglable) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe AUCUNE bonne raison d\'utiliser autre chose.' invérifiable en sens inverse. PHP fournit cette machine avec **`password_hash`** (bcrypt, sel aléatoire intégré) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe **aucune bonne raison** d\'y déroger — ni md5, ni sha1, ni « chiffrement maison ».',
+          intro: 'La règle est absolue et ne supporte aucune exception : **un mot de passe ne se stocke JAMAIS**. Ni en clair (la base fuit ? tous les comptes sont pillés), ni « chiffré » (réversible = réversible par l\'attaquant aussi), ni en MD5/SHA1 (cassable en secondes sur un GPU moderne). On stocke une **empreinte** — le résultat d\'une fonction à sens unique, volontairement LENTE, qui rend impossible de retrouver l\'original. PHP fournit cette machine depuis 2014 avec **`password_hash`** (bcrypt, sel intégré, coût réglable) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe AUCUNE bonne raison d\'utiliser autre chose.\' invérifiable en sens inverse. PHP fournit cette machine avec **`password_hash`** (bcrypt, sel aléatoire intégré) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe **aucune bonne raison** d\'y déroger — ni md5, ni sha1, ni « chiffrement maison ».',
           blocks: [
             { t: 'h3', h: 'Inscription : hacher' },
             { t: 'code', lang: 'php', code:
@@ -1403,14 +1362,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-sessions', 'php-validation', 'php-csrf', 'lv-authentification']
         },
-
         {
           id: 'php-xss',
           title: 'XSS : échapper avec htmlspecialchars',
           icon: 'shield',
           level: 'Intermédiaire',
           tagline: 'Tout affichage de donnée externe passe par htmlspecialchars : END the « echo $_GET » era, par contexte de sortie.',
-          intro: 'La XSS (Cross-Site Scripting), c\'est l\'attaque où un utilisateur malveillant écrit du JavaScript dans un champ « commentaire » — et ce code s\'exécute dans le navigateur de TOUS les visiteurs qui lisent la page. Cookies volés, actions effectuées à leur place, défacement : c\'est la faille n°1 des applications web depuis 25 ans. La parade en PHP est simple : chaque donnée qui vient DE L\'EXTÉRIEUR (formulaire, URL, API…) doit être **échappée** avant d\'être affichée. `htmlspecialchars()` transforme `<` en `&lt;` — inoffensif pour le navigateur, inoffensif pour tes visiteurs. Le piège : il faut le faire À L\'AFFICHAGE, pas au stockage — et dans le BON contexte (HTML, attribut, JavaScript, URL… chaque contexte a son échappement).' dans le navigateur des autres — vol de cookies, de sessions, actions à leur place. La parade centrale en PHP : **`htmlspecialchars` à l\'AFFICHAGE**, adaptée au contexte (texte HTML, attribut, JS, URL). Ni plus tôt, ni plus tard.',
+          intro: 'La XSS (Cross-Site Scripting), c\'est l\'attaque où un utilisateur malveillant écrit du JavaScript dans un champ « commentaire » — et ce code s\'exécute dans le navigateur de TOUS les visiteurs qui lisent la page. Cookies volés, actions effectuées à leur place, défacement : c\'est la faille n°1 des applications web depuis 25 ans. La parade en PHP est simple : chaque donnée qui vient DE L\'EXTÉRIEUR (formulaire, URL, API…) doit être **échappée** avant d\'être affichée. `htmlspecialchars()` transforme `<` en `&lt;` — inoffensif pour le navigateur, inoffensif pour tes visiteurs. Le piège : il faut le faire À L\'AFFICHAGE, pas au stockage — et dans le BON contexte (HTML, attribut, JavaScript, URL… chaque contexte a son échappement).\' dans le navigateur des autres — vol de cookies, de sessions, actions à leur place. La parade centrale en PHP : **`htmlspecialchars` à l\'AFFICHAGE**, adaptée au contexte (texte HTML, attribut, JS, URL). Ni plus tôt, ni plus tard.',
           blocks: [
             { t: 'h3', h: 'L\'attaque, pour comprendre' },
             { t: 'code', lang: 'php', code:
@@ -1447,14 +1405,13 @@ DEVDOCS.php.categories.push(
           ],
           related: ['php-validation', 'php-formulaires', 'php-mots-de-passe', 'lv-blade']
         },
-
         {
           id: 'php-csrf',
           title: 'CSRF : le jeton de confiance',
           icon: 'token',
           level: 'Avancé',
           tagline: 'Un formulaire peut venir d\'un autre site : le jeton aléatoire en session + hash_equals ferme la porte.',
-          intro: 'Tu es connecté à ta boutique au marché Dantokpa. Dans un autre onglet, tu visites un site de recettes de gari. Ce site, sans que tu le saches, contient un formulaire invisible qui envoie `POST /supprimer-mon-compte` vers TA boutique. Ton navigateur joint automatiquement TES cookies de session — le serveur voit UNE REQUÊTE AUTHENTIFIÉE et exécute la suppression. C\'est la **CSRF** (Cross-Site Request Forgery) : un site tiers fait agir ton navigateur À TON INSU. La parade : faire en sorte que chaque action sensible exige un SECRET que seul TON formulaire peut connaître — un **jeton CSRF**, généré aléatoirement, stocké en session, et vérifié avant toute action destructive.' qui soumet **en cachette** un formulaire POST vers /supprimer — ton navigateur joint **automatiquement tes cookies**, et le serveur y voit… toi. C\'est la **CSRF** (Cross-Site Request Forgery). La parade : exiger un **secret présent dans le formulaire** qu\'un site tiers ne peut pas connaître ni lire — le jeton CSRF.',
+          intro: 'Tu es connecté à ta boutique au marché Dantokpa. Dans un autre onglet, tu visites un site de recettes de gari. Ce site, sans que tu le saches, contient un formulaire invisible qui envoie `POST /supprimer-mon-compte` vers TA boutique. Ton navigateur joint automatiquement TES cookies de session — le serveur voit UNE REQUÊTE AUTHENTIFIÉE et exécute la suppression. C\'est la **CSRF** (Cross-Site Request Forgery) : un site tiers fait agir ton navigateur À TON INSU. La parade : faire en sorte que chaque action sensible exige un SECRET que seul TON formulaire peut connaître — un **jeton CSRF**, généré aléatoirement, stocké en session, et vérifié avant toute action destructive.\' qui soumet **en cachette** un formulaire POST vers /supprimer — ton navigateur joint **automatiquement tes cookies**, et le serveur y voit… toi. C\'est la **CSRF** (Cross-Site Request Forgery). La parade : exiger un **secret présent dans le formulaire** qu\'un site tiers ne peut pas connaître ni lire — le jeton CSRF.',
           blocks: [
             { t: 'h3', h: 'Générer et afficher le jeton' },
             { t: 'code', lang: 'php', code:
@@ -1474,7 +1431,7 @@ DEVDOCS.php.categories.push(
               'Bonus admin : `Referer`/`Origin` cohérents (indice, pas preuve)',
               'Les frameworks (Laravel) automatisent ça via middleware (`@csrf` dans Blade)'
             ] },
-            { t: 'p', h: 'Cas des **API JSON** : si ton API utilise des tokens Bearer (envoyés via `Authorization: Bearer ...`) et PAS de cookies, la CSRF ne s'applique simplement pas. Pourquoi ? Parce que le navigateur n'envoie JAMAIS automatiquement un en-tête `Authorization`. La CSRF exploite l'envoi automatique des cookies — sans cookies, l'attaque est structurellement impossible. Si ton SPA utilise à la fois des cookies (pour le refresh token) ET des tokens Bearer (pour l'API), protège les routes qui lisent les cookies avec un jeton CSRF, et laisse les routes Bearer tranquilles. : si l\'API n\'utilise **pas de cookie** d\'authentification (jeton Bearer lu par le JS, jamais envoyé automatiquement), la CSRF ne s\'applique simplement pas — le pré-requis de l\'attaque (l\'envoi automatique des cookies) a disparu.' }
+            { t: 'p', h: 'Cas des **API JSON** : si ton API utilise des tokens Bearer (envoyés via `Authorization: Bearer ...`) et PAS de cookies, la CSRF ne s\'applique simplement pas. Pourquoi ? Parce que le navigateur n\'envoie JAMAIS automatiquement un en-tête `Authorization`. La CSRF exploite l\'envoi automatique des cookies — sans cookies, l\'attaque est structurellement impossible. Si ton SPA utilise à la fois des cookies (pour le refresh token) ET des tokens Bearer (pour l\'API), protège les routes qui lisent les cookies avec un jeton CSRF, et laisse les routes Bearer tranquilles. : si l\'API n\'utilise **pas de cookie** d\'authentification (jeton Bearer lu par le JS, jamais envoyé automatiquement), la CSRF ne s\'applique simplement pas — le pré-requis de l\'attaque (l\'envoi automatique des cookies) a disparu.' }
           ],
           errors: [
             { title: 'Vérifier le jeton après l\'action — ou jamais', lang: 'php', bad:
@@ -1488,7 +1445,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 14. COMPOSER & DÉPENDANCES */
     {
       id: 'composer',
@@ -1501,7 +1457,7 @@ DEVDOCS.php.categories.push(
           icon: 'extension',
           level: 'Intermédiaire',
           tagline: 'Le gestionnaire de dépendances de PHP : require, lock, vendor/ à ne pas committer, et l\'autoload qui tue les require.',
-          intro: 'Imagine devoir télécharger manuellement chaque bibliothèque PHP dont tu as besoin — puis ses dépendances, puis les dépendances des dépendances. **Composer** est né en 2012 pour résoudre ce cauchemar : tu déclares tes dépendances dans `composer.json`, une commande (`composer install`) télécharge tout dans `vendor/`, et un **autoloader** charge automatiquement les classes sans que tu écrives un seul `require`. C\'est le npm de PHP, le pip de Python, le gem de Ruby — un gestionnaire de dépendances standardisé. Et surtout, c\'est la porte d\'entrée de tout l\'écosystème moderne : Laravel, Symfony, PHPUnit, Guzzle… tout s\'installe via Composer.' : déclarer les bibliothèques du projet (`composer.json`), les télécharger (`vendor/`), figer les versions (`composer.lock`) — et charger les classes **automatiquement** grâce au standard PSR-4. C\'est la porte d\'entrée de tout l\'écosystème moderne : Laravel, Symfony, PHPUnit…',
+          intro: 'Imagine devoir télécharger manuellement chaque bibliothèque PHP dont tu as besoin — puis ses dépendances, puis les dépendances des dépendances. **Composer** est né en 2012 pour résoudre ce cauchemar : tu déclares tes dépendances dans `composer.json`, une commande (`composer install`) télécharge tout dans `vendor/`, et un **autoloader** charge automatiquement les classes sans que tu écrives un seul `require`. C\'est le npm de PHP, le pip de Python, le gem de Ruby — un gestionnaire de dépendances standardisé. Et surtout, c\'est la porte d\'entrée de tout l\'écosystème moderne : Laravel, Symfony, PHPUnit, Guzzle… tout s\'installe via Composer.\' : déclarer les bibliothèques du projet (`composer.json`), les télécharger (`vendor/`), figer les versions (`composer.lock`) — et charger les classes **automatiquement** grâce au standard PSR-4. C\'est la porte d\'entrée de tout l\'écosystème moderne : Laravel, Symfony, PHPUnit…',
           blocks: [
             { t: 'h3', h: 'Installation & premier require' },
             { t: 'code', lang: 'bash', code:
@@ -1537,7 +1493,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 15. API REST */
     {
       id: 'api',
@@ -1550,7 +1505,7 @@ DEVDOCS.php.categories.push(
           icon: 'api',
           level: 'Intermédiaire',
           tagline: 'header JSON, json_encode/decode, méthodes HTTP, codes de statut — un petit routeur REST propre, sans framework.',
-          intro: 'Jusqu\'ici, ton PHP produisait du HTML — des pages que le navigateur affiche. Mais de plus en plus, le navigateur n\'est qu\'UN des clients possibles : une appli mobile, un front React/Vue, un autre serveur, un script automatisé… tous veulent les MÊMES données, pas du HTML. La solution : renvoyer du **JSON** — un format de données lisible par TOUS les langages. Avec trois en-têtes HTTP bien choisis et `json_encode`, ton PHP passe de « générateur de pages » à « fournisseur de données ». C\'est le cœur des API REST modernes : le même code sert un site web, une appli mobile et un partenaire commercial — chacun dans le format qui lui convient.' que n\'importe quel front (React, Vue, appli mobile) peut consommer. Une API REST propre repose sur quatre piliers : le **Content-Type** annoncé, le **bon code de statut**, les **méthodes HTTP** qui portent l\'intention (GET/POST/PUT/DELETE), et des réponses homogènes. Voyons la machine complète.',
+          intro: 'Jusqu\'ici, ton PHP produisait du HTML — des pages que le navigateur affiche. Mais de plus en plus, le navigateur n\'est qu\'UN des clients possibles : une appli mobile, un front React/Vue, un autre serveur, un script automatisé… tous veulent les MÊMES données, pas du HTML. La solution : renvoyer du **JSON** — un format de données lisible par TOUS les langages. Avec trois en-têtes HTTP bien choisis et `json_encode`, ton PHP passe de « générateur de pages » à « fournisseur de données ». C\'est le cœur des API REST modernes : le même code sert un site web, une appli mobile et un partenaire commercial — chacun dans le format qui lui convient.\' que n\'importe quel front (React, Vue, appli mobile) peut consommer. Une API REST propre repose sur quatre piliers : le **Content-Type** annoncé, le **bon code de statut**, les **méthodes HTTP** qui portent l\'intention (GET/POST/PUT/DELETE), et des réponses homogènes. Voyons la machine complète.',
           blocks: [
             { t: 'h3', h: 'La ressource en deux temps' },
             { t: 'code', lang: 'php', label: 'api/produits.php', code:
@@ -1586,7 +1541,6 @@ DEVDOCS.php.categories.push(
         }
       ]
     },
-
     /* 16. NAMESPACES */
     {
       id: 'namespaces',
@@ -1599,7 +1553,7 @@ DEVDOCS.php.categories.push(
           icon: 'hub',
           level: 'Intermédiaire',
           tagline: 'namespace, use et alias : des noms courts sans guerre des noms — et le pacte PSR-4 qui charge les fichiers tout seul.',
-          intro: 'Tant que tu es seul sur ton projet, appeler ta classe `Client` ne pose aucun problème. Mais le jour où tu installes Guzzle (un client HTTP) via Composer, sa classe `Client` et TA classe `Client` entrent en collision — PHP ne sait plus laquelle charger. Les **namespaces** sont la solution : chaque classe est décorée du nom de son « quartier » (`App\Boutique\Client` ≠ `GuzzleHttp\Client`). Ajoute le standard **PSR-4** (quartier = dossier) et l\'autoloader de Composer, et tu obtiens le Saint Graal : tu écris `use App\Boutique\Panier;`, tu fais `new Panier()`, et PHP trouve tout seul `src/Boutique/Panier.php` — sans UN SEUL `require`.' `Connection` ou `Client`. Les **espaces de noms** décorent chaque classe du nom de son « quartier » : `App\Boutique\Client` ≠ `GuzzleHttp\Client`. Ajoute le standard **PSR-4** (quartier ↔ dossier) et l\'autoloader de Composer, et les require disparaissent du paysage.',
+          intro: 'Tant que tu es seul sur ton projet, appeler ta classe `Client` ne pose aucun problème. Mais le jour où tu installes Guzzle (un client HTTP) via Composer, sa classe `Client` et TA classe `Client` entrent en collision — PHP ne sait plus laquelle charger. Les **namespaces** sont la solution : chaque classe est décorée du nom de son « quartier » (`App\Boutique\Client` ≠ `GuzzleHttp\Client`). Ajoute le standard **PSR-4** (quartier = dossier) et l\'autoloader de Composer, et tu obtiens le Saint Graal : tu écris `use App\Boutique\Panier;`, tu fais `new Panier()`, et PHP trouve tout seul `src/Boutique/Panier.php` — sans UN SEUL `require`.\' `Connection` ou `Client`. Les **espaces de noms** décorent chaque classe du nom de son « quartier » : `App\Boutique\Client` ≠ `GuzzleHttp\Client`. Ajoute le standard **PSR-4** (quartier ↔ dossier) et l\'autoloader de Composer, et les require disparaissent du paysage.',
           blocks: [
             { t: 'h3', h: 'Déclarer, en première ligne' },
             { t: 'code', lang: 'php', label: 'src/Boutique/Panier.php', code:
