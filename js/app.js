@@ -417,11 +417,20 @@
     else if (parts[0] === 'historique') { html = viewHistorique(); key = 'historique'; title = 'Récemment consultés'; }
     else if (parts[0] === 'application') {
       // Délégué au module d'exercices (exo-app.js)
-      if (typeof window.ExoApp !== 'undefined' && window.ExoApp.bind) {
-        window.ExoApp.bind();
-        return;
+      if (typeof window.ExoApp !== 'undefined' && window.ExoApp.route) {
+        var exoResult = window.ExoApp.route(parts);
+        if (exoResult && exoResult.html) {
+          html = exoResult.html;
+          title = exoResult.title || 'Application';
+          key = 'application';
+          // ExoApp.bind() sera appelé APRÈS l'injection HTML
+          // (il attache les runners DOM aux éléments #exo-runner)
+        } else {
+          html = viewHome();
+        }
+      } else {
+        html = viewHome();
       }
-      html = viewHome();
     }
     else { html = viewHome(); }
 
@@ -430,6 +439,11 @@
     window.scrollTo(0, 0);
     $('#topbar-title').textContent = TITLES[key] || title;
     document.title = title + ' — Easy Learn';
+
+    /* Si on vient d'afficher une page Application, attacher les runners DOM */
+    if (key === 'application' && typeof window.ExoApp !== 'undefined' && window.ExoApp.bind) {
+      window.ExoApp.bind(view);
+    }
 
     document.querySelectorAll('[data-nav]').forEach((el) => {
       el.classList.toggle('active', el.dataset.nav === key || (key === '' && el.dataset.nav === 'home'));

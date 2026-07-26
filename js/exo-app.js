@@ -1,7 +1,7 @@
 /* ============================================================
    exo-app.js — Module « Ateliers Pratiques » (Premium)
    ------------------------------------------------------------
-   Vues : hub (#/ateliers), page module (#/application/<mod>),
+   Vues : hub (#/application), page module (#/application/<mod>),
    détail (#/application/<mod>/<exo>), paywall (#/application/premium).
    Progression : localStorage 'dd-exo-progress-v1'.
    Verrouillage : délégué à premium.js (remplaçable par un vrai
@@ -310,7 +310,7 @@
   function moduleView(m) {
     var L = DEVDOCS[m], s = modStats(m);
     var domKind = X()[m].list.some(function (e) { return e.kind === 'dom'; });
-    var html = '<nav class="breadcrumb view-anim" aria-label="Fil d\'Ariane"><a href="#/ateliers">Ateliers</a>' + icon('chevron_right') + '<span>' + esc(L.name) + '</span></nav>';
+    var html = '<nav class="breadcrumb view-anim" aria-label="Fil d\'Ariane"><a href="#/application">Ateliers</a>' + icon('chevron_right') + '<span>' + esc(L.name) + '</span></nav>';
     /* Héro en dégradé aux couleurs du langage — fini le « tout blanc » */
     html += '<header class="exo-mod-hero view-anim" style="--mc:var(--c-' + m + ')">' +
       '<span class="mh-icon material-symbols-rounded">' + L.icon + '</span>' +
@@ -427,7 +427,7 @@
 
   function detailView(m, e) {
     var L = DEVDOCS[m], acc = accessible(e), st = statusOf(e);
-    var html = '<nav class="breadcrumb view-anim" aria-label="Fil d\'Ariane"><a href="#/ateliers">Ateliers</a>' + icon('chevron_right') +
+    var html = '<nav class="breadcrumb view-anim" aria-label="Fil d\'Ariane"><a href="#/application">Ateliers</a>' + icon('chevron_right') +
       '<a href="#/application/' + m + '">' + esc(L.name) + '</a>' + icon('chevron_right') + '<span>' + esc(e.title) + '</span></nav>';
 
     /* Héro en dégradé aux couleurs du langage (chips givrées) */
@@ -511,7 +511,7 @@
         '<div class="prem-state">' + icon('verified') + ' Premium actif' + (st.at ? ' depuis le ' + new Date(st.at).toLocaleDateString('fr-FR') : '') + '</div>' +
         '<h1>Tout est débloqué</h1>' +
         '<p>Ateliers, indices et solutions de tous les modules sont ouverts. Il ne reste plus qu\'à travailler : la régularité bat le talent.</p>' +
-        '<a class="btn" href="#/ateliers">' + icon('military_tech') + '<span>Retour aux ateliers</span></a>' +
+        '<a class="btn" href="#/application">' + icon('military_tech') + '<span>Retour aux ateliers</span></a>' +
         '<p style="margin:22px 0 0"><button type="button" class="btn ghost small" data-premium-revoke>' + icon('lock_reset') + '<span>Révoquer Premium (démo)</span></button></p>' +
         '</div>';
     }
