@@ -436,7 +436,7 @@
   }
 
   /* ---------- Routeur ---------- */
-  const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés' };
+  const TITLES = { home: 'Accueil', favoris: 'Favoris', historique: 'Récemment consultés', application: 'Application' };
 
   function route() {
     if (!view) return;
@@ -449,6 +449,11 @@
       if (typeof window.ExoApp !== 'undefined' && typeof window.ExoApp.rerender === 'function') {
         window.ExoApp.rerender();
       }
+      // Mettre à jour le chrome (topbar, navbar) pour Application
+      key = 'application';
+      document.querySelectorAll('[data-nav]').forEach(function (el) {
+        el.classList.toggle('active', el.dataset.nav === 'application');
+      });
       return;
     }
 

@@ -780,14 +780,4 @@
   if (navCount) navCount.textContent = total || '';
 
   window.ExoApp = { route: route, bind: bind, rerender: rerender };
-
-  /* Écoute les changements de hash pour la navigation Application.
-     L'approche est autonome : exo-app.js gère ses propres routes
-     sans dépendre du routeur principal d'app.js. */
-  window.addEventListener('hashchange', function () {
-    var h = location.hash.replace(/^#\/?/, '');
-    if (h.startsWith('application')) {
-      rerender();
-    }
-  });
 })();
