@@ -549,9 +549,11 @@ html[data-theme="dark"] .hint-card .material-symbols-rounded { color: #ffd60a; }
   display: grid;
   grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
   gap: 18px; align-items: start;
+  min-width: 0;
 }
 .workshop .preview-frame { position: sticky; top: 76px; }
 .workshop .preview-frame iframe { height: min(430px, 52vh); }
+.workshop-edit { min-width: 0; }
 @media (max-width: 1060px) {
   .workshop { grid-template-columns: 1fr; }
   .workshop .preview-frame { position: static; }
@@ -560,7 +562,6 @@ html[data-theme="dark"] .hint-card .material-symbols-rounded { color: #ffd60a; }
 
 .editor-shell {
   border-radius: var(--radius-m);
-  overflow: hidden;
   border: 1px solid var(--code-stroke);
   background: var(--code-bg);
   box-shadow: var(--shadow-card);
@@ -570,6 +571,7 @@ html[data-theme="dark"] .hint-card .material-symbols-rounded { color: #ffd60a; }
   padding: 8px 10px 0;
   background: var(--code-header);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .editor-tabs button {
   display: inline-flex; align-items: center; gap: 6px;
@@ -584,6 +586,7 @@ html[data-theme="dark"] .hint-card .material-symbols-rounded { color: #ffd60a; }
 .editor-tabs button.on { color: #e6e9ee; background: var(--code-bg); }
 .editor-tabs .ro-tag { font-size: 10px; font-weight: 800; letter-spacing: .05em; padding: 1px 6px; border-radius: 999px; background: rgba(255,255,255,.1); color: #9aa1ab; }
 
+.editor-panes { position: relative; }
 .editor { position: relative; background: var(--code-bg); }
 .editor-hl, .editor textarea {
   margin: 0; padding: 16px 18px;
@@ -594,11 +597,12 @@ html[data-theme="dark"] .hint-card .material-symbols-rounded { color: #ffd60a; }
 .editor-hl { position: absolute; inset: 0; overflow: hidden; pointer-events: none; color: var(--code-text); }
 .editor-hl code { font: inherit; }
 .editor textarea {
-  position: relative; z-index: 1; display: block; width: 100%;
+  position: relative; z-index: 1; display: block; width: 100%; min-height: 140px;
   border: none; outline: none; resize: none;
   background: transparent;
   color: transparent; caret-color: #e6e9ee;
   overflow: auto;
+  overscroll-behavior: contain;
 }
 .editor textarea::selection { background: rgba(90, 155, 213, .35); color: transparent; }
 .editor.ro textarea { caret-color: transparent; }
