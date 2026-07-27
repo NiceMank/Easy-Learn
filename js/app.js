@@ -159,11 +159,13 @@
   function applyTheme(theme, silent) {
     document.documentElement.setAttribute('data-theme', theme);
     store.set('dd-theme', theme);
-    $('#theme-icon').textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+    var ticon = $('#theme-icon');
+    if (ticon) ticon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
     if (!silent) toast(theme === 'dark' ? 'Mode sombre activé' : 'Mode clair activé', theme === 'dark' ? 'dark_mode' : 'light_mode');
   }
   applyTheme(store.get('dd-theme', window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'), true);
-  $('#theme-toggle').addEventListener('click', () => {
+  var themeToggle = $('#theme-toggle');
+  if (themeToggle) themeToggle.addEventListener('click', function () {
     applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
 
@@ -475,7 +477,8 @@
     view.innerHTML = html;
     observeReveals();
     window.scrollTo(0, 0);
-    $('#topbar-title').textContent = TITLES[key] || title;
+    var tb = $('#topbar-title');
+    if (tb) tb.textContent = TITLES[key] || title;
     document.title = title + ' — Easy Learn';
 
     document.querySelectorAll('[data-nav]').forEach((el) => {
@@ -502,33 +505,29 @@
     }
   }
 
-  window.addEventListener('hashchange', route);
 
   /* ---------- Recherche Spotlight ---------- */
-  const overlay = $('#search-overlay');
-  const input = $('#search-input');
-  const resultsBox = $('#search-results');
+  var overlay = $('#search-overlay');
+  var input = $('#search-input');
+  var resultsBox = $('#search-results');
 
   function openSearch() {
+    if (!overlay) return;
     overlay.hidden = false;
-    input.value = '';
+    if (input) { input.value = ''; input.focus({ preventScroll: true }); }
     renderResults('');
-    /* Focus fiable : un essai immédiat, puis un renfort après le reflow
-       de l'overlay (certains navigateurs ignorent focus() tant que le
-       panneau vient d'être révélé), avec sélection du texte pour pouvoir
-       taper directement par-dessus — comportement Spotlight. */
-    input.focus({ preventScroll: true });
-    input.select();
-    requestAnimationFrame(() => { input.focus({ preventScroll: true }); input.select(); });
-    setTimeout(() => { input.focus({ preventScroll: true }); input.select(); }, 60);
   }
-  function closeSearch() { overlay.hidden = true; }
+  function closeSearch() { if (overlay) overlay.hidden = true; }
 
-  ['#open-search-side', '#open-search-top', '#open-search-tab'].forEach((sel) => {
-    const el = $(sel); if (el) el.addEventListener('click', openSearch);
-  });
-  $('#search-close').addEventListener('click', closeSearch);
-  $('#search-backdrop').addEventListener('click', closeSearch);
+  if (input && resultsBox) {
+    ['#open-search-side', '#open-search-top', '#open-search-tab'].forEach(function (sel) {
+      var el = $(sel); if (el) el.addEventListener('click', openSearch);
+    });
+    var searchClose = $('#search-close');
+    if (searchClose) searchClose.addEventListener('click', closeSearch);
+    var backdrop = $('#search-backdrop');
+    if (backdrop) backdrop.addEventListener('click', closeSearch);
+  }
 
   function snippet(item, q) {
     const i = norm(item.raw).indexOf(q);
@@ -572,16 +571,18 @@
       '</span><span class="search-result-hint">' + DB[item.lang].name + '</span></a>';
   }
 
-  input.addEventListener('input', () => renderResults(input.value));
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && resultsBox.dataset.first) {
-      location.hash = '#/fiche/' + resultsBox.dataset.first;
-      closeSearch();
-    }
-  });
-  resultsBox.addEventListener('click', (e) => { if (e.target.closest('a')) closeSearch(); });
+  if (input) {
+    input.addEventListener('input', function () { renderResults(input.value); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && resultsBox && resultsBox.dataset.first) {
+        location.hash = '#/fiche/' + resultsBox.dataset.first;
+        closeSearch();
+      }
+    });
+  }
+  if (resultsBox) resultsBox.addEventListener('click', function (e) { if (e.target.closest('a')) closeSearch(); });
 
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); overlay.hidden ? openSearch() : closeSearch(); }
     if (e.key === 'Escape' && !overlay.hidden) closeSearch();
   });
@@ -606,23 +607,30 @@
     }
   });
 
+  window.addEventListener('hashchange', route);
+
   /* ---------- Init ---------- */
-  refreshCounts();
+  try {
+    refreshCounts();
+  } catch (e) { /* DOM pas prêt — normal dans certains cas */ }
 
   /* Garantit que la route initiale s'exécute APRÈS que le DOM soit prêt,
      même si les scripts chargent dans un ordre non déterministe
      (cache navigateur, chargement différé, ordre réseau aléatoire).
      Sans cette précaution, un refresh sur #/fiche/xxx peut afficher
      une page noire car #view n'existe pas encore. */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', route);
-    // Double filet : si DOMContentLoaded a déjà eu lieu (bordure IE11/WebView),
-    // requestAnimationFrame garantit que le DOM est peint avant route()
-    requestAnimationFrame(function () {
-      if (!view || !view.innerHTML) route();
-    });
-  } else {
-    route();
+  try {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', route);
+      requestAnimationFrame(function () {
+        if (!view || !view.innerHTML) route();
+      });
+    } else {
+      route();
+    }
+  } catch (e) {
+    // Fallback ultime : essayer route() même en cas d'erreur
+    setTimeout(function () { try { route(); } catch (e2) {} }, 10);
   }
 
   /* ---------- Capacitor : bouton retour Android ---------- */

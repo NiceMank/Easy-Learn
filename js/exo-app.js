@@ -756,16 +756,21 @@
     var viewEl = document.getElementById('view');
     if (!viewEl) return;
     var parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
-    var r = route(parts);
-    viewEl.innerHTML = r.html;
-    document.title = (r.title || 'Application') + ' — Easy Learn';
-    var tb = document.getElementById('topbar-title');
-    if (tb) tb.textContent = r.title || 'Application';
-    // Activer le lien Application dans la sidebar
-    document.querySelectorAll('[data-nav]').forEach(function (el) {
-      el.classList.toggle('active', el.dataset.nav === 'application');
-    });
-    bind(viewEl);
+    try {
+      var r = route(parts);
+      if (!r || !r.html) return;
+      viewEl.innerHTML = r.html;
+      document.title = (r.title || 'Application') + ' — Easy Learn';
+      var tb = document.getElementById('topbar-title');
+      if (tb) tb.textContent = r.title || 'Application';
+      // Activer le lien Application dans la sidebar
+      document.querySelectorAll('[data-nav]').forEach(function (el) {
+        el.classList.toggle('active', el.dataset.nav === 'application');
+      });
+      bind(viewEl);
+    } catch (e) {
+      console.error('ExoApp.rerender error:', e);
+    }
   }
 
   /* ---------- Init ---------- */
