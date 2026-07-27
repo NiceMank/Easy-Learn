@@ -448,15 +448,32 @@
        faire le rendu via son propre écouteur hashchange. */
     var rawHash = location.hash.replace(/^#\/?/, '');
     if (rawHash.startsWith('application')) {
-      if (typeof window.ExoApp !== 'undefined' && typeof window.ExoApp.rerender === 'function') {
-        window.ExoApp.rerender();
+      // Délégation à exo-app.js : générer le HTML et l'injecter
+      if (typeof window.ExoApp !== 'undefined' && typeof window.ExoApp.route === 'function') {
+        try {
+          var appParts = rawHash.split('/').filter(Boolean);
+          var exoResult = window.ExoApp.route(appParts);
+          if (exoResult && exoResult.html) {
+            view.innerHTML = exoResult.html;
+            var tb = $('#topbar-title');
+            if (tb) tb.textContent = exoResult.title || 'Application';
+            document.title = (exoResult.title || 'Application') + ' — Easy Learn';
+            document.querySelectorAll('[data-nav]').forEach(function (el) {
+              el.classList.toggle('active', el.dataset.nav === 'application');
+            });
+            observeReveals();
+            window.scrollTo(0, 0);
+            /* Attacher les runners DOM après injection HTML */
+            if (typeof window.ExoApp.bind === 'function') {
+              try { window.ExoApp.bind(view); } catch (e) {}
+            }
+            return;
+          }
+        } catch (err) {
+          console.error('ExoApp route error:', err);
+        }
       }
-      // Mettre à jour le chrome (topbar, navbar) pour Application
-      key = 'application';
-      document.querySelectorAll('[data-nav]').forEach(function (el) {
-        el.classList.toggle('active', el.dataset.nav === 'application');
-      });
-      return;
+      // Fallback : retour à l'accueil
     }
 
     const hash = rawHash;
