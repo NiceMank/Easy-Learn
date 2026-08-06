@@ -10,7 +10,7 @@ global.window = {}; global.DEVDOCS = window.DEVDOCS = {};
 const dfiles = fs.readdirSync('/home/user/devdocs/js').filter((f) => /^data-.*\.js$/.test(f));
 dfiles.forEach((f) => require('/home/user/devdocs/js/' + f));
 const DB = global.DEVDOCS;
-const KNOWN = new Set(['h3', 'p', 'ul', 'ol', 'code', 'callout', 'table', 'demo']);
+const KNOWN = new Set(['h3', 'p', 'ul', 'ol', 'code', 'callout', 'table', 'demo', 'diagram']);
 let total = 0; const fails = []; const ids = new Map();
 Object.keys(DB).forEach((l) => DB[l].categories.forEach((c) => c.fiches.forEach((f) => {
   total++;
@@ -24,6 +24,7 @@ Object.keys(DB).forEach((l) => DB[l].categories.forEach((c) => c.fiches.forEach(
     if (b.t === 'code' && (typeof b.code !== 'string' || !b.code.trim())) fails.push(f.id + ' b' + i + ' : code vide');
     if (b.t === 'table' && !((b.head || []).length && (b.rows || []).length)) fails.push(f.id + ' b' + i + ' : table incomplète');
     if (b.t === 'demo' && !b.html) fails.push(f.id + ' b' + i + ' : demo sans html');
+    if (b.t === 'diagram' && (typeof b.svg !== 'string' || !b.svg.trim().startsWith('<svg'))) fails.push(f.id + ' b' + i + ' : diagram sans svg');
     if (b.t === 'callout' && !['tip', 'warn', 'info'].includes(b.kind)) fails.push(f.id + ' b' + i + ' : callout kind inconnu ' + b.kind);
   });
 })));

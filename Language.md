@@ -1,8 +1,14 @@
 # Easy Learn — Langages du projet
 
-**Easy Learn** couvre **17 langages, bibliothèques et frameworks**, organisés en trois familles. Chaque module propose des **fiches théoriques** (explications de professeur, exemples copiables, pièges) et **5 exercices pratiques** (2 Fondamentaux, 2 Intermédiaires, 1 Projet réel — le premier est gratuit).
+**Easy Learn** couvre **19 langages, bibliothèques et frameworks**, organisés en quatre familles. Chaque module propose des **fiches théoriques** (explications de professeur, exemples copiables, pièges) et — pour 17 d'entre eux — **5 exercices pratiques** (2 Fondamentaux, 2 Intermédiaires, 1 Projet réel — le premier est gratuit).
 
-**Totaux : 371 fiches · 85 exercices · 17 accents de couleur dédiés.**
+**Totaux : 405 fiches · 85 exercices · 19 accents de couleur dédiés.**
+
+### Fondamentaux
+
+| Langage | Rôle | Fiches | Exercices | Correction | Accent | Contenu |
+|---|---|---|---|---|---|---|
+| **Algorithmique** | Logique & pseudo-code | 13 | — | — | `#6c5ce7` | `js/data-algo.js` |
 
 ### Front-end
 
@@ -20,21 +26,22 @@
 
 | Langage | Rôle | Fiches | Exercices | Correction | Accent | Contenu |
 |---|---|---|---|---|---|---|
-| **PHP** | Langage serveur | 35 | 5 | Auto-évaluation en local | `#777BB4` | `js/data-php.js` |
-| **Laravel** | Framework PHP | 18 | 5 | Auto-évaluation en local | `#ee3820` | `js/data-laravel.js` |
+| **PHP** | Langage serveur | 36 | 5 | Auto-évaluation en local | `#777BB4` | `js/data-php.js` |
+| **Laravel** | Framework PHP | 19 | 5 | Auto-évaluation en local | `#ee3820` | `js/data-laravel.js` — depuis août 2026 : fiche d'entrée « Notions de base » + 22 schémas visuels (`diagram`) pour débutants |
 | **TanStack Query** | Gestion des données serveur | 14 | 5 | Auto-évaluation en local | `#e8364f` | `js/data-tanstack.js` |
 | **Python** | Langage polyvalent | 18 | 5 | Auto-évaluation en local | `#306998` | `js/data-python.js` |
 | **Flask** | Micro-framework Python | 17 | 5 | Auto-évaluation en local | `#3a3a3c` | `js/data-flask.js` |
 | **Django** | Framework Python complet | 20 | 5 | Auto-évaluation en local | `#0c4b33` | `js/data-django.js` |
-| **Node.js & Express** | JS côté serveur | 29 | 5 | Auto-évaluation en local | `#5FA04E` | `js/data-node.js` |
+| **Node.js & Express** | JS côté serveur | 30 | 5 | Auto-évaluation en local | `#5FA04E` | `js/data-node.js` |
 
 ### Mobile & bas niveau
 
 | Langage | Rôle | Fiches | Exercices | Correction | Accent | Contenu |
 |---|---|---|---|---|---|---|
 | **React Native** | Applications mobiles | 24 | 5 | Auto-évaluation en local | `#00a9ce` | `js/data-reactnative.js` |
-| **Langage C** | Langage système | 30 | 5 | Auto-évaluation en local | `#00599C` | `js/data-c.js` |
-| **Java** | Langage objet JVM | 42 | 5 | Auto-évaluation en local | `#ED8B00` | `js/data-java.js` |
+| **Flutter** | Applications multiplateformes | 16 | — | — | `#0553B1` | `js/data-flutter.js` |
+| **Langage C** | Langage système | 31 | 5 | Auto-évaluation en local | `#00599C` | `js/data-c.js` |
+| **Java** | Langage objet JVM | 43 | 5 | Auto-évaluation en local | `#ED8B00` | `js/data-java.js` |
 
 ## Comment ajouter un langage
 
@@ -44,4 +51,4 @@
 4. Ajouter la couleur `--c-<id>` + l'accent `body[data-lang="<id>"]` dans `css/main.css`, le dégradé d'icône `.ic-<id>`, et le point `.dot-<id>`.
 5. Enregistrer l'id dans `LANGS` (`js/app.js`), `MODULE_ORDER` (`js/exo-app.js`, au bon groupe) et l'entrée de la barre latérale dans `index.html`.
 
-_Fichier généré pour Easy Learn — 22 juillet 2026._
+_Fichier mis à jour pour Easy Learn — 6 août 2026._

@@ -782,6 +782,73 @@ html[data-theme="dark"] .chip.lvl-avance { color: #ff6f66; }
   display: flex; align-items: center; gap: 6px;
 }
 
+/* ---------- Schémas pédagogiques (bloc diagram) ----------
+   SVG inline coloré via les variables du thème : les classes dg-*
+   portent tout le langage visuel (boîtes, flèches, textes).       */
+.diagram {
+  margin: 18px 0;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-m);
+  background: var(--fill);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.diagram-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  font-size: 12.5px; font-weight: 600; color: var(--text-2);
+  letter-spacing: .04em;
+  background: var(--fill-strong);
+  border-bottom: 1px solid var(--stroke);
+}
+.diagram-head .material-symbols-rounded { font-size: 18px; color: var(--accent); }
+.diagram-body { padding: 14px 12px; overflow-x: auto; }
+.diagram-body svg {
+  display: block; margin: 0 auto;
+  width: 100%; min-width: 620px; max-width: 760px; height: auto;
+  font-family: inherit;
+}
+.diagram-cap {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 16px;
+  font-size: 13.5px; line-height: 1.5; color: var(--text-2);
+  background: var(--fill-strong);
+  border-top: 1px solid var(--stroke);
+}
+.diagram-cap .material-symbols-rounded { font-size: 17px; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+
+/* Textes */
+.diagram svg .dg-t  { font-size: 13px; font-weight: 600; fill: var(--text); }
+.diagram svg .dg-m  { font-size: 12px; fill: var(--text-2); }
+.diagram svg .dg-ms { font-size: 10.5px; fill: var(--text-3); }
+.diagram svg .dg-tw { font-size: 12.5px; font-weight: 700; fill: #fff; }
+.diagram svg .dg-numt { font-size: 11px; font-weight: 700; fill: #fff; }
+.diagram svg .dg-tt { font-size: 13px; font-weight: 700; fill: var(--accent); }
+
+/* Boîtes */
+.diagram svg .dg-b  { fill: var(--bg-elev); stroke: var(--stroke); stroke-width: 1.2; }
+.diagram svg .dg-ba { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+.diagram svg .dg-as { fill: var(--accent); }
+.diagram svg .dg-pill { fill: var(--fill-strong); stroke: var(--stroke); stroke-width: 1; }
+.diagram svg .dg-num { fill: var(--accent); }
+.diagram svg .dg-zone { fill: none; stroke: var(--text-3); stroke-width: 1.1; stroke-dasharray: 6 4; }
+.diagram svg .dg-grid { stroke: var(--stroke); stroke-width: 1; }
+
+/* Flèches & liaisons */
+.diagram svg .dg-e  { stroke: var(--text-3); stroke-width: 1.7; fill: none; }
+.diagram svg .dg-ea { stroke: var(--accent); stroke-width: 2.1; fill: none; }
+.diagram svg .dg-dash { stroke-dasharray: 5 4; }
+.diagram svg .dg-fill-e { fill: var(--text-3); }
+.diagram svg .dg-fill-a { fill: var(--accent); }
+
+/* Verdicts (coches / croix) — fill uniquement (texte, puces) */
+.diagram svg .dg-ok   { fill: #1aae52; }
+.diagram svg .dg-ko   { fill: #e0342b; }
+.diagram svg .dg-warn { fill: #d97a00; }
+html[data-theme="dark"] .diagram svg .dg-ok   { fill: #30d158; }
+html[data-theme="dark"] .diagram svg .dg-ko   { fill: #ff6961; }
+html[data-theme="dark"] .diagram svg .dg-warn { fill: #ffb340; }
+
 /* ---------- Tableaux de doc ---------- */
 .doc-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
 .doc-table th, .doc-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--stroke); }

@@ -89,7 +89,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 {t:"table",head:["","StatelessWidget","StatefulWidget"],rows:[
   ["Quand ?","Interface FIXE","Interface qui ÉVOLUE"],
   ["Exemples","Text, Icon, Padding, AppBar","TextField, Checkbox, Formulaire"],
-  ["Classes","1 : Widget → build()","2 : Widget + State<Widget> → build()"],
+  ["Classes","1 : Widget → build()","2 : Widget + State&lt;Widget&gt; → build()"],
   ["const ?","OUI, TOUJOURS","Le Widget peut être const, pas son State"]
 ]},
 {t:"h3",h:"StatefulWidget : le compteur de gari"},
@@ -279,7 +279,7 @@ DEVDOCS.flutter = {id:"flutter",name:"Flutter",icon:"deployed_code",tagline:"Un 
 {t:"h3",h:"Lien avec les notions déjà vues"}, {t:"p",h:"Cycle Flutter = cycle React : `initState` = `componentDidMount` + `useEffect([],[])`, `dispose` = `componentWillUnmount` + cleanup."}
 ],errors:[
 {title:"context dans initState",lang:"dart",bad:"initState() { final p = context.read<Panier>(); }  // crash subtil",good:"initState() { addPostFrameCallback((_) { final p = context.read<Panier>(); }); }",why:"Pendant initState, le 1er build n'est pas fait. addPostFrameCallback garantit le contexte complet."},
-{title:"super.dispose() oublié",lang:"dart",bad:"dispose() { _ctrl.dispose(); /* pas de super.dispose() */ }",good:"dispose() { _ctrl.dispose(); super.dispose(); }",why:"State<T> nettoie ses ressources internes via dispose(). Sans super, fuite."}
+{title:"super.dispose() oublié",lang:"dart",bad:"dispose() { _ctrl.dispose(); /* pas de super.dispose() */ }",good:"dispose() { _ctrl.dispose(); super.dispose(); }",why:"State&lt;T&gt; nettoie ses ressources internes via dispose(). Sans super, fuite."}
 ],related:["flutter-setstate","flutter-widgets","flutter-formulaires","rx-effets"]}
 ]},
 {id:"assets",name:"Assets & ressources",icon:"folder",fiches:[

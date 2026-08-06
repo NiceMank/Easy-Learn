@@ -51,6 +51,7 @@
         case 'ul': case 'ol': return (b.items || []).map(stripTags).join(' ');
         case 'table': return (b.head || []).concat((b.rows || []).flat()).join(' ');
         case 'code': return b.code || '';
+        case 'diagram': return stripTags(b.title || '') + ' ' + stripTags(b.caption || '');   // titre + légende indexés, jamais le SVG
         default: return '';
       }
     }).join(' ');
@@ -141,6 +142,15 @@
           (b.caption ? '<div class="demo-caption">' + icon('visibility') + '<span>' + b.caption + '</span></div>' : '') +
         '</div>';
       }
+      case 'diagram':
+        // Schéma pédagogique : b.svg est injecté BRUT (contenu de confiance,
+        // comme les champs h/items — pas une donnée utilisateur). Les classes
+        // dg-* (voir main.css) colorent le SVG via les variables du thème.
+        return '<figure class="diagram reveal">' +
+          (b.title ? '<figcaption class="diagram-head">' + icon('schema') + '<span>' + md(b.title) + '</span></figcaption>' : '') +
+          '<div class="diagram-body" role="img" aria-label="' + High.esc(stripTags(b.title || 'Schéma')) + '">' + b.svg + '</div>' +
+          (b.caption ? '<figcaption class="diagram-cap">' + icon('info') + '<span>' + md(b.caption) + '</span></figcaption>' : '') +
+        '</figure>';
       default: return '';
     }
   }

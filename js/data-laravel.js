@@ -20,6 +20,129 @@ DEVDOCS.laravel = {
       icon: 'architecture',
       fiches: [
         {
+          id: 'lv-notions',
+          title: 'Notions de base : le web, le terminal et la base de données',
+          icon: 'school',
+          level: 'Débutant',
+          tagline: 'Client, serveur, requête HTTP, terminal, paquets, base de données : tous les mots que le cours Laravel emploie, expliqués une fois pour toutes — avec schémas.',
+          intro: 'Ce module emploie parfois des mots comme « requête », « serveur » ou « migration » comme s\'ils allaient de soi. Rien d\'anormal : ce sont les briques du métier. Cette fiche d\'entrée les définit TOUS, simplement et en images — lis-la avant la fiche Installation, ou reviens-y dès qu\'un mot te résiste. Dix minutes ici t\'en feront gagner des heures ensuite.',
+          blocks: [
+            { t: 'h3', h: 'Comment le web fonctionne en 30 secondes' },
+            { t: 'p', h: 'Quand tu tapes une adresse ou que tu cliques un lien, ton NAVIGATEUR (Chrome, Safari…) envoie une question à travers Internet : la **requête HTTP**. De l\'autre côté, un ordinateur allumé en permanence — le **serveur** — la reçoit, fait travailler ton application, puis renvoie la **réponse** (la page que tu vois). Ce va-et-vient question/réponse EST le web : chaque page, chaque clic, chaque formulaire. Comme au restaurant : le client (navigateur) commande, la cuisine (serveur + application) prépare en regardant ses réserves (la base de données), puis le plat revient en salle.' },
+            { t: 'diagram', title: 'Le va-et-vient fondamental : requête → traitement → réponse', svg: `<svg viewBox="0 0 680 260">
+  <defs><marker id="lv-n1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="40" width="168" height="64" rx="12" class="dg-b"/>
+  <text x="104" y="66" class="dg-t" text-anchor="middle">Navigateur</text>
+  <text x="104" y="86" class="dg-m" text-anchor="middle">le client (PC, téléphone)</text>
+  <rect x="330" y="14" width="330" height="232" rx="14" class="dg-zone"/>
+  <text x="344" y="36" class="dg-ms">LE SERVEUR — ALLUMÉ 24H/24</text>
+  <rect x="360" y="48" width="270" height="56" rx="12" class="dg-ba"/>
+  <text x="495" y="70" class="dg-t" text-anchor="middle">Laravel — ton application</text>
+  <text x="495" y="90" class="dg-m" text-anchor="middle">routes → contrôleur → vue</text>
+  <rect x="360" y="168" width="270" height="56" rx="12" class="dg-b"/>
+  <text x="495" y="190" class="dg-t" text-anchor="middle">Base de données</text>
+  <text x="495" y="210" class="dg-m" text-anchor="middle">produits, clients, commandes</text>
+  <path d="M 190,50 C 250,44 300,54 356,62" class="dg-e" marker-end="url(#lv-n1)"/>
+  <circle cx="272" cy="42" r="9" class="dg-num"/><text x="272" y="46" class="dg-numt" text-anchor="middle">1</text>
+  <text x="272" y="28" class="dg-m" text-anchor="middle">requête HTTP : GET /boutique</text>
+  <path d="M 560,106 L 560,164" class="dg-e" marker-end="url(#lv-n1)"/>
+  <circle cx="560" cy="134" r="9" class="dg-num"/><text x="560" y="138" class="dg-numt" text-anchor="middle">2</text>
+  <text x="576" y="138" class="dg-m">requête SQL</text>
+  <path d="M 430,164 L 430,106" class="dg-e" marker-end="url(#lv-n1)"/>
+  <circle cx="430" cy="134" r="9" class="dg-num"/><text x="430" y="138" class="dg-numt" text-anchor="middle">3</text>
+  <text x="414" y="138" class="dg-m" text-anchor="end">les lignes trouvées</text>
+  <path d="M 356,88 C 296,92 250,92 190,84" class="dg-e" marker-end="url(#lv-n1)"/>
+  <circle cx="274" cy="96" r="9" class="dg-num"/><text x="274" y="100" class="dg-numt" text-anchor="middle">4</text>
+  <text x="274" y="117" class="dg-m" text-anchor="middle">réponse : la page HTML</text>
+</svg>`, caption: 'Ce cycle se répète à CHAQUE clic. Laravel, c\'est la cuisine : la fiche suivante (« Structure, cycle de vie ») en ouvre les portes une par une. Retiens déjà ceci : ton navigateur ne voit jamais ni le code PHP, ni la base — seulement la réponse HTML.' },
+            { t: 'table', head: ['Mot', 'Traduction simple'], rows: [
+              ['URL', 'L\'adresse complète d\'une page — comme l\'adresse postale d\'une maison (« https://boutique-awa.bj/boutique »)'],
+              ['requête HTTP', 'La question envoyée par le navigateur : « je veux TELLE page, TELLE action »'],
+              ['réponse HTTP', 'Ce que le serveur renvoie : du HTML, du JSON, une image… accompagné d\'un **statut**'],
+              ['verbe HTTP', 'L\'intention de la question : `GET` (lire) ou `POST` (envoyer des données) sont les deux plus courants'],
+              ['statut (200, 404, 500…)', 'Le verdict du serveur : 200 « voilà », 404 « inconnu », 500 « j\'ai planté » — tu les verras tous'],
+              ['HTML / CSS / JavaScript', 'Les trois langages que le NAVIGATEUR comprend : le contenu, le style, l\'interactivité'],
+              ['PHP', 'Le langage exécuté par le SERVEUR (jamais par le navigateur) — celui dans lequel Laravel est écrit']
+            ] },
+            { t: 'h3', h: 'Langage, framework, bibliothèque : qui commande qui ?' },
+            { t: 'p', h: '**PHP est un langage** : un vocabulaire et une grammaire que l\'ordinateur exécute. Une **bibliothèque** est une caisse d\'outils tout faits (générer un PDF, redimensionner une image) : c\'est TOI qui l\'appelles quand tu en as besoin. Un **framework** inverse la relation : il fournit la structure ET appelle TON code au bon moment — « ne nous appelez pas, on vous appellera ». Concrètement avec Laravel : quand une requête arrive, c\'est LUI qui la reçoit, l\'aiguille (les routes), la protège (les middleware), puis délègue à TON contrôleur — et renvoie la réponse. Tu écris les 20 % métier (TA boutique), il fournit les 80 % d\'infrastructure, écrits en PHP eux aussi.' },
+            { t: 'diagram', title: 'La pile des outils : qui fait quoi (et ce que TU écris vraiment)', svg: `<svg viewBox="0 0 680 232">
+  <defs><marker id="lv-n2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="100" y="16" width="400" height="40" rx="10" class="dg-ba"/>
+  <text x="300" y="40" class="dg-t" text-anchor="middle">TON code : routes, contrôleurs, vues</text>
+  <rect x="100" y="64" width="400" height="40" rx="10" class="dg-b"/>
+  <text x="300" y="88" class="dg-t" text-anchor="middle">Laravel : routing, Eloquent, Blade, auth…</text>
+  <rect x="100" y="112" width="400" height="40" rx="10" class="dg-b"/>
+  <text x="300" y="136" class="dg-t" text-anchor="middle">PHP — le moteur qui exécute tout</text>
+  <rect x="100" y="160" width="400" height="40" rx="10" class="dg-b"/>
+  <text x="300" y="184" class="dg-t" text-anchor="middle">Serveur web + système d'exploitation</text>
+  <path d="M 40,28 L 95,28" class="dg-e" marker-end="url(#lv-n2)"/>
+  <text x="67" y="18" class="dg-m" text-anchor="middle">requête</text>
+  <path d="M 95,44 L 40,44" class="dg-e" marker-end="url(#lv-n2)"/>
+  <text x="67" y="58" class="dg-m" text-anchor="middle">réponse</text>
+  <text x="512" y="40" class="dg-m">◀ tu n'écris QUE cette couche</text>
+  <text x="512" y="88" class="dg-m">◀ déjà écrit, testé, audité</text>
+  <text x="512" y="136" class="dg-m">◀ le langage</text>
+  <text x="512" y="184" class="dg-m">◀ la machine, allumée 24h/24</text>
+</svg>`, caption: 'Lecture : la requête descend la pile, la réponse la remonte. Ton travail se concentre dans la couche du haut — le reste est déjà écrit par des experts : c\'est exactement la promesse d\'un framework. Et Composer (fiche Installation) est le magasin qui livre la couche Laravel et les bibliothèques.' },
+            { t: 'h3', h: 'Le terminal : piloter l\'ordinateur en tapant du texte' },
+            { t: 'p', h: 'Le TERMINAL (aussi appelé « console » ou « invite de commandes ») est cette fenêtre sombre où l\'on tape des ordres au lieu de cliquer. Pourquoi s\'en servir ? Parce que les outils de développement (Composer, artisan…) n\'ont pas d\'interface graphique : on leur parle EN TEXTANT. L\'ouvrir : **Windows** → touche Windows, tape « Terminal » ; **macOS** → Cmd+Espace, tape « Terminal » ; **Linux** → Ctrl+Alt+T. Une commande se lit de gauche à droite : dans `php artisan serve`, `php` est le programme appelé, `artisan serve` ce qu\'on lui demande — ici « démarre le serveur, s\'il te plaît ».' },
+            { t: 'code', lang: 'bash', label: 'Les cinq commandes de survie (essaie-les, aucun danger)', code: 'pwd                    # « où suis-je ? » : affiche le dossier courant\ncd boutique-awa        # « entre DANS le dossier boutique-awa » (change directory)\ncd ..                  # « remonte d\'un dossier »\nls                     # liste les fichiers du dossier courant (sous Windows : dir)\nphp -v                 # demande sa version à PHP — ta première discussion avec lui' },
+            { t: 'callout', kind: 'warn', h: 'Deux pièges qui font perdre des heures la première semaine. **Le `$` (ou `>`) affiché au début des commandes dans les tutoriels ne se tape PAS** : c\'est l\'invite, le signe « à toi de parler ». Et les commandes se tapent **dans le bon dossier** : `php artisan …` ne fonctionne que dans le dossier du projet — fais d\'abord `cd boutique-awa`, sinon : « Could not open input file: artisan ».' },
+            { t: 'h3', h: 'La base de données : le cahier où rien ne s\'efface' },
+            { t: 'p', h: 'Ton application PHP s\'arrête après chaque réponse (la fiche suivante l\'expliquera en détail) : tout ce qui doit survivre — produits, clients, commandes — est rangé dans la **base de données**. Elle ressemble à un classeur de tableaux : une **table** par sujet (`produits`, `clients`, `commandes`), une **colonne** par information (`nom`, `prix`, `stock`), une **ligne** par élément concret. On l\'interroge dans un langage de questions appelé **SQL** — et bonne nouvelle : Eloquent, la fiche phare du module, traduira ce SQL pour toi. Pour débuter tu utiliseras **SQLite** : la base entière tient en UN fichier, rien à installer ; **MySQL** viendra plus tard, en production.' },
+            { t: 'diagram', title: 'Anatomie d\'une base de données : table, colonnes, lignes', svg: `<svg viewBox="0 0 680 230">
+  <defs><marker id="lv-n3" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="46" y="30" class="dg-t">la TABLE : produits</text>
+  <rect x="46" y="44" width="50" height="26" class="dg-ba"/><rect x="96" y="44" width="170" height="26" class="dg-ba"/><rect x="266" y="44" width="100" height="26" class="dg-ba"/><rect x="366" y="44" width="100" height="26" class="dg-ba"/>
+  <text x="71" y="61" class="dg-t" text-anchor="middle">id</text><text x="181" y="61" class="dg-t" text-anchor="middle">nom</text><text x="316" y="61" class="dg-t" text-anchor="middle">prix</text><text x="416" y="61" class="dg-t" text-anchor="middle">stock</text>
+  <rect x="46" y="70" width="50" height="26" class="dg-b"/><rect x="96" y="70" width="170" height="26" class="dg-b"/><rect x="266" y="70" width="100" height="26" class="dg-b"/><rect x="366" y="70" width="100" height="26" class="dg-b"/>
+  <text x="71" y="87" class="dg-m" text-anchor="middle">1</text><text x="181" y="87" class="dg-m" text-anchor="middle">Gari premium</text><text x="316" y="87" class="dg-m" text-anchor="middle">21 000</text><text x="416" y="87" class="dg-m" text-anchor="middle">12</text>
+  <rect x="46" y="96" width="50" height="26" class="dg-b"/><rect x="96" y="96" width="170" height="26" class="dg-b"/><rect x="266" y="96" width="100" height="26" class="dg-b"/><rect x="366" y="96" width="100" height="26" class="dg-b"/>
+  <text x="71" y="113" class="dg-m" text-anchor="middle">2</text><text x="181" y="113" class="dg-m" text-anchor="middle">Huile rouge 5L</text><text x="316" y="113" class="dg-m" text-anchor="middle">6 500</text><text x="416" y="113" class="dg-m" text-anchor="middle">30</text>
+  <text x="676" y="26" class="dg-t" text-anchor="end">une COLONNE = une information</text>
+  <path d="M 640,34 L 340,48" class="dg-e" marker-end="url(#lv-n3)"/>
+  <text x="46" y="168" class="dg-t">une LIGNE = un élément (un produit)</text>
+  <path d="M 100,158 L 60,100" class="dg-e" marker-end="url(#lv-n3)"/>
+  <text x="500" y="80" class="dg-tt" text-anchor="middle">Eloquent</text>
+  <path d="M 474,96 L 512,120" class="dg-ea" marker-end="url(#lv-n3)"/>
+  <rect x="516" y="124" width="148" height="66" rx="12" class="dg-b"/>
+  <text x="590" y="146" class="dg-t" text-anchor="middle">objet Produit</text>
+  <text x="590" y="164" class="dg-ms" text-anchor="middle">{ nom: 'Gari premium',</text>
+  <text x="590" y="180" class="dg-ms" text-anchor="middle">prix: 21000 }</text>
+</svg>`, caption: 'La formule magique : TABLE = le sujet, COLONNE = l\'information, LIGNE = l\'élément. Et garde la flèche de droite sous le coude : Eloquent (l\'ORM de Laravel) transformera chaque ligne en objet PHP manipulable — c\'est tout le sujet de la fiche Eloquent.' },
+            { t: 'h3', h: 'Frontend et backend : de quel côté du comptoir ?' },
+            { t: 'ul', items: [
+              '**Frontend** (le « devant ») : ce qui s\'exécute dans le NAVIGATEUR du visiteur — HTML, CSS, JavaScript. On le voit, on clique dessus.',
+              '**Backend** (l\'« arrière-boutique ») : ce qui s\'exécute sur le SERVEUR — PHP, Laravel, la base de données. Invisible du visiteur, c\'est là que vivent les données et les règles du jeu.',
+              'Le pont entre les deux : la requête / réponse HTTP du premier schéma. Laravel est un framework **backend** : il fabrique la réponse (HTML ou JSON) que le frontend affiche.',
+              'Piège classique : chercher son PHP dans « Afficher le code source » de la page. Tu n\'y verras JAMAIS ton PHP — il a déjà été exécuté et remplacé par son résultat HTML avant l\'envoi.'
+            ] },
+            { t: 'h3', h: 'Le petit glossaire du module (à garder sous le coude)' },
+            { t: 'table', head: ['Terme', 'Sens en une phrase'], rows: [
+              ['framework', 'Une application « à trous » : il fournit la structure, tu remplis le métier'],
+              ['paquet (package)', 'Une bibliothèque prête à l\'emploi livrée par Composer — comme une appli dans un téléphone'],
+              ['dépendance', 'Un paquet dont TON projet a besoin pour tourner (Laravel lui-même est une dépendance)'],
+              ['API', 'Une façade « pour programmes » : l\'application y répond en données (JSON) plutôt qu\'en pages à lire'],
+              ['JSON', 'Un format texte pour transporter des données structurées : `{ "nom": "Gari", "prix": 21000 }`'],
+              ['ORM', 'Le traducteur tables ↔ objets : chaque ligne de base devient un objet PHP (fiche Eloquent)'],
+              ['MVC', 'La répartition Modèle (données) / Vue (affichage) / Contrôleur (chef d\'orchestre) — schéma à la fiche Contrôleurs'],
+              ['artisan', 'La console de commandes de Laravel : `php artisan …` crée fichiers et migrations, lance le serveur']
+            ] },
+            { t: 'h3', h: 'Lien avec la suite' },
+            { t: 'p', h: 'Tu as maintenant tous les mots pour attaquer : la fiche **Installation** va te faire poser chaque outil un par un (PHP le moteur, Composer le magasin à paquets, le projet frais), et la fiche **Structure, cycle de vie & artisan** rouvrira le premier schéma de cette page en zoomant sur ce qui se passe ENTRE la requête et la réponse. Un conseil de lecture : ne récite pas ce glossaire — utilise-le. Chaque fois qu\'un mot du cours te semble flou, reviens ici.' }
+          ],
+          errors: [
+            { title: 'Confondre le terminal et le navigateur', lang: 'bash', bad:
+'# L\'erreur presque universelle de la première semaine :\n# taper ceci dans la BARRE D\'ADRESSE du navigateur :\nphp artisan serve\n# → Google répond « aucun résultat »… une adresse attend une URL,\n#   pas une commande. Ou l\'inverse : taper dans le TERMINAL :\nhttp://localhost:8000\n# → « command not found » : le terminal ne visite pas les pages.', good:
+'# Chaque outil a SA fenêtre :\n#\n# Dans le TERMINAL : donner des ORDRES à ta machine\nphp artisan serve              # démarre le serveur — ici ✓\n#\n# Dans le NAVIGATEUR : poser des QUESTIONS aux serveurs\nhttp://localhost:8000          # voir la page — ici ✓\n#\n# Mémo : on TRAVAILLE dans le terminal, on REGARDE dans le navigateur.', why: 'Le terminal et le navigateur parlent deux protocoles différents : le premier exécute des COMMANDES sur ta machine, le second envoie des requêtes HTTP à des serveurs. « http://localhost:8000 » n\'est pas une commande (aucun programme de ce nom) et « php artisan serve » n\'est pas une adresse (aucun site de ce nom). Ce mélange est le premier tribunal de tout débutant : trente secondes à comprendre la différence épargnent une journée de « ça ne marche pas ».' },
+            { title: '« Could not open input file: artisan »', lang: 'bash', bad:
+'C:\\Users\\awa> php artisan make:model Produit\n# → Could not open input file: artisan\n# Panique : « mon installation est cassée ! » — non.\n# La commande a été lancée depuis TON DOSSIER PERSONNEL,\n# pas depuis le dossier du projet. artisan est un FICHIER :\n# php le cherche ici… et ne le trouve pas.', good:
+'C:\\Users\\awa> cd boutique-awa        # d\'abord ENTRER dans le projet\nC:\\Users\\awa\\boutique-awa> php artisan make:model Produit\n# → Model created successfully.\n# Réflexe : quand « php artisan … » répond « file not found »,\n# vérifie où tu es (pwd / cd) avant de douter de l\'installation.', why: 'Une commande s\'exécute TOUJOURS dans un dossier courant, et `php artisan …` signifie « exécute le fichier artisan QUI EST DANS CE DOSSIER ». Hors du projet, ce fichier n\'existe pas : l\'erreur est littérale, pas un mystère d\'installation. C\'est la version grand public d\'une loi plus vaste du métier : avant d\'accuser l\'outil, vérifier le contexte (dossier, utilisateur, serveur lancé). Le rituel à garder : ouvrir le terminal → `cd` vers le projet → et seulement ensuite, travailler.' }
+          ],
+          related: ['lv-installation', 'lv-fondamentaux', 'lv-routing']
+        },
+        {
           id: 'lv-installation',
           title: 'Installation & configuration',
           icon: 'download',
@@ -30,6 +153,7 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Pourquoi Laravel ne « se télécharge » pas-t-il comme un simple fichier ?' },
             { t: 'p', h: 'Une application Laravel n\'est pas un fichier qu\'on pose : c\'est un ASSEMBLAGE — le cœur du framework (des dizaines de paquets), TON code métier au milieu (routes, contrôleurs, vues), et des réglages qui changent d\'une machine à l\'autre (base de données, clés). Télécharger un « laravel.zip » figerait tout ça en bloc. La bonne méthode procède en deux temps : **Composer** crée le squelette frais depuis le gabarit officiel, puis **artisan** (la console intégrée) l\'initialise pour TA machine (clé de chiffrement, base). C\'est le même contrat que npm côté JavaScript : un manifeste, des dépendances versionnées, un dossier `vendor/` jetable.' },
             { t: 'p', h: 'La carte des outils, une bonne fois : **PHP** est le moteur qui exécute tout (le « Node » du monde PHP). **Composer** est son npm : il lit `composer.json`, télécharge `vendor/`, verrouille les versions dans `composer.lock`. **artisan** est le terminal bilingue de Laravel : il crée projets, contrôleurs, migrations… — tu t\'en serviras à chaque séance. Et le **serveur Web** ? Pendant le développement, c\'est `php artisan serve` qui joue ce rôle — Apache/Nginx n\'interviennent qu\'en production.' },
+            { t: 'callout', kind: 'info', h: 'Mot nouveau — **paquet** (ou « package ») : une boîte de code toute prête, écrite par quelqu\'un d\'autre, que Composer télécharge dans le dossier `vendor/` (Laravel lui-même est un paquet !). Ton projet **dépend** de ces boîtes — d\'où le mot **dépendance**. Composer porte le joli nom de **gestionnaire de paquets** : pense à un magasin d\'applications pour ton projet. Si les mots « terminal », « PATH » ou « commande » te sont étrangers, fais d\'abord un détour par la fiche **Notions de base** — elle est faite pour toi.' },
             { t: 'h3', h: 'Prérequis : PHP et Composer, dans le bon sens' },
             { t: 'table', head: ['Outil', 'Version requise', 'Vérification', 'Rôle'], rows: [
               ['PHP (CLI)', '≥ 8.2 (Laravel 11/12)', '`php -v` DOIT répondre 8.2+', 'Exécute le framework et ton code'],
@@ -39,9 +163,32 @@ DEVDOCS.laravel = {
             ] },
             { t: 'callout', kind: 'info', h: 'Par OS — la méthode qui coûte le moins de larmes. **Windows/macOS : Laravel Herd** (installateur de la famille Laravel — PHP, Composer, tout pré-câblé en 5 min, l\'équivalent moderne de XAMPP sans les maux de tête PATH). **Linux Ubuntu/Debian : `sudo apt install php-cli php-mbstring php-xml php-sqlite3 php-curl composer`** — chaque extension s\'installe en un paquet séparé, ne les oublie pas. **Windows, sans Herd :** XAMPP marche aussi — mais attends-toi à ajouter PHP au PATH toi-même (l\'erreur n°1 en bas).' },
             { t: 'h3', h: 'Créer le projet : l\'assistant officiel fait le gros du travail' },
+            { t: 'diagram', title: 'Les 5 étapes de l\'installation, dans l\'ordre', svg: `<svg viewBox="0 0 680 150">
+  <defs><marker id="lv-i1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="16" y="44" width="124" height="62" rx="12" class="dg-b"/>
+  <text x="78" y="68" class="dg-t" text-anchor="middle">1 · Vérifier</text>
+  <text x="78" y="88" class="dg-m" text-anchor="middle">php -v · composer</text>
+  <path d="M 140,75 L 146,75" class="dg-e" marker-end="url(#lv-i1)"/>
+  <rect x="147" y="44" width="124" height="62" rx="12" class="dg-b"/>
+  <text x="209" y="68" class="dg-t" text-anchor="middle">2 · Créer</text>
+  <text x="209" y="88" class="dg-m" text-anchor="middle">create-project</text>
+  <path d="M 271,75 L 277,75" class="dg-e" marker-end="url(#lv-i1)"/>
+  <rect x="278" y="44" width="124" height="62" rx="12" class="dg-b"/>
+  <text x="340" y="68" class="dg-t" text-anchor="middle">3 · Initialiser</text>
+  <text x="340" y="88" class="dg-m" text-anchor="middle">key:generate</text>
+  <path d="M 402,75 L 408,75" class="dg-e" marker-end="url(#lv-i1)"/>
+  <rect x="409" y="44" width="124" height="62" rx="12" class="dg-b"/>
+  <text x="471" y="68" class="dg-t" text-anchor="middle">4 · La base</text>
+  <text x="471" y="88" class="dg-m" text-anchor="middle">sqlite + migrate</text>
+  <path d="M 533,75 L 539,75" class="dg-e" marker-end="url(#lv-i1)"/>
+  <rect x="540" y="44" width="124" height="62" rx="12" class="dg-ba"/>
+  <text x="602" y="68" class="dg-t" text-anchor="middle">5 · Lancer</text>
+  <text x="602" y="88" class="dg-m" text-anchor="middle">artisan serve ✓</text>
+</svg>`, caption: 'Chaque ligne de commande ci-dessous correspond à UNE de ces étapes — si l\'une échoue, tu sais exactement où tu en es. Et le raccourci bienvenu : les étapes 3 et 4 sont faites **une seule fois par projet** ; au quotidien, tu ne tapes que la 5.' },
             { t: 'code', lang: 'bash', label: 'Terminal — de zéro au projet qui tourne', code:
 '# 1) Vérifier le socle — ces deux lignes DOIVENT répondre avant tout :\nphp -v                # → PHP 8.2.x ou plus\ncomposer --version    # → Composer 2.x\n\n# 2) Créer le projet « boutique-awa » (télécharge le framework + le squelette)\ncomposer create-project laravel/laravel boutique-awa\ncd boutique-awa\n\n# 3) La clé de chiffrement (OBLIGATOIRE — sessions, cookies chiffrés)\nphp artisan key:generate\n\n# 4) Créer la base SQLite (un simple fichier) et la préparer\ntype nul > database\\database.sqlite   :: Windows\ntouch database/database.sqlite        # macOS / Linux\nphp artisan migrate                   # crée users, cache, jobs…\n\n# 5) Lancer le serveur de développement\nphp artisan serve\n#   → « Server running on http://127.0.0.1:8000 » —\n#     la page d\'accueil Laravel s\'affiche : l\'atelier fonctionne.' },
             { t: 'p', h: 'Relis chaque geste : `create-project` télécharge le framework dans `vendor/` ET le squelette applicatif (routes/, app/, config/) — c\'est l\'équivalent de `npm create vite@latest` + `npm install` réunis. `key:generate` écrit une clé dans `.env` : sans elle, tout le chiffrement (sessions !) refuse de tourner — l\'erreur n°2 en bas. `migrate` construit les tables de base (users, cache, jobs) dans ta base fraîche. Et `serve` lance un serveur PHP intégré — pratique en dev, jamais en prod.' },
+            { t: 'callout', kind: 'info', h: 'Comment lire `http://127.0.0.1:8000` : `127.0.0.1` est l\'adresse spéciale qui désigne **toujours ta propre machine** (son surnom : `localhost` — « l\'hôte local »). Le `:8000` est le **port** : un numéro de guichet qui permet à plusieurs serveurs de cohabiter sur la même machine. Traduction complète : « la page servie par MON serveur de dev, guichet 8000 » — elle n\'est visible que chez toi, personne d\'autre ne peut la voir, et c\'est normal.' },
             { t: 'h3', h: 'Le fichier .env et la connexion à la base' },
             { t: 'p', h: '`.env` est le TROUSSEAU de réglages par machine : identifiants de base, clé secrète, URL — différent en dev, en staging, en prod, et JAMAIS commité (`.gitignore` le sait). Laravel le lit à chaque démarrage, et `config/database.php` s\'y réfère. Pour débuter, SQLite est le bonheur : pas de serveur MySQL à installer, un fichier à sauvegarder avec le projet. La fiche **Configuration** du module détaillera `config:cache` et le piège associé ; ici retiens seulement : tu changes `.env`, tu relances `php artisan serve`.' },
             { t: 'code', lang: 'bash', label: '.env — les lignes qui comptent aujourd\'hui', code:
@@ -87,7 +234,7 @@ DEVDOCS.laravel = {
               why: 'La clé APP_KEY chiffre sessions et cookies ; sans elle, toute la mécanique d\'authentification s\'arrête net — et l\'erreur n\'apparaît qu\'au premier usage CHIFFRÉ (typiquement le login), pas à la page d\'accueil, d\'où l\'illusion « le clone marche ». `.env` n\'étant jamais versionné, CHAQUE machine (collègue, serveur, ton autre PC) doit refaire le rituel : `.env.example` copié, `key:generate`, `migrate`. C\'est d\'ailleurs exactement ce que font les kits de démarrage Laravel — le rituel n\'est pas une corvée, c\'est le contrat.'
             }
           ],
-          related: ['lv-fondamentaux', 'lv-configuration', 'lv-migrations']
+          related: ['lv-notions', 'lv-fondamentaux', 'lv-configuration', 'lv-migrations']
         },
         {
           id: 'lv-fondamentaux',
@@ -116,6 +263,40 @@ DEVDOCS.laravel = {
             ]},
             { t: 'p', h: 'Retiens la règle des 80/20 : au quotidien, tu vis dans **`app/`, `routes/`, `resources/views/` et `database/`**, avec un détour régulier par `config/`. Le reste est de l\'infrastructure que tu ne toucheras qu\'en cas de besoin précis. Et note bien le rôle de `public/` : c\'est la SEULE porte d\'entrée web — tout le reste du projet (tes secrets, tes classes) est hors de portée des navigateurs. C\'est un choix de sécurité fondamental, pas un caprice.' },
             { t: 'h3', h: 'Le cycle de vie d\'une requête, de index.php à la réponse' },
+            { t: 'diagram', title: 'Le voyage d\'une requête, en une image', svg: `<svg viewBox="0 0 680 250">
+  <defs><marker id="lv-f1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="16" y="30" width="204" height="56" rx="12" class="dg-b"/>
+  <circle cx="30" cy="30" r="9" class="dg-num"/><text x="30" y="34" class="dg-numt" text-anchor="middle">1</text>
+  <text x="118" y="52" class="dg-t" text-anchor="middle">Navigateur</text>
+  <text x="118" y="72" class="dg-m" text-anchor="middle">GET /boutique</text>
+  <path d="M 220,58 L 236,58" class="dg-e" marker-end="url(#lv-f1)"/>
+  <rect x="238" y="30" width="204" height="56" rx="12" class="dg-b"/>
+  <circle cx="252" cy="30" r="9" class="dg-num"/><text x="252" y="34" class="dg-numt" text-anchor="middle">2</text>
+  <text x="340" y="52" class="dg-t" text-anchor="middle">public/index.php</text>
+  <text x="340" y="72" class="dg-m" text-anchor="middle">démarre le framework</text>
+  <path d="M 442,58 L 458,58" class="dg-e" marker-end="url(#lv-f1)"/>
+  <rect x="460" y="30" width="204" height="56" rx="12" class="dg-b"/>
+  <circle cx="474" cy="30" r="9" class="dg-num"/><text x="474" y="34" class="dg-numt" text-anchor="middle">3</text>
+  <text x="562" y="52" class="dg-t" text-anchor="middle">Middleware</text>
+  <text x="562" y="72" class="dg-m" text-anchor="middle">session · CSRF · auth…</text>
+  <path d="M 562,86 L 562,138" class="dg-e" marker-end="url(#lv-f1)"/>
+  <rect x="460" y="140" width="204" height="56" rx="12" class="dg-b"/>
+  <circle cx="474" cy="140" r="9" class="dg-num"/><text x="474" y="144" class="dg-numt" text-anchor="middle">4</text>
+  <text x="562" y="162" class="dg-t" text-anchor="middle">Routeur</text>
+  <text x="562" y="182" class="dg-m" text-anchor="middle">quelle route répond ?</text>
+  <path d="M 460,168 L 444,168" class="dg-e" marker-end="url(#lv-f1)"/>
+  <rect x="238" y="140" width="204" height="56" rx="12" class="dg-ba"/>
+  <circle cx="252" cy="140" r="9" class="dg-num"/><text x="252" y="144" class="dg-numt" text-anchor="middle">5</text>
+  <text x="340" y="162" class="dg-t" text-anchor="middle">Contrôleur + modèles</text>
+  <text x="340" y="182" class="dg-m" text-anchor="middle">TON code parle à la base</text>
+  <path d="M 238,168 L 222,168" class="dg-e" marker-end="url(#lv-f1)"/>
+  <rect x="16" y="140" width="204" height="56" rx="12" class="dg-b"/>
+  <circle cx="30" cy="140" r="9" class="dg-num"/><text x="30" y="144" class="dg-numt" text-anchor="middle">6</text>
+  <text x="118" y="162" class="dg-t" text-anchor="middle">Réponse HTML / JSON</text>
+  <text x="118" y="182" class="dg-m" text-anchor="middle">renvoyée au navigateur</text>
+  <path d="M 118,196 L 118,232" class="dg-e dg-dash" marker-end="url(#lv-f1)"/>
+  <text x="132" y="228" class="dg-m">cycle terminé — PHP s'éteint, prêt pour la requête suivante</text>
+</svg>`, caption: 'Suis les numéros : c\'est le même voyage que la liste détaillée ci-dessous, étape par étape. Deux choses à retenir : **tout** passe par public/index.php (le reste du projet est invisible du web), et le framework redémarre à CHAQUE requête — c\'est le modèle « shared nothing » qu\'on déplie juste après.' },
             { t: 'ol', items: [
               '**Le frontal web** (nginx/Apache) reçoit `GET /boutique` et redirige TOUT vers `public/index.php` — le point d\'entrée unique. Aucune autre URL ne correspond à un fichier réel.',
               '**`index.php` démarre le framework** : il charge l\'autoloader de Composer (qui sait trouver chaque classe depuis `vendor/`), puis crée l\'application depuis `bootstrap/app.php`.',
@@ -172,6 +353,25 @@ DEVDOCS.laravel = {
 'APP_NAME="Boutique Awa"\nAPP_ENV=local          # local sur ton PC, production sur le serveur\nAPP_DEBUG=true         # true en dev, ABSOLUMENT false en prod\nAPP_URL=http://localhost:8000\n\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_DATABASE=boutique_dev\nDB_USERNAME=root\n\nMTN_MOMO_API_KEY=sk_test_51AbC…     # le secret vit ICI, hors git' },
             { t: 'code', lang: 'php', label: 'config/services.php — le formateur de valeurs', code:
 '<?php\n\nreturn [\n\n    \'mtn_momo\' => [\n        \'api_key\' => env(\'MTN_MOMO_API_KEY\'),        // pioché dans .env\n        \'base_url\' => env(\'MTN_MOMO_URL\', \'https://sandbox.momodeveloper.mtn.com\'),\n        \'timeout\' => 15,\n    ],\n\n];\n\n// Ton code métier lit UNIQUEMENT ceci :\n// config(\'services.mtn_momo.api_key\')   → la valeur de CETTE machine\n// config(\'services.mtn_momo.timeout\')  → 15 (même sans .env, le défaut tient)' },
+            { t: 'diagram', title: 'Le voyage d\'une valeur : du .env jusqu\'à ton code', svg: `<svg viewBox="0 0 680 190">
+  <defs><marker id="lv-c1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="30" y="40" width="170" height="56" rx="12" class="dg-b"/>
+  <text x="115" y="62" class="dg-t" text-anchor="middle">.env</text>
+  <text x="115" y="82" class="dg-m" text-anchor="middle">valeurs de CETTE machine</text>
+  <path d="M 200,68 L 253,68" class="dg-e" marker-end="url(#lv-c1)"/>
+  <circle cx="226" cy="68" r="9" class="dg-num"/><text x="226" y="72" class="dg-numt" text-anchor="middle">1</text>
+  <rect x="255" y="40" width="190" height="56" rx="12" class="dg-b"/>
+  <text x="350" y="62" class="dg-t" text-anchor="middle">config/services.php</text>
+  <text x="350" y="82" class="dg-m" text-anchor="middle">met en forme via env(…)</text>
+  <path d="M 445,68 L 508,68" class="dg-e" marker-end="url(#lv-c1)"/>
+  <circle cx="476" cy="68" r="9" class="dg-num"/><text x="476" y="72" class="dg-numt" text-anchor="middle">2</text>
+  <rect x="510" y="40" width="150" height="56" rx="12" class="dg-ba"/>
+  <text x="585" y="62" class="dg-t" text-anchor="middle">Ton code</text>
+  <text x="585" y="82" class="dg-m" text-anchor="middle">config(…) — partout</text>
+  <rect x="30" y="112" width="630" height="58" rx="12" class="dg-zone"/>
+  <text x="46" y="134" class="dg-m">En production, config:cache fige le tout dans UN fichier plat : le .env n'est PLUS lu.</text>
+  <text x="46" y="154" class="dg-m">Conséquence : env() appelé hors de config/ retourne null en prod — le piège vu juste après.</text>
+</svg>`, caption: 'Trois acteurs, trois rôles : .env stocke (jamais commité), config/ structure (versionné), config() lit (ton code). La flèche ne va JAMAIS dans l\'autre sens : ton code ne lit pas .env directement.' },
             { t: 'h3', h: 'Sous le capot : config:cache, et pourquoi env() hors de config/ te piégera' },
             { t: 'p', h: 'En production, on lance `php artisan config:cache` : Laravel lit UNE FOIS tous les fichiers `config/`, les aplatit en un seul PHP ultra-rapide à charger, et écrit le résultat dans `bootstrap/cache/config.php`. À partir de ce moment — retiens bien — **le fichier `.env` n\'est tout simplement PLUS lu**. Conséquence qui a fait souffrir des générations de débutants : si ton code appelle `env(\'MTN_MOMO_API_KEY\')` directement (hors `config/`), il obtient `null` en production, alors que tout marchait en local. Le crash est silencieux, incompréhensible… et disparaît dès que tu remplaces par `config(\'services.mtn_momo.api_key\')` : la valeur était bien dans le cache, c\'est la porte d\'entrée qui était fausse.' },
             { t: 'callout', kind: 'warn', h: 'La règle d\'or en une phrase : **`env()` n\'a le droit de cité QUE dans les fichiers de `config/`** — ailleurs, uniquement `config()`. Et réciproquement, après chaque changement de config en production : `php artisan config:cache` pour régénérer le cache, sinon l\'ancienne version continue de servir.' },
@@ -230,6 +430,33 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Déclarer une route : le contrat minimal' },
             { t: 'code', lang: 'php', label: 'routes/web.php', code:
 'use Illuminate\\Support\\Facades\\Route;\nuse App\\Http\\Controllers\\CatalogueController;\n\n// FORME MINIMALE (didactique) — une closure directement dans la route :\nRoute::get(\'/bonjour\', function () {\n    return \'Bienvenue à la Boutique Awa\';\n});\n\n// FORME RÉELLE — le contrôleur : la route AIGUILLE, ne TRAVAILLE pas\nRoute::get(\'/boutique\', [CatalogueController::class, \'index\']);\nRoute::post(\'/boutique/panier\', [PanierController::class, \'ajouter\']);\n\n// Voir TOUTE la table d\'aiguillage :\n// $ php artisan route:list' },
+            { t: 'diagram', title: 'Comment le routeur choisit : verbe + URL, première ligne qui matche', svg: `<svg viewBox="0 0 680 240">
+  <defs><marker id="lv-r1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="88" width="180" height="56" rx="12" class="dg-b"/>
+  <text x="110" y="110" class="dg-t" text-anchor="middle">Requête entrante</text>
+  <text x="110" y="130" class="dg-m" text-anchor="middle">GET /boutique/gari-premium</text>
+  <rect x="254" y="16" width="230" height="210" rx="14" class="dg-b"/>
+  <text x="369" y="40" class="dg-t" text-anchor="middle">Table des routes</text>
+  <text x="369" y="58" class="dg-ms" text-anchor="middle">(parcourue dans l'ordre)</text>
+  <text x="268" y="88" class="dg-m">GET /boutique</text>
+  <text x="470" y="88" class="dg-ko" text-anchor="end">✗ URL ≠</text>
+  <rect x="262" y="100" width="214" height="30" rx="8" class="dg-ba"/>
+  <text x="268" y="120" class="dg-t">GET /boutique/{produit}</text>
+  <text x="470" y="120" class="dg-ok" text-anchor="end">✓ MATCH</text>
+  <text x="268" y="152" class="dg-m">POST /boutique/panier</text>
+  <text x="470" y="152" class="dg-ko" text-anchor="end">✗ verbe ≠</text>
+  <text x="268" y="184" class="dg-m">PUT /boutique/{produit}</text>
+  <text x="470" y="184" class="dg-ko" text-anchor="end">✗ verbe ≠</text>
+  <text x="369" y="212" class="dg-ms" text-anchor="middle">gagnante : /boutique/gari-premium</text>
+  <rect x="520" y="84" width="144" height="76" rx="12" class="dg-ba"/>
+  <text x="592" y="106" class="dg-t" text-anchor="middle">Contrôleur</text>
+  <text x="592" y="126" class="dg-m" text-anchor="middle">CatalogueController</text>
+  <text x="592" y="144" class="dg-ms" text-anchor="middle">show('gari-premium')</text>
+  <path d="M 200,116 L 250,116" class="dg-e" marker-end="url(#lv-r1)"/>
+  <circle cx="226" cy="116" r="9" class="dg-num"/><text x="226" y="120" class="dg-numt" text-anchor="middle">1</text>
+  <path d="M 484,116 L 518,116" class="dg-e" marker-end="url(#lv-r1)"/>
+  <circle cx="501" cy="116" r="9" class="dg-num"/><text x="501" y="120" class="dg-numt" text-anchor="middle">2</text>
+</svg>`, caption: 'Le routeur compare la requête (verbe + URL) à CHAQUE ligne, dans l\'ordre de déclaration, et s\'arrête au premier motif qui matche — sans se demander « laquelle tu pensais ». Le paramètre {produit} capture le segment « gari-premium » et le transmet au contrôleur. C\'est pourquoi l\'ordre et les contraintes comptent tant (pièges en bas de page).' },
             { t: 'p', h: 'Les deux formes sont légales, mais tiens-toi à la règle d\'or : **une closure ne dépasse jamais trois lignes de logique**. Dès qu\'une route fait quelque chose (base de données, validation, vrai métier), elle déménage dans un contrôleur — la prochaine fiche explique pourquoi (injection de dépendances, testabilité, lisibilité). La closure garde un usage honorable : la page statique, le ping de santé, le lien temporaire.' },
             { t: 'h3', h: 'Les verbes HTTP ont un sens — utilise-les' },
             { t: 'table', head: ['Verbe', 'Intention', 'Exemple Boutique Awa'], rows: [
@@ -285,6 +512,34 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Pourquoi un contrôleur plutôt qu\'une closure dans la route' },
             { t: 'p', h: 'On l\'a dit : une closure dans `routes/web.php` dégénère vite — la logique s\'y entasse, non testable, non réutilisable, impossible à organiser. Le contrôleur est une CLASSE, et cette petitesse de rien change tout : une classe peut recevoir des dépendances (l\'injection, ci-dessous), être testée isolément, regrouper les 7 actions CRUD d\'une même ressource au même endroit. Conséquence pratique : les routes deviennent une table SÈCHE et lisible — aiguillage pur — et le métier vit dans des classes nommées, que tinker, les tests et l\'IDE comprennent.' },
+            { t: 'diagram', title: 'MVC : le trio qui répond à une requête (et le rôle de chacun)', svg: `<svg viewBox="0 0 680 246">
+  <defs><marker id="lv-ct1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="16" y="30" width="170" height="44" rx="12" class="dg-b"/>
+  <text x="101" y="48" class="dg-t" text-anchor="middle">Requête HTTP</text>
+  <text x="101" y="66" class="dg-m" text-anchor="middle">GET /produits</text>
+  <rect x="250" y="22" width="210" height="60" rx="12" class="dg-ba"/>
+  <text x="355" y="46" class="dg-t" text-anchor="middle">CONTRÔLEUR</text>
+  <text x="355" y="66" class="dg-m" text-anchor="middle">le chef d'orchestre — TON code</text>
+  <path d="M 186,52 L 248,52" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <rect x="486" y="118" width="178" height="60" rx="12" class="dg-b"/>
+  <text x="575" y="142" class="dg-t" text-anchor="middle">MODÈLE</text>
+  <text x="575" y="162" class="dg-m" text-anchor="middle">les données (Eloquent)</text>
+  <rect x="16" y="118" width="178" height="60" rx="12" class="dg-b"/>
+  <text x="105" y="142" class="dg-t" text-anchor="middle">VUE</text>
+  <text x="105" y="162" class="dg-m" text-anchor="middle">l'affichage (Blade)</text>
+  <rect x="486" y="196" width="178" height="36" rx="10" class="dg-b"/>
+  <text x="575" y="219" class="dg-m" text-anchor="middle">base de données</text>
+  <path d="M 462,68 L 558,112" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <text x="513" y="84" class="dg-ms" text-anchor="middle">demande les données</text>
+  <path d="M 558,128 L 466,86" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <text x="515" y="118" class="dg-ms" text-anchor="middle">résultats</text>
+  <path d="M 575,178 L 575,194" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <text x="586" y="190" class="dg-ms">SQL</text>
+  <path d="M 248,76 L 108,116" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <text x="176" y="88" class="dg-ms" text-anchor="middle">prépare l'affichage</text>
+  <path d="M 105,178 L 105,210" class="dg-e" marker-end="url(#lv-ct1)"/>
+  <text x="119" y="206" class="dg-m">réponse HTML → navigateur</text>
+</svg>`, caption: '**M**odèle = les données (Eloquent parle à la base), **V**ue = l\'affichage (Blade produit le HTML), **C**ontrôleur = le chef d\'orchestre : il reçoit la requête, demande les données au modèle et décide de la réponse. Toute l\'architecture de Laravel tourne autour de ce trio — et le contrôleur reste MINCE : il coordonne, il ne calcule pas.' },
             { t: 'h3', h: 'Créer et câbler : le contrôleur resource en une commande' },
             { t: 'code', lang: 'php', code:
 'php artisan make:controller ProduitController --resource\n// → app/Http/Controllers/ProduitController.php avec les 7 méthodes CRUD :\n\n//   index()    GET    /produits              liste (paginée !)\n//   create()   GET    /produits/create       formulaire de création\n//   store()    POST   /produits              enregistre le nouveau\n//   show()     GET    /produits/{produit}    fiche détail\n//   edit()     GET    /produits/{p}/edit     formulaire d\'édition\n//   update()   PUT/PATCH /produits/{p}       enregistre la modif\n//   destroy()  DELETE /produits/{p}          supprime\n\n// Le câblage en UNE ligne (routes/web.php) :\nRoute::resource(\'produits\', ProduitController::class);\n// → les 7 routes, nommées, contraintes nommées produits.index,\n//   produits.show… : php artisan route:list pour vérifier' },
@@ -334,6 +589,38 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Ton espace admin filet + ton panier filet + ton compte filet… Ajouter `if (!auth()->check()) return redirect(\'/login\')` en tête de 40 contrôleurs, c\'est 40 copies à maintenir — et 40 occasions d\'en oublier une (l\'erreur n°1 de sécurité du débutant : la route qui trainait, non protégée). Le middleware REVERSE la relation : la règle est écrite UNE FOIS dans une classe, et le ROUTAGE l\'applique aux routes concernées — groupe `admin`, groupe `api`, ou application entière. Le contrôleur n\'a même plus besoin de savoir que la règle existe : la requête est DÉJÀ filtrée quand elle arrive.' },
             { t: 'h3', h: 'Anatomie : l\'oignon et le $next' },
             { t: 'p', h: 'Un middleware reçoit la requête et une fonction `$next` (« passe au suivant »). Avant `$next`, tu peux BLOQUER (redirection, 403, 429) ou MODIFIER la requête ; `$next($request)` transmet au middleware suivant, puis au contrôleur — et au retour, la RÉPONSE traverse de nouveau ta couche dans l\'autre sens, où tu peux la transformer (ajouter un en-tête, compresser). C\'est la structure en **oignon** : chaque couche enveloppe les suivantes, à l\'aller et au retour. L\'ordre dans lequel tu emboîtes compte : la session AVANT l\'auth (l\'auth lit la session), CSRF APRÈS la session (le jeton vit en session).' },
+            { t: 'diagram', title: 'Le tunnel des middleware, à l\'aller… et au retour', svg: `<svg viewBox="0 0 680 200">
+  <defs><marker id="lv-m1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="14" y="73" width="116" height="54" rx="12" class="dg-b"/>
+  <text x="72" y="95" class="dg-t" text-anchor="middle">Requête</text>
+  <text x="72" y="113" class="dg-m" text-anchor="middle">POST /admin</text>
+  <rect x="150" y="40" width="76" height="120" rx="12" class="dg-b"/>
+  <circle cx="188" cy="40" r="9" class="dg-num"/><text x="188" y="44" class="dg-numt" text-anchor="middle">1</text>
+  <text x="188" y="95" class="dg-t" text-anchor="middle">CORS</text>
+  <text x="188" y="113" class="dg-ms" text-anchor="middle">en-têtes</text>
+  <rect x="246" y="40" width="76" height="120" rx="12" class="dg-b"/>
+  <circle cx="284" cy="40" r="9" class="dg-num"/><text x="284" y="44" class="dg-numt" text-anchor="middle">2</text>
+  <text x="284" y="95" class="dg-t" text-anchor="middle">Session</text>
+  <text x="284" y="113" class="dg-ms" text-anchor="middle">qui es-tu ?</text>
+  <rect x="342" y="40" width="76" height="120" rx="12" class="dg-b"/>
+  <circle cx="380" cy="40" r="9" class="dg-num"/><text x="380" y="44" class="dg-numt" text-anchor="middle">3</text>
+  <text x="380" y="95" class="dg-t" text-anchor="middle">CSRF</text>
+  <text x="380" y="113" class="dg-ms" text-anchor="middle">jeton signé</text>
+  <rect x="438" y="40" width="76" height="120" rx="12" class="dg-b"/>
+  <circle cx="476" cy="40" r="9" class="dg-num"/><text x="476" y="44" class="dg-numt" text-anchor="middle">4</text>
+  <text x="476" y="95" class="dg-t" text-anchor="middle">auth</text>
+  <text x="476" y="113" class="dg-ms" text-anchor="middle">connecté ?</text>
+  <rect x="540" y="73" width="126" height="54" rx="12" class="dg-ba"/>
+  <text x="603" y="95" class="dg-t" text-anchor="middle">TON contrôleur</text>
+  <text x="603" y="113" class="dg-m" text-anchor="middle">enfin ✓</text>
+  <path d="M 130,100 L 148,100" class="dg-e" marker-end="url(#lv-m1)"/>
+  <path d="M 226,100 L 244,100" class="dg-e" marker-end="url(#lv-m1)"/>
+  <path d="M 322,100 L 340,100" class="dg-e" marker-end="url(#lv-m1)"/>
+  <path d="M 418,100 L 436,100" class="dg-e" marker-end="url(#lv-m1)"/>
+  <path d="M 514,100 L 538,100" class="dg-e" marker-end="url(#lv-m1)"/>
+  <path d="M 603,127 L 603,178 L 72,178 L 72,130" class="dg-e dg-dash" marker-end="url(#lv-m1)"/>
+  <text x="334" y="170" class="dg-m" text-anchor="middle">la réponse repasse par les mêmes couches au retour (en-têtes, mesures…)</text>
+</svg>`, caption: 'Chaque couche peut BLOQUER (403, 419, redirection login) — et alors le contrôleur n\'est JAMAIS appelé. C\'est le point fort : une règle écrite une fois protège toutes les routes du groupe. À l\'aller, chaque couche décide ; au retour (pointillés), elle peut peaufiner la réponse.' },
             { t: 'code', lang: 'php', label: 'app/Http/Middleware/CouvreFeu.php', code:
 '<?php\n\nnamespace App\\Http\\Middleware;\n\nuse Closure;\nuse Illuminate\\Http\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass CouvreFeu\n{\n    public function handle(Request $request, Closure $next): Response\n    {\n        // AVANT $next : BLOQUER ou transformer la REQUÊTE —\n        $heure = (int) now()->format(\'H\');\n        if ($heure >= 22 || $heure < 6) {\n            // Couvre-feu maintenance : la boutique ferme la nuit\n            if ($request->is(\'admin/*\')) {\n                abort(503, \'Maintenance nocturne — réessaie à 6 h.\');\n            }\n        }\n\n        $response = $next($request);   // le reste de l\'oignon s\'exécute\n\n        // APRÈS $next : transformer la RÉPONSE si besoin —\n        $response->headers->set(\'X-Boutique\', \'Awa\');\n\n        return $response;              // TOUJOURS retourner une réponse\n    }\n}' },
             { t: 'h3', h: 'Enregistrer et appliquer (Laravel 11+)' },
@@ -384,6 +671,7 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Afficher des données — en sécurité par défaut' },
             { t: 'p', h: 'Le réflexe PHP de base, `<?= $produit->nom ?>`, affiche la valeur TELLE QUELLE — y compris si un client malveillant a saisi `<script>…</script>` dans le nom de son produit (la XSS, injection n°1 du web). Blade corrige le défaut à la racine : **`{{ }}` ÉCHAPPE systématiquement** (les chevrons deviennent `&lt;script&gt;`, inoffensifs). Le rendu d\'une saisie utilisateur est donc sûr PAR DÉFAUT — la porte blindée est fermée sans que tu y penses. Le contre-pied exact : `{!! !!}` qui affiche BRUT, réservé au HTML que TU maîtrises (un rendu de Markdown interne, jamais une saisie).' },
+            { t: 'callout', kind: 'info', h: 'Deux mots nouveaux, expliqués vite. Un **moteur de templates** : le logiciel qui prend un fichier « HTML + trous » (les `{{ }}` et `@if`) et le remplit avec tes données pour produire le HTML final. Et la **XSS** (« Cross-Site Scripting ») : le piège où un visiteur injecte du code (un script) dans TON site via un champ (nom, commentaire) — si le site affiche sa saisie telle quelle, le script s\'exécute chez tous les autres visiteurs. D\'où l\'importance de l\'échappement automatique de `{{ }}`.' },
             { t: 'code', lang: 'php', label: 'resources/views/produits/show.blade.php', code:
 '<h1>{{ $produit->nom }}</h1>\n<p>{{ $produit->description }}</p>\n\n{{-- affichage avec défaut (syntaxe courte et sûre) --}}\n<p>Stock : {{ $produit->stock ?? \'non renseigné\' }}</p>\n\n{{-- une saisie utilisateur : --}}\n{{-- {{ $avis->texte }} échappe → le <script> devient du texte inerte --}}\n\n{{-- le HTML maîtrisé UNIQUEMENT (ici : contenu rédigé par toi) --}}\n{!! $guideHtml !!}\n\n{{-- un commentaire Blade : NI dans le HTML envoyé, NI dans la page vue --}}\n{{-- utile pour documenter le template ; <!-- --> serait visible publiquement --}}' },
             { t: 'h3', h: 'Les directives de tous les jours' },
@@ -396,7 +684,32 @@ DEVDOCS.laravel = {
 '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <meta charset="utf-8">\n    <title>@yield(\'titre\', \'Boutique Awa\')</title>\n</head>\n<body>\n    <nav>\n        <a href="{{ route(\'produits.index\') }}">Catalogue</a>\n        @auth <a href="{{ route(\'commandes.index\') }}">Mes commandes</a> @endauth\n    </nav>\n\n    <main>\n        @yield(\'contenu\')          {{-- la zone que chaque page remplit --}}\n    </main>\n\n    <footer>© {{ date(\'Y\') }} Boutique Awa — Cotonou</footer>\n</body>\n</html>' },
             { t: 'code', lang: 'php', label: 'resources/views/produits/index.blade.php (la page)', code:
 '@extends(\'layouts.app\')        {{-- j\'hérite de la coquille --}}\n\n@section(\'titre\', \'Catalogue — Boutique Awa\')\n\n@section(\'contenu\')\n    <h1>Catalogue du jour</h1>\n    @foreach ($produits as $produit)\n        <x-carte-produit :produit="$produit" />\n    @endforeach\n@endsection' },
-            { t: 'h3', h: 'Composants Blade : `<x-…>` — la voie moderne' },
+            { t: 'diagram', title: 'Assemblage d\'une page : la coquille + la section + les composants', svg: `<svg viewBox="0 0 680 240">
+  <defs><marker id="lv-b1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="20" y="28" class="dg-t">layout app.blade.php — la coquille</text>
+  <rect x="20" y="40" width="240" height="172" rx="14" class="dg-b"/>
+  <rect x="32" y="54" width="216" height="24" rx="8" class="dg-pill"/>
+  <text x="140" y="70" class="dg-ms" text-anchor="middle">en-tête + nav (commun à toutes les pages)</text>
+  <rect x="32" y="86" width="216" height="76" rx="10" class="dg-zone"/>
+  <text x="140" y="130" class="dg-m" text-anchor="middle">@yield('contenu')</text>
+  <rect x="32" y="170" width="216" height="28" rx="8" class="dg-pill"/>
+  <text x="140" y="188" class="dg-ms" text-anchor="middle">pied de page (commun)</text>
+  <text x="322" y="74" class="dg-t">page produits/index.blade.php</text>
+  <rect x="322" y="86" width="172" height="76" rx="12" class="dg-b"/>
+  <text x="408" y="112" class="dg-m" text-anchor="middle">@extends + @section</text>
+  <text x="408" y="132" class="dg-ms" text-anchor="middle">'contenu' rempli ici</text>
+  <text x="408" y="150" class="dg-ms" text-anchor="middle">@foreach + composants</text>
+  <path d="M 322,124 L 252,124" class="dg-ea" marker-end="url(#lv-b1)"/>
+  <text x="322" y="188" class="dg-t">composants réutilisables</text>
+  <rect x="322" y="198" width="172" height="34" rx="10" class="dg-b"/>
+  <text x="408" y="220" class="dg-t" text-anchor="middle">&lt;x-carte-produit /&gt;</text>
+  <path d="M 408,196 L 408,164" class="dg-e" marker-end="url(#lv-b1)"/>
+  <rect x="540" y="86" width="124" height="76" rx="12" class="dg-ba"/>
+  <text x="602" y="112" class="dg-t" text-anchor="middle">PAGE HTML</text>
+  <text x="602" y="132" class="dg-ms" text-anchor="middle">assemblée une fois</text>
+  <text x="602" y="150" class="dg-ms" text-anchor="middle">→ au navigateur</text>
+  <path d="M 510,124 L 538,124" class="dg-e" marker-end="url(#lv-b1)"/>
+</svg>`, caption: 'La page déclare « j\'hérite de la coquille » (@extends), remplit la zone prévue (@section alimente @yield), et utilise des morceaux réutilisables (composants). Modifier la coquille = UN fichier, toutes les pages suivent — c\'est tout l\'intérêt.' },
             { t: 'p', h: 'L\'héritage traite la coquille ; les COMPOSANTS traitent les morceaux réutilisables : carte produit, badge promo, alerte, bouton danger. Crée `resources/views/components/carte-produit.blade.php` et tu obtiens la balise `<x-carte-produit />` — avec Props typées (`@props`), attributs fusionnés (`$attributes`), et slots pour le contenu. C\'est la composition `<Composant />` de React, côté serveur : le point où Blade cesse d\'être « un moteur de templates » et devient un système de composants.' },
             { t: 'code', lang: 'php', label: 'resources/views/components/carte-produit.blade.php', code:
 '@props([\'produit\', \'compacte\' => false])\n\n<article {{ $attributes->merge([\'class\' => \'carte\']) }}>\n    <h3>{{ $produit->nom }}</h3>\n    <p>{{ number_format($produit->prix, 0, \',\', \' \') }} F</p>\n\n    @if ($produit->stock === 0)\n        <em>Rupture</em>\n    @endif\n\n    {{-- slot : contenu libre placé entre les balises au moment de l\'usage --}}\n    @unless($compacte)\n        <div class="actions">{{ $slot }}</div>\n    @endunless\n</article>\n\n{{-- usage dans une page :\n<x-carte-produit :produit="$p" class="vedette">\n    <a href="{{ route(\'produits.show\', $p) }}">Voir la fiche</a>\n</x-carte-produit>\n--}}' },
@@ -442,6 +755,32 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Dès que les règles deviennent sérieuses (conditionnelles, métier, réutilisées dans l\'API), elles DÉMÉNAGENT dans une classe dédiée : le Form Request. Trois avantages nets : le contrôleur reste mince (injection directe — la fiche Contrôleurs en parle) ; les règles sont testables et réutilisables ; et `authorize()` y accueille le contrôle d\'accès pour la requête (« ce vendeur peut-il modifier CE produit ? »), fusionnant validation de DONNÉES et autorisation d\'ACTION au bon endroit.' },
             { t: 'code', lang: 'php', label: 'app/Http/Requests/StoreProduitRequest.php', code:
 '<?php\n\nnamespace App\\Http\\Requests;\n\nuse Illuminate\\Foundation\\Http\\FormRequest;\n\nclass StoreProduitRequest extends FormRequest\n{\n    // 1) DROITS : cette action est-elle permise, indépendamment des champs ?\n    public function authorize(): bool\n    {\n        return $this->user()->can(\'create\', \\App\\Models\\Produit::class);\n    }\n\n    // 2) RÈGLES : qu\'est-ce qui a le droit d\'entrer ?\n    public function rules(): array\n    {\n        return [\n            \'nom\'          => [\'required\', \'string\', \'max:120\', \'unique:produits,nom\'],\n            \'prix\'         => [\'required\', \'integer\', \'min:100\'],\n            \'stock\'        => [\'required\', \'integer\', \'min:0\'],\n            \'description\'  => [\'nullable\', \'string\', \'max:2000\'],\n            \'promo\'        => [\'nullable\', \'boolean\'],\n            \'image\'        => [\'nullable\', \'image\', \'max:2048\'],       // Ko\n        ];\n    }\n\n    // 3) MESSAGES (optionnel) : parler humain, pas regex\n    public function messages(): array\n    {\n        return [\n            \'nom.unique\' => \'Ce nom de produit est déjà pris par le catalogue.\',\n            \'prix.min\'   => \'Un prix doit être d\'au moins 100 F.\',\n        ];\n    }\n}\n\n// Dans le contrôleur — INJECTION DIRECTE (fiche Contrôleurs) :\npublic function store(StoreProduitRequest $request)\n{\n    // arrivé ici, TOUT est validé ET autorisé :\n    $produit = Produit::create($request->validated());\n    return redirect()->route(\'produits.show\', $produit);\n}' },
+            { t: 'diagram', title: 'La douane avant la base : rien n\'entre sans être vérifié', svg: `<svg viewBox="0 0 680 222">
+  <defs><marker id="lv-v1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <path d="M 260,92 L 260,56" class="dg-e" marker-end="url(#lv-v1)"/>
+  <text x="260" y="48" class="dg-ko" text-anchor="middle">✗ 403 — pas le droit</text>
+  <rect x="16" y="92" width="130" height="56" rx="12" class="dg-b"/>
+  <text x="81" y="114" class="dg-t" text-anchor="middle">Formulaire</text>
+  <text x="81" y="134" class="dg-m" text-anchor="middle">POST /produits</text>
+  <rect x="190" y="92" width="140" height="56" rx="12" class="dg-b"/>
+  <circle cx="260" cy="92" r="9" class="dg-num"/><text x="260" y="96" class="dg-numt" text-anchor="middle">1</text>
+  <text x="260" y="116" class="dg-t" text-anchor="middle">authorize()</text>
+  <text x="260" y="134" class="dg-m" text-anchor="middle">les droits ?</text>
+  <rect x="374" y="92" width="140" height="56" rx="12" class="dg-b"/>
+  <circle cx="444" cy="92" r="9" class="dg-num"/><text x="444" y="96" class="dg-numt" text-anchor="middle">2</text>
+  <text x="444" y="116" class="dg-t" text-anchor="middle">rules()</text>
+  <text x="444" y="134" class="dg-m" text-anchor="middle">les données ?</text>
+  <rect x="558" y="92" width="108" height="56" rx="12" class="dg-ba"/>
+  <circle cx="612" cy="92" r="9" class="dg-num"/><text x="612" y="96" class="dg-numt" text-anchor="middle">3</text>
+  <text x="612" y="116" class="dg-t" text-anchor="middle">Contrôleur</text>
+  <text x="612" y="134" class="dg-ms" text-anchor="middle">→ ta base, propre</text>
+  <path d="M 146,120 L 188,120" class="dg-e" marker-end="url(#lv-v1)"/>
+  <path d="M 330,120 L 372,120" class="dg-e" marker-end="url(#lv-v1)"/>
+  <path d="M 514,120 L 556,120" class="dg-e" marker-end="url(#lv-v1)"/>
+  <path d="M 444,148 L 444,182" class="dg-e" marker-end="url(#lv-v1)"/>
+  <text x="444" y="200" class="dg-ko" text-anchor="middle">✗ retour au formulaire + erreurs</text>
+  <text x="444" y="216" class="dg-ms" text-anchor="middle">(en API : réponse 422 JSON) — et rien ne touche la base</text>
+</svg>`, caption: 'Trois barrières, dans l\'ordre : authorize() (as-tu le droit d\'AGIR ?), rules() (les données sont-elles saines ?), et seulement alors ton contrôleur — qui ne reçoit que validated(), les champs déclarés et propres. En cas d\'échec, la requête repart avec les erreurs : la donnée douteuse ne touche JAMAIS ta base.' },
             { t: 'h3', h: 'Les règles à connaître par cœur' },
             { t: 'table', head: ['Règle', 'Sens', 'Exemple typique'], rows: [
               ['`required`', 'le champ doit être présent ET non vide', 'nom, prix'],
@@ -501,6 +840,27 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Toute exception NON attrapée dans ton code finit sa course dans le **gestionnaire d\'exceptions** — le filet central. Là, trois décisions sont prises pour toi, configurables : **rapporter** (écrire dans les logs / notifier Sentry), **rendre** (transformer l\'exception en réponse HTTP), et **masquer** (ne jamais envoyer les détails internes au client). En Laravel 11+, ce câblage vit dans `bootstrap/app.php`, à côté du middleware.' },
             { t: 'code', lang: 'php', label: 'bootstrap/app.php — le filet central', code:
 '->withExceptions(function (Exceptions $exceptions) {\n    // 1) Ne JAMAIS rapporter les erreurs « attendues » (422, 404…) :\n    //    elles polluent les logs de bruit normal.\n    $exceptions->dontReport([\n        \\Illuminate\\Validation\\ValidationException::class,\n    ]);\n\n    // 2) RENDRE une exception métier de manière personnalisée —\n    //    web ET api en même endroit :\n    $exceptions->render(function (SoldeInsuffisant $e, $request) {\n        if ($request->expectsJson()) {\n            return response()->json([\n                \'erreur\' => \'solde_insuffisant\',\n                \'message\' => $e->getMessage(),\n            ], 422);\n        }\n        return back()->withErrors([\'montant\' => $e->getMessage()]);\n    });\n\n    // 3) Enrichir le CONTEXTE des rapports (utilisateur, requête) :\n    $exceptions->context(function () {\n        return [\'boutique\' => auth()->user()?->boutique?->slug];\n    });\n})' },
+            { t: 'diagram', title: 'Une exception attrapée par le filet : deux destinations', svg: `<svg viewBox="0 0 680 220">
+  <defs><marker id="lv-e1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="82" width="180" height="56" rx="12" class="dg-b"/>
+  <text x="110" y="104" class="dg-t" text-anchor="middle">Exception levée</text>
+  <text x="110" y="124" class="dg-ms" text-anchor="middle">throw new SoldeInsuffisant</text>
+  <path d="M 200,110 L 248,110" class="dg-e" marker-end="url(#lv-e1)"/>
+  <rect x="250" y="82" width="180" height="56" rx="12" class="dg-ba"/>
+  <text x="340" y="104" class="dg-t" text-anchor="middle">Gestionnaire central</text>
+  <text x="340" y="124" class="dg-m" text-anchor="middle">bootstrap/app.php</text>
+  <path d="M 430,96 L 498,54" class="dg-e" marker-end="url(#lv-e1)"/>
+  <text x="452" y="70" class="dg-ms" text-anchor="middle">report()</text>
+  <rect x="500" y="20" width="164" height="56" rx="12" class="dg-b"/>
+  <text x="582" y="42" class="dg-t" text-anchor="middle">RAPPORT — pour TOI</text>
+  <text x="582" y="62" class="dg-ms" text-anchor="middle">logs structurés, Sentry…</text>
+  <path d="M 430,124 L 498,170" class="dg-e" marker-end="url(#lv-e1)"/>
+  <text x="452" y="154" class="dg-ms" text-anchor="middle">render()</text>
+  <rect x="500" y="144" width="164" height="64" rx="12" class="dg-b"/>
+  <text x="582" y="166" class="dg-t" text-anchor="middle">RENDU — le visiteur</text>
+  <text x="582" y="184" class="dg-ms" text-anchor="middle">web : page sobre (404, 500…)</text>
+  <text x="582" y="200" class="dg-ms" text-anchor="middle">api : JSON { erreur: … }</text>
+</svg>`, caption: 'Toute exception non attrapée finit au gestionnaire central, qui fait DEUX choses distinctes : t\'en informer TOI proprement (logs, alertes — avec tous les détails techniques), et répondre au visiteur sobrement (page d\'erreur ou JSON, SANS les détails). En production avec APP_DEBUG=false, cette séparation est une question de sécurité.' },
             { t: 'h3', h: 'Les exceptions métier : de simples classes' },
             { t: 'p', h: 'L\'exception générique `throw new Exception(\'solde insuffisant\')` est un panneau sans nom — impossible à distinguer d\'une panne à l\'arrivée. Une EXCEPTION MÉTIER est une petite classe nommée qui porte le sens : `SoldeInsuffisant`, `CommandeDejaLivree`, `TontineComplete`. Elle peut même porter sa propre RÉPONSE (méthode `render()`) : l\'endroit où elle naît (ton service de tontine) n\'a plus à savoir comment on l\'affiche — il la jette, le protocole fait le reste.' },
             { t: 'code', lang: 'php', label: 'app/Exceptions/SoldeInsuffisant.php', code:
@@ -552,6 +912,36 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Pourquoi ta base mérite du Git autant que ton code' },
             { t: 'p', h: 'Travailler le schéma à la main (phpMyAdmin, « j\'ajoute la colonne en prod, puis sur ma machine, enfin je crois ») produit trois maux qui finissent TOUJOURS par mordre : les bases dev/prod dérivent (le bug « ça marche chez moi » à l\'état pur) ; une nouvelle recrue met deux jours à reconstruire la base (en devinant ce qui manque) ; et aucun retour en arrière n\'existe quand une colonne mal nommée empoisonne le code. La migration régle les trois d\'un coup : le schéma est DÉCRIT en PHP, chaque changement est un fichier daté joué UNE FOIS partout, et chaque machine — collègue, CI, production — obtient EXACTEMENT la même structure en tapant `php artisan migrate`. Le nouveau venu, lui, tape `migrate:fresh --seed` et a une base complète avec données de démo en trente secondes.' },
             { t: 'callout', kind: 'info', h: 'Sous le capot : Laravel tient un registre — la table `migrations` — listant chaque migration DÉJÀ exécutée sur CETTE base. `migrate` ne rejoue que les fichiers absents du registre : rejouer mille fois la commande est sûr, chaque changement n\'est appliqué qu\'une fois. C\'est ce registre qui rend l\'édition rétroactive si dangereuse (carte d\'erreur en bas) : la base pense avoir déjà joué ce fichier.' },
+            { t: 'diagram', title: 'Le registre `migrations` : comment ta base sait ce qui est déjà fait', svg: `<svg viewBox="0 0 680 214">
+  <defs><marker id="lv-mig1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="20" width="270" height="186" rx="14" class="dg-b"/>
+  <text x="155" y="42" class="dg-t" text-anchor="middle">database/migrations/</text>
+  <text x="34" y="70" class="dg-m">2026_01_01_create_users</text>
+  <text x="276" y="70" class="dg-ok" text-anchor="end">✔ jouée</text>
+  <text x="34" y="96" class="dg-m">2026_02_10_create_produits</text>
+  <text x="276" y="96" class="dg-ok" text-anchor="end">✔ jouée</text>
+  <text x="34" y="122" class="dg-m">2026_03_02_add_seuil_alerte</text>
+  <text x="276" y="122" class="dg-warn" text-anchor="end">en attente…</text>
+  <text x="34" y="160" class="dg-ms">(côté fichiers : l'historique complet,</text>
+  <text x="34" y="176" class="dg-ms">versionné avec Git)</text>
+  <path d="M 292,100 L 336,100" class="dg-ea" marker-end="url(#lv-mig1)"/>
+  <text x="314" y="118" class="dg-ms" text-anchor="middle">php artisan</text>
+  <text x="314" y="132" class="dg-ms" text-anchor="middle">migrate</text>
+  <rect x="342" y="20" width="150" height="186" rx="14" class="dg-b"/>
+  <text x="417" y="42" class="dg-t" text-anchor="middle">table migrations</text>
+  <text x="417" y="58" class="dg-ms" text-anchor="middle">(le registre)</text>
+  <text x="354" y="80" class="dg-m">…users</text><text x="480" y="80" class="dg-ok" text-anchor="end">✔</text>
+  <text x="354" y="106" class="dg-m">…produits</text><text x="480" y="106" class="dg-ok" text-anchor="end">✔</text>
+  <text x="354" y="132" class="dg-m">…seuil</text><text x="480" y="132" class="dg-tt" text-anchor="end">✔ NOUVEAU</text>
+  <path d="M 497,100 L 520,100" class="dg-e" marker-end="url(#lv-mig1)"/>
+  <rect x="524" y="20" width="140" height="186" rx="14" class="dg-b"/>
+  <text x="594" y="42" class="dg-t" text-anchor="middle">la vraie base</text>
+  <text x="538" y="68" class="dg-m">produits :</text>
+  <text x="538" y="90" class="dg-ms">· id</text>
+  <text x="538" y="108" class="dg-ms">· nom</text>
+  <text x="538" y="126" class="dg-ms">· prix</text>
+  <text x="538" y="144" class="dg-tt">· + seuil_alerte</text>
+</svg>`, caption: '`migrate` compare les fichiers au registre : seule la migration « en attente » est jouée — le schéma gagne sa colonne, le registre sa ligne ✔. Rejouer la commande mille fois ne change plus rien. Et c\'est exactement pour ça qu\'on ne retouche JAMAIS un fichier déjà marqué ✔ : personne ne le relira.' },
             { t: 'h3', h: 'Créer une table : la migration comme contrat' },
             { t: 'code', lang: 'php', label: 'database/migrations/2026_07_22_000001_create_produits_table.php', code:
 '<?php\n\nuse Illuminate\\Database\\Migrations\\Migration;\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nreturn new class extends Migration\n{\n    // up() : ce qu\'il faut FAIRE pour avancer — le contrat « créer »\n    public function up(): void\n    {\n        Schema::create(\'produits\', function (Blueprint $table) {\n            $table->id();                                  // PK auto incrémentée\n            $table->string(\'nom\', 120);\n            $table->string(\'slug\')->unique();\n            $table->unsignedInteger(\'prix\');             // en FRANCS, pas de float !\n            $table->unsignedInteger(\'stock\')->default(0);\n            $table->text(\'description\')->nullable();     // peut être vide\n            $table->boolean(\'promo\')->default(false);\n            $table->foreignId(\'categorie_id\')            // la clé étrangère…\n                  ->constrained()                        // …vers categories.id\n                  ->cascadeOnDelete();                   // catégorie supprimée → produits aussi\n            $table->timestamps();                         // created_at + updated_at\n        });\n    }\n\n    // down() : l\'INVERSE exact — ce qu\'il faut faire pour RECULER\n    public function down(): void\n    {\n        Schema::dropIfExists(\'produits\');\n    }\n};' },
@@ -612,6 +1002,28 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Eloquent respecte la philosophie « convention sur configuration » au sommet : une classe VIDE de 10 lignes fonctionne ENTIÈREMENT, si tu respectes ses habitudes de nommage. La classe `Produit` (singulier, PascalCase) correspond à la table `produits` (pluriel, snake_case) ; la clé primaire s\'appelle `id` ; les colonnes `created_at`/`updated_at` sont remplies MAGICIEMENT à chaque sauvegarde. Respecte les conventions : zéro configuration. Déroge (table au singulier, clé `code_produit`) : dis-le explicitement — trois propriétés suffisent, lisibles au premier regard.' },
             { t: 'code', lang: 'php', label: 'app/Models/Produit.php — la forme minimale qui marche', code:
 '<?php\n\nnamespace App\\Models;\n\nuse Illuminate\\Database\\Eloquent\\Model;\n\nclass Produit extends Model\n{\n    // Rien d\'autre n\'est REQUIS, grâce aux conventions :\n    //   table       → produits         (déduite du nom de classe)\n    //   clé prim.   → id               (auto-incrémentée)\n    //   timestamps  → created_at / updated_at gérés tout seuls\n\n    // La SEULE chose à décider : le mass assignment (sécurité)\n    protected $fillable = [\n        \'nom\', \'slug\', \'prix\', \'stock\', \'description\', \'categorie_id\',\n    ];\n\n    // Les casts : la valeur PHP native à la frontière de la base\n    protected $casts = [\n        \'promo\'     => \'boolean\',\n        \'prix\'      => \'integer\',\n        \'options\'   => \'array\',          // colonne json → tableau PHP\n        \'publie_le\' => \'date\',\n    ];\n}\n\n// Dérogations explicites, si besoin :\n// protected $table = \'catalogue_produits\';\n// protected $primaryKey = \'code\';\n// public $timestamps = false;' },
+            { t: 'diagram', title: 'Ce qu\'est un ORM : des tables SQL transformées en objets PHP', svg: `<svg viewBox="0 0 680 230">
+  <defs><marker id="lv-el1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="30" y="38" class="dg-t">la table SQL : produits</text>
+  <rect x="30" y="50" width="44" height="24" class="dg-ba"/><rect x="74" y="50" width="108" height="24" class="dg-ba"/><rect x="182" y="50" width="76" height="24" class="dg-ba"/>
+  <text x="52" y="66" class="dg-t" text-anchor="middle">id</text><text x="128" y="66" class="dg-t" text-anchor="middle">nom</text><text x="220" y="66" class="dg-t" text-anchor="middle">prix</text>
+  <rect x="30" y="74" width="44" height="24" class="dg-b"/><rect x="74" y="74" width="108" height="24" class="dg-b"/><rect x="182" y="74" width="76" height="24" class="dg-b"/>
+  <text x="52" y="90" class="dg-m" text-anchor="middle">1</text><text x="128" y="90" class="dg-m" text-anchor="middle">Gari</text><text x="220" y="90" class="dg-m" text-anchor="middle">21000</text>
+  <rect x="30" y="98" width="44" height="24" class="dg-b"/><rect x="74" y="98" width="108" height="24" class="dg-b"/><rect x="182" y="98" width="76" height="24" class="dg-b"/>
+  <text x="52" y="114" class="dg-m" text-anchor="middle">2</text><text x="128" y="114" class="dg-m" text-anchor="middle">Huile</text><text x="220" y="114" class="dg-m" text-anchor="middle">6500</text>
+  <text x="312" y="52" class="dg-tt" text-anchor="middle">Eloquent</text>
+  <text x="312" y="68" class="dg-ms" text-anchor="middle">(l'ORM de Laravel)</text>
+  <path d="M 258,86 C 300,74 330,66 366,68" class="dg-e dg-dash" marker-end="url(#lv-el1)"/>
+  <path d="M 258,110 C 300,120 330,132 366,134" class="dg-e dg-dash" marker-end="url(#lv-el1)"/>
+  <rect x="366" y="56" width="290" height="48" rx="12" class="dg-b"/>
+  <text x="511" y="78" class="dg-t" text-anchor="middle">objet Produit #1</text>
+  <text x="511" y="96" class="dg-ms" text-anchor="middle">{ id: 1, nom: 'Gari', prix: 21000 }</text>
+  <rect x="366" y="122" width="290" height="48" rx="12" class="dg-b"/>
+  <text x="511" y="144" class="dg-t" text-anchor="middle">objet Produit #2</text>
+  <text x="511" y="162" class="dg-ms" text-anchor="middle">{ id: 2, nom: 'Huile', prix: 6500 }</text>
+  <text x="511" y="196" class="dg-m" text-anchor="middle">la classe Produit parle à la TABLE entière —</text>
+  <text x="511" y="214" class="dg-ms" text-anchor="middle">et chaque LIGNE devient un objet avec ses attributs</text>
+</svg>`, caption: '**ORM** = « Object-Relational Mapping » : le traducteur officiel entre le monde SQL (tables, lignes) et le monde PHP (classes, objets). Fini le SQL à la main et la copie de chaque champ : `Produit::all()` retourne une **collection** d\'objets (un tableau enrichi, avec des méthodes pratiques), et `$produit->prix` lit la colonne directement. Tu parles PHP, Eloquent parle SQL.' },
             { t: 'h3', h: 'Les requêtes du quotidien — fluides et lisibles' },
             { t: 'code', lang: 'php', code:
 '// Trouver UNE ligne (par clé primaire) — avec le 404 honnête :\n$produit = Produit::findOrFail($id);\n\n// Filtrer — la phrase fluide du query builder Eloquent :\n$promos = Produit::where(\'promo\', true)\n    ->where(\'stock\', \'>\', 0)\n    ->orderBy(\'nom\')\n    ->paginate(20);                          // JAMAIS all() en prod\n\n// Le premier qui matche (ou la création si absent) :\n$categorie = Categorie::firstOrCreate([\'nom\' => \'Céréales\']);\n\n// Le contenu brut pour un select HTML :\n$categories = Categorie::orderBy(\'nom\')->pluck(\'nom\', \'id\');\n// → collection [1 => \'Céréales\', 2 => \'Huiles\', …]\n\n// Créer (mass assignment sécurisé) / mettre à jour / supprimer :\n$produit = Produit::create($request->validated());     // fiche Validation\n$produit->update([\'stock\' => $produit->stock - $quantite]);\n$produit->delete();\n\n// Compter, sommer — la base travaille, pas PHP :\nProduit::where(\'promo\', true)->count();\nProduit::sum(\'prix\');' },
@@ -665,10 +1077,58 @@ DEVDOCS.laravel = {
             { t: 'code', lang: 'php', code:
 '// app/Models/Commande.php\npublic function produits()\n{\n    return $this->belongsToMany(Produit::class)\n        ->withPivot(\'quantite\', \'prix_unitaire\')   // les données DU LIEN\n        ->withTimestamps();\n}\n\n// Attacher un produit AU PANIER avec ses données de lien :\n$commande->produits()->attach($produit->id, [\n    \'quantite\' => 3,\n    \'prix_unitaire\' => $produit->prix,   // figé à l\'instant de l\'achat !\n]);\n\n// Synchroniser (remplacer TOUT le contenu — le fidèle du panier) :\n$commande->produits()->sync([\n    $idGari  => [\'quantite\' => 2, \'prix_unitaire\' => 21000],\n    $idHuile => [\'quantite\' => 1, \'prix_unitaire\' => 6500],\n]);\n\n// Lire : la ligne de commande est un produit + ses données pivot\nforeach ($commande->produits as $ligne) {\n    echo $ligne->nom, \' × \', $ligne->pivot->quantite,\n         \' = \', $ligne->pivot->prix_unitaire * $ligne->pivot->quantite;\n}' },
             { t: 'callout', kind: 'tip', h: 'La colonne `prix_unitaire` au pivot n\'est PAS de la duplication bête : c\'est de l\'HISTORIQUE. Le prix du catalogue changera la semaine prochaine ; ta commande livrée doit se souvenir du prix du jour de l\'achat. La règle : copie les valeurs d\'instantané (montants, taux, adresses) dans le pivot — et référence, ne copie pas, ce qui doit rester vivant.' },
+            { t: 'diagram', title: 'Les trois relations du quotidien, posées sur le schéma', svg: `<svg viewBox="0 0 680 250">
+  <defs><marker id="lv-rel1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="30" y="30" width="180" height="54" rx="12" class="dg-b"/>
+  <text x="120" y="52" class="dg-t" text-anchor="middle">CATEGORIES</text>
+  <text x="120" y="70" class="dg-ms" text-anchor="middle">id · nom</text>
+  <rect x="270" y="30" width="190" height="54" rx="12" class="dg-b"/>
+  <text x="365" y="52" class="dg-t" text-anchor="middle">PRODUITS</text>
+  <text x="365" y="70" class="dg-ms" text-anchor="middle">id · nom · categorie_id</text>
+  <rect x="30" y="140" width="180" height="54" rx="12" class="dg-b"/>
+  <text x="120" y="162" class="dg-t" text-anchor="middle">COMMANDES</text>
+  <text x="120" y="180" class="dg-ms" text-anchor="middle">id · client_id · date</text>
+  <rect x="270" y="140" width="190" height="72" rx="12" class="dg-ba"/>
+  <text x="365" y="160" class="dg-t" text-anchor="middle">commande_produit (pivot)</text>
+  <text x="365" y="178" class="dg-ms" text-anchor="middle">commande_id · produit_id</text>
+  <text x="365" y="196" class="dg-tt" text-anchor="middle">+ quantite · prix_unitaire</text>
+  <path d="M 210,57 L 268,57" class="dg-e" marker-end="url(#lv-rel1)"/>
+  <text x="226" y="50" class="dg-t">1</text><text x="254" y="50" class="dg-t">N</text>
+  <text x="240" y="80" class="dg-ms" text-anchor="middle">hasMany / belongsTo</text>
+  <path d="M 210,167 L 268,167" class="dg-e" marker-end="url(#lv-rel1)"/>
+  <text x="226" y="160" class="dg-t">1</text><text x="254" y="160" class="dg-t">N</text>
+  <path d="M 365,84 L 365,138" class="dg-e" marker-end="url(#lv-rel1)"/>
+  <text x="353" y="106" class="dg-t">1</text><text x="353" y="130" class="dg-t">N</text>
+  <text x="476" y="166" class="dg-ms">le prix du LIEN, figé</text>
+  <text x="476" y="182" class="dg-ms">au moment de l'achat</text>
+  <text x="340" y="234" class="dg-m" text-anchor="middle">le pivot rend possible la relation plusieurs-à-plusieurs commandes ⇔ produits</text>
+</svg>`, caption: 'La règle d\'or de lecture : **la clé étrangère vit chez l\'enfant** — produits porte categorie_id, le pivot porte les deux clés. Et la table pivot n\'est pas qu\'un « tuyau » : elle stocke les données DU LIEN (la quantité, le prix figé à l\'achat). Voilà pourquoi belongsToMany existe : cette table est obligatoire physiquement, Eloquent la rend simplement invisible quand tu n\'as pas besoin de ses données.' },
             { t: 'h3', h: 'LE piège : le N+1, et l\'eager loading qui le tue' },
             { t: 'p', h: 'Scène de crime connue d\'avance : ta vue liste 20 commandes et affiche le client de chacune (`$commande->user->name` dans la boucle Blade). Eloquent exécute 1 requête pour les commandes… puis **une requête PAR LIGNE** pour aller chercher chaque client : 21 requêtes pour une page, chaque requête ajoutant sa latence. Avec 100 lignes, 101 requêtes — et ton hébergeur partagé de Cotonou toussote. C\'est le problème N+1 : le coût caché du chargement PARESSEUX (lazy loading), invisible tant qu\'on ne compte pas les requêtes.' },
             { t: 'code', lang: 'php', code:
 '// AVANT (N+1) : la relation est chargée À CHAQUE TOUR dans la vue\n$commandes = Commande::paginate(20);\n// la vue fera 20 requêtes supplémentaires, une par $commande->user\n\n// APRÈS : with() charge TOUT en 2 requêtes — la relation PRÉ-CHARGÉE :\n$commandes = Commande::with(\'user\')->paginate(20);\n//   requête 1 : SELECT * FROM commandes LIMIT 20\n//   requête 2 : SELECT * FROM users WHERE id IN (1, 7, 9, …)\n//   puis Eloquent COUSIT : chaque commande reçoit son user. Fini.\n\n// plusieurs relations : ->with(\'user\', \'produits\')\n// relation imbriquée : ->with(\'produits.categorie\')\n// colonnes limitées : ->with(\'user:id,name\')   (précise toujours l\'id !)\n// compter SANS charger : ->withCount(\'produits\')   $categorie->produits_count' },
+            { t: 'diagram', title: 'Le N+1 en chiffres : 21 requêtes contre 2, pour la MÊME page', svg: `<svg viewBox="0 0 680 214">
+  <defs><marker id="lv-rel2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="20" y="40" class="dg-t">SANS with() — le chargement paresseux (lazy)</text>
+  <rect x="20" y="52" width="160" height="40" rx="10" class="dg-b"/>
+  <text x="100" y="76" class="dg-m" text-anchor="middle">SELECT * FROM commandes</text>
+  <path d="M 180,72 L 204,72" class="dg-e" marker-end="url(#lv-rel2)"/>
+  <rect x="206" y="52" width="190" height="40" rx="10" class="dg-b"/>
+  <text x="301" y="76" class="dg-m" text-anchor="middle">users : 1 requête PAR commande</text>
+  <path d="M 396,72 L 428,72" class="dg-ko" marker-end="url(#lv-rel2)"/>
+  <rect x="430" y="52" width="150" height="40" rx="20" class="dg-b"/>
+  <text x="505" y="77" class="dg-ko" text-anchor="middle">= 21 requêtes !</text>
+  <text x="20" y="136" class="dg-t">AVEC with('user') — l'eager loading</text>
+  <rect x="20" y="148" width="200" height="40" rx="10" class="dg-b"/>
+  <text x="120" y="172" class="dg-m" text-anchor="middle">SELECT commandes LIMIT 20</text>
+  <path d="M 220,168 L 244,168" class="dg-e" marker-end="url(#lv-rel2)"/>
+  <rect x="246" y="148" width="230" height="40" rx="10" class="dg-b"/>
+  <text x="361" y="172" class="dg-ms" text-anchor="middle">SELECT users WHERE id IN (1, 7, 9, …)</text>
+  <path d="M 476,168 L 500,168" class="dg-e" marker-end="url(#lv-rel2)"/>
+  <rect x="502" y="148" width="120" height="40" rx="20" class="dg-b"/>
+  <text x="562" y="173" class="dg-ok" text-anchor="middle">= 2 requêtes ✓</text>
+  <text x="340" y="208" class="dg-ms" text-anchor="middle">puis Eloquent COUSIT le tout en mémoire : la vue boucle sans requêter de plus</text>
+</svg>`, caption: 'Le lazy loading relance une requête SQL à CHAQUE tour de boucle — inoffensif avec 3 lignes en dev, catastrophique avec 200 en production. `with(\'user\')` dit à Eloquent : « charge les relations MAINTENANT, par lots » — deux requêtes quelle que soit la taille de la liste. D\'où le réflexe : une relation utilisée dans une boucle = un with() dans la requête.' },
             { t: 'callout', kind: 'info', h: 'Laravel 11 peut TE PROTÉGER structurellement : `Model::preventLazyLoading(!app()->isProduction())` (dans AppServiceProvider) lève une exception dès qu\'une relation est chargée à la paresse en dev — tu découvres chaque N+1 à l\'écriture, jamais en prod. Et pour compter les requêtes pendant le dev : Laravel Telescope ou la barre de debug Clockwork — une page qui en fait plus de 5 vous dévisage.' },
             { t: 'h3', h: 'Arbres plus profonds : hasManyThrough, morphTo (repères)' },
             { t: 'p', h: 'Deux relations moins quotidiennes à connaître de nom : `hasManyThrough` (« les commandes DE MES produits » en traversant la boutique — `$boutique->commandes()` sans rattacher les commandes directement à la boutique) et les relations POLYMORPHES (`avisables` : des avis attachés indifféremment à un produit OU à une boutique — une table, une colonne type + id). Garde-les pour le jour précis où ton schéma les appelle — et reviens d\'abord vérifier qu\'une relation SIMPLE ne suffisait pas : la moitié des polymorphes du débutant sont des tables classiques qui manquaient.' },
@@ -726,6 +1186,45 @@ DEVDOCS.laravel = {
             { t: 'code', lang: 'php', code:
 '// Générer un token (une seule fois côté serveur) :\n$user = User::find(3);\n$token = $user->createToken(\'zemidjan-app\', [\'commandes:lire\']);\n$token->plainTextToken;   // « 4|sU… » — MONTRÉ UNE SEULE FOIS, à copier\n//                          // (en base : le HASH — la fuite du fichier ne vole rien)\n\n// routes/api.php — protéger par token ET par ability :\nRoute::middleware(\'auth:sanctum\')->group(function () {\n    Route::get(\'/commandes\', [ApiCommandeController::class, \'index\'])\n        ->middleware(\'abilities:commandes:lire\');\n    Route::post(\'/commandes\', [ApiCommandeController::class, \'store\'])\n        ->middleware(\'abilities:commandes:ecrire\');\n});\n\n// Le client (module JavaScript — fiche fetch de data-js) :\n//   fetch(\'/api/commandes\', {\n//       headers: { Authorization: \'Bearer \' + token, Accept: \'application/json\' }\n//   })' },
             { t: 'callout', kind: 'tip', h: 'Règle de choix : navigateur sur TON domaine → session Breeze (CSRF inclus, zéro JS à gérer). Mobile, SPA externe, partenaire → tokens Sanctum. Les DEUX cohabitent naturellement (le compte web en session, l\'app mobile en token) — c\'est le dessin standard des projets sérieux.' },
+            { t: 'diagram', title: 'Les deux façons de prouver « c\'est moi » : session ou token', svg: `<svg viewBox="0 0 680 230">
+  <defs><marker id="lv-au1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="20" y="30" class="dg-t">Sur le web (Breeze) : la session-cookie</text>
+  <rect x="20" y="44" width="140" height="48" rx="10" class="dg-b"/>
+  <text x="90" y="66" class="dg-t" text-anchor="middle">Formulaire /login</text>
+  <text x="90" y="84" class="dg-ms" text-anchor="middle">email + mot de passe</text>
+  <path d="M 160,68 L 174,68" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="176" y="44" width="150" height="48" rx="10" class="dg-b"/>
+  <text x="251" y="66" class="dg-t" text-anchor="middle">Vérification</text>
+  <text x="251" y="84" class="dg-ms" text-anchor="middle">hash bcrypt comparé</text>
+  <path d="M 326,68 L 340,68" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="342" y="44" width="150" height="48" rx="10" class="dg-ba"/>
+  <text x="417" y="66" class="dg-t" text-anchor="middle">Session + cookie</text>
+  <text x="417" y="84" class="dg-ms" text-anchor="middle">le serveur se souvient</text>
+  <path d="M 492,68 L 506,68" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="508" y="44" width="156" height="48" rx="10" class="dg-b"/>
+  <text x="586" y="66" class="dg-t" text-anchor="middle">Connecté</text>
+  <text x="586" y="84" class="dg-ms" text-anchor="middle">auth()->user() partout</text>
+  <text x="20" y="110" class="dg-ko">✗</text>
+  <text x="34" y="110" class="dg-ms">identifiants faux → retour au formulaire</text>
+  <text x="20" y="142" class="dg-t">Sur mobile / API (Sanctum) : le token</text>
+  <rect x="20" y="156" width="140" height="48" rx="10" class="dg-b"/>
+  <text x="90" y="178" class="dg-t" text-anchor="middle">createToken()</text>
+  <text x="90" y="196" class="dg-ms" text-anchor="middle">montré UNE seule fois</text>
+  <path d="M 160,180 L 174,180" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="176" y="156" width="150" height="48" rx="10" class="dg-b"/>
+  <text x="251" y="178" class="dg-t" text-anchor="middle">Token stocké</text>
+  <text x="251" y="196" class="dg-ms" text-anchor="middle">hashé en base</text>
+  <path d="M 326,180 L 340,180" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="342" y="156" width="150" height="48" rx="10" class="dg-ba"/>
+  <text x="417" y="178" class="dg-t" text-anchor="middle">Chaque requête</text>
+  <text x="417" y="196" class="dg-ms" text-anchor="middle">Authorization: Bearer …</text>
+  <path d="M 492,180 L 506,180" class="dg-e" marker-end="url(#lv-au1)"/>
+  <rect x="508" y="156" width="156" height="48" rx="10" class="dg-b"/>
+  <text x="586" y="178" class="dg-t" text-anchor="middle">Abilities</text>
+  <text x="586" y="196" class="dg-ms" text-anchor="middle">commandes:lire, pas écrire</text>
+  <text x="20" y="222" class="dg-ko">✗</text>
+  <text x="34" y="222" class="dg-ms">token absent ou faux → 401 Unauthorized</text>
+</svg>`, caption: 'Session = le serveur garde un registre et ton NAVIGATEUR présente un cookie à chaque visite (parfait pour ton site). Token = une longue chaîne-secrète présentée dans l\'en-tête de CHAQUE requête (parfait pour mobile et partenaires — pas besoin de cookies). Dans les deux cas, le mot de passe servi de clé une fois : ensuite c\'est la session ou le token qui parle.' },
             { t: 'h3', h: 'Les mots de passe : le réflexe unique, gratuit' },
             { t: 'p', h: 'Un mot de passe ne se STOCKE jamais : on stocke son HASH (bcrypt — lent, salé, spécifiquement conçu pour résister au brute-force). Laravel a intégré la règle dans le modèle User moderne : le cast `\'password\' => \'hashed\'` hâche AUTOMATIQUEMENT à chaque écriture de l\'attribut, et la vérification `password_verify` est faite par le système d\'auth. Tu n\'as RIEN à écrire — et surtout rien à hacher toi-même : c\'est le péché de la carte d\'erreur en bas (le double hash qui casse le login sans bruit).' },
             { t: 'code', lang: 'php', label: 'app/Models/User.php — le cast qui fait le travail', code:
@@ -763,6 +1262,31 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'La question précise : qui, quoi, sur quoi' },
             { t: 'p', h: '« Autorisé » sans objet ne veut rien dire. Chaque règle d\'accès répond à : QUEL utilisateur (connecté ? rôle admin ?), quelle ACTION (voir, créer, modifier, supprimer, publier), sur QUELLE instance précise (le produit #42 — pas « un produit en général »). Cette précision change le code : `$commande->user_id === auth()->id()` est une règle d\'autorisation — et écrire cette ligne en quinze contrôleurs, c\'est quinze chances d\'en rater un. Les Gates et Policies CENTRALISENT ces règles en un endroit nommé, testable, réutilisable dans les contrôleurs, Blade, l\'API et les actions en queue.' },
+            { t: 'diagram', title: 'Les deux portes : le middleware ouvre la maison, la policy garde chaque chambre', svg: `<svg viewBox="0 0 680 240">
+  <defs><marker id="lv-g1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="16" y="86" width="96" height="48" rx="12" class="dg-b"/>
+  <text x="64" y="106" class="dg-t" text-anchor="middle">Awa</text>
+  <text x="64" y="124" class="dg-ms" text-anchor="middle">navigateur</text>
+  <rect x="150" y="16" width="514" height="206" rx="16" class="dg-zone"/>
+  <text x="650" y="38" class="dg-ms" text-anchor="end">LA BOUTIQUE (zone connectée)</text>
+  <rect x="170" y="100" width="150" height="64" rx="12" class="dg-b"/>
+  <circle cx="245" cy="100" r="9" class="dg-num"/><text x="245" y="104" class="dg-numt" text-anchor="middle">1</text>
+  <text x="245" y="126" class="dg-t" text-anchor="middle">middleware auth</text>
+  <text x="245" y="146" class="dg-m" text-anchor="middle">connectée ?</text>
+  <rect x="350" y="60" width="286" height="136" rx="14" class="dg-zone"/>
+  <text x="622" y="82" class="dg-ms" text-anchor="end">COMMANDE #42 — la chambre</text>
+  <rect x="386" y="96" width="170" height="64" rx="12" class="dg-ba"/>
+  <circle cx="471" cy="96" r="9" class="dg-num"/><text x="471" y="100" class="dg-numt" text-anchor="middle">2</text>
+  <text x="471" y="122" class="dg-t" text-anchor="middle">policy update()</text>
+  <text x="471" y="142" class="dg-m" text-anchor="middle">SA commande ?</text>
+  <text x="493" y="178" class="dg-ok" text-anchor="middle" font-size="12">✓ si OUI : l'action s'exécute</text>
+  <path d="M 112,110 L 168,128" class="dg-e" marker-end="url(#lv-g1)"/>
+  <path d="M 320,132 L 384,128" class="dg-e" marker-end="url(#lv-g1)"/>
+  <path d="M 200,100 L 200,58" class="dg-e" marker-end="url(#lv-g1)"/>
+  <text x="200" y="50" class="dg-ko" text-anchor="middle" font-size="12">✗ renvoyée vers /login</text>
+  <path d="M 471,160 L 471,196" class="dg-e" marker-end="url(#lv-g1)"/>
+  <text x="471" y="214" class="dg-ko" text-anchor="middle" font-size="12">✗ 403 : pas SA commande</text>
+</svg>`, caption: 'L\'authentification (portière ①) répond « QUI es-tu ? » ; l\'autorisation (portière ②) répond « as-tu le droit de faire ÇA, sur CET objet précis ? ». Un utilisateur connecté qui tape l\'URL d\'une commande d\'un autre passe la première porte… et se fait arrêter net à la seconde. Voilà pourquoi cacher le bouton ne suffit JAMAIS : la vraie frontière est serveur, pas visuelle.' },
             { t: 'h3', h: 'Gate : la règle simple et rapide' },
             { t: 'code', lang: 'php', label: 'app/Providers/AppServiceProvider.php', code:
 'use Illuminate\\Support\\Facades\\Gate;\n\npublic function boot(): void\n{\n    // La règle PONCTUELLE, hors modèle précis — parfaite en Gate :\n    Gate::define(\'gerer-boutique\', function ($user) {\n        return $user->estAdmin() || $user->boutique?->estActive();\n    });\n}\n\n// À l\'usage, trois formes — même règle :\n// 1) dans un contrôleur :\nGate::authorize(\'gerer-boutique\');            // 403 si refus, sinon continue\n\n// 2) dans Blade :\n@can(\'gerer-boutique\')\n    <a href="{{ route(\'admin.produits.index\') }}">Administration</a>\n@endcan\n\n// 3) dans du code (valeur booléenne, pour composer) :\nif (Gate::allows(\'gerer-boutique\')) { /* … */ }' },
@@ -819,6 +1343,30 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Commençons par le constat chirurgical : si, pour ajouter « notifier par WhatsApp » à ta commande, tu dois OUVRIR et MODIFIER `CommandeController::store()`, ta conception force chaque nouveauté à réouvrir un fichhier qui marchait. C\'est la violation du principe ouvert/fermé : un code SÛR devrait être fermé à la modification directe, ouvert à l\'extension par ajout de NOUVEAUX fichiers. L\'événement répare exactement ça : le contrôleur publie UN FAIT (« CommandePayee »), et chaque réaction est un NOUVEAU fichier branché par enregistrement — le contrôleur peut être oublié pendant des mois, le système continue d\'apprendre des réactions.' },
             { t: 'h3', h: 'Les trois acteurs, et le mécanisme complet' },
             { t: 'p', h: 'Trois rôles à distinguer nettement : l\'**ÉVÉNEMENT** est une petite classe qui transporte le FAIT et ses données (la commande, le montant) — rien d\'autre, pas de logique. Le **LISTENER** est la réaction, une classe par réaction (« EnvoyerConfirmationMail », « NotifierZemidjan ») avec sa méthode `handle()`. Et `dispatch()` est la PUBLICATION : l\'endroit du code qui crie le fait, sans dire (et sans savoir) qui écoute. Ajouter une réaction = créer un listener — le point de publication n\'est jamais modifié.' },
+            { t: 'diagram', title: 'Le découplage en image : un fait publié, plusieurs réactions abonnées', svg: `<svg viewBox="0 0 680 250">
+  <defs><marker id="lv-ev1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="96" width="150" height="60" rx="12" class="dg-b"/>
+  <text x="95" y="120" class="dg-t" text-anchor="middle">store()</text>
+  <text x="95" y="140" class="dg-ms" text-anchor="middle">event(new …)</text>
+  <rect x="236" y="96" width="180" height="60" rx="12" class="dg-ba"/>
+  <text x="326" y="120" class="dg-t" text-anchor="middle">ÉVÉNEMENT</text>
+  <text x="326" y="139" class="dg-ms" text-anchor="middle">CommandePayee {commande, montant}</text>
+  <path d="M 170,126 L 234,126" class="dg-e" marker-end="url(#lv-ev1)"/>
+  <rect x="470" y="24" width="196" height="44" rx="10" class="dg-b"/>
+  <text x="568" y="44" class="dg-t" text-anchor="middle">EnvoyerConfirmationMail</text>
+  <text x="568" y="62" class="dg-ms" text-anchor="middle">listener — mail au client</text>
+  <rect x="470" y="92" width="196" height="44" rx="10" class="dg-b"/>
+  <text x="568" y="112" class="dg-t" text-anchor="middle">NotifierZemidjan</text>
+  <text x="568" y="130" class="dg-ms" text-anchor="middle">listener — SMS au livreur</text>
+  <rect x="470" y="160" width="196" height="44" rx="10" class="dg-b"/>
+  <text x="568" y="180" class="dg-t" text-anchor="middle">IncrementerStats</text>
+  <text x="568" y="198" class="dg-ms" text-anchor="middle">listener — statistiques</text>
+  <path d="M 416,116 C 440,70 440,46 468,46" class="dg-e" marker-end="url(#lv-ev1)"/>
+  <path d="M 416,126 L 468,118" class="dg-e" marker-end="url(#lv-ev1)"/>
+  <path d="M 416,136 C 440,180 440,182 468,182" class="dg-e" marker-end="url(#lv-ev1)"/>
+  <rect x="236" y="212" width="430" height="30" rx="10" class="dg-zone"/>
+  <text x="451" y="231" class="dg-ms" text-anchor="middle">+ future réaction : un NOUVEAU fichier, jamais une modif du contrôleur</text>
+</svg>`, caption: 'Le contrôleur crie « une commande est payée » et n\'en sait pas plus — il ne connaît ni mail, ni SMS, ni stats. Chaque réaction est une classe à part, branchée ailleurs. Ajouter « notifier par WhatsApp » demain = UN nouveau listener, zéro modification de store() : le code qui marche n\'est plus jamais réouvert.' },
             { t: 'code', lang: 'php', code:
 '// 1) L\'ÉVÉNEMENT — le fait, avec ses données, rien d\'autre\n//    php artisan make:event CommandePayee\nnamespace App\\Events;\n\nclass CommandePayee\n{\n    public function __construct(\n        public readonly \\App\\Models\\Commande $commande,\n        public readonly int $montant,\n    ) {}\n}\n\n// 2) LE LISTENER — UNE réaction, une classe\n//    php artisan make:listener EnvoyerConfirmationMail --event=CommandePayee\nnamespace App\\Listeners;\n\nclass EnvoyerConfirmationMail\n{\n    public function handle(\\App\\Events\\CommandePayee $evenement): void\n    {\n        \\Illuminate\\Support\\Facades\\Mail::to($evenement->commande->user)\n            ->queue(new \\App\\Mail\\ConfirmationCommande($evenement->commande));\n    }\n}\n\n// 3) LA PUBLICATION — le contrôleur crie le fait, sans savoir qui écoute\npublic function store(StoreCommandeRequest $request)\n{\n    $commande = Commande::create([...]);\n    event(new \\App\\Events\\CommandePayee($commande, $total));\n    // ou : CommandePayee::dispatch($commande, $total);\n    return redirect()->route(\'commandes.confirmation\', $commande);\n}' },
             { t: 'h3', h: 'Enregistrement : découverte automatique vs explicite' },
@@ -864,6 +1412,44 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Le cycle HTTP est un huit clos : chaque requête monopolise un worker PHP de ton serveur — pendant que le tien redimensionne une image de 4 Mo, il NE SERT PERSONNE D\'AUTRE (les autres clients attendent leur tour sur l\'hébergement mutualisé). Et la montre joue contre toi : l\'utilisateur abandonne au-delà de 2-3 secondes, le navigateur coupe à 30-120. La loi d\'airain : tout ce qui dépasse une demi-seconde de traitement ET dont le client n\'a pas besoin du résultat immédiat est candidat à la queue. Mails, PDF, images, appels d\'API externes, exports : toute la liste passe en arrière-plan — et ta boutique redevient instantanée.' },
             { t: 'h3', h: 'La mécanique : le job, la file, le worker' },
             { t: 'p', h: 'Trois acteurs, un flux. Le **JOB** est une classe décrivant UNE tâche (avec sa méthode `handle()` — « ce qu\'il faudra faire ») ; il est SÉRIALISÉ (ses propriétés deviennent du JSON) et rangé dans la **FILE** (la table `jobs` en base, ou Redis — une boîte aux lettres ordonnée : FIFO). Le **WORKER** est un processus LONG (`php artisan queue:work`) qui vit à côté : il lit la file en boucle, désérialise chaque job et exécute `handle()`. Le serveur web, lui, ne fait QUE déposer l\'enveloppe — c\'est toute la latence que le client paie.' },
+            { t: 'diagram', title: 'La même action, deux mondes : 4 secondes d\'attente contre 160 ms', svg: `<svg viewBox="0 0 680 262">
+  <defs><marker id="lv-q1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <text x="20" y="30" class="dg-t">SANS queue — le client attend tout, dans sa requête</text>
+  <rect x="20" y="42" width="150" height="46" rx="10" class="dg-b"/>
+  <text x="95" y="62" class="dg-m" text-anchor="middle">créer la commande</text>
+  <text x="95" y="80" class="dg-ms" text-anchor="middle">150 ms</text>
+  <path d="M 170,65 L 184,65" class="dg-e" marker-end="url(#lv-q1)"/>
+  <rect x="186" y="42" width="150" height="46" rx="10" class="dg-b"/>
+  <text x="261" y="62" class="dg-m" text-anchor="middle">envoyer le mail</text>
+  <text x="261" y="80" class="dg-ms" text-anchor="middle">900 ms</text>
+  <path d="M 336,65 L 350,65" class="dg-e" marker-end="url(#lv-q1)"/>
+  <rect x="352" y="42" width="150" height="46" rx="10" class="dg-b"/>
+  <text x="427" y="62" class="dg-m" text-anchor="middle">traiter les images</text>
+  <text x="427" y="80" class="dg-ms" text-anchor="middle">3 s</text>
+  <path d="M 502,65 L 516,65" class="dg-e" marker-end="url(#lv-q1)"/>
+  <rect x="518" y="42" width="146" height="46" rx="23" class="dg-b"/>
+  <text x="591" y="62" class="dg-ko" text-anchor="middle" font-size="13">réponse : ~4 s</text>
+  <text x="591" y="80" class="dg-ms" text-anchor="middle">client frustré…</text>
+  <text x="20" y="122" class="dg-t">AVEC queue — la requête dépose l'enveloppe et répond</text>
+  <rect x="20" y="134" width="220" height="46" rx="10" class="dg-b"/>
+  <text x="130" y="154" class="dg-m" text-anchor="middle">créer commande + dispatch()</text>
+  <text x="130" y="172" class="dg-ms" text-anchor="middle">160 ms</text>
+  <path d="M 240,157 L 254,157" class="dg-e" marker-end="url(#lv-q1)"/>
+  <rect x="256" y="134" width="162" height="46" rx="23" class="dg-b"/>
+  <text x="337" y="154" class="dg-ok" text-anchor="middle" font-size="13">réponse : 160 ms</text>
+  <text x="337" y="172" class="dg-ms" text-anchor="middle">le client est servi ✓</text>
+  <path d="M 130,182 L 130,194" class="dg-e dg-dash" marker-end="url(#lv-q1)"/>
+  <rect x="20" y="196" width="290" height="52" rx="12" class="dg-zone"/>
+  <text x="34" y="214" class="dg-ms">LA FILE (jobs en attente)</text>
+  <rect x="34" y="220" width="78" height="22" rx="11" class="dg-pill"/>
+  <text x="73" y="235" class="dg-ms" text-anchor="middle">job : mail</text>
+  <rect x="120" y="220" width="90" height="22" rx="11" class="dg-pill"/>
+  <text x="165" y="235" class="dg-ms" text-anchor="middle">job : images</text>
+  <path d="M 310,222 L 378,222" class="dg-e dg-dash" marker-end="url(#lv-q1)"/>
+  <rect x="380" y="196" width="216" height="52" rx="12" class="dg-b"/>
+  <text x="488" y="218" class="dg-t" text-anchor="middle">WORKER (queue:work)</text>
+  <text x="488" y="236" class="dg-ms" text-anchor="middle">exécute en arrière-plan, en boucle</text>
+</svg>`, caption: 'Le client n\'a pas besoin du mail pour savoir que sa commande est enregistrée : tout ce qui est LENT et différable part dans la file, et le worker — un processus à part, lancé une fois — la vide en continu. Sans worker, rappelle-toi : la file gonfle en silence (carte d\'erreur en bas).' },
             { t: 'code', lang: 'php', code:
 'php artisan make:job TraiterImagesProduit\n→ app/Jobs/TraiterImagesProduit.php\n\nnamespace App\\Jobs;\n\nuse Illuminate\\Contracts\\Queue\\ShouldQueue;\n\nclass TraiterImagesProduit implements ShouldQueue\n{\n    use \\Illuminate\\Bus\\Queueable;                    // le kit standard\n\n    public $tries = 3;              // 3 chances avant l\'échec définitif\n    public $backoff = [30, 120, 600];  // délais entre tentatives : 30 s, 2 min, 10 min\n\n    public function __construct(public readonly \\App\\Models\\Produit $produit) {}\n\n    public function handle(): void\n    {\n        $produit = $this->produit->fresh();       // données du JOUR, pas d\'hier\n        foreach ($produit->images as $image) {\n            $image->redimensionner(1200, 900);\n            $image->genererMiniature();\n        }\n    }\n}\n\n// Dans le contrôleur — la dépose, puis la réponse immédiate :\nTraiterImagesProduit::dispatch($produit);\nreturn redirect()->route(\'produits.show\', $produit)\n    ->with(\'succes\', \'Produit créé — images en préparation.\');' },
             { t: 'h3', h: 'Configurer : database pour démarrer, Redis pour les sérieux' },
@@ -907,6 +1493,33 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Le problème : « return $produit » est une fuite par défaut' },
             { t: 'p', h: 'Quand tu fais `return $produit;` dans un contrôleur API, Laravel sérialise TOUT l\'objet : chaque colonne (y compris `seuil_interne`, `fournisseur_id`, `created_at` brut ISO 8601), et — plus insidieux — chaque RELATION déjà chargée en mémoire au fil du contrôleur (la boutique du produit, avec le téléphone du vendeur). Le client API voit une fuite de données qui a l\'air d\'une réponse normale, et ton API colle son schéma interne à la figure du monde : renommer une colonne en base devient une casse d\'API, publique, versionnée. La resource coupe la relation : **le client ne voit que ce que le contrat déclare**, et l\'intérieur reste libre de bouger.' },
+            { t: 'diagram', title: 'La resource : une liste blanche entre ton modèle et le monde', svg: `<svg viewBox="0 0 680 240">
+  <defs><marker id="lv-api1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="20" y="20" width="236" height="200" rx="14" class="dg-b"/>
+  <text x="138" y="42" class="dg-t" text-anchor="middle">Modèle Eloquent (tout)</text>
+  <text x="34" y="66" class="dg-m">id · nom · prix · stock</text>
+  <text x="34" y="84" class="dg-m">description · created_at</text>
+  <text x="34" y="108" class="dg-ko" font-size="12">✗ seuil_interne</text>
+  <text x="34" y="126" class="dg-ko" font-size="12">✗ fournisseur_id</text>
+  <text x="34" y="144" class="dg-ko" font-size="12">✗ boutique.vendeur.tel</text>
+  <text x="34" y="162" class="dg-ko" font-size="12">✗ timestamps bruts ISO</text>
+  <text x="34" y="188" class="dg-ms">tout ça sort si tu fais</text>
+  <text x="34" y="204" class="dg-ms">return $produit;  (la fuite)</text>
+  <path d="M 256,120 L 290,120" class="dg-e" marker-end="url(#lv-api1)"/>
+  <rect x="292" y="76" width="150" height="88" rx="12" class="dg-ba"/>
+  <text x="367" y="104" class="dg-t" text-anchor="middle">ProduitResource</text>
+  <text x="367" y="124" class="dg-m" text-anchor="middle">toArray() :</text>
+  <text x="367" y="142" class="dg-m" text-anchor="middle">la liste blanche</text>
+  <path d="M 442,120 L 476,110" class="dg-e" marker-end="url(#lv-api1)"/>
+  <rect x="478" y="40" width="182" height="160" rx="14" class="dg-b"/>
+  <text x="569" y="62" class="dg-t" text-anchor="middle">{ JSON — le contrat }</text>
+  <text x="492" y="88" class="dg-m">"id": 1,</text>
+  <text x="492" y="106" class="dg-m">"nom": "Gari",</text>
+  <text x="492" y="124" class="dg-m">"prix": 21000,</text>
+  <text x="492" y="142" class="dg-m">"en_stock": true,</text>
+  <text x="492" y="160" class="dg-m">"categorie": { … }</text>
+  <text x="492" y="184" class="dg-ok" font-size="12">✓ stable, maîtrisé, sans fuite</text>
+</svg>`, caption: 'La resource est un traducteur à LISTE BLANCHE : seuls les champs déclarés dans toArray() franchissent la frontière — les colonnes internes, relations chargées et formats bruts restent dedans. Résultat : les clients API programment contre un contrat stable, et tu peux renommer une colonne en base demain sans rien casser.' },
             { t: 'h3', h: 'Créer et retourner une resource' },
             { t: 'code', lang: 'php', code:
 'php artisan make:resource ProduitResource\n→ app/Http/Resources/ProduitResource.php\n\nnamespace App\\Http\\Resources;\n\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass ProduitResource extends JsonResource\n{\n    // La FORME de la sortie — un tableau, dire ce qui sort, et comment :\n    public function toArray($request): array\n    {\n        return [\n            \'id\'         => $this->id,\n            \'nom\'        => $this->nom,\n            \'prix\'       => $this->prix,\n            \'prix_humain\' => $this->prix_formate,             // accessor (fiche Eloquent)\n            \'en_stock\'   => $this->stock > 0,\n            \'categorie\'  => new CategorieResource($this->whenLoaded(\'categorie\')),\n            //            + relation imbriquée, CHARGÉE SEULEMENT si le\n            //              contrôleur l\'a eager-loadée — sinon ABSENTE du JSON,\n            //              jamais null qui gâche le contrat\n            \'liens\'      => [\n                \'fiche\' => route(\'api.produits.show\', $this->id),\n            ],\n        ];\n    }\n}\n\n// Dans le contrôleur — une ligne, le contrat à la place de l\'objet :\npublic function show(Produit $produit)\n{\n    return new ProduitResource($produit->load(\'categorie\'));   // eager-load controlé\n}\n\npublic function index()\n{\n    $produits = Produit::enStock()->paginate(20);\n    return ProduitResource::collection($produits);   // liste + meta de pagination AUTO\n}' },
@@ -960,6 +1573,29 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Pest : la syntaxe qui donne envie' },
             { t: 'code', lang: 'php', label: 'tests/Feature/CatalogueTest.php', code:
 '<?php\n\nuse App\\Models\\Categorie;\nuse App\\Models\\Produit;\n\nit(\'affiche le catalogue public\', function () {\n    Categorie::factory()->create([\'nom\' => \'Céréales\']);\n    Produit::factory()->create([\'nom\' => \'Gari premium\', \'stock\' => 8]);\n\n    $this->get(\'/boutique\')\n        ->assertOk()                          // 200\n        ->assertSee(\'Gari premium\')          // contenu présent\n        ->assertSee(\'Céréales\');\n});\n\nit(\'redirige un invité qui veut commander\', function () {\n    $this->post(\'/commandes\', [\'produit_id\' => 1])\n        ->assertRedirect(\'/login\');          // middleware auth d\'abord\n});\n\nit(\'refuse à Awa de supprimer le produit de sa sœur\', function () {\n    $awa = \\App\\Models\\User::factory()->create();\n    $produit = Produit::factory()->create();   // d\'une AUTRE boutique\n\n    $this->actingAs($awa)\n        ->delete(\"/produits/{$produit->id}\")\n        ->assertForbidden();                  // la policy en preuve\n});' },
+            { t: 'diagram', title: 'Anatomie d\'un test : Arrange, Act, Assert', svg: `<svg viewBox="0 0 680 172">
+  <defs><marker id="lv-t1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
+  <rect x="16" y="52" width="150" height="72" rx="12" class="dg-b"/>
+  <text x="91" y="76" class="dg-t" text-anchor="middle">1 · ARRANGE</text>
+  <text x="91" y="94" class="dg-m" text-anchor="middle">les données</text>
+  <text x="91" y="112" class="dg-ms" text-anchor="middle">Produit::factory()</text>
+  <path d="M 166,88 L 194,88" class="dg-e" marker-end="url(#lv-t1)"/>
+  <rect x="196" y="52" width="150" height="72" rx="12" class="dg-b"/>
+  <text x="271" y="76" class="dg-t" text-anchor="middle">2 · ACT</text>
+  <text x="271" y="94" class="dg-m" text-anchor="middle">l'action testée</text>
+  <text x="271" y="112" class="dg-ms" text-anchor="middle">get('/boutique')</text>
+  <path d="M 346,88 L 374,88" class="dg-e" marker-end="url(#lv-t1)"/>
+  <rect x="376" y="52" width="150" height="72" rx="12" class="dg-b"/>
+  <text x="451" y="76" class="dg-t" text-anchor="middle">3 · ASSERT</text>
+  <text x="451" y="94" class="dg-m" text-anchor="middle">la preuve</text>
+  <text x="451" y="112" class="dg-ms" text-anchor="middle">assertOk() · assertSee()</text>
+  <path d="M 526,88 L 554,88" class="dg-e" marker-end="url(#lv-t1)"/>
+  <rect x="556" y="52" width="110" height="72" rx="12" class="dg-ba"/>
+  <text x="611" y="82" class="dg-t" text-anchor="middle">vert ✓</text>
+  <text x="611" y="102" class="dg-t" text-anchor="middle">/ rouge ✗</text>
+  <text x="340" y="156" class="dg-m" text-anchor="middle">…sur une base SQLite EN MÉMOIRE recréée à chaque test (RefreshDatabase) — jamais ta vraie base.</text>
+</svg>`, caption: 'Chaque test suit le même scénario en trois temps : on PRÉPARE un mini-monde (factory), on JOUE l\'action (une requête factice à toute l\'application), puis on EXIGE le résultat (les assertions). Si la boutique change un jour et qu\'un comportement promis dévie — le test vire au rouge AVANT la mise en ligne, pas après.' },
+            { t: 'callout', kind: 'info', h: 'Mot nouveau — une **assertion** (`assertOk`, `assertSee`, `assertForbidden`…) : un contrat écrit, « cette page DOIT répondre 200 ». Le test exécute le scénario puis confronte la réalité au contrat : conforme → vert ; déviante → rouge, avec la ligne fautive. Une suite verte n\'est pas « rien » : c\'est toutes tes règles du jeu qui tiennent encore, vérifiées en une minute.' },
             { t: 'p', h: 'PHPUnit sous-jacent, Pest au-dessus : les `assertOk()`, `assertRedirect()`, `assertForbidden()`, `assertSee()`, `assertJsonPath()` sont des helpers HTTP Laravel — le test Feature joue TOUTE la pile (route → middleware → contrôleur → policy → base de test), exactement comme un vrai client, mais en mémoire et instantané. C\'est la raison de son efficacité : chaque fiche de ce module (routing, middleware, policy, validation…) devient une LIGNE de preuve possible.' },
             { t: 'h3', h: 'La base de test : isolée, fraîche, jetable' },
             { t: 'code', lang: 'php', label: 'phpunit.xml + le trait RefreshDatabase', code:

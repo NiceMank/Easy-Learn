@@ -3,9 +3,9 @@
 const { loadPage, waitReady } = require(__dirname + '/render-html.js');
 
 const EXPECT = {
-  html: 9, css: 12, js: 13, ts: 25, tailwind: 15, php: 35, laravel: 18,
+  html: 9, css: 12, js: 13, ts: 25, tailwind: 15, php: 36, laravel: 19,
   react: 21, tanstack: 14, python: 18, flask: 17, django: 20, vue: 29,
-  rn: 24, node: 29, c: 30, java: 42
+  rn: 24, node: 30, c: 31, java: 43, algo: 13, flutter: 16
 };
 const TOTAL_FICHES = Object.values(EXPECT).reduce((a, b) => a + b, 0);
 

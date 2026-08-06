@@ -1,6 +1,6 @@
 # Easy Learn — Documentation Interactive (style iOS)
 
-Site de documentation personnelle pour **HTML, CSS, JavaScript, TypeScript, React JS, Tailwind CSS, PHP, Laravel, TanStack Query, Python, Flask, Django, Vue.js, React Native, Node.js & Express, Langage C et Java**, en pur HTML/CSS/JS vanilla, sans build ni dépendance (hors CDN des icônes Google Material Symbols Rounded). **371 fiches** au total.
+Site de documentation personnelle pour **Algorithmique, HTML, CSS, JavaScript, TypeScript, React JS, Tailwind CSS, PHP, Laravel, TanStack Query, Python, Flask, Django, Vue.js, React Native, Flutter, Node.js & Express, Langage C et Java** (19 modules), en pur HTML/CSS/JS vanilla, sans build ni dépendance (hors CDN des icônes Google Material Symbols Rounded). **405 fiches** au total.
 
 ## Lancer le site
 
@@ -27,18 +27,20 @@ devdocs/
     ├── data-js.js      # ← CONTENU : 13 fiches JavaScript
     ├── data-typescript.js # ← CONTENU : 25 fiches TypeScript (accent bleu TS #3178C6)
     ├── data-tailwind.js# ← CONTENU : 15 fiches Tailwind CSS (accent cyan)
-    ├── data-php.js     # ← CONTENU : 35 fiches PHP (accent violet PHP #777BB4)
-    ├── data-laravel.js # ← CONTENU : 17 fiches Laravel (accent rouge brique)
-    ├── data-react.js   # ← CONTENU : 20 fiches React JS (accent bleu ciel)
-    ├── data-tanstack.js# ← CONTENU : 13 fiches TanStack Query (accent corail)
+    ├── data-php.js     # ← CONTENU : 36 fiches PHP (accent violet PHP #777BB4)
+    ├── data-laravel.js # ← CONTENU : 19 fiches Laravel (accent rouge brique) — fiche d'entrée « Notions de base » + 22 schémas visuels (blocs diagram)
+    ├── data-react.js   # ← CONTENU : 21 fiches React JS (accent bleu ciel)
+    ├── data-tanstack.js# ← CONTENU : 14 fiches TanStack Query (accent corail)
     ├── data-python.js  # ← CONTENU : 18 fiches Python (accent bleu Python)
-    ├── data-flask.js   # ← CONTENU : 16 fiches Flask (accent anthracite)
-    ├── data-django.js  # ← CONTENU : 19 fiches Django (accent vert forêt)
-    ├── data-vue.js     # ← CONTENU : 28 fiches Vue.js 3 (accent vert émeraude)
-    ├── data-reactnative.js # ← CONTENU : 23 fiches React Native (accent cyan/bleu clair #61DAFB)
-    ├── data-node.js    # ← CONTENU : 29 fiches Node.js & Express (accent vert Node #339933/#5FA04E)
-    ├── data-c.js       # ← CONTENU : 30 fiches Langage C C11/C17 (accent bleu acier #00599C)
-    ├── data-java.js    # ← CONTENU : 42 fiches Java 17/21 (accent orange Java #ED8B00)
+    ├── data-flask.js   # ← CONTENU : 17 fiches Flask (accent anthracite)
+    ├── data-django.js  # ← CONTENU : 20 fiches Django (accent vert forêt)
+    ├── data-vue.js     # ← CONTENU : 29 fiches Vue.js 3 (accent vert émeraude)
+    ├── data-reactnative.js # ← CONTENU : 24 fiches React Native (accent cyan/bleu clair #61DAFB)
+    ├── data-flutter.js # ← CONTENU : 16 fiches Flutter (accent bleu Flutter #0553B1)
+    ├── data-node.js    # ← CONTENU : 30 fiches Node.js & Express (accent vert Node #339933/#5FA04E)
+    ├── data-c.js       # ← CONTENU : 31 fiches Langage C C11/C17 (accent bleu acier #00599C)
+    ├── data-java.js    # ← CONTENU : 43 fiches Java 17/21 (accent orange Java #ED8B00)
+    ├── data-algo.js    # ← CONTENU : 13 fiches Algorithmique (accent violet #6C5CE7)
     └── app.js          # Routeur, vues, recherche, favoris, historique, thème
 ```
 
@@ -75,6 +77,7 @@ Dans le `data-*.js` du langage, ajouter un objet dans le tableau `fiches` d'une 
 | `callout` | `{ t:'callout', kind:'tip\|warn\|info', h:'…' }` | Encadré coloré |
 | `table` | `{ t:'table', head:[…], rows:[[…]] }` | Tableau de référence |
 | `demo` | `{ t:'demo', html:'…', height:150, caption:'…' }` | Démo réelle dans iframe sandboxée |
+| `diagram` | `{ t:'diagram', title:'…', svg:'<svg …/>', caption:'…' }` | Schéma pédagogique : SVG inline, coloré automatiquement par le thème via les classes `dg-*` de `main.css` (boîtes `dg-b`/`dg-ba`, textes `dg-t`/`dg-m`/`dg-ms`, flèches `dg-e`/`dg-ea`/`dg-dash`, badges `dg-num`, verdicts `dg-ok`/`dg-ko`/`dg-warn`) — titre et légende passés par `md()`, le `svg` injecté brut (contenu de confiance) |
 
 L'index de recherche, le temps de lecture, la navigation précédent/suivant et les compteurs se génèrent **automatiquement**.
 
@@ -114,12 +117,12 @@ Adossé à la documentation : **85 exercices répartis sur les 17 modules** (5 p
 
 Le contenu et l'application sont validés par la suite de harnais Node du dossier **`tests/`** (persistante, versionnée dans le dépôt). Prérequis unique : jsdom (v29) — `mkdir -p /tmp/nm && cd /tmp/nm && npm i jsdom` (les scripts le chargent depuis `/tmp/nm/node_modules/jsdom`, à réinstaller si `/tmp` a été vidé).
 
-- `tests/validate.js` — 371 fiches sur 17 modules : IDs uniques, champs requis, blocs bien formés (types connus, contenus obligatoires), liens `related` existants, `read` non codé en dur.
-- `tests/scan-all-tags.js` — aucune balise HTML brute hors backticks dans les champs passés par `md()` (régression du bug `<template>`/`<script>` avalant la fin des fiches, corrigé en juillet 2026).
+- `tests/validate.js` — 405 fiches sur 19 modules : IDs uniques, champs requis, blocs bien formés (types connus — `diagram` inclus, contenus obligatoires), liens `related` existants, `read` non codé en dur.
+- `tests/scan-all-tags.js` — aucune balise HTML brute hors backticks dans les champs passés par `md()` — y compris `title`/`caption` des blocs `diagram` (régression du bug `<template>`/`<script>` avalant la fin des fiches, corrigé en juillet 2026).
 - `tests/census.js` — recensement factuel : fiches par module, tailles, première fiche, fiche d'installation présente ou non, totaux exercices.
-- `tests/smoke.js` — une instance jsdom, puis la navigation réelle par hash : accueil + 17 sommaires + 371 fiches ; vérifie `#view`, h1, blocs de code et le `pager` de chaque fiche.
+- `tests/smoke.js` — une instance jsdom, puis la navigation réelle par hash : accueil + 19 sommaires + 405 fiches ; vérifie `#view`, h1, blocs de code et le `pager` de chaque fiche.
 - `tests/exocheck.js` — 85 exercices (30 `dom` / 55 `checklist`) : panneaux éditables + tests fonctionnels pour les `dom`, checklist/contraintes/indices/solutions présents, puis rendu réel d'une page exercice.
 - `tests/smoke-design.js` — 24 assertions statiques sur le design (classes clés, thème `[data-theme]`, overlay de recherche, Material Symbols, media queries, accolades équilibrées).
 - `tests/render-html.js` — rendu jsdom d'une page précise (`node tests/render-html.js /fiche/<id> [fiche|sommaire|home]`), utilisé par smoke.js et exocheck.js.
 
-Dernier passage (23 juillet 2026) : **tout au vert** — 389 pages visitées, 371 pagers présents, 0 lien `related` cassé, 0 balise brute, 85/85 exercices, 24/24 design.
+Dernier passage (6 août 2026) : **tout au vert** — 425 pages visitées, 405 pagers présents, 0 lien `related` cassé, 0 balise brute, 85/85 exercices, 24/24 design.
