@@ -30,6 +30,26 @@
   };
   let favs = store.get('dd-favs', []);
   let hist = store.get('dd-hist', []);
+  let completed = store.get('dd-completed', []);
+
+  /* ---------- Persistance & Progression ---------- */
+  const isCompleted = (id) => completed.includes(id);
+  function toggleCompleted(id) {
+    if (isCompleted(id)) {
+      completed = completed.filter((c) => c !== id);
+      toast('Marqué comme non lu', 'unpublished');
+    } else {
+      completed.push(id);
+      toast('Notion marquée comme maîtrisée ! 🎉', 'check_circle');
+    }
+    store.set('dd-completed', completed);
+    refreshCounts();
+    document.querySelectorAll('[data-complete="' + id + '"]').forEach(function (btn) {
+      btn.classList.toggle('on', isCompleted(id));
+      const span = btn.querySelector('span:last-child');
+      if (span) span.textContent = isCompleted(id) ? 'Maîtrisé' : 'Marquer comme maîtrisé';
+    });
+  }
 
   /* ---------- Index global ---------- */
   const ficheIndex = new Map(); // id -> {fiche, lang, cat}
@@ -120,7 +140,7 @@
 
   function renderBlock(b) {
     switch (b.t) {
-      case 'h3': return '<h3 class="reveal">' + md(b.h) + '</h3>';
+      case 'h3': return '<h3 class="reveal"' + (b.id ? ' id="' + b.id + '"' : '') + '>' + md(b.h) + '</h3>';
       case 'p': return '<p class="reveal">' + md(b.h) + '</p>';
       case 'ul': return '<ul class="reveal">' + b.items.map((i) => '<li>' + md(i) + '</li>').join('') + '</ul>';
       case 'ol': return '<ol class="reveal">' + b.items.map((i) => '<li>' + md(i) + '</li>').join('') + '</ol>';
@@ -272,12 +292,15 @@
   function langIconCls(langId) { return { algo: 'ic-algo', html: 'ic-html', css: 'ic-css', js: 'ic-js', ts: 'ic-ts', react: 'ic-react', tailwind: 'ic-tailwind', php: 'ic-php', laravel: 'ic-laravel', tanstack: 'ic-tanstack', python: 'ic-python', flask: 'ic-flask', django: 'ic-django', vue: 'ic-vue', rn: 'ic-rn', flutter: 'ic-flutter', node: 'ic-node', c: 'ic-c', java: 'ic-java' }[langId] || 'ic-neutral'; }
 
   function ficheCard(f, langId) {
-    return '<a class="fiche-card reveal" data-level="' + norm(f.level) + '" href="#/fiche/' + f.id + '">' +
+    const done = isCompleted(f.id);
+    return '<a class="fiche-card reveal' + (done ? ' is-completed' : '') + '" data-level="' + norm(f.level) + '" href="#/fiche/' + f.id + '">' +
       '<span class="card-icon ' + langIconCls(langId) + '">' + icon(f.icon) + '</span>' +
       '<span class="card-title">' + High.esc(f.title) + '</span>' +
       '<p class="card-desc">' + (f.tagline ? md(f.tagline) : High.esc(stripTags(f.intro).slice(0, 90)) + '…') + '</p>' +
       '<span class="card-meta"><span class="chip ' + lvlClass(f.level) + '">' + f.level + '</span>' +
-      '<span class="chip">' + icon('schedule') + f.read + '</span></span>' +
+      '<span class="chip">' + icon('schedule') + f.read + '</span>' +
+      (done ? '<span class="chip completed-chip">' + icon('check_circle') + 'Maîtrisé</span>' : '') +
+      '</span>' +
     '</a>';
   }
 
@@ -339,10 +362,19 @@
     const L = DB[langId];
     if (!L || !L.categories) return '<div class="empty-state"><span class="big-ic material-symbols-rounded">error</span><h2>Module introuvable</h2><p>Le module ' + langId + ' n\'a pas pu être chargé.</p><a class="btn" href="#/">Retour à l\'accueil</a></div>';
     document.body.setAttribute('data-lang', langId);
+
+    const allFiches = flatFiches(langId);
+    const doneCount = allFiches.filter((f) => isCompleted(f.id)).length;
+    const pct = allFiches.length ? Math.round((doneCount / allFiches.length) * 100) : 0;
+
     let out = '<section class="hero view-anim">' +
       '<span class="hero-eyebrow">' + icon(L.icon) + ' ' + L.name + '</span>' +
       '<h1>' + High.esc(L.heroTitle).replace(/\*\*([^\*]+)\*\*/g,'<strong>$1</strong>') + '</h1>' +
       '<p class="lead">' + md(L.tagline) + '</p></section>' +
+      '<div class="module-progress-wrap reveal">' +
+        '<div class="module-progress-header"><span>Progression du module</span><strong>' + doneCount + ' / ' + allFiches.length + ' maîtrises (' + pct + '%)</strong></div>' +
+        '<div class="module-progress-bar"><div class="module-progress-fill" style="width:' + pct + '%"></div></div>' +
+      '</div>' +
       '<div class="reveal" style="margin-bottom:20px">' +
         '<div class="segmented" id="lvl-filter">' +
           '<button class="on" data-lvl="">Tous</button>' +
@@ -379,11 +411,39 @@
         '<span class="chip">' + icon('schedule') + f.read + ' de lecture</span>' +
         '<span class="chip accent">' + icon('folder') + e.cat.name + '</span>' +
       '</div></div>' +
-      '<button class="icon-btn fav-btn' + (isFav(id) ? ' on' : '') + '" data-fav="' + id + '" aria-label="Ajouter aux favoris" title="Favori">' +
-        icon('favorite') + '</button></header>';
+      '<div style="display:flex;gap:8px;align-items:center;">' +
+        '<button class="mark-completed-btn' + (isCompleted(id) ? ' on' : '') + '" data-complete="' + id + '" aria-label="Marquer comme maîtrisé" title="Statut de maîtrise">' +
+          icon('check_circle') + '<span>' + (isCompleted(id) ? 'Maîtrisé' : 'Marquer comme maîtrisé') + '</span></button>' +
+        '<button class="icon-btn fav-btn' + (isFav(id) ? ' on' : '') + '" data-fav="' + id + '" aria-label="Ajouter aux favoris" title="Favori">' +
+          icon('favorite') + '</button>' +
+      '</div></header>';
 
     out += '<p class="fiche-intro view-anim">' + md(f.intro) + '</p>';
-    out += '<div class="fiche-body">' + (f.blocks || []).map(renderBlock).join('') + '</div>';
+
+    // Extraire les intertitres h3 pour générer le sommaire (TOC)
+    let headingIdx = 0;
+    const tocItems = [];
+    const processedBlocks = (f.blocks || []).map(function (b) {
+      if (b.t === 'h3') {
+        headingIdx++;
+        const sectionId = 'sec-' + headingIdx;
+        tocItems.push({ id: sectionId, title: stripTags(b.h) });
+        return Object.assign({}, b, { id: sectionId });
+      }
+      return b;
+    });
+
+    if (tocItems.length >= 2) {
+      out += '<nav class="fiche-toc view-anim">' +
+        '<div class="toc-header">' + icon('toc') + '<span>Sommaire de la fiche</span></div>' +
+        '<ul class="toc-list">' +
+          tocItems.map(function (item) {
+            return '<li><a href="#' + item.id + '" data-toc-link="' + item.id + '">' + icon('chevron_right') + High.esc(item.title) + '</a></li>';
+          }).join('') +
+        '</ul></nav>';
+    }
+
+    out += '<div class="fiche-body">' + processedBlocks.map(renderBlock).join('') + '</div>';
 
     if (f.errors && f.errors.length) {
       out += '<h2 class="section-title reveal">' + icon('error') + 'Erreurs fréquentes & pièges</h2>';
@@ -634,7 +694,7 @@
     if (e.key === 'Escape' && !overlay.hidden) closeSearch();
   });
 
-  /* ---------- Délégation : copier & favoris ---------- */
+  /* ---------- Délégation : copier, favoris, complétion & TOC ---------- */
   document.addEventListener('click', (e) => {
     const copy = e.target.closest('[data-copy]');
     if (copy) {
@@ -651,6 +711,21 @@
     if (fav) {
       toggleFav(fav.dataset.fav);
       fav.classList.toggle('on', isFav(fav.dataset.fav));
+      return;
+    }
+    const compBtn = e.target.closest('[data-complete]');
+    if (compBtn) {
+      toggleCompleted(compBtn.dataset.complete);
+      return;
+    }
+    const tocLink = e.target.closest('[data-toc-link]');
+    if (tocLink) {
+      e.preventDefault();
+      const targetEl = document.getElementById(tocLink.dataset.tocLink);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
     }
   });
 

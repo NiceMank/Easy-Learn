@@ -963,6 +963,111 @@ DEVDOCS.algo.categories.push(
         related: ['algo-definition', 'algo-pseudo-code', 'algo-variables', 'algo-conditions', 'algo-boucles', 'py-demarrage', 'js-variables']
       }
     ]
+  },
+
+  /* ======================================================
+     9. ALGORITHMES CLASSIQUES & RÉCURSIVITÉ
+     ====================================================== */
+  {
+    id: 'algorithmes-avances',
+    name: 'Algorithmes classiques & Récursivité',
+    icon: 'account_tree',
+    fiches: [
+      {
+        id: 'algo-recherche',
+        title: 'Recherche linéaire vs Recherche dichotomique',
+        icon: 'search',
+        level: 'Avancé',
+        tagline: 'Trouver une aiguille dans une botte de foin : la méthode lente (une par une) vs la méthode éclair (couper en deux).',
+        intro: 'Imaginons que tu cherches le mot « Zémidjan » dans un dictionnaire de 100 000 mots. Deux choix s\'offrent à toi : tourner les pages une par une depuis la lettre A (recherche linéaire), ou ouvrir le dictionnaire au milieu, voir qu\'on est à la lettre M, et éliminer immédiatement les 50 000 premières pages d\'un seul coup (recherche dichotomique). La différence ? Dans le premier cas, tu peux faire 100 000 vérifications. Dans le second, 17 vérifications suffisent ! Cette fiche décortique ces deux algorithmes de recherche fondamentaux.',
+        blocks: [
+          { t: 'h3', h: 'La recherche linéaire : l\'approche naïve' },
+          { t: 'p', h: 'La **recherche linéaire** (ou séquentielle) consiste à parcourir le tableau élément par élément, du début à la fin, jusqu\'à trouver l\'élément recherché ou atteindre la fin du tableau. C\'est la seule méthode possible si le tableau N\'EST PAS trié.' },
+          { t: 'syntax', title: 'Recherche linéaire en pseudo-code', lang: 'text', code:
+'FONCTION chercher_lineaire(tableau, valeur_cible)\n  POUR i DE 1 À TAILLE(tableau) FAIRE\n    SI tableau[i] = valeur_cible ALORS\n      RETOURNER i  // trouvé à l\'index i !\n    FIN SI\n  FIN POUR\n  RETOURNER -1  // non trouvé\nFIN FONCTION', legend: [
+            ['POUR i DE 1 À TAILLE', 'on examine les cases une à une, dans l\'ordre, du premier au dernier élément'],
+            ['RETOURNER i', 'dès que l\'élément est trouvé, la fonction s\'arrête immédiatement et renvoie l\'index'],
+            ['RETOURNER -1', 'si la boucle se termine sans rien trouver, la convention universelle est de renvoyer -1']
+          ]},
+          { t: 'h3', h: 'La recherche dichotomique (Binary Search) : l\'approche par division' },
+          { t: 'p', h: 'La **recherche dichotomique** exige une condition préalable stricte : **LE TABLEAU DOIT ÊTRE TRIÉ**. À chaque étape, on regarde l\'élément du milieu. S\'il est plus grand que notre cible, on élimine toute la moitié droite. S\'il est plus petit, on élimine toute la moitié gauche. On divise l\'espace de recherche par 2 à chaque coup.' },
+          { t: 'syntax', title: 'Recherche dichotomique en pseudo-code', lang: 'text', code:
+'FONCTION chercher_dichotomique(tableau, cible)\n  debut ← 1\n  fin ← TAILLE(tableau)\n  TANT QUE debut ≤ fin FAIRE\n    milieu ← (debut + fin) DIV 2\n    SI tableau[milieu] = cible ALORS\n      RETOURNER milieu\n    SINON SI tableau[milieu] < cible ALORS\n      debut ← milieu + 1  // chercher dans la moitié droite\n    SINON\n      fin ← milieu - 1    // chercher dans la moitié gauche\n    FIN SI\n  FIN TANT QUE\n  RETOURNER -1\nFIN FONCTION', legend: [
+            ['debut ≤ fin', 'tant qu\'il reste des cases non éliminées à examiner entre debut et fin'],
+            ['(debut + fin) DIV 2', 'calcule l\'index de la case située exactement au milieu du segment actuel'],
+            ['debut ← milieu + 1', 'si la valeur au milieu est trop petite, la cible est forcément plus loin à droite'],
+            ['fin ← milieu - 1', 'si la valeur au milieu est trop grande, la cible est forcément plus haut à gauche']
+          ]},
+          { t: 'h3', h: 'Comparaison des performances : O(N) vs O(log N)' },
+          { t: 'table', head: ['Taille du tableau (N)', 'Recherche linéaire (pire cas)', 'Recherche dichotomique (pire cas)'], rows: [
+            ['10 éléments', '10 comparaisons', '4 comparaisons'],
+            ['1 000 éléments', '1 000 comparaisons', '10 comparaisons'],
+            ['1 000 000 éléments', '1 000 000 comparaisons', '20 comparaisons'],
+            ['1 000 000 000 éléments', '1 milliard de comparaisons', '30 comparaisons']
+          ]},
+          { t: 'p', h: 'La différence est vertigineuse : pour un milliard d\'éléments, la recherche linéaire peut prendre plusieurs secondes, alors que la recherche dichotomique répond en 30 étapes invisibles à l\'œil humain.' },
+          { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+          { t: 'ul', items: [
+            '**« Je peux utiliser la recherche dichotomique sur n\'importe quel tableau. »** ABSOLUMENT FAUX. Si le tableau n\'est pas trié, la dichotomie éliminera la mauvaise moitié et conclura à tort que l\'élément n\'existe pas.',
+            '**« Il vaut toujours mieux trier puis faire une dichotomie. »** Pas toujours ! Trier un tableau coûte du temps. Si tu ne cherches qu\'UNE seule fois dans un tableau non trié, une simple recherche linéaire est plus rapide que de trier d\'abord.'
+          ] }
+        ],
+        errors: [
+          {
+            title: 'Lancer une recherche dichotomique sur un tableau non trié',
+            bad: 'tableau ← [15, 3, 42, 8, 1]\nindex ← chercher_dichotomique(tableau, 8)\n// Le milieu sera 42, 8 < 42 donc on cherche à gauche [15, 3]…\n// Résultat : -1 (non trouvé alors que 8 est bien présent !)',
+            good: '// Solution 1 : trier le tableau D\'ABORD\nTRIER(tableau)  // devient [1, 3, 8, 15, 42]\nindex ← chercher_dichotomique(tableau, 8)  // trouve 8 à l\'index 3 !\n\n// Solution 2 : utiliser la recherche linéaire si le tableau reste désordonné',
+            why: 'La dichotomie repose à 100 % sur l\'hypothèse que tous les éléments à droite du milieu sont plus grands et tous ceux à gauche sont plus petits. Sans tri, cette hypothèse est fausse.'
+          }
+        ],
+        related: ['algo-tableaux', 'algo-boucles', 'algo-fonctions']
+      },
+      {
+        id: 'algo-recursion',
+        title: 'La récursivité & la pile d\'appels',
+        icon: 'layers',
+        level: 'Avancé',
+        tagline: 'Une fonction qui s\'appelle elle-même : comprendre le cas de base et la pile d\'appels (Call Stack).',
+        intro: 'Imagine des poupées russes (les Matryoshka). Tu ouvres une grande poupée : dedans se trouve une poupée identique mais plus petite. Tu l\'ouvres : une autre encore plus petite. Tu continues jusqu\'à atteindre la TOUTE PETITE poupée pleine qu\'on ne peut pas ouvrir. Tu as enfin fini d\'ouvrir, tu peux tout refermer. En programmation, la **récursivité** est cette idée exacte : une fonction qui s\'appelle **elle-même** sur un problème plus petit, jusqu\'à atteindre un cas de départ simple qu\'on appelle le **cas de base**.',
+        blocks: [
+          { t: 'h3', h: 'Les deux règles d\'or de la récursivité' },
+          { t: 'p', h: 'Toute fonction récursive DOIT comporter deux parties obligatoires :' },
+          { t: 'ul', items: [
+            '**1. Le Cas de Base (Condition d\'arrêt)** : C\'est la condition qui ARRÊTE les appels récursifs et renvoie une valeur directe sans rappel. Sans lui, la fonction s\'appelle à l\'infini jusqu\'au plantage (`Stack Overflow`).',
+            '**2. Le Cas Récursif** : C\'est l\'étape où la fonction s\'appelle elle-même, mais avec un argument **RÉDUIT** qui la rapproche inexorablement du cas de base.'
+          ] },
+          { t: 'syntax', title: 'Calcul de la factorielle (N!) en récursif', lang: 'text', code:
+'FONCTION factorielle(n)\n  SI n ≤ 1 ALORS\n    RETOURNER 1         // CAS DE BASE\n  SINON\n    RETOURNER n * factorielle(n - 1)  // CAS RÉCURSIF\n  FIN SI\nFIN FONCTION', legend: [
+            ['SI n ≤ 1 RETOURNER 1', 'le CAS DE BASE : si n vaut 1 (ou 0), la réponse est 1. La chaîne d\'appels s\'arrête ici !'],
+            ['n * factorielle(n - 1)', 'le CAS RÉCURSIF : 5! = 5 × 4!. La fonction s\'appelle elle-même avec (n - 1), un problème plus petit']
+          ]},
+          { t: 'h3', h: 'Que se passe-t-il en mémoire ? La pile d\'appels (Call Stack)' },
+          { t: 'p', h: 'Quand tu appelles `factorielle(3)`, l\'ordinateur ne calcule pas le résultat instantanément. Il empile chaque appel en mémoire dans ce qu\'on appelle la **pile d\'appels** (Call Stack) :' },
+          { t: 'table', head: ['Étape', 'Action sur la pile d\'appels', 'État de la pile (de bas en haut)'], rows: [
+            ['1', 'Appel initial `factorielle(3)`', '`factorielle(3)` (en attente de 3 * factorielle(2))'],
+            ['2', 'Appel de `factorielle(2)`', '`factorielle(3)` → `factorielle(2)` (en attente de 2 * factorielle(1))'],
+            ['3', 'Appel de `factorielle(1)`', '`factorielle(1)` atteint le cas de base'],
+            ['4', '`factorielle(1)` renvoie 1', '`factorielle(1)` est dépilée → renvoie 1'],
+            ['5', '`factorielle(2)` calcule 2 * 1 = 2', '`factorielle(2)` est dépilée → renvoie 2'],
+            ['6', '`factorielle(3)` calcule 3 * 2 = 6', '`factorielle(3)` est dépilée → renvoie 6. FIN !']
+          ]},
+          { t: 'h3', h: 'Ce que les débutants comprennent mal' },
+          { t: 'ul', items: [
+            '**« La récursivité est toujours meilleure qu\'une boucle. »** Faux. Chaque appel récursif consomme de la mémoire dans la pile d\'appels. Une boucle `POUR` ou `TANT QUE` est souvent plus rapide et consomme 0 mémoire supplémentaire.',
+            '**« Que signifie Stack Overflow ? »** Si tu oublies le cas de base ou que ta condition d\'arrêt n\'est jamais atteinte, la pile d\'appels se remplit indéfiniment jusqu\'à saturer la mémoire allouée. C\'est l\'origine du célèbre nom du site d\'entraide !'
+          ] }
+        ],
+        errors: [
+          {
+            title: 'Oublier le cas de base (Stack Overflow garanti)',
+            bad: 'FONCTION comptera_rebours(n)\n  AFFICHER n\n  RETOURNER comptera_rebours(n - 1)  // Pas de cas de base !\nFIN FONCTION',
+            good: 'FONCTION comptera_rebours(n)\n  SI n ≤ 0 ALORS\n    AFFICHER "Décollage !"\n    RETOURNER  // Cas de base !\n  FIN SI\n  AFFICHER n\n  RETOURNER comptera_rebours(n - 1)\nFIN FONCTION',
+            why: 'Sans cas de base, la fonction s\'appellera pour n=0, n=-1, n=-2... indéfiniment jusqu\'à épuisement de la mémoire de la pile d\'appels (Stack Overflow).'
+          }
+        ],
+        related: ['algo-fonctions', 'algo-boucles']
+      }
+    ]
   }
 );
 /*__FIN_ALGO__*/
