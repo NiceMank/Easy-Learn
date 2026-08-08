@@ -34,6 +34,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Question légitime : Bootstrap ou une simple feuille de style se « posent » avec une balise `link`, alors pourquoi Tailwind exige-t-il une étape de build ? Parce que Contrairement à une bibliothèque CSS, Tailwind ne LIVRE aucun style prêt à l\'emploi : il FABRIQUE le tien. Ses 25 000 utilitaires possibles ne peuvent pas tous être livrés — le fichier ferait des mégaoctets. La solution de l\'équipe : un petit moteur qui lit ton HTML et n\'écrit dans le CSS final que les classes que tu as réellement tapées. L\'installation, c\'est le branchement de ce moteur — rien de plus, mais rien de moins.' },
             { t: 'p', h: 'Imagine un imprimeur de Dantokpa qui tiendrait un stock de toutes les affiches imaginables : impossible, il faudrait un hangar. Il travaille « à la demande » : tu montres ton texte, il imprime exactement ce qui est commandé. ici, il faut bien comprendre que ton `content` (la liste des fichiers à scanner) est le bon de commande de cet imprimeur : si un fichier n\'y figure pas, ses classes ne seront jamais « imprimées » dans le CSS — et la page paraîtra « cassée » alors que le code est parfait.' },
             { t: 'h3', h: 'La philosophie utility-first, en deux mots' },
+            { t: 'syntax', title: 'Lire une ligne de classes Tailwind', lang: 'html', code:
+'<button class="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">\n  Commander\n</button>', legend: [
+              ['class="px-4 py-2 …"', 'plusieurs MICRO-CLASSES dans un seul attribut : chacune pose UNE propriété CSS — rien d\'autre'],
+              ['px-4 py-2', 'padding horizontal 1rem, vertical 0.5rem : la même échelle de 4px en 4px partout — jamais de « 13px pour celui-ci »'],
+              ['bg-sky-600 text-white', 'fond et texte : la couleur est NUMÉROTÉE dans le thème (50 très clair → 950 presque noir)'],
+              ['rounded-lg', 'l\'arrondi vient du THÈME, pas de ton humeur du jour : la cohérence devient mécanique'],
+              ['hover:bg-sky-700', 'le VARIANT : « au survol, applique ceci » — l\'état se lit dans le HTML, sans une ligne de CSS à ouvrir']
+            ]},
             { t: 'p', h: 'Le CSS traditionnel dit : « je nomme une boîte `.carte-produit`, puis je décris son style dans un fichier séparé ». Tailwind inverse la démarche : tu écris directement `class="flex items-center gap-4 rounded-xl bg-white p-4 shadow"` sur l\'élément, et chaque classe fait UNE chose (`flex` = `display: flex`, `p-4` = `padding: 1rem`…). Trois gains immédiats : tu ne baptises plus rien (adieu les `.wrapper-inner-bis`), ton CSS ne gonfle plus à chaque page, et le design reste **cohérent par construction** puisque tout puise dans la même échelle (espacements 0-96, couleurs 50-950).' },
             { t: 'p', h: 'Beaucoup de débutants rétorquent : « mais le HTML devient illisible ! » En réalité, la lisibilité se JOUE ailleurs : on découpe la page en composants (un fichier par carte, par bouton…), et la « duplication des classes » disparaît d\'elle-même. La fiche Bonnes pratiques du module y consacre toute sa première section — retiens pour l\'instant que ce débat est tranché par l\'outillage des composants, pas par un retour au CSS à grand nommage.' },
             { t: 'table', head: ['Approche', 'Principe', 'Quand ça coince'], rows: [
@@ -107,6 +115,13 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Sans thème, chaque développeur (ou chacune de tes propres sessions, trois mois apart) invente ses valeurs : `color: #f59e0b` ici, `color: #f59d0a` là — et au bout de six mois, le site de la Boutique Awa contient 37 jaunes presque identiques mais pas tout à fait. Un thème, c\'est le **rayon d\'épices de l\'échoppe** : ce qui est en rayon est utilisable partout, ce qui n\'y est pas n\'existe pas. La cohérence n\'est plus une discipline, c\'est la structure elle-même.' },
             { t: 'p', h: 'La mécanique est simple : `tailwind.config.js` contient un objet `theme` ; chaque valeur que tu y déclares devient automatiquement des familles de classes. Déclare une couleur `awa` et tu obtiens d\'un coup `bg-awa-500`, `text-awa-700`, `border-awa-200`, `ring-awa-300`, `from-awa-400`… Une seule ligne de configuration, des dizaines d\'utilitaires cohérents — c\'est le même mécanisme de génération vu dans la fiche Installation, appliqué à TES valeurs.' },
             { t: 'h3', h: 'extend : le seul endroit où tu toucheras vraiment' },
+            { t: 'syntax', title: 'extend : déclarer sa couleur une seule fois', lang: 'js', code:
+'// tailwind.config.js\nexport default {\n  theme: {\n    extend: {\n      colors: { marque: "#ee3820" }\n    }\n  }\n}', legend: [
+              ['theme.extend', 'le réglage SÛR : AJOUTE tes valeurs sans écraser le thème par défaut — tu gardes sky-600 ET tu gagnes marque'],
+              ['colors: { marque: "#ee3820" }', 'la couleur déclarée UNE fois devient utilisable PARTOUT : bg-marque, text-marque, border-marque, ring-marque…'],
+              ['le bénéfice', 'chaque utilitaire de couleur apprend ta teinte AUTOMATIQUEMENT : le design system en trois lignes'],
+              ['w-[137px]', 'au passage : les crochets = valeur ARBITRAIRE hors thème — dépanne au débogage, à ne pas laisser vivre en production']
+            ]},
             { t: 'code', lang: 'js', label: 'tailwind.config.js — la palette de la Boutique Awa', code:
 'module.exports = {\n  content: ["./src/**/*.{html,js}", "./index.html"],\n  theme: {\n    extend: {\n      colors: {\n        // la marque : ocre marché + vert fraîcheur\n        awa: {\n          50:  \'#fdf8ed\',\n          500: \'#d97706\',   // ambre profond — l\'accent principal\n          700: \'#b45309\'\n        },\n        momo: \'#ffcb05\',     // jaune Mobile Money (boutons de paiement)\n        moov: \'#0066b3\'\n      },\n      fontFamily: {\n        sans: [\'Inter\', \'system-ui\', \'sans-serif\']\n      },\n      borderRadius: {\n        carte: \'1.25rem\'      // l\'arrondi signature du catalogue\n      }\n    }\n  }\n}' },
             { t: 'p', h: 'Relis ce fichier comme un générateur : `colors.awa.500` débloque `bg-awa-500`, `text-awa-500`, `border-awa-500`, `ring-awa-500`, `divide-awa-500`, `from-awa-500`, `placeholder-awa-500`… `borderRadius.carte` donne `rounded-carte`. Une déclaration, une constellation de classes — et toutes portent le même chiffre `500`, donc s\'accordent entre elles. ici, tu touches au principe fondateur : **le thème EST le design system**.' },
@@ -178,6 +193,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Une interface réussie est d\'abord des boîtes BIEN PLACÉES ; les couleurs et ombres viennent après. Sans structure claire, on finit par bricoler : marges négatives pour « rattraper » un titre, `z-index: 9999` en désespoir de cause, badge qui s\'affiche derrière l\'image au rez-de-chaussée du téléphone. Les utilitaires de cette fiche sont les fondations invisibles — personne ne les remarque quand elles sont bonnes, tout le monde voit leur absence.' },
             { t: 'p', h: 'L\'intuition de départ : le navigateur pose chaque boîte SOUS la précédente, comme les colis s\'empilent sur l\'étal du marché le samedi matin — c\'est le **flux**. `display` change la façon d\'empiler (en ligne, en bloc). `position`, elle, autorise à SORTIR un colis de la pile pour le poser ailleurs : sur le côté de l\'étal (`absolute`), collé au comptoir (`fixed`), ou normal jusqu\'à un certain point puis accroché au plafond (`sticky`). Toute la mise en page se pense avec ces deux mouvements.' },
             { t: 'h3', h: 'Display : les utilitaires qui gouvernent tout' },
+            { t: 'syntax', title: 'Display : la fiche de correspondance', lang: 'html', code:
+'<div class="flex">…</div>\n<div class="grid grid-cols-3 gap-4">…</div>\n<span class="block md:inline-block">…</span>', legend: [
+              ['flex', '= display:flex sur le parent : les utilitaires justify-*/items-* se branchent ensuite dessus'],
+              ['grid grid-cols-3', 'la grille en une ligne : trois colonnes égales, de grid-cols-1 à grid-cols-12'],
+              ['gap-4', 'l\'espace ENTRE enfants, sans marges négatives à compenser : 1rem, échelle habituelle'],
+              ['block md:inline-block', 'CHANGER de nature selon l\'écran : le display est un utilitaire comme un autre, soumis aux variants'],
+              ['hidden md:block', 'le combo classique : invisible sur mobile, visible à partir de md — menus et sidebars en connaissent le refrain']
+            ]},
             { t: 'table', head: ['Classe', 'CSS équivalent', 'Effet concret'], rows: [
               ['`block`', '`display: block`', 'Prend toute la ligne, empile verticalement (titre, section)'],
               ['`inline-block`', '`display: inline-block`', 'Reste dans la ligne MAIS accepte largeur/hauteur (badge, bouton)'],
@@ -241,6 +264,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Regarde un vieux projet CSS : `margin: 13px` ici, `17px` là, `15px` ailleurs — chaque valeur fut « sentie » à l\'instant où elle fut tapée. Résultat : des espacements presque pareils mais pas égaux, une vibration visuelle diffuse que l\'utilisateur ne sait pas nommer mais qu\'il PERÇOIT (« ce site fait brouillon »). Une échelle de note en note, comme la gamme en musique : tu ne choisis plus une fréquence parmi l\'infini, tu choisis une NOTE. Toutes les boîtes de la page jouent alors dans la même tonalité — c\'est cela, la « cohérence » qu\'on admire sur les sites premium.' },
             { t: 'p', h: 'La conversion à **mémoriser par cœur** (elle revient des milliers de fois) : `1 unité = 4 px`. Donc `p-1` = 4 px, `p-2` = 8 px, `p-3` = 12 px, `p-4` = 16 px, `p-6` = 24 px, `p-8` = 32 px, `p-12` = 48 px, `p-16` = 64 px, `p-24` = 96 px. Entre deux valeurs entières, `p-2.5` = 10 px, `p-3.5` = 14 px. Et `p-0.5` = 2 px, utile pour les micro-ajustements. Le reste — `px-4` (gauche+droite), `py-6` (haut+bas), `mt-8`, `me-2` — se déduit de la même table.' },
             { t: 'h3', h: 'L\'échelle d\'espacement, une bonne fois pour toutes' },
+            { t: 'syntax', title: 'L\'échelle d\'espacement, décortiquée', lang: 'text', code:
+'p-4   → padding  partout          : 16px\npx-6  → padding  horizontal       : 24px\npy-2  → padding  vertical         : 8px\nmt-8  → margin   haut             : 32px\n-mt-2 → margin   haut NÉGATIVE    : -8px', legend: [
+              ['1 = 0.25rem = 4px', 'l\'ÉCHELLE : chaque chiffre vaut 4px × n — p-4 = 16px, mt-8 = 32px. Cinq valeurs apprises (1, 2, 4, 6, 8) couvrent 90 % du quotidien'],
+              ['p / px / py / pt pr pb pl', 'la LETTRE localise : partout, horizontal, vertical, ou UN seul côté (top/right/bottom/left)'],
+              ['m- pour margin', 'même grammaire côté extérieur : m-4, mx-auto (le centreur), mt-8…'],
+              ['-mt-2', 'le signe MOINS devant pour les marges négatives : remonter un badge de 8px dans le flux'],
+              ['mx-auto', 'centrage horizontal d\'un bloc à largeur fixe : la classique margin: 0 auto, sans quitter le HTML']
+            ]},
             { t: 'table', head: ['Classe', 'Valeur', 'Classe', 'Valeur'], rows: [
               ['`p-0` / `m-0` / `w-0`', '0', '`w-6`', '1.5rem (24 px)'],
               ['`*-0.5`', '0.125rem (2 px)', '`*-8`', '2rem (32 px)'],
@@ -314,6 +345,15 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Pendant vingt ans, mettre trois boîtes côte à côte exigeait des acrobaties : `float` avec ses dégagements magiques, `inline-block` et ses espacements fantômes, des clearfix partout. Flexbox (une dimension) et Grid (deux dimensions) ont réglé ce problème structurellement dans les navigateurs : aligner, répartir et centrer deviennent des PROPRIÉTÉS du conteneur. Tailwind n\'invente rien ici — il donne une grammaire d\'une ligne à deux modèles qui valent mille lignes de bricolage.' },
             { t: 'p', h: 'L\'intuition directrice, à graver : **flexbox, c\'est un BANC** — des invités alignés sur UNE rangée (ou une colonne), qu\'on espace, serre ou répartit. **Grid, ce sont les TABLES d\'un restaurant** — une salle entière quadrillée, chaque objet a sa case, certains plats occupent deux couverts (`col-span-2`). Choix de vie : si ton problème est « une liste d\'éléments dans une direction », c\'est flex ; si c\'est « une surface de cases régulières dans deux directions », c\'est grid.' },
             { t: 'h3', h: 'Flexbox : la table de correspondance' },
+            { t: 'syntax', title: 'Flex et grid en classes, mot à mot', lang: 'html', code:
+'<div class="flex items-center justify-between gap-3">\n  <span>Logo</span><nav class="hidden md:flex gap-6">…</nav>\n</div>\n<div class="grid grid-cols-2 md:grid-cols-4 gap-4">…</div>', legend: [
+              ['flex', 'display flex sur le parent : rangée par défaut (flex-col pour empiler)'],
+              ['items-center', 'align-items : alignement sur l\'AXE CROISÉ — tout centré verticalement ici'],
+              ['justify-between', 'justify-content : répartition sur l\'AXE principal — space-between pousse les extrémités aux bords'],
+              ['gap-3 / gap-4', 'la gouttière entre enfants : adieu les marges du dernier élément'],
+              ['grid-cols-2 md:grid-cols-4', 'deux colonnes sur mobile, quatre à partir de md : le responsive direct dans les classes (fiche dédiée)'],
+              ['tout CSS a sa classe', 'flex-wrap, grow, shrink-0, col-span-2, place-items-center… : chaque propriété des fiches CSS Flexbox et Grid existe ici, mot à mot']
+            ]},
             { t: 'table', head: ['CSS (parent)', 'Utilitaire', 'Effet'], rows: [
               ['`display: flex`', '`flex`', 'Le conteneur aligne ses enfants sur l\'axe principal'],
               ['`flex-direction: column / row`', '`flex-col` / `flex-row`', 'Inverse l\'axe principal (vertical / horizontal)'],
@@ -400,6 +440,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Sans système, les tailles de texte se multiplient comme les espacements : `font-size: 19px` pour ce titre, `22px` pour celui-là, `13px` pour cette légende. À peine perceptibles prises séparément, ces micro-différences composent une page « flottante » où rien ne semble tout à fait aligné. L\'échelle fixe des notes : titre principal `text-3xl`, sous-titre `text-xl`, corps `text-base`, légende `text-sm`. Quatre notes pour toute une application — et chaque ajout d\'une cinquième devient une décision réfléchie, pas un accident.' },
             { t: 'p', h: 'Le détail qui change tout sous le capot : chaque classe `text-*` embarque SON interligne couplé. `text-lg` génère `font-size: 1.125rem; line-height: 1.75rem` — petit texte = interligne généreux (lisibilité), grand titre = interligne resserré (élégance). C\'est pourquoi un titre Tailwind sort bien tassé « naturellement » alors qu\'en CSS manuel, on oublie le `line-height` une fois sur deux et le titre est affreusement aéré.' },
             { t: 'h3', h: 'Tailles, graisses, alignements' },
+            { t: 'syntax', title: 'La typographie en quatre volants', lang: 'html', code:
+'<h2 class="text-2xl font-bold tracking-tight text-gray-900">Le gari premium</h2>\n<p class="text-base text-gray-600 leading-relaxed">…</p>', legend: [
+              ['text-2xl', 'la TAILLE nommée : text-sm → text-9xl, valeurs du thème — jamais de pixels au jugé'],
+              ['font-bold', 'la GRAISSE : font-light … font-black en une classe'],
+              ['tracking-tight', 'l\'INTER-LETTRE : serré sur les titres (tracking-tight), aéré sur les petites capitales (tracking-widest)'],
+              ['leading-relaxed', 'l\'INTERLIGNE : détendu pour le confort de lecture des paragraphes — leading-none … leading-loose'],
+              ['text-gray-600', 'la teinte SECONDAIRE de l\'échelle : la hiérarchie visuelle sans inventer une couleur — gray-900 titre, gray-600 texte, gray-400 légende']
+            ]},
             { t: 'table', head: ['Famille', 'Classes', 'Rôle'], rows: [
               ['Taille', '`text-xs` → `text-9xl`', 'Échelle fixe, avec line-height couplé'],
               ['Graisse', '`font-thin` → `font-black` (100-900)', 'Hiérarchie : `font-medium` souvent suffisant'],
@@ -477,6 +525,13 @@ DEVDOCS.tailwind = {
             { t: 'code', lang: 'html', label: 'La carte produit aux bons numéros (Boutique Awa)', code:
 '<article class="rounded-2xl border border-slate-200 bg-white p-4">\n  <!-- bordure 200, surface blanche : le neutre fait la structure -->\n  <span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs\n               font-bold text-amber-800">Promo marché</span>   <!-- badge 100/800 -->\n  <h3 class="mt-2 font-semibold text-slate-900">Gari fin — 5 kg</h3> <!-- texte 900 -->\n  <p class="text-sm text-slate-500">Livré en 2 h à Cotonou</p>      <!-- secondaire 500 -->\n  <button class="mt-3 w-full rounded-xl bg-awa-600 py-2.5 font-semibold text-white\n                 hover:bg-awa-700">\n    Ajouter au panier\n  </button>  <!-- accent 600, hover 700 : un cran de profondeur, jamais de noir -->\n</article>' },
             { t: 'h3', h: 'L\'opacité à la volée : la notation slash' },
+            { t: 'syntax', title: 'Le slash : l\'opacité réglée à la volée', lang: 'text', code:
+'bg-sky-600/80      → fond sky-600 à 80 %\ntext-black/50      → texte noir à 50 %\nring-4 ring-sky-600/40  → anneau translucide', legend: [
+              ['bg-sky-600/80', 'le SLASH règle l\'OPACITÉ à la volée : 80 % opaque, sans déclarer aucune nouvelle couleur'],
+              ['/50, /10 …', 'les paliers usuels de 5 en 5 — et toute valeur précise via les crochets : /[0.35]'],
+              ['ring-4 ring-sky-600/40', 'l\'ANNEAU : halo décoratif SANS toucher la mise en page (box-shadow en coulisses) — cartes et focus adorent'],
+              ['le système complet', 'teinte (sky) + intensité (600) + opacité (/80) : trois volants indépendants, une couleur unique à déclarer']
+            ]},
             { t: 'p', h: 'Ajoute `/50` à n\'importe quelle couleur : `bg-red-500/50`, `text-slate-900/70`, `border-black/10`. Le CANAL ALPHA de la couleur — et de la couleur SEULE — passe au pourcentage indiqué. Sous le capot : `bg-slate-900/60` génère `background-color: rgb(15 23 42 / 0.6)`. Subtilité capitale : c\'est transparent SANS toucher au contenu. Le texte écrit DANS le bandeau reste pleinement opaque — exactement ce qu\'un `opacity-60` sur l\'élément rendrait impossible (il rend TOUT translucide, texte inclus — voir l\'erreur en bas de fiche).' },
             { t: 'table', head: ['Notation', 'Alpha', 'Usage typique'], rows: [
               ['`/5` → `/10`', 'quasi imperceptible', 'teinter une surface blanche avec discrétion'],
@@ -548,6 +603,14 @@ DEVDOCS.tailwind = {
             { t: 'code', lang: 'html', label: 'Le registre de la tontine, filets parfaits', code:
 '<ul class="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">\n  <li class="flex items-center justify-between p-3">\n    <span>Awa Mensah</span>\n    <span class="font-semibold text-emerald-600">+ 25 000 F · MoMo</span>\n  </li>\n  <li class="flex items-center justify-between p-3">\n    <span>Koffi A.</span>\n    <span class="font-semibold text-emerald-600">+ 25 000 F · Moov</span>\n  </li>\n  <li class="flex items-center justify-between p-3">\n    <span>Sena D.</span>\n    <span class="font-semibold text-amber-600">en attente</span>\n  </li>\n</ul>\n<!-- trois items, DEUX filets — et jamais à retoucher quand\n     la liste grandit : le sélecteur gère tout seul. -->' },
             { t: 'h3', h: 'Ombres & anneaux' },
+            { t: 'syntax', title: 'La finition d\'une carte, couche par couche', lang: 'html', code:
+'<div class="rounded-2xl border border-gray-200 shadow-sm p-6">…</div>\n<button class="rounded-lg ring-2 ring-offset-2 ring-sky-600">…</button>', legend: [
+              ['rounded-2xl', 'l\'arrondi : rounded-sm … rounded-2xl … rounded-full (le cercle parfait) — la finition en une classe'],
+              ['border border-gray-200', 'la bordure EXISTE (border : 1px) PUIS se colore : deux décisions, deux classes'],
+              ['shadow-sm', 'l\'ombre DISCRÈTE : shadow-sm/md/lg/xl — l\'élévation subtile qui décolle la carte du fond'],
+              ['ring-2 ring-offset-2', 'l\'anneau DÉTACHÉ du cadre avec un espace intermédiaire : la signature « focus » des boutons soignés'],
+              ['p-6', 'et l\'air intérieur qui va avec : la finition n\'est jamais qu\'extérieure — le contenu respire aussi']
+            ]},
             { t: 'table', head: ['Classe', 'Usage recommandé'], rows: [
               ['`shadow-sm`', 'Relief à peine perceptible — champs, petites cartes au repos'],
               ['`shadow` / `shadow-md`', 'Cartes standard, menus déroulants'],
@@ -620,6 +683,14 @@ DEVDOCS.tailwind = {
             ] },
             { t: 'p', h: 'Deux pièges de lecture classiques, d\'entrée. Premier : `sm:` NE signifie PAS « pour mobile » — le mobile est déjà couvert par les classes nues ; `sm:` ne sert qu\'à différencier « très petit » (< 640) de « petit » (≥ 640), un ajustement relativement rare. Second : les paliers s\'ADDITIONNENT par le bas — `md:` couvre la tablette ET tout ce qui est plus grand (sauf si `lg:` vient préciser). On parle d\'héritage par palier : chaque seuil repart de ce que le précédent a posé.' },
             { t: 'h3', h: 'La lecture qui change tout : « à partir de »' },
+            { t: 'syntax', title: 'mobile-first en une ligne de classes', lang: 'html', code:
+'<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">…</div>', legend: [
+              ['grid-cols-1 (sans préfixe)', 'le mobile D\'ABORD : ce que voient tes clients par défaut — tout le reste est amélioration progressive'],
+              ['md:grid-cols-2', '« À PARTIR DE md (768px) : deux colonnes » — min-width, toujours : chaque variante AJOUTE pour les écrans plus grands'],
+              ['lg:grid-cols-4', 'puis quatre à partir de lg (1024px) : les variantes s\'empilent du petit au grand, jamais l\'inverse'],
+              ['sm md lg xl 2xl', 'les CINQ paliers à connaître : 640, 768, 1024, 1280, 1536 px'],
+              ['la leçon', ' une classe sans préfixe = la règle de base ; préfixe:classe = la surcharge « à partir de » — toute la lecture Tailwind tient là']
+            ]},
             { t: 'p', h: 'Prenons la grille du catalogue : `grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-6`. Traduction intégrale — de 0 à 639 px : deux colonnes, gouttière 12 px (le téléphone du marchand) ; À PARTIR de 640 : inchangé (aucun `sm:`) ; À PARTIR de 768 : trois colonnes (tablette au comptoir) ; À PARTIR de 1024 : quatre colonnes, gouttière 24 px (laptop du fond de boutique). Note que `gap-3` survit sur tablette : seul `lg:` le remplace. Tu n\'as jamais écrit le mot « mobile » — c\'est l\'état par défaut.' },
             { t: 'code', lang: 'html', label: 'La page catalogue en trois phrases de Tailwind', code:
 '<!-- header : empilé sur mobile, horizontal dès la tablette -->\n<header class="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">\n  <h1 class="text-xl font-bold md:text-2xl">Boutique Awa</h1>\n  <nav class="flex gap-4 text-sm md:text-base">Catalogue · Livraison · Tontine</nav>\n</header>\n\n<!-- grille produits : 2 → 3 → 4 colonnes selon l\'écran -->\n<main class="grid grid-cols-2 gap-3 px-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">\n  <article class="rounded-xl bg-white p-3 shadow-sm md:p-4">Gari — 3 500 F</article>\n  <article class="rounded-xl bg-white p-3 shadow-sm md:p-4">Huile — 2 800 F</article>\n  <!-- … -->\n</main>\n\n<!-- la barre d\'action mobile n\'existe que sous md -->\n<nav class="fixed inset-x-0 bottom-0 flex justify-around border-t bg-white p-2 md:hidden">\n  Accueil · Panier · Compte\n</nav>\n<!-- et le menu latéral n\'existe qu\'À PARTIR de md -->\n<aside class="hidden w-64 border-r p-4 md:block">Filtres</aside>' },
@@ -692,6 +763,14 @@ DEVDOCS.tailwind = {
 '<button class="rounded-xl bg-amber-400 px-6 py-3 font-bold text-slate-900 shadow-md\n               transition\n               hover:bg-amber-500\n               focus:outline-none focus:ring-4 focus:ring-amber-300\n               active:scale-95\n               disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-amber-400">\n  Payer avec MTN MoMo\n</button>\n<!-- lecture :\n     hover  → la couleur monte d\'une nuance (400 → 500)\n     focus  → ring-4 (visible au clavier) ; on retire l\'outline natif\n     active → le bouton s\'enfonce de 5 % — sensation d\'appui réel\n     disabled → à la fois pâle, curseur interdit ET « plus de hover »\n     transition (fiche Animations) adoucit tous ces changements. -->' },
             { t: 'callout', kind: 'tip', h: 'Réflexe d\'accessibilité : `focus:` n\'est pas du style décoratif — c\'est le seul repère d\'un utilisateur au CLAVIER (tabulation). Ne supprime jamais l\'outline sans le remplacer par un `ring` visible. `focus-visible:` affine encore : l\'anneau n\'apparaît qu\'au clavier, pas au simple clic — le meilleur des deux mondes.' },
             { t: 'h3', h: 'group-hover : réagir au survol du PARENT' },
+            { t: 'syntax', title: 'group-hover : l\'état du parent pilote l\'enfant', lang: 'html', code:
+'<div class="group rounded-xl p-4 hover:bg-gray-50">\n  <h3 class="text-gray-900 group-hover:text-sky-600">Gari</h3>\n</div>', legend: [
+              ['class="group"', 'le MARQUEUR posé sur le parent : un nom de rendez-vous pour ses enfants — purement nominal, sans aucun effet visuel'],
+              ['hover:bg-gray-50', 'l\'état du CONTENEUR au survol : fond de carte qui s\'allume'],
+              ['group-hover:text-sky-600', '« quand MON ANCÊTRE group est survolé, MOI je change » : le titre vire au bleu quand on survole la carte'],
+              ['tout en HTML', 'zéro JavaScript : la relation parent → enfant reste du CSS, lisible au pied de l\'élément'],
+              ['peer-checked:…', 'le cousin : réagir à l\'état d\'un FRÈRE (checkbox cochée → label stylé) — des interactions complètes sans script']
+            ]},
             { t: 'p', h: 'Cas concret du quotidien : une CARTE entière est cliquable (produit → page détail), mais c\'est son TITRE qui doit virer à l\'ambre au survol, et sa petite flèche glisser à droite. En CSS pur, il fallait écrire `.carte:hover .titre { … }` dans un fichier séparé. Tailwind résout en deux marqueurs coopératifs : `group` sur l\'ancêtre commun (la carte), `group-hover:text-amber-600` sur le titre, `group-hover:translate-x-1` sur la flèche. Lecture : « quand le GROUPE est survolé, cet enfant change ».' },
             { t: 'code', lang: 'html', label: 'La carte produit, toute entière sensible', code:
 '<a href="/produit/gari" class="group block rounded-2xl bg-white p-4 shadow-sm\n                               transition hover:shadow-md">\n  <div class="overflow-hidden rounded-xl">\n    <img src="gari.jpg" class="transition group-hover:scale-105" alt="Gari">\n  </div>\n  <h3 class="mt-3 font-semibold text-slate-900 transition group-hover:text-awa-600">\n    Gari fin — 5 kg\n  </h3>\n  <p class="flex items-center justify-between text-sm text-slate-500">\n    3 500 F\n    <span class="transition group-hover:translate-x-1 group-hover:text-awa-600">→</span>\n  </p>\n</a>\n<!-- trois éléments réagissent au MÊME survol de la carte :\n     zoom de l\'image, titre ambre, flèche qui glisse — zéro JS. -->' },
@@ -743,6 +822,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Le sombre se rate plus vite que le clair : un `bg-slate-900` jeté sur la page, un texte blanc pur qui éblouit au lieu de rassurer, des ombres qui deviennent invisibles, des couleurs d\'accent qui hurlent. Et surtout : 150 classes `dark:` écrites avec amour… qui ne s\'allument JAMAIS parce que la stratégie `media` par défaut suit le réglage système, alors que l\'équipe testait un « toggle » inexistant. D\'où cette fiche en deux temps : d\'abord écrire les deux visages de chaque surface, ensuite brancher l\'interrupteur.' },
             { t: 'p', h: 'Grammaire — identique à `hover:` et `md:` : `dark:bg-slate-900` se lit « EN SOMBRE, fond slate 900 ». Chaque élément peut donc porter DEUX classes contradictoires en apparence : `bg-white dark:bg-slate-800`. Ce n\'est pas une redondance, c\'est le contrat : toi qui écris UNE surface, tu décris ses DEUX visages en même temps. Jamais « on fera le sombre plus tard » — c\'est comme décider de l\'accessibilité à la fin : ça ne revient jamais, et ça coûte dix fois.' },
             { t: 'h3', h: 'Écrire les deux états de chaque surface' },
+            { t: 'syntax', title: 'dark: : les deux visages, côte à côte', lang: 'html', code:
+'<div class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">…</div>', legend: [
+              ['bg-white text-gray-900', 'le visage CLAIR : écrit normalement, comme toute la page'],
+              ['dark:bg-gray-900', '« quand le mode sombre est actif, applique ceci » — chaque surface décrit ses DEUX visages à côté l\'un de l\'autre'],
+              ['dark:text-gray-100', 'TOUS les contrastes se redéclarent : texte, fond, bordures (dark:border-gray-700)…'],
+              ['la stratégie d\'abord', 'darkMode: "class" (bouton manuel) ou "media" (préférence système) : le choix se fait UNE fois dans la config — ensuite tu n\'écris que des dark:'],
+              ['le réflexe', 'tester CHAQUE écran dans les deux modes dès le début : rétro-adapter tout un site est la douleur classique']
+            ]},
             { t: 'p', h: 'Le modèle mental : pense ta page en COUCHES, et inverse par les EXTRÊMITÉS de la palette. Fond de page : blanc → slate-900/950. Surface (cartes) : blanc → slate-800. Bordures : slate-200 → slate-700. Texte principal : slate-900 → slate-100. Texte secondaire : slate-500 → slate-400. L\'accent (boutons, liens) : souvent plus VIF en sombre (`awa-500` → `awa-400`) car les profondeurs absorbent la lumière. Erreur classique à éviter : « blanc pur sur noir pur » — le contraste maximal fatigue ; les extrêmes de la palette (100/900) sont plus reposants que (blanc/noir).' },
             { t: 'table', head: ['Couche', 'Clair', 'Sombre'], rows: [
               ['Fond de page', '`bg-slate-50` / `bg-white`', '`dark:bg-slate-950` / `dark:bg-slate-900`'],
@@ -808,6 +895,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Une animation utile répond une question de l\'utilisateur : « mon clic a-t-il été pris ? » (rebond actif), « où est passée la carte ? » (glissement), « quelque chose se passe-t-il ? » (spinner). Une animation GRATUITE, elle, distrait : bannières clignotantes, titres qui rebondissent à l\'infini. La règle d\'équilibre des interfaces premium : chaque mouvement a une RAISON — sinon il n\'existe pas. Et la règle de dosage : 150-300 ms par transition, rarement plus ; au-delà, l\'utilisateur ATTEND l\'interface au lieu de converser avec elle.' },
             { t: 'p', h: 'Deux mécanismes distincts à ne pas fusionner : la **transition** = « quand une propriété change (au hover, au focus…), interpole-là doucement au lieu de basculer » — elle RÉAGIT à un événement. L\'**animation** (`animate-spin`, keyframes) = « joue cette chorégraphie en boucle ou une fois, seule » — elle AGIT d\'elle-même. Tout ce que les fiches précédentes ont mis en place (`hover:`, `focus:`…) devient doux grâce à la première ; les indicateurs de chargement vivent grâce à la seconde.' },
             { t: 'h3', h: 'transition : donner la permission d\'animer' },
+            { t: 'syntax', title: 'transition + état : le micro-mouvement, décortiqué', lang: 'html', code:
+'<button class="bg-sky-600 transition-colors duration-200 hover:bg-sky-700 active:scale-95">\n  Commander\n</button>', legend: [
+              ['transition-colors', 'la PERMISSION : « les changements de couleur glissent au lieu de sauter » — posée sur l\'état NORMAL, pas sur hover'],
+              ['duration-200', 'la DURÉE en millisecondes : 150–300 au quotidien — au-delà, l\'interface semble traîner'],
+              ['hover:bg-sky-700', 'le DÉCLENCHEUR : le changement d\'état joue la transition automatiquement, rien à brancher'],
+              ['active:scale-95', 'le transform au CLIC : le bouton s\'enfonce de 5 % — la micro-réponse tactile des apps premium'],
+              ['animate-pulse / spin / bounce / ping', 'les quatre animations intégrées : chargements, notifications et skeletons sans écrire un keyframe']
+            ]},
             { t: 'p', h: 'Le malentendu n°1, à détruire tout de suite : `hover:scale-105` SEUL ne glisse pas — il TELEPORTE, instantanément. Le hover change la valeur ; rien ne dit au navigateur de prendre son temps. C\'est `transition` qui donne cette permission : posée sur l\'état NORMAL de l\'élément (pas sur `hover:` !), elle déclare « surveille mes propriétés transform, et interpole tout changement en 150 ms ». Sous le capot, `transition` = `transition-property: color, background-color, border-color…, box-shadow, transform; transition-duration: 150ms; transition-timing-function: cubic-bezier(…)` — la version tout-terrain. Les variantes `transition-colors`, `transition-transform`, `transition-opacity` ciblent précisément, avec le même confort.' },
             { t: 'table', head: ['Classe', 'Propriétés animées', 'Quand la choisir'], rows: [
               ['`transition`', 'couleurs + fond + bordures + ombre + transform + opacité', 'Le bon défaut des composants interactifs'],
@@ -881,6 +976,14 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Utility-first ne veut pas dire « plus jamais de CSS ». Trois besoins restent structurels : 1) le fichier d\'entrée doit DÉCLARER ce qu\'il contient (c\'est le rôle des `@tailwind`) ; 2) certains styles échappent aux utilitaires — un style de scrollbar, un `::selection`, une classe imposée par un plugin Wordpress ; 3) un motif répété 25 fois peut mériter un NOM plutôt qu\'un 26e copier-coller. Mais attention : chacune de ces échappées a un PROTOCOLE — et l\'ignorer est la source de tous les « pourquoi mes classes ne marchent-elles plus ? ».' },
             { t: 'p', h: 'La métaphore de la fiche : ton `input.css` est une RECETTE. `@tailwind` dit « insère ici les plats préparés par la maison » ; `@layer` dit « mon plat maison va à CET étage du dressage — pas un autre » ; `@apply` dit « sers-toi directement dans les plats existants pour composer le mien ». Trois gestes précis, dans une cascade que tu contrôles au lieu de la subir.' },
             { t: 'h3', h: '@tailwind : les trois strates' },
+            { t: 'syntax', title: '@tailwind, @layer, @apply : le CSS maison rangé', lang: 'css', code:
+'@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n@layer components {\n  .btn-primary {\n    @apply px-4 py-2 rounded-lg bg-sky-600 text-white;\n  }\n}', legend: [
+              ['@tailwind base', 'le RESET et les styles de base : le premier étage injecté'],
+              ['@tailwind components', 'l\'étage COMPOSANTS : là où vivent tes classes maison (.btn-primary)'],
+              ['@tailwind utilities', 'l\'étage UTILITAIRES, généré à la demande : il gagne en cas de duel — les retouches utilitaires dépassent toujours le composant'],
+              ['@apply …', 'ASSEMBLE un motif d\'utilitaires en classe réutilisable : UNIQUEMENT pour les motifs qui se RÉPÈTENT (boutons, badges…), pas pour fuir les classes'],
+              ['@layer components {…}', 'RANGER son CSS au bon étage : purge correcte, cascade prévisible — le CSS sans couche échappe à la discipline']
+            ]},
             { t: 'table', head: ['Directive', 'Contenu injecté', 'Taille après purge'], rows: [
               ['`@tailwind base;`', 'Le preflight : reset moderne (marges à zéro, `box-sizing`, images en `block`…)', 'Toujours présent (~2 Ko)'],
               ['`@tailwind components;`', 'Couche des COMPOSANTS : vide par défaut, remplie par tes `@layer components` et les plugins', 'Selon usage'],
@@ -945,6 +1048,13 @@ DEVDOCS.tailwind = {
             { t: 'p', h: 'Tous les sites n\'ont pas besoin d\'une typographie d\'article, ni d\'inputs soignés — embarquer ces styles dans le noyau alourdirait la purge de tous pour le bénéfice de quelques-uns. D\'où l\'architecture : un NOYAU minuscule (le générateur + l\'échelle), des PLUGINS officiels (`@tailwindcss/forms`, `@tailwindcss/typography`, `@tailwindcss/aspect-ratio`, `@tailwindcss/container-queries`) qui suivent les mêmes mécanismes (« content », purge, thème). Tu installes ce que tu utilises : rien de plus n\'embarque en production. Confiance supplémentaire : ce sont les mêmes auteurs que le framework — les utilitaires suivent l\'ÉCHELLE, pas le feeling.' },
             { t: 'p', h: 'Anatomie d\'un plugin, pour ne pas les révérer : c\'est une fonction JS qui enregistre de nouveaux utilitaires (`addUtilities`) et/ou des styles de base (`addBase`) dans ton fichier généré. Tu pourrais en écrire un toi-même (niveau avancé — courant dans les design systems d\'équipe) ; pour l\'instant, retenons le circuit : `npm install` → `require()` dans la config → les nouvelles classes deviennent scannables, purgeables et thémables comme les natives.' },
             { t: 'h3', h: 'Brancher un plugin' },
+            { t: 'syntax', title: 'Brancher un plugin officiel, ligne par ligne', lang: 'js', code:
+'// tailwind.config.js\nimport forms from "@tailwindcss/forms";\n\nexport default {\n  plugins: [forms]\n}', legend: [
+              ['import forms from "…"', 'le plugin officiel des FORMULAIRES : des styles de base sains pour input/textarea/select — après npm i -D @tailwindcss/forms'],
+              ['plugins: [forms]', 'le BRANCHEMENT : déclaré dans la config, actif partout'],
+              ['@tailwindcss/typography', 'son frère célèbre : la classe prose qui habille le HTML venu d\'un CMS ou de Markdown — plus de style d\'articles à la main'],
+              ['la règle', 'un plugin répond à UN besoin nommé : chaque ajout est du CSS servi à tous tes visiteurs — branche à la carte, pas en bouquet']
+            ]},
             { t: 'code', lang: 'bash', label: 'Installation + branchement (2 lignes)', code:
 'npm install -D @tailwindcss/forms @tailwindcss/typography\n\n// tailwind.config.js\nmodule.exports = {\n  content: ["./src/**/*.{html,js}"],\n  theme: { extend: {} },\n  plugins: [\n    require("@tailwindcss/forms"),\n    require("@tailwindcss/typography")\n  ]\n}\n// c\'est tout : les nouveaux utilitaires sont opérationnels,\n// scannés et purgés comme les natifs. Pas de CSS externe à lier.' },
             { t: 'callout', kind: 'tip', h: 'Le test de branchage express : écris `prose` sur un `article` (ou regarde un `input[type="checkbox"]` prendre du style) — si la classe produit du rendu, le plugin est actif. Si rien ne bouge, le circuit est le même que la fiche Installation : fichier scanné ? watch actif ? plugin bien dans `plugins: []` ?' },
@@ -1021,6 +1131,14 @@ DEVDOCS.tailwind = {
 '# la commande de production (--minify RETIRE les commentaires et espaces)\nnpx tailwindcss -i src/input.css -o dist/output.css --minify\n\n# vérifier le poids réel (le chiffre qui compte pour tes visiteurs) :\nwc -c dist/output.css\nls -lh dist/output.css\n# règle mentale : > 50 Ko = suspect (un safelist oublieux ?\n# un content qui matche node_modules ? à investiguer)' },
             { t: 'callout', kind: 'info', h: 'Sous le capot : pourquoi la purge peut-elle être aussi brutale en toute confiance ? Parce que Tailwind ne traque pas « l\'usage » à l\'exécution — il traque le TEXTE à l\'écriture. Toute classe présente en chaîne complète dans un fichier scanné survit ; toute autre disparaît sans appel. C\'est le mécanisme le plus simple qui soit (pas d\'analyse dynamique), et c\'est exactement ce qui le rend fiable — si tu respectes le format « chaîne complète » qu\'on va voir tout de suite.' },
             { t: 'h3', h: 'Le piège des classes dynamiques — et la safelist' },
+            { t: 'syntax', title: 'Classes dynamiques : le piège, et sa parade', lang: 'js', code:
+'// ✗ INVISIBLE au scan : la classe n\'existe nulle part en clair\nconst badge = `<span class="bg-${couleur}-600">…</span>`;\n\n// ✓ la MAP : chaque classe existe en entier dans le code\nconst COULEURS = {\n  rouge: "bg-red-600 text-white",\n  vert:  "bg-emerald-600 text-white",\n};\nconst badge = `<span class="${COULEURS[couleur]}">…</span>`;', legend: [
+              ['"bg-" + couleur + "-600"', 'le piège nº 1 : Tailwind génère le CSS en SCANNANT ton code — une classe ASSEMBLÉE à la volée est invisible, donc jamais générée'],
+              ['const COULEURS = {…}', 'la parade : une MAP où chaque classe existe EN ENTIER quelque part dans le code — le scan la voit, le CSS existe'],
+              ['bg-red-600 (en clair)', 'chaque valeur est une classe COMPLÈTE, littérale : le scanner ne fait pas d\'arithmétique, il cherche des chaînes entières'],
+              ['la safelist (plan B)', 'dans tailwind.config : safelist: ["bg-red-600", "bg-emerald-600"] force la génération — utile quand les classes viennent d\'un CMS'],
+              ['la règle d\'or', 'une classe Tailwind doit toujours apparaître ENTIÈRE et en clair dans ton code — sinon elle n\'existera pas en production']
+            ]},
             { t: 'p', h: 'Le tourment n°1 des équipes, expliqué une bonne fois : si tu CONSTRUIS la classe en assemblant des morceaux (`"bg-" + couleur + "-500"`), ton fichier ne contient JAMAIS la chaîne complète `bg-emerald-500` → jamais générée → rien ne s\'affiche, en dev comme en prod. Ce n\'est PAS un caprice de Tailwind, c\'est son mode de fonctionnement (contrat n°1). Les solutions, par ordre de préférence : 1) une **map d\'équivalence** qui nomme les classes en entier (TOUJOURS le premier choix) ; 2) l\'écriture de toutes les variantes en ternaire ; 3) la **safelist** pour les cas ingérables (contenu CMS) — en dernier, car elle échappe à la purge et regonfle le fichier.' },
             { t: 'code', lang: 'html', label: 'Le badge de statut qui fonctionne partout (la map)', code:
 '{{-- le statut arrive des données : payee / en_attente / livree --}}\n@php\n  $statutStyles = [\n    "payee"      => "bg-emerald-100 text-emerald-700",\n    "en_attente" => "bg-amber-100 text-amber-800",\n    "livree"     => "bg-sky-100 text-sky-700",\n  ];\n@endphp\n<span class="rounded-full px-2.5 py-0.5 text-xs font-bold\n             {{ $statutStyles[$commande->statut] }}">\n  {{ $commande->statutLisible }}\n</span>\n{{-- chaque classe existe EN ENTIER dans ce fichier → scan OK,\n     purge OK, et l\'extend devient trivial : une ligne de tableau. --}}' },

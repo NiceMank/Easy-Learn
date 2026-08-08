@@ -42,6 +42,14 @@ DEVDOCS.python = {
 '# python3  (sans argument) ouvre le REPL : Read, Eval, Print, Loop\n>>> 2 + 3 * 4\n14\n>>> "cotonou".upper()\n"COTONOU"\n>>> prix = 2500\n>>> prix * 1.18        # chaque expression est ÉVALUÉE puis AFFICHÉE\n2950.0\n# quit() pour sortir. Idéal pour TESTER UNE IDÉE en 10 secondes.' },
             { t: 'p', h: 'Le REPL est parfait pour vérifier une méthode, un format de date, un slicing… mais rien n\'y est sauvegardé : dès que ça dépasse trois lignes, on passe au fichier. Garde un onglet REPL ouvert en permanence — c\'est le réflexe des pythonistes rapides.' },
             { t: 'h3', h: 'Le script : éditer, lancer, recommencer' },
+            { t: 'syntax', title: 'Le premier script, décortiqué', lang: 'python', code:
+'# boutique.py\nprix = 1500\nttc = prix * 1.18\nprint(f"Total : {ttc} FCFA")', legend: [
+              ['# boutique.py', 'le COMMENTAIRE Python : du dièse à la fin de la ligne — tout y est ignoré'],
+              ['prix = 1500', 'l\'AFFECTATION : un nom, un =, une valeur — aucun mot-clé, aucun type à déclarer, c\'est = en Python'],
+              ['print(…)', 'la SORTIE : affiche dans le terminal — l\'équivalent de echo/console.log'],
+              ['f"Total : {ttc} FCFA"', 'la F-STRING : le { } interpole n\'importe quelle expression — le réflexe « texte + valeurs »'],
+              ['python boutique.py', 'et on LANCE depuis le terminal : python nom-du-fichier.py — lecture et exécution de haut en bas']
+            ]},
             { t: 'code', lang: 'py', label: 'hello.py', code:
 '# Un fichier .py s\'exécute de HAUT EN BAS, ligne par ligne :\nvilles = ["Cotonou", "Parakou", "Natitingou"]\n\nfor i, ville in enumerate(villes, start=1):\n    print(f"{i}. {ville}")\n\nprint("Terminé !")' },
             { t: 'code', lang: 'bash', code:
@@ -82,6 +90,14 @@ DEVDOCS.python = {
           intro: 'Un module, c\'est un fichier `.py` ; un package, un dossier de modules. Tu organises ton code avec `import`, tu ajoutes des librairies avec `pip`… et tu les isoles **par projet** avec un environnement virtuel (`venv`) — sinon deux projets exigeant des versions différentes de Flask se marchent dessus. C\'est le socle hygiénique de tout le web Python.',
           blocks: [
             { t: 'h3', h: 'Importer proprement' },
+            { t: 'syntax', title: 'Les formes d\'import, décortiquées', lang: 'python', code:
+'import json\nfrom datetime import datetime\nfrom utils import tva as calcul_tva', legend: [
+              ['import json', 'le MODULE entier : tu écris ensuite json.loads(…) — le préfixe dit clairement D\'OÙ vient chaque outil'],
+              ['from datetime import datetime', 'l\'import CIBLÉ : juste l\'outil voulu, utilisable sans préfixe'],
+              ['as calcul_tva', 'l\'ALIAS : renomme à l\'arrivée — anti-collision de noms et raccourci lisible'],
+              ['évite from x import *', '« tout, en vrac » : tu ne sais plus ce qui vient d\'où — la forme à proscrire'],
+              ['ton propre code', 'from utils import tva importe ton fichier utils.py situé à côté — même mécanisme que les modules officiels']
+            ]},
             { t: 'code', lang: 'py', code:
 'import math                    # tout le module : math.sqrt(9)\nfrom flask import Flask        # une pièce précise : Flask(...)\nfrom datetime import date as d # alias, pour les noms à collisions\n\n# TON code : même mécanique\n# from models import Tache     (models.py à côté)\n# from blog.routes import bp   (package blog/ avec __init__.py)' },
             { t: 'h3', h: 'Le garde-fou if __name__ == "__main__"' },
@@ -124,6 +140,13 @@ DEVDOCS.python = {
 'nom = "Awa"            # str — chaîne de caractères\nage = 27               # int — entier\nprix = 19.99           # float — décimal\nactif = True           # bool — True / False (majuscule !)\nresultat = None        # NoneType — "aucune valeur", l\'absence explicite\n\nprint(type(age))       # <class "int"> — type() inspecte n\'importe quoi' },
             { t: 'p', h: 'Pas de `const`, pas de déclaration : on assigne et c\'est tout. Les noms s\'écrivent en `snake_case` par convention. `None` joue le rôle de `null` : c\'est LA valeur « rien » de Python, et beaucoup de fonctions la retournent par défaut (fiche Fonctions).' },
             { t: 'h3', h: 'Les f-strings : l\'interpolation native' },
+            { t: 'syntax', title: 'La f-string, décortiquée', lang: 'python', code:
+'nom = "Awa"\nprix = 1500\nprint(f"{nom} vend le gari à {prix} F, soit {prix * 1.18:.0f} F TTC")', legend: [
+              ['f"…"', 'le f devant les guillemets : « string FORMATÉE » — le réflexe texte + valeurs en Python 3'],
+              ['{nom}', 'l\'INTERPOLATION : n\'importe quelle variable ou expression (même {len(panier)}) est évaluée puis insérée'],
+              ['{prix * 1.18:.0f}', 'le FORMAT après : (deux-points) : .0f = arrondi à l\'entier, .2f = deux décimales, :, = séparateur de milliers'],
+              ['vs "x" + str(prix)', 'concaténer à la main exige des str() partout : la f-string convertit toute seule — fini le TypeError habituel']
+            ]},
             { t: 'code', lang: 'py', code:
 'nom = "Awa"\nville = "Cotonou"\n\n# f"..." : le texte entre { } est ÉVALUÉ — n\'importe quelle expression\nmessage = f"Bonjour {nom}, bienvenue à {ville.upper()} !"\nprint(f"Dans 3 ans : {2026 + 3}")\n\n# Anciennes écoles (à reconnaître, plus à utiliser) :\n# "Bonjour " + nom        → concaténation fragile (types !)\n# "Bonjour {}".format(nom) → verbeux' },
             { t: 'h3', h: 'L\'indentation : des blocs sans accolades' },
@@ -148,9 +171,25 @@ DEVDOCS.python = {
           intro: 'Contrôler le flux, en Python, c\'est d\'abord penser **vérité** : presque toute valeur est soit « truthy » soit « falsy » (`""`, `0`, `[]`, `None` sont faux). Ensuite, un renversement d\'habitude pour qui vient d\'autres langages : la boucle `for` n\'itère PAS sur des indices — elle itère directement sur les **objets**. Tout le reste (enumerate, zip, else de boucle) découle de là.',
           blocks: [
             { t: 'h3', h: 'if / elif / else — et la vérité des valeurs' },
+            { t: 'syntax', title: 'if / elif / else à la Python', lang: 'python', code:
+'if stock >= demande:\n    vendre(demande)\nelif stock > 0:\n    proposer_partiel()\nelse:\n    print("Rupture")', legend: [
+              ['if condition :', 'le test suivi de DEUX-POINTS : la ligne annonce « ce qui suit est un bloc »'],
+              ['l\'INDENTATION', 'LES 4 ESPACES sont le bloc : pas d\'accolades en Python, l\'alignement FAIT LA STRUCTURE'],
+              ['elif', 'else if contracté : la branche suivante, évaluée seulement si les précédentes sont fausses — et la cascade s\'aligne proprement'],
+              ['la vérité Python', '0, "", [], {}, None valent FAUX dans un test ; tout le reste vaut VRAI — if panier: suffit à tester « non vide »'],
+              ['else', 'le filet final, optionnel : attrape tout le reste']
+            ]},
             { t: 'code', lang: 'py', code:
 'stock = 3\n\nif stock == 0:\n    print("Rupture")\nelif stock < 5:\n    print("Stock faible")    # elif : autant de branches que nécessaire\nelse:\n    print("Stock OK")\n\n# La forme IDIOMATIQUE : tester la valeur elle-même\nif taches:            # liste NON vide ? (falsy : "", 0, [], {}, None)\n    afficher(taches)\nif not erreurs:       # aucune erreur ?\n    valider()' },
             { t: 'h3', h: 'for : itérer sur les OBJETS' },
+            { t: 'syntax', title: 'for in : la boucle Python, décortiquée', lang: 'python', code:
+'for produit in panier:\n    total += produit["prix"]\n\nfor i, ligne in enumerate(catalogue):\n    print(i, ligne["nom"])', legend: [
+              ['for produit in panier', 'la boucle visite DIRECTEMENT les éléments — pas d\'indice à gérer ni de i++ : le for…of de JavaScript'],
+              ['in', '« DANS » : toute collection itérable fonctionne — liste, chaîne, dictionnaire, fichier…'],
+              ['total += valeur', 'le raccourci « ajoute à » : total = total + valeur, en trois caractères'],
+              ['enumerate(catalogue)', 'l\'INDICE QUAND MÊME : rend (position, élément) à chaque tour — quand tu as vraiment besoin du numéro'],
+              ['range(5)', 'et pour « 5 tours nets » : range produit 0,1,2,3,4 — le compteur classique reste disponible']
+            ]},
             { t: 'code', lang: 'py', code:
 'taches = ["gari", "apy", "piment"]\n\nfor t in taches:                       # chaque ÉLÉMENT, pas un index !\n    print(t)\n\nfor i, t in enumerate(taches, start=1):  # index + élément, proprement\n    print(f"{i}. {t}")\n\nnoms = ["Awa", "Moussa"]\nprix = [500, 800]\nfor n, p in zip(noms, prix):             # deux listes en parallèle\n    print(f"{n} doit {p} F")\n\nfor i in range(3):       # 0, 1, 2 — quand on a VRAIMENT besoin de nombres\n    print("bip")' },
             { t: 'h3', h: 'while, break & continue' },
@@ -189,6 +228,13 @@ DEVDOCS.python = {
               ['`find()` / `count()`', 'chercher / compter', '`s.find("@")` (-1 si absent)']
             ]},
             { t: 'h3', h: 'Le duo split/join, au cœur du parsing' },
+            { t: 'syntax', title: 'split / join : découper et recoller', lang: 'python', code:
+'morceaux = "gari,riz,huile".split(",")\n# ["gari", "riz", "huile"]\nphrase = " + ".join(morceaux)\n# "gari + riz + huile"', legend: [
+              ['"a,b,c".split(",")', 'DÉCOUPE la chaîne au séparateur donné → une LISTE : la première étape de tout parsing'],
+              ['" + ".join(morceaux)', 'RECOLLE : le séparateur « porte » la liste — attention, join se pose sur le SÉPARATEUR, pas sur la liste (le sens qui surprend tout le monde)'],
+              ['split() sans argument', 'découpe sur N\'IMPORTE quel blanc (espaces, tabulations, sauts de ligne), en ignorant les répétitions'],
+              ['le pipeline type', 'fichier texte → lignes (splitlines) → champs (split(",")) → traitement → join : 80 % du nettoyage de données tient là']
+            ]},
             { t: 'code', lang: 'py', code:
 'ligne = "gari,2500,sac 25kg"\nchamps = ligne.split(",")            # ["gari", "2500", "sac 25kg"]\n\nproduits = ["attiéké", "alloco", "foutou"]\nmenu = " → ".join(produits)          # "attiéké → alloco → foutou"\n# Note : join s\'appelle sur le SÉPARATEUR, pas sur la liste !' },
             { t: 'h3', h: 'f-strings : le formatage professionnel' },
@@ -215,6 +261,14 @@ DEVDOCS.python = {
             { t: 'code', lang: 'py', code:
 'courses = ["attiéké", "gari", "piment"]\n\ncourses.append("huile")      # ajouter à la fin\ncourses.remove("gari")       # retirer par valeur\nprint(courses[0])            # "attiéké" — index 0-based\nprint(courses[-1])           # "huile" — négatif = depuis la fin !\nprint(len(courses))          # 3\n\nfor article in courses:\n    print(f"- {article}")\n\n# Tranches (slicing) : courses[1:3], courses[::-1] (inversée)' },
             { t: 'h3', h: 'Le dictionnaire : la star du web Python' },
+            { t: 'syntax', title: 'Le dictionnaire, décortiqué', lang: 'python', code:
+'produit = {"nom": "gari", "prix": 1200, "stock": 8}\nproduit["prix"]            # 1200\nproduit.get("promo", 0)    # 0 : défaut si absente\nproduit["stock"] += 1', legend: [
+              ['{"nom": "gari"}', 'CLÉ: VALEUR entre accolades — un objet JSON en puissance, d\'où la star du web Python'],
+              ['produit["prix"]', 'lecture par CLÉ entre crochets — KeyError si la clé est absente : l\'accès direct n\'est pas timide'],
+              ['.get("promo", 0)', 'l\'accès DÉFENSIF : la clé absente renvoie le défaut au lieu de planter'],
+              ['produit["stock"] += 1', 'on lit ET écrit par la même notation : ajouter une clé inexistante la CRÉE tout simplement'],
+              ['les clés', 'strings à 99 % ; tout IMMUABLE peut servir de clé (nombre, tuple) — jamais une liste']
+            ]},
             { t: 'code', lang: 'py', code:
 'user = {"pseudo": "awa", "ville": "Cotonou", "points": 1500}\n\nuser["points"] += 100                 # lire / modifier par clé\nuser["niveau"] = "or"                 # créer une clé à la volée\nprint(user.get("email"))              # None si absente — SAFE\nprint(user.get("email", "inconnu"))   # avec valeur par défaut\n\nfor cle, valeur in user.items():\n    print(f"{cle} → {valeur}")\n\n# C\'est EXACTEMENT ce que JSON devient après request.get_json()' },
             { t: 'h3', h: 'Les compréhensions : transformer en une ligne' },
@@ -239,6 +293,14 @@ DEVDOCS.python = {
           intro: 'La compréhension est le geste signature de Python : au lieu d\'écrire une boucle de cinq lignes avec un `append`, on écrit l\'**intention** — « donne-moi la liste des X transformés, pour ces éléments, si cette condition ». Ça se lit presque en français. Mais comme toute concision, elle a un prix : un cran de trop et on fabrique de l\'illISIBLE.',
           blocks: [
             { t: 'h3', h: 'Anatomie : [expression for élément in source if condition]' },
+            { t: 'syntax', title: 'La compréhension de liste, décortiquée', lang: 'python', code:
+'prix = [p["prix"] for p in produits if p["stock"] > 0]', legend: [
+              ['[ … for p in produits]', 'la BOUCLE à l\'intérieur des crochets : chaque élément de la source passe son tour'],
+              ['p["prix"] (le début)', 'l\'EXPRESSION RÉCOLTÉE : ce qu\'on GARDE de chaque élément — ici juste son prix'],
+              ['if p["stock"] > 0 (la fin)', 'le FILTRE optionnel : seuls les éléments qui passent la condition entrent dans le résultat'],
+              ['se lit', '« les prix DES produits QUI sont en stock » — toute la phrase tient dans l\'ordre : expression for source if condition'],
+              ['la règle de lisibilité', 'UNE ligne ? Parfait. Deux for imbriqués ? Reviens à la boucle classique — la compréhension est un outil de clarté, pas de concision']
+            ]},
             { t: 'code', lang: 'py', code:
 '# La boucle équivalente d\'abord :\ncarres = []\nfor n in range(10):\n    if n % 2 == 0:\n        carres.append(n * n)\n\n# …devient, mot à mot :\ncarres = [n * n for n in range(10) if n % 2 == 0]\n#         └─QUOI────┘  └──D\'OÙ──┘  └────SI────┘\n# → [0, 4, 16, 36, 64]' },
             { t: 'h3', h: 'Dict et set compréhensions' },
@@ -276,10 +338,25 @@ DEVDOCS.python = {
           intro: 'Chaque vue Flask est une fonction ; chaque décorateur l\'enrobe. Autant dire que maîtriser `def` et sa gestion souple des arguments — positionnels, **nommés**, valeurs par défaut, collecteurs `*args` et `**kwargs` — n\'est pas optionnel. Ajoutons la **portée** (quel nom voit quoi), et le piège le plus célèbre de tout Python : le **défaut mutable**.',
           blocks: [
             { t: 'h3', h: 'Définir, appeler, retourner' },
+            { t: 'syntax', title: 'def et return, décortiqués', lang: 'python', code:
+'def prix_ttc(ht, taux=0.18):\n    return ht * (1 + taux)\n\ntotal = 10000 + prix_ttc(10000)', legend: [
+              ['def prix_ttc(ht, taux=0.18):', 'la DÉCLARATION : def, nom en snake_case, paramètres — et deux-points qui ouvrent le bloc'],
+              ['taux=0.18', 'la valeur par DÉFAUT si l\'appelant ne précise rien : les optionnels se mettent À LA FIN'],
+              ['return', 'renvoie la valeur ET stoppe la fonction — sans return, une fonction Python vaut None'],
+              ['prix_ttc(10000)', 'l\'APPEL : le résultat (11800.0) prend la place de l\'appel dans l\'expression'],
+              ['prix_ttc(10000, taux=0.05)', 'l\'argument NOMMÉ : lisible, et l\'ordre redevient libre — le confort Python au quotidien']
+            ]},
             { t: 'code', lang: 'py', code:
 'def prix_ttc(prix_ht, tva=0.18):\n    """Retourne le prix TTC. (docstring : la doc vit dans la fonction)"""\n    return round(prix_ht * (1 + tva), 2)\n\nprix_ttc(1000)                 # 1180.0 — tva par défaut\nprix_ttc(1000, 0.05)           # 1050.0 — positionnel\nprix_ttc(1000, tva=0.05)       # idem, mais LISIBLE (argument nommé)' },
             { t: 'p', h: '`return` renvoie la valeur ET stoppe la fonction — sans `return`, une fonction retourne **implicitement `None`** (source de mille `TypeError: "NoneType" object is not…`). Un seul `return` peut renvoyer un tuple : `return total, nb` — et l\'appelant débale : `total, nb = calcul()`.' },
             { t: 'h3', h: '*args et **kwargs : les collecteurs' },
+            { t: 'syntax', title: '*args et **kwargs : accepter l\'imprévu', lang: 'python', code:
+'def moyenne(*notes):\n    return sum(notes) / len(notes)\n\ndef facture(client, **options):\n    print(client, options)\n\nmoyenne(12, 15, 9)\nfacture("Awa", livraison=True, adresse="Calavi")', legend: [
+              ['*notes', 'collecte les arguments POSITIONNELS supplémentaires dans un TUPLE : la fonction en accepte autant qu\'on veut'],
+              ['**options', 'collecte les arguments NOMMÉS supplémentaires dans un DICTIONNAIRE : options["livraison"] vaut True'],
+              ['moyenne(12, 15, 9)', 'trois notes ou trente : même appel, même fonction — le * fait le tri'],
+              ['l\'étoile inverse', 'somme(*notes) ÉTALE un itérable en arguments à l\'appel — le même symbole, sens inverse : collecte à la définition, étale à l\'appel']
+            ]},
             { t: 'code', lang: 'py', code:
 'def journal(titre, *articles, **meta):\n    # *articles : tuple de TOUS les positionnels supplémentaires\n    # **meta : dict de TOUS les arguments nommés supplémentaires\n    print(titre, articles, meta)\n\njournal("Actu", "a1", "a2", categorie="sport", urgent=True)\n# Actu ("a1", "a2") {"categorie": "sport", "urgent": True}' },
             { t: 'p', h: 'On ne les écrit pas tous les jours, mais on les LIT partout : signatures des frameworks, décorateurs génériques, wrappers. `**kwargs` est la porte d\'entrée pour transmettre un jeu d\'options sans les énumérer.' },
@@ -312,6 +389,14 @@ DEVDOCS.python = {
             { t: 'code', lang: 'py', code:
 'def dire_bonjour():\n    print("Bonjour !")\n\nf = dire_bonjour      # SANS parenthèses : on manipule la fonction elle-même\nf()                   # Bonjour ! — appelée via son alias' },
             { t: 'h3', h: 'Fabriquer un décorateur maison' },
+            { t: 'syntax', title: 'Le décorateur, fabriqué pièce par pièce', lang: 'python', code:
+'def chronometre(fonction):\n    def enveloppe(*args, **kwargs):\n        print("départ…")\n        return fonction(*args, **kwargs)\n    return enveloppe\n\n@chronometre\ndef calculer_total():\n    pass', legend: [
+              ['def chronometre(fonction)', 'le décorateur reçoit LA FONCTION à habiller : une fonction est une valeur, elle circule comme toute autre'],
+              ['def enveloppe(*args, **kwargs)', 'la version HABILLÉE : elle capture tous les arguments possibles, ajoute son service, puis délègue'],
+              ['return enveloppe', 'le décorateur RENVOIE la nouvelle fonction — c\'est elle qui portera le nom original'],
+              ['@chronometre', 'L\'AROBASE : « ce nom désigne désormais la version habillée » — sucre pour calculer_total = chronometre(calculer_total)'],
+              ['conviction', 'compris une fois, ce patron débloque Flask (@app.route), les tests et tout l\'écosystème Python web']
+            ]},
             { t: 'code', lang: 'py', code:
 'import functools\n\ndef journaliser(func):\n    @functools.wraps(func)              # préserve nom et docstring !\n    def wrapper(*args, **kwargs):\n        print(f"→ appel de {func.__name__}")\n        resultat = func(*args, **kwargs)\n        print(f"← retour : {resultat}")\n        return resultat\n    return wrapper\n\n@journaliser                          # ≡ total = journaliser(total)\ndef total(panier):\n    return sum(panier)\n\ntotal([10, 20, 30])   # → appel de total / ← retour : 60' },
             { t: 'p', h: 'Le schéma est toujours le même : le décorateur reçoit `func`, définit un `wrapper` qui fait quelque chose AVANT et/ou APRÈS, délègue via `func(*args, **kwargs)`, et retourne le wrapper. L\'`@` au-dessus de la définition n\'est que du sucre pour `ma_fonction = journaliser(ma_fonction)`.' },
@@ -339,6 +424,13 @@ DEVDOCS.python = {
           intro: 'Un `return` termine une fonction ; un **`yield`** la met en **pause** : elle rend une valeur, gèle son état, et reprend exactement là où elle en était au prochain appel. Une fonction contenant `yield` ne retourne pas une liste — elle retourne un **générateur**, un itérateur paresseux qui produit ses valeurs à la demande. C\'est LA réponse Python à trois problèmes : fichiers énormes, séries infinies, pipelines de données.',
           blocks: [
             { t: 'h3', h: 'yield vs return : la pause qui change tout' },
+            { t: 'syntax', title: 'yield : produire à la demande, décortiqué', lang: 'python', code:
+'def compter(maximum):\n    n = 1\n    while n <= maximum:\n        yield n\n        n += 1\n\nfor nombre in compter(3):\n    print(nombre)   # 1 puis 2 puis 3', legend: [
+              ['yield n', 'PRODUIT une valeur et MET LA FONCTION EN PAUSE : à la prochaine demande, elle reprend exactement où elle en était'],
+              ['vs return', 'return TERMINE tout et oublie ; yield SUSPEND et se souvient — la fonction devient une machine à valeurs successives'],
+              ['for nombre in compter(3)', 'le générateur SE CONSOMMMME au fil de l\'eau : chaque tour demande la valeur suivante'],
+              ['pourquoi c\'est géant', 'lire un fichier de 10 Go LIGNE PAR LIGNE sans jamais le charger entier : la mémoire reste plate, le pipeline coule']
+            ]},
             { t: 'code', lang: 'py', code:
 'def compte_a_rebours(n):\n    while n > 0:\n        yield f"Encore {n}…"     # rend une valeur, SE FIGE ICI\n        n -= 1\n    yield "Décollage !"\n\netapes = compte_a_rebours(3)\nprint(next(etapes))   # "Encore 3…" — l\'état local (n) est CONSERVÉ\nprint(next(etapes))   # "Encore 2…"\nfor reste in etapes:  # for appelle next tout seul, jusqu\'à l\'épuisement\n    print(reste)      # "Encore 1…", "Décollage !"' },
             { t: 'h3', h: 'Le cas d\'école : lire un fichier énorme' },
@@ -366,6 +458,14 @@ DEVDOCS.python = {
           intro: '`with open(...) as f:` — tu l\'as déjà écrit ; voici ce que ça veut dire. Un **context manager** est un objet qui sait **entrer** (`__enter__`) et **sortir** (`__exit__`) d\'un contexte — et Python GARANTIT la sortie, même si une exception explose au milieu du bloc. C\'est le mécanisme derrière tout ce qui « s\'ouvre et doit se fermer » : fichiers, connexions BDD, transactions, verrous, timers.',
           blocks: [
             { t: 'h3', h: 'Le problème qu\'il résout' },
+            { t: 'syntax', title: 'with : la fermeture garantie, décortiquée', lang: 'python', code:
+'with open("ventes.csv") as f:\n    lignes = f.readlines()\n# le fichier est DÉJÀ fermé ici', legend: [
+              ['with open(…) as f', 'ouvre la ressource et la NOMME : f vit le temps du bloc indenté'],
+              ['la promesse', 'quoi qu\'il arrive à la sortie du bloc — succès OU EXCEPTION — la ressource est refermée proprement'],
+              ['f.readlines()', 'à l\'intérieur, on consomme : le fichier est ouvert, tout est permis'],
+              ['sans with', 'un f.close() oublié (ou sauté par une erreur) laisse des fichiers ouverts — avec, le finally est ÉCRIT une fois dans open'],
+              ['partout pareil', 'connexions de base, verrous, sessions réseau : with est LE protocole des ressources propres en Python']
+            ]},
             { t: 'code', lang: 'py', code:
 '# Sans with : la fermeture peut être OUBLIÉE ou sautée par une erreur\nf = open("donnees.txt", encoding="utf-8")\ndonnes = f.read()          # si ça plante ICI → fichier resté OUVERT\nf.close()\n\n# Avec with : fermer est garanti, quoi qu\'il arrive dans le bloc\nwith open("donnees.txt", encoding="utf-8") as f:\n    donnes = f.read()\n# ← à la sortie du bloc (normale OU en exception), __exit__ a fermé f' },
             { t: 'h3', h: 'Le protocole : __enter__ / __exit__' },
@@ -393,6 +493,14 @@ DEVDOCS.python = {
           intro: 'Python reste dynamiquement typé : les **annotations de type** ne changent rien à l\'exécution — une fonction annotée `int` accepte toujours n\'importe quoi. Alors à quoi bon ? Trois clients les lisent : **l\'éditeur** (autocomplétion et erreurs soulignées en rouge), **les linters** externes (mypy, pyright) qui traquent les bugs avant l\'exécution, et **les humains** (et frameworks !) qui découvrent la forme des données attendue d\'un coup d\'œil.',
           blocks: [
             { t: 'h3', h: 'La syntaxe essentielle' },
+            { t: 'syntax', title: 'Les type hints, décortiqués', lang: 'python', code:
+'def prix_ttc(ht: float, taux: float = 0.18) -> float:\n    return ht * (1 + taux)\n\ndef premier(items: list[str]) -> str | None:\n    return items[0] if items else None', legend: [
+              ['ht: float', 'l\'ANNOTATION du paramètre : le type ATTENDU, écrit après le nom'],
+              ['-> float', 'le type ANNONCÉ du retour : flèche puis type, avant les deux-points'],
+              ['list[str]', 'la collection TYPÉE : une liste DE chaînes — les génériques natifs depuis Python 3.9'],
+              ['str | None', '« chaîne OU None » : le retour honnête d\'une recherche potentiellement vide (Optional[str] dans l\'ancienne syntaxe)'],
+              ['la chose à savoir', 'Python IGNORE ces annotations à l\'exécution : c\'est mypy ou ton éditeur qui les contrôle — documentation vérifiable, pas police']
+            ]},
             { t: 'code', lang: 'py', code:
 'def prix_ttc(prix_ht: float, tva: float = 0.18) -> float:\n    return round(prix_ht * (1 + tva), 2)\n\n# Variables annotées :\ncompteur: int = 0\nutilisateurs: list[str] = ["awa", "moussa"]          # paramétré (3.9+)\npoints: dict[str, int] = {"awa": 1500}\ncoordonnees: tuple[float, float] = (6.37, 2.35)\n\n# Paramètre OPTIONNEL = peut être None :\ndef trouver(pseudo: str) -> dict | None:             # X | None (3.10+)\n    ...\n# avant : Optional[dict] via "from typing import Optional"' },
             { t: 'h3', h: 'Ce que l\'annotation NE FAIT PAS' },
@@ -436,6 +544,14 @@ DEVDOCS.python = {
           intro: 'On peut écrire beaucoup de Python sans créer de classe… mais on en **sous-classe** constamment : tes modèles SQLAlchemy héritent de `db.Model`, tes formulaires héritent de `FlaskForm`, tes exceptions héritent de `Exception`. Il te faut donc le niveau complet de la POO Python : `__init__` et `self`, l\'héritage, les **méthodes spéciales** (`__str__`, `__repr__`, `__eq__`) et les **propriétés** (`@property`).',
           blocks: [
             { t: 'h3', h: 'Anatomie minimale' },
+            { t: 'syntax', title: 'class, __init__ et self, décortiqués', lang: 'python', code:
+'class Produit:\n    def __init__(self, nom, prix):\n        self.nom = nom\n        self.prix = prix\n\n    def etiquette(self):\n        return f"{self.nom} : {self.prix} F"\n\np = Produit("gari", 1200)\np.etiquette()   # "gari : 1200 F"', legend: [
+              ['class Produit:', 'le PLAN de construction : PascalCase par convention'],
+              ['def __init__(self, nom, prix)', 'le CONSTRUCTEUR : appelé automatiquement à la création (Produit("gari", 1200)) pour remplir l\'objet'],
+              ['self', 'L\'OBJET COURANT : premier paramètre de TOUTE méthode — posé automatiquement par Python, jamais à l\'appel'],
+              ['self.nom = nom', 'l\'ATTRIBUT : la valeur rangée SUR l\'objet — elle survit après la méthode, contrairement aux variables locales'],
+              ['p.etiquette()', 'l\'APPEL : on n\'écrit PAS self — Python glisse p tout seul : p.etiquette() ≡ Produit.etiquette(p)']
+            ]},
             { t: 'code', lang: 'py', code:
 'class Compte:\n    banque = "Ecobank"          # attribut de CLASSE : partagé par tous\n\n    def __init__(self, titulaire, solde=0):\n        self.titulaire = titulaire     # attributs D\'INSTANCE : à chacun les siens\n        self.solde = solde\n\n    def deposer(self, montant):\n        self.solde += montant\n        return self.solde\n\nc = Compte("Awa", 5000)\nc.deposer(1500)\nprint(c.solde)          # 6500' },
             { t: 'p', h: '`__init__` n\'est pas le constructeur au sens strict (l\'objet existe déjà) : c\'est l\'initialiseur, appelé juste après la création. Et `self` — l\'instance elle-même — doit figurer en **premier paramètre de chaque méthode** ; Python le remplit automatiquement à l\'appel (`c.deposer(1500)` ≡ `Compte.deposer(c, 1500)`).' },
@@ -469,6 +585,14 @@ DEVDOCS.python = {
           intro: 'Lire un CSV, écrire un rapport, charger une config JSON : l\'accès fichier est quotidien — et truffé de petites embûches (encodage, chemin Windows, fichier laissé ouvert). Python règle l\'essentiel avec trois outils : **`with open()`** pour l\'I/O, les **`encoding=` explicites** (accents sauvés), et **`pathlib`** pour des chemins portables qu\'on assemble comme des objets, pas comme des chaînes.',
           blocks: [
             { t: 'h3', h: 'Lire : trois niveaux de voracité' },
+            { t: 'syntax', title: 'Lire un fichier, mode par mode', lang: 'python', code:
+'with open("ventes.txt", encoding="utf-8") as f:\n    tout = f.read()         # TOUT le fichier, une chaîne\n    # f.readline()          # la prochaine ligne\n    # for ligne in f: …     # ligne par ligne, économe', legend: [
+              ['open("ventes.txt", encoding="utf-8")', 'l\'OUVERTURE — toujours avec encoding="utf-8" explicite : les accents de « Dantokpa » disent merci'],
+              ['with … as f:', 'le gardiennage : fermeture GARANTIE à la sortie du bloc, même en cas d\'erreur'],
+              ['f.read()', 'TOUT le contenu en une chaîne : parfait pour les petits fichiers, risqué pour les gros'],
+              ['for ligne in f', 'l\'itération ÉCONOME : une ligne à la fois — un fichier de 10 Go ne change rien à la mémoire'],
+              ['mode', '"r" lire (défaut), "w" écrire (ÉCRASE), "a" ajouter à la fin, "rb"/"wb" binaire — la lettre décide du destin du fichier']
+            ]},
             { t: 'code', lang: 'py', code:
 '# Toujours with + encoding — les deux règles non négociables :\nwith open("notes.txt", encoding="utf-8") as f:\n    tout = f.read()                    # TOUTE la chaîne d\'un coup\n\nwith open("notes.txt", encoding="utf-8") as f:\n    lignes = f.readlines()             # LISTE de lignes (mémoire !)\n\nwith open("gros_fichier.log", encoding="utf-8") as f:\n    for ligne in f:                    # PARESSEUX : une ligne à la fois\n        if "ERREUR" in ligne:          # → la boucle for est LA bonne méthode\n            print(ligne.strip())       #   pour les gros fichiers' },
             { t: 'h3', h: 'Écrire et les modes d\'ouverture' },
@@ -502,6 +626,14 @@ DEVDOCS.python = {
           intro: 'En Python, une erreur non traitée interrompt tout le programme en affichant un **traceback** — la pile d\'appels jusqu\'au point de rupture (lis-le de bas en haut : la dernière ligne est la cause). Les exceptions se traitent avec `try/except`, mais la qualité d\'un traitement se juge à un critère : **sa précision**. Et quand les erreurs standard ne suffisent plus, on crée les siennes.',
           blocks: [
             { t: 'h3', h: 'La structure complète' },
+            { t: 'syntax', title: 'try / except / else / finally, décortiqué', lang: 'python', code:
+'try:\n    prix = float(saisie)\nexcept ValueError as e:\n    print("Pas un nombre :", e)\nelse:\n    appliquer(prix)\nfinally:\n    journaliser("tentative")', legend: [
+              ['try:', 'la zone à RISQUE sous surveillance'],
+              ['except ValueError as e', 'attrape PAR TYPE : précis, pas un filet fourre-tout — e transporte le détail de l\'incident'],
+              ['else:', 'exécuté SEULEMENT SI le try a réussi : la suite normale n\'est pas surveillée à tort — nuance que JavaScript ne connaît pas'],
+              ['finally:', 'TOUJOURS, succès comme échec : le rangement officiel'],
+              ['raise ValueError("prix négatif")', 'LANCE ta propre alerte : l\'exécution saute au except correspondant le plus proche']
+            ]},
             { t: 'code', lang: 'py', code:
 'def lire_config(chemin):\n    try:\n        with open(chemin) as f:\n            return f.read()\n    except FileNotFoundError:\n        print(f"Fichier absent : {chemin} — config par défaut.")\n        return {}\n    except PermissionError as e:\n        print(f"Droits insuffisants : {e}")\n        raise                       # on re-lance après avoir loggué' },
             { t: 'h3', h: 'else / finally / raise : les trois compléments' },
@@ -550,6 +682,13 @@ DEVDOCS.python = {
             { t: 'code', lang: 'bash', code:
 'boutique/\n├── app.py                  # point d\'entrée\n├── config.py               # un MODULE (un fichier)\n└── boutique/               # un PACKAGE (un dossier + __init__.py)\n    ├── __init__.py         # rend le dossier importable (peut contenir\n    │                       # l\'API publique du package)\n    ├── produits/\n    │   ├── __init__.py\n    │   ├── modeles.py      # class Produit(db.Model)…\n    │   └── vues.py         # routes du domaine\n    └── commandes/\n        ├── __init__.py\n        ├── modeles.py\n        └── vues.py' },
             { t: 'h3', h: 'Les formes d\'import, hiérarchisées' },
+            { t: 'syntax', title: 'Package : dossier + __init__.py + import pointillé', lang: 'python', code:
+'boutique/\n    __init__.py\n    prix.py          # def ttc(…)\n\n# ailleurs :\nfrom boutique.prix import ttc\nfrom boutique import prix', legend: [
+              ['__init__.py', 'la CARTE DE VISITE : sa présence fait du dossier un PACKAGE importable (même vide, elle suffit)'],
+              ['boutique.prix', 'le CHEMIN POINTILLÉ : package.module — la structure des dossiers devient la syntaxe des imports'],
+              ['from boutique.prix import ttc', 'l\'import CIBLÉ depuis ton propre package : exactement la même mécanique que pour les librairies'],
+              ['relative vs absolu', 'from .prix import ttc (relatif, DANS le package) ; from boutique.prix (absolu, depuis l\'extérieur) — chacun sa place']
+            ]},
             { t: 'table', head: ['Forme', 'Verdict', 'Pourquoi'], rows: [
               ['`import json`', 'ok', 'explicite : json.loads visible'],
               ['`from json import loads`', 'ok', 'précis ; attention aux collisions de noms'],
@@ -582,6 +721,14 @@ DEVDOCS.python = {
             { t: 'code', lang: 'py', code:
 'from datetime import datetime, date, timedelta\n\nmaintenant = datetime.now()\nprint(maintenant.strftime("%d/%m/%Y %H:%M"))     # "21/07/2026 14:30"\n\nentree = datetime.strptime("25/12/2026", "%d/%m/%Y")  # chaîne → date\ndans_une_semaine = date.today() + timedelta(days=7)   # arithmétique\n\n# Attention aux FUSEAUX : datetime.now() = heure locale naïve.\n# Pour des dates « aware » (production, API) : zoneinfo\nfrom zoneinfo import ZoneInfo\nlome = datetime.now(ZoneInfo("Africa/Porto-Novo"))' },
             { t: 'h3', h: 'json : Python ↔ JSON' },
+            { t: 'syntax', title: 'json : les quatre fonctions du pont', lang: 'python', code:
+'texte = json.dumps(produit)          # dict → chaîne JSON\ndata = json.loads(texte)             # chaîne JSON → dict\njson.dump(produit, f, ensure_ascii=False)\ndata = json.load(f)', legend: [
+              ['json.dumps(obj)', 'SÉRIALISE : dict/list Python → chaîne JSON — prête pour le réseau ou le stockage'],
+              ['json.loads(texte)', 'PARSE : chaîne JSON → dict/list Python — les données redeviennent maniables'],
+              ['le s', 'dumps/loads travaillent sur des CHAÎNES (s = string) ; dump/load sans s écrivent/lisent dans un FICHIER'],
+              ['ensure_ascii=False', 'les accents EN CLAIR dans le JSON (« é » au lieu de \\u00e9) : le réflexe des API francophones'],
+              ['le pont JS', 'c\'est JSON.stringify / JSON.parse de JavaScript, mot pour mot — les deux langues se parlent par ce format']
+            ]},
             { t: 'code', lang: 'py', code:
 'import json\n\npanier = {"articles": ["gari", "piment"], "total": 3300, "promo": None}\n\ntexte = json.dumps(panier, ensure_ascii=False)   # dict → chaîne JSON\n# ensure_ascii=False : conserve les accents ("attiéké" lisible !)\nretour = json.loads(texte)                       # chaîne JSON → dict\nprint(retour["total"])                           # 3300\n\n# directement dans un FICHIER :\nwith open("panier.json", "w", encoding="utf-8") as f:\n    json.dump(panier, f, ensure_ascii=False, indent=2)\n# c\'est EXACTEMENT ce mécanisme que renvoie une API Flask (jsonify)' },
             { t: 'h3', h: 'random : le hasard du quotidien (PAS crypto !)' },
@@ -618,6 +765,14 @@ DEVDOCS.python = {
             { t: 'code', lang: 'bash', code:
 'python -m unittest              # découvre et exécute test_*.py\n# ..\n# Ran 2 tests in 0.001s — OK' },
             { t: 'h3', h: 'pytest : même idée, zéro cérémonie' },
+            { t: 'syntax', title: 'Le test pytest, décortiqué', lang: 'python', code:
+'# test_prix.py\ndef test_ttc():\n    assert prix_ttc(10000) == 11800.0\n\ndef test_stock_negatif_refuse():\n    with pytest.raises(ValueError):\n        vendre(-1)', legend: [
+              ['test_prix.py / def test_…', 'la CONVENTION fait tout : fichier test_*.py, fonctions test_* — pytest les trouve tout seul'],
+              ['assert …', 'l\'ASSERTION NUE : pas de self.assertEqual — un simple assert Python, et pytest explique l\'écart quand ça rate'],
+              ['pytest.raises(ValueError)', 'tester qu\'une ERREUR EST BIEN levée : le with entre en attente — pas d\'exception = test rouge'],
+              ['python -m pytest', 'et on lance : tout est découvert, joué et compté — zéro cérémonie, zéro classe obligatoire'],
+              ['Arrange Act Assert', 'même squelette que partout : préparer les données, agir, vérifier le résultat — le test reste une recette simple']
+            ]},
             { t: 'code', lang: 'bash', code: 'pip install pytest' },
             { t: 'code', lang: 'py', label: 'test_total.py (pytest)', code:
 'from total import total_panier\n\ndef test_total_simple():\n    panier = [{"prix": 2500, "qte": 2}, {"prix": 300, "qte": 3}]\n    assert total_panier(panier) == 5900      # assert NU : message détaillé\n\ndef test_panier_vide():\n    assert total_panier([]) == 0\n\ndef test_chiffres_negatifs_rejetes():\n    # pytest.raises : vérifier qu\'une ERREUR est bien levée\n    import pytest\n    with pytest.raises(TypeError):\n        total_panier(None)   # sommer None doit planter TypeError' },
