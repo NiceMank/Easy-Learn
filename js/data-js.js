@@ -27,6 +27,13 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème que les variables résolvent' },
             { t: 'p', h: 'Imagine gérer la tontine du quartier sans variables : le taux de commission (5 %) serait récrit en dur dans chaque calcul, sur chaque ligne. Le jour où la règle passe à 6 %, tu relis tout le programme en espérant n\'en oublier aucune occurrence — et les « 5 » qui voulaient dire autre chose (5 membres ?) se mélangent aux vrais taux. Avec `const TAUX = 0.05`, la valeur vit à UN endroit : la modifier revient à éditer une seule ligne, et le NOM explique l\'intention partout où il apparaît. Nommer les valeurs, c\'est déjà programmer.' },
             { t: 'h3', h: 'const, puis let… et var au musée' },
+            { t: 'syntax', title: 'Déclarer, décortiqué à la déclaration près', lang: 'js', code:
+'const boutique = "Awa";\nlet stock = 10;\nstock = 8;', legend: [
+              ['const boutique = "Awa"', 'const : la valeur ne sera JAMAIS réassignée — c\'est le choix par défaut, qui sécurise la lecture du code'],
+              ['let stock = 10;', 'let : la variable POURRA changer — tu signales explicitement cette possibilité en choisissant let'],
+              ['stock = 8;', 'la RÉASSIGNATION : pas de let cette fois, la boîte existe déjà — on écrase juste son contenu'],
+              ['var (au musée)', 'l\'ancêtre : portée étrange et hoisting piégeux. Tu le croiseras dans les vieux tutoriels — ne l\'écris plus']
+            ]},
             { t: 'code', lang: 'js', code:
 'const prenom = "Awa";     // ne peut PAS être réassignée\nlet score = 0;            // peut être réassignée plus tard\nvar ancien = 42;          // héritage du vieux JS : à éviter\n\nscore = score + 10;       // OK : let autorise la modification\nprenom = "Fatou";         // ERREUR TypeError : Assignment to constant variable' },
             { t: 'p', h: 'La règle de décision tient en une phrase : **`const` par défaut, `let` seulement quand la valeur doit changer réellement** (compteur, saisie, état qui évolue), `var` jamais. Pourquoi ce militantisme pour const ? Parce qu\'il rend ton intention explicite — « cette valeur ne bougera pas » — et transforme une famille entière de bugs (la réassignation accidentelle) en erreurs immédiates et visibles, au lieu de mystères silencieux.' },
@@ -37,6 +44,13 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Sous le capot : une étiquette collée sur une valeur' },
             { t: 'p', h: 'Pour vraiment maîtriser ce qui suit, retiens l\'image mentale exacte : la variable n\'est pas une boîte contenant la valeur, c\'est une **flèche qui pointe vers elle**. Pour les valeurs simples (nombre, texte, booléen — les « primitives »), copier la variable copie la valeur : `let b = a` donne à b son propre exemplaire. Pour les objets et tableaux, copier la variable ne copie QUE la flèche : deux noms peuvent alors pointer vers LE MÊME objet, et modifier l\'un change l\'autre. C\'est la notion de référence — le piège préféré des débutants, qu\'on démontera dans la fiche Objets.' },
             { t: 'h3', h: 'Portée : où une variable existe' },
+            { t: 'syntax', title: 'La portée de bloc, décortiquée', lang: 'js', code:
+'{\n  const promo = 15;\n}\nconsole.log(promo);   // ReferenceError', legend: [
+              ['{ … }', 'la PORTÉE de bloc : const et let n\'existent qu\'ENTRE les accolades où elles sont nées'],
+              ['const promo', 'une variable de COURSE : créée dans le bloc, détruite à la sortie — rien ne fuit, le dehors reste propre'],
+              ['ReferenceError', 'hors du bloc, promo n\'a JAMAIS existé : l\'erreur dit simplement « hors de portée » — et c\'est une protection, pas une punition'],
+              ['le réflexe', 'déclare la variable le plus PRÈS possible de son usage, dans le bloc le plus petit possible']
+            ]},
             { t: 'code', lang: 'js', code:
 'const taux = 0.18;              // globale : visible partout dans le fichier\n\nfunction calculer(prix) {\n  const tva = prix * taux;      // locale au bloc { } de la fonction\n  if (prix > 1000) {\n    let remise = prix * 0.05;   // n\'existe QUE dans ce if\n  }\n  return prix + tva;\n  // ici, remise est déjà introuvable\n}\n\nconsole.log(tva);     // ERREUR ReferenceError : tva n\'existe pas ici' },
             { t: 'p', h: '`let` et `const` sont **scoped au bloc** `{ }` où ils sont déclarés : une variable créée dans un `if`, une boucle ou une fonction cesse d\'exister dès la sortie du bloc. Loin d\'être une contrainte, c\'est une protection : moins il y a de noms visibles à un endroit, moins il peut s\'y produire de collisions et d\'effets de bord. Règle de conduite : déclare chaque variable au plus PRÈS de son usage, jamais « au cas où » tout en haut du fichier.' },
@@ -97,6 +111,13 @@ DEVDOCS.js = {
             { t: 'code', lang: 'js', code:
 '// Arithmétiques\n10 + 5      // 15\n10 % 3      // 1  : reste de la division (pair/impair, cycles)\n2 ** 3      // 8  : puissance\ncompteur++  // incrémente (version courte de compteur = compteur + 1)\n\n// Concaténation de texte\n"Bonjour " + "Awa"        // "Bonjour Awa"\n\n// Comparaison -> produisent un boolean\nage >= 18\n\n// Logique\nestMajeur && aPaye    // ET : les deux\nestAdmin || estModo   // OU : au moins un\n!estConnecte          // NON : inverse' },
             { t: 'h3', h: 'La leçon n°1 : === plutôt que ==' },
+            { t: 'syntax', title: '=== ou == : la règle absolue', lang: 'js', code:
+'5 === "5"    // false : types différents\n5 == "5"     // true : conversion forcée — piège !', legend: [
+              ['===', 'l\'égalité STRICTE : compare le TYPE ET la valeur. C\'est la seule qu\'on écrit au quotidien'],
+              ['==', 'l\'égalité LÂCHE : elle CONVERTIT en cachette ("5" devient 5) avant de comparer — une source de bugs insoupçonnables'],
+              ['false ici, true là', '"5" n\'EST PAS 5 : l\'un est du texte, l\'autre un nombre — la stricte le dit honnêtement'],
+              ['le réflexe', 'toujours === et !== ; si une conversion est nécessaire, fais-la toi-même au grand jour : Number("5") === 5']
+            ]},
             { t: 'code', lang: 'js', code:
 '"5" == 5     // true  : == CONVERTIT les types avant de comparer\n"5" === 5    // false : === compare type ET valeur, sans conversion\n\n0 == ""              // true (!)\nnull == undefined    // true (le seul cas où == est toléré)\n[] == false          // true (!)\n\n// Réflexe pro : TOUJOURS === et !==' },
             { t: 'p', h: '`==` applique des règles de conversion parfois contre-intuitives (« une chaîne vide vaut zéro », les tableaux passent par du texte…). Même les développeurs expérimentés ne les récitent pas de tête — et c\'est précisément le problème : un code qu\'on ne peut pas prédire est un code à bugs. `===` est franc : même type + même valeur, sinon faux. En adoptant `===` partout, toute une catégorie de bugs disparaît de ta vie.' },
@@ -109,6 +130,13 @@ DEVDOCS.js = {
 '0.1 + 0.2                 // 0.30000000000000004  (!)\n(0.1 + 0.2).toFixed(2)    // "0.30" (chaîne : arrondi pour l\'affichage)\nMath.round(4.6)           // 5\nparseInt("42px")          // 42  : lit le premier entier trouvé\nNumber("42px")            // NaN : conversion stricte\nNumber.isNaN(NaN)         // true (NaN !== NaN, il se teste ainsi)' },
             { t: 'p', h: 'Pourquoi `0.1 + 0.2` ne fait-il pas exactement `0.3` ? Sous le capot, les nombres sont stockés en **binaire flottant** (norme IEEE 754) — et 0,1 comme 0,2 n\'ont pas d\'écriture finie en binaire, exactement comme 1/3 n\'en a pas en décimal. Les erreurs de la 17e décimale sont donc inévitables… et sans conséquence pour l\'affichage (tu arrondis). Pour de la comptabilité stricte — les frais d\'une.transaction MoMo, par exemple — on compte en entiers (les centimes) ou on arrondit méthodiquement ; mais pour 99 % des cas, `toFixed` pour l\'affichage suffit.' },
             { t: 'h3', h: 'Les opérateurs modernes à connaître' },
+            { t: 'syntax', title: '?? et ?. : protéger contre le vide, décortiqué', lang: 'js', code:
+'const surnom = client.surnom ?? "pas de surnom";\nconst ville = client.adresse?.ville;', legend: [
+              ['??', 'coalescence : prend la valeur de droite SEULEMENT si gauche vaut null ou undefined — 0, "" et false sont conservés (à la différence de ||)'],
+              ['?.', 'chaînage OPTIONNEL : si adresse n\'existe pas, tout s\'arrête proprement à undefined au lieu d\'exploser en TypeError'],
+              ['la combo', 'adresse?.ville ?? "inconnue" : « descends prudemment, prévois un défaut » — deux lignes de sécurité en une'],
+              ['quand ?', 'à chaque donnée venant de l\'extérieur (API, formulaire, localStorage) : là où tu ne contrôles pas ce qui arrive']
+            ]},
             { t: 'code', lang: 'js', code:
 'user?.adresse?.ville    // ?. : enchaîne sans planter si un maillon est null/undefined\nstock ?? 0              // ?? : valeur de repli SEULEMENT si null/undefined\nstock || 0              // || : repli si falsy (avale aussi 0 et "" — attention !)\n\ncompteur ||= 10         // assigne seulement si falsy\ncompteur ??= 10         // assigne seulement si null/undefined' },
             { t: 'p', h: 'La différence `||` / `??` est LE détail qui sauve des bugs silencieux : `||` replie sur toutes les valeurs falsy (dont `0` et `""`, souvent légitimes), `??` ne replie que sur `null` et `undefined`. Pour des défauts numériques ou textuels, `??` est presque toujours le choix correct — et le chaînage `?.` est le gardien des données profondes (fiche Objets).' },
@@ -142,15 +170,36 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème : un programme sans décision est un script, pas une application' },
             { t: 'p', h: 'Imagine l\'application de la Boutique Awa sans conditions : le bouton « Commander » fonctionnerait même avec un panier vide, les prix barrés s\'afficheraient sans promo, l\'espace vendeur s\'ouvrirait aux visiteurs. Chaque règle métier est une bifurcation : « SI telle chose, ALORS ça, SINON autre chose ». La condition est le mécanisme qui traduit ces règles en code — et les opérateurs logiques de la fiche précédente (`&&`, `||`, comparaisons, valeurs falsy) sont exactement le vocabulaire qui les alimente.' },
             { t: 'h3', h: 'if / else if / else : la bifurcation de base' },
+            { t: 'syntax', title: 'if / else if / else, décortiqué', lang: 'js', code:
+'if (stock >= demande) {\n  vendre(demande);\n} else if (stock > 0) {\n  proposerPartiel();\n} else {\n  afficherRupture();\n}', legend: [
+              ['if (condition) {…}', 'le TEST : le bloc ne s\'exécute que si la condition vaut true — parenthèses autour du test, accolades autour du bloc'],
+              ['else if', 'la branche suivante, évaluée SEULEMENT si toutes les précédentes sont fausses — le SINON SI du pseudo-code, à l\'identique'],
+              ['else', 'le filet final : attrape tout ce qui reste, sans poser de condition'],
+              ['la vérité JS', 'la condition est convertie en booléen : 0, "", null, undefined, NaN deviennent false (les « falsy »), tout le reste true']
+            ]},
             { t: 'code', lang: 'js', code:
 'const heure = new Date().getHours();\n\nif (heure < 12) {\n  console.log("Bonjour !");\n} else if (heure < 18) {\n  console.log("Bon après-midi !");\n} else {\n  console.log("Bonsoir !");\n}' },
             { t: 'p', h: 'Point de mécanique capital : les conditions sont testées **de haut en bas, et la première vraie l\'emporte** — les suivantes ne sont même pas évaluées. L\'ordre compte donc : place les cas les plus restrictifs en premier. `if (note >= 10)` posé avant `if (note >= 16)` avalerait les « mention très bien », qui n\'arriveraient jamais jusqu\'à leur branche.' },
             { t: 'p', h: 'Autre mécanique cachée utile à connaître : les opérateurs `&&` et `||` sont paresseux (court-circuit). Dans `estConnecte && chargerProfil()`, la fonction n\'est appelée QUE si le premier test est vrai ; dans `nom || "Invité"`, le repli n\'est évalué qu\'en cas de falsy. C\'est ce comportement qui rend l\'écriture `??`/`||` possible — et qui évite de déclencher des traitements inutiles (ou dangereux) quand la condition préalable échoue.' },
             { t: 'h3', h: 'Le ternaire : l\'if qui rend une valeur' },
+            { t: 'syntax', title: 'Le ternaire, décortiqué', lang: 'js', code:
+'const badge = stock > 0 ? "Disponible" : "Épuisé";', legend: [
+              ['stock > 0 ?', 'le TEST, exactement comme dans un if'],
+              ['"Disponible"', 'la valeur si VRAI — le premier choix'],
+              [': "Épuisé"', 'les deux-points puis la valeur si FAUX — les DEUX branches sont obligatoires ici, contrairement au if'],
+              ['une valeur, rien d\'autre', 'le ternaire PRODUIT une valeur à ranger ou à afficher : parfait pour un libellé ou un prix, pas pour de gros traitements']
+            ]},
             { t: 'code', lang: 'js', code:
 'const badge = estConnecte ? "Tableau de bord" : "Se connecter";\n\n// condition ? valeurSiVrai : valeurSiFaux\n\nconst classeStock = produit.stock > 0 ? "dispo" : "epuise";\nconst texte = quantite > 1 ? quantite + " articles" : "1 article";' },
             { t: 'p', h: 'Le ternaire brille pour **choisir une valeur** — un texte, une classe CSS, un nombre — au point d\'usage. Ses limites sont tout aussi claires : dès que la logique fait plus d\'un étage (ternaires imbriqués) ou exécute plusieurs actions, reviens à un bon vieux `if`. La règle d\'or d\'un code lisible : le ternaire doit tenir en une ligne évidente ; tout ce qui demande de « réfléchir » mérite un if.' },
             { t: 'h3', h: 'switch : la cascade d\'égalités' },
+            { t: 'syntax', title: 'switch : un cas, un break', lang: 'js', code:
+'switch (jour) {\n  case "samedi":\n    ouvrir(8, 18);\n    break;\n  default:\n    ouvrir(9, 17);\n}', legend: [
+              ['switch (jour)', 'on examine UNE valeur contre une liste de cas — plus lisible que six else if à la queue'],
+              ['case "samedi":', 'le cas d\'égalité STRICTE avec la valeur examinée, suivi de deux-points'],
+              ['break;', 'OBLIGATOIRE à la fin de chaque cas : sans lui, l\'exécution TOMBE dans le cas suivant — le bug le plus classique du switch'],
+              ['default:', 'le cas fourre-tout si rien n\'a correspondu — le else du switch']
+            ]},
             { t: 'code', lang: 'js', code:
 'switch (jour) {\n  case "lundi":\n    console.log("Courage, la semaine commence !");\n    break;                 // sans break, on TOMBE dans le cas suivant\n  case "vendredi":\n    console.log("Bientôt le week-end.");\n    break;\n  case "samedi":\n  case "dimanche":        // plusieurs cas -> le même traitement\n    console.log("Repos bien mérité.");\n    break;\n  default:                // tous les autres cas\n    console.log("Bonne journée !");\n}' },
             { t: 'p', h: 'Deux subtilités à mémoriser. 1) Le `break` : sans lui, l\'exécution **traverse** vers le cas suivant (fallthrough) — parfois voulu (les deux cas du week-end ci-dessus), le plus souvent un bug muet. 2) La comparaison est **stricte** : `switch` utilise `===`, pas de conversion de types. `case "5"` ne captera jamais le nombre `5`.' },
@@ -193,14 +242,36 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème : répéter sans copier-coller' },
             { t: 'p', h: 'La tontine compte 30 membres. Sans boucle, tu écrirais 30 fois `console.log("Cotisation de " + nom)` avec 30 noms différents — puis tu modifierais le message 30 fois le jour où il change. La boucle sépare **l\'action** (écrite une fois) de la **répétition** (décidée par les données) : ajoute un 31e membre, le programme suit tout seul. C\'est le même principe que les variables — nommer une fois, réutiliser partout — appliqué aux ACTIONS.' },
             { t: 'h3', h: 'for : quand on connaît le nombre de tours' },
+            { t: 'syntax', title: 'for : les trois morceaux, décortiqués', lang: 'js', code:
+'for (let i = 0; i < 5; i++) {\n  console.log("Table de 7 :", 7 * i);\n}', legend: [
+              ['let i = 0', 'INITIALISATION : le compteur démarre — exécuté UNE seule fois, avant le premier tour'],
+              ['i < 5', 'CONDITION : testée AVANT chaque tour ; dès qu\'elle devient fausse, la boucle s\'arrête'],
+              ['i++', 'INCRÉMENT : exécuté APRÈS chaque tour — c\'est lui qui rapproche de la sortie, tour après tour'],
+              ['tout sur une ligne', 'départ ; test ; pas — toute la mécanique est visible d\'un coup d\'œil : c\'est la force du for'],
+              ['le rythme exact', 'init → test → corps → incrément → test → corps → … jusqu\'au test FAUX']
+            ]},
             { t: 'code', lang: 'js', code:
 'for (let i = 1; i <= 5; i++) {\n  console.log("Tentative n°" + i);\n}\n//     départ     condition de poursuite   pas à chaque tour\n\n// Rebonds utiles : compter à l\'envers, aller de 2 en 2\nfor (let i = 10; i >= 0; i--) { decompte(i); }' },
             { t: 'p', h: 'La boucle `for` classique rassemble les trois éléments de la répétition sur une seule ligne : initialisation, condition de poursuite, progression. Elle reste irremplaçable quand tu veux un contrôle fin — indices précis, pas personnalisé, parcours à l\'envers — ou quand tu dois sortir avec `break` au milieu. Son inconvénient : l\'index `i` est une mécanique que tu dois gérer toi-même, avec ses risques de bornes (`<` vs `<=`, le fameux « off by one »).' },
             { t: 'h3', h: 'while : quand on répète *tant que*' },
+            { t: 'syntax', title: 'while : répéter sans savoir combien de fois', lang: 'js', code:
+'let stock = 3;\nwhile (stock > 0) {\n  vendreUnArticle();\n  stock--;\n}', legend: [
+              ['while (stock > 0)', 'répète TANT QUE la condition est vraie — testée AVANT chaque tour : zéro tour reste possible'],
+              ['stock--', 'LA ligne vitale : quelque chose DOIT faire évoluer la condition — oublie-la et c\'est la boucle infinie, l\'onglet gelé'],
+              ['for ou while ?', 'tours connus d\'avance → for ; répéter jusqu\'à un événement imprévisible (saisie valide, stock épuisé) → while — le POUR vs TANT QUE du module Algo !'],
+              ['stock-- = stock = stock - 1', 'la décrémentation raccourcie : relire puis écraser, en deux caractères']
+            ]},
             { t: 'code', lang: 'js', code:
 'let carburant = 100;\n\nwhile (carburant > 0) {\n  conduire();\n  carburant -= 8;   // sans cette ligne : boucle INFINIE !\n}\n\n// do...while : le corps s\'exécute AU MOINS une fois\ndemande = "";\ndo {\n  demande = prompt("Tapez « ok » pour continuer");\n} while (demande !== "ok");' },
             { t: 'p', h: '`while` tourne tant que la condition est vraie — sans te garantir qu\'elle deviendra fausse un jour. C\'est à TOI de faire progresser quelque chose dans le corps vers la sortie : décrémenter, lire une saisie, avancer un curseur. Sinon : boucle infinie, onglet gelé, petit moment de solitude. Le variant `do...while` inverse l\'ordre (corps d\'abord, test ensuite) pour les cas où le premier passage est obligatoire — typiquement : poser la question au moins une fois.' },
             { t: 'h3', h: 'for…of : la boucle moderne sur les collections' },
+            { t: 'syntax', title: 'for…of : visiter chaque élément, sans indice', lang: 'js', code:
+'for (const produit of panier) {\n  total += produit.prix;\n}', legend: [
+              ['of', '« DE chaque élément » : for…of visite les VALEURS d\'un tableau, du premier au dernier — sans indice à gérer ni piège du zéro'],
+              ['const produit', 'à chaque tour, l\'élément courant porte ce nom — const, car on ne réassigne pas la variable de boucle elle-même'],
+              ['total += produit.prix', 'le raccourci « ajoute à » : total = total + produit.prix — le cumul maison de toutes les sommes'],
+              ['pas sur les objets', 'for…of est fait pour les COLLECTIONS (tableaux, chaînes, Map, Set) ; pour les propriétés d\'un objet, c\'est for…in ou Object.entries()']
+            ]},
             { t: 'code', lang: 'js', code:
 'const courses = ["riz", "huile", "gombo"];\n\nfor (const article of courses) {\n  console.log("Acheter : " + article);\n}\n\n// for...of fonctionne sur tout « itérable » :\nfor (const lettre of "gari") { console.log(lettre); }    // les caractères\nfor (const [i, article] of courses.entries()) { }       // index + valeur' },
             { t: 'p', h: '`for…of` est le choix par défaut pour parcourir : pas d\'index à gérer, pas d\'erreur de borne, lecture naturelle (« pour chaque article DE courses »). Il opère sur les itérables : tableaux, chaînes, Map, Set… Son cousin `for…in`, lui, énumère les **clés d\'un objet** — à bannir sur les tableaux : il renvoie les index en CHAÎNES (`"0" + 1` donne `"01"`) et peut ramasser des propriétés qui ne sont pas des éléments.' },
@@ -254,6 +325,14 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème que les fonctions résolvent' },
             { t: 'p', h: 'En attaquant les boucles, tu as déjà goûté au « écrire une fois, exécuter partout ». Les fonctions appliquent le même principe aux TRAITEMENTS ENTIERS : calculer la TVA, formater un prix en FCFA, vérifier un numéro MTN. Sans elles, le même calcul de frais serait copié à cinq endroits du projet — et le jour où les frais changent, tu en corrigeras quatre. La fonction nomme le traitement, le rend testable isolément, et te permet de lire le programme principal comme un sommaire : `validerCommande()`, `envoyerRecu()`, `mettreAJourStock()`. C\'est ça, l\'abstraction : cacher la complexité derrière un bon nom.' },
             { t: 'h3', h: 'Déclarer et appeler' },
+            { t: 'syntax', title: 'function : définir puis appeler, décortiqué', lang: 'js', code:
+'function tva(montant) {\n  return montant * 0.18;\n}\n\nconst total = 10000 + tva(10000);', legend: [
+              ['function tva(montant)', 'la DÉCLARATION : nom + paramètres entre parenthèses. montant est l\'ingrédient ATTENDU, pas encore une vraie valeur'],
+              ['return …', 'la valeur renvoyée à l\'appelant — ET la fin immédiate de la fonction : rien après un return ne s\'exécute'],
+              ['tva(10000)', 'L\'APPEL avec l\'ARGUMENT concret : le résultat (1800) prend la place de l\'appel dans l\'expression → total vaut 11800'],
+              ['définir ≠ exécuter', 'la déclaration n\'est qu\'une recette écrite : rien n\'est calculé tant que personne n\'appelle la fonction'],
+              ['hoisting', 'les fonctions function sont « hissées » : tu peux les appeler AVANT leur ligne de déclaration — spécificité du mot-clé function']
+            ]},
             { t: 'code', lang: 'js', code:
 'function additionner(a, b) {\n  return a + b;\n}\n\nconst total = additionner(12, 30);   // 42\n\n// Forme fléchée (ES6), parfaite en une ligne :\nconst doubler = (n) => n * 2;            // return implicite\nconst saluer = () => console.log("Salut !");' },
             { t: 'p', h: 'Deux paires de parenthèses qui changent tout : `additionner` désigne la MACHINE (une valeur), `additionner(12, 30)` l\'ACTIVE et récupère sa production. Et `return` a un double rôle : il **renvoie** la valeur et il **arrête net** la fonction — tout ce qui suit un return exécuté est ignoré. Sans return, la fonction produit silencieusement `undefined` : la source n°1 des « undefined is not a function » et des variables vides mystérieuses.' },
@@ -262,6 +341,13 @@ DEVDOCS.js = {
 'function commander(plat, quantite = 1, sauce = false) {\n  return quantite + "x " + plat + (sauce ? " avec sauce" : "");\n}\ncommander("Attiéké-poisson");     // "1x Attiéké-poisson"\ncommander("Alloco", 3, true);     // "3x Alloco avec sauce"\n\n// ...rest : capter un nombre variable d\'arguments\nconst somme = (...nombres) => nombres.reduce((t, n) => t + n, 0);\nsomme(100, 250, 80);   // 430' },
             { t: 'p', h: 'Les paramètres par défaut s\'activent quand l\'argument est absent ou `undefined` — fini les `if (quantite === undefined) quantite = 1`. Et `...rest` rassemble tous les arguments restants en un vrai tableau : l\'outil des fonctions à entrée libre (sommes, journaux, concaténations). Astuce d\'atelier : si ta fonction attend beaucoup d\'options, prends UN objet `options` en paramètre et destructue-le — tu repars vers la fiche Objets.' },
             { t: 'h3', h: 'Déclarée vs fléchée : la vraie différence' },
+            { t: 'syntax', title: 'La fonction fléchée, décortiquée', lang: 'js', code:
+'const ttc = (montant) => {\n  return montant * 1.18;\n};\nconst double = n => n * 2;', legend: [
+              ['const ttc = …', 'la fonction est une VALEUR rangée dans une variable : toute la philosophie de JavaScript tient dans cette ligne'],
+              ['(montant) => {…}', 'la FLÉCHÉE : paramètres, flèche, corps — plus brève et omniprésente dans le JS moderne (React, map, fetch…)'],
+              ['n => n * 2', 'la forme ULTRA-courte : un seul paramètre (parenthèses offertes) et une seule expression (return implicite)'],
+              ['la vraie différence', 'les fléchées n\'ont PAS leur propre this : sans importance pour un calcul, décisif dans les objets et les classes — voir la fiche Objets']
+            ]},
             { t: 'table', head: ['', 'function', '=> (flèche)'], rows: [
               ['Syntaxe', 'Verbeuse', 'Compacte (return implicite sur une ligne)'],
               ['`this`', 'Le sien propre (dépend de l\'appel)', 'Hérité du contexte parent (pas de this propre)'],
@@ -310,10 +396,25 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème : les collections, et les boucles qui les brouillent' },
             { t: 'p', h: 'Presque toute donnée réelle arrive en série : le catalogue de la Boutique Awa, les cotisations de la tontine, l\'historique des transactions MoMo. Traiter ces listes à base de boucles `for` fonctionne — mais le code dit COMMENT parcourir au lieu de dire QUOI faire. Lis « garde les produits en stock, prends leur nom, trie-les » : c\'est exactement `filtrer`/`transformer`/`trier`. Les méthodes expriment l\'intention et laissent la mécanique au moteur — c\'est pour ça qu\'elles ont conquis le JavaScript moderne.' },
             { t: 'h3', h: 'Créer, lire, ajouter, retirer' },
+            { t: 'syntax', title: 'Le tableau : créer, lire, mesurer', lang: 'js', code:
+'const panier = ["gari", "riz"];\npanier.push("huile");\npanier[0];              // "gari"\npanier.length;          // 3', legend: [
+              ['["gari", "riz"]', 'le tableau LITTÉRAL : éléments entre crochets, séparés par des virgules'],
+              ['panier[0]', 'L\'INDICE commence à ZÉRO en JavaScript : le premier élément est [0] — le décalage nº 1 des débutants'],
+              ['push("huile")', 'ajoute à la FIN — sa sœur pop() retire à la fin, shift()/unshift() jouent au début'],
+              ['panier.length', 'le nombre d\'éléments, TOUJOURS à jour — retenir que le dernier indice vaut length - 1']
+            ]},
             { t: 'code', lang: 'js', code:
 'const fruits = ["pomme", "banane", "mangue"];\n\nfruits[0];            // "pomme" (l\'index commence a 0 !)\nfruits.length;        // 3 (nb d\'éléments : dernier index + 1)\nfruits.at(-1);        // "mangue" (at : les index négatifs partent de la fin)\n\nfruits.push("ananas");    // ajoute a la FIN\nfruits.unshift("kiwi");   // ajoute au DEBUT\nfruits.pop();             // retire le dernier (et le rend)\nfruits.shift();           // retire le premier\n\nfruits.includes("banane");// true\nfruits.slice(0, 2);       // copie une tranche, SANS modifier l\'original' },
             { t: 'p', h: 'Deux reflexes mnémotechniques. 1) `length` compte les éléments, donc le dernier index est TOUJOURS `length - 1` — ou plus simplement `.at(-1)`. 2) À retenir par paires contraires : `slice` COPIE sans toucher l\'original, `splice` MODIFIE sur place (insère/retire) ; la quasi-totalité du temps, c\'est `slice` qu\'on veut.' },
             { t: 'h3', h: 'map, filter, find : le trio fondateur' },
+            { t: 'syntax', title: 'map / filter / find, décortiqués', lang: 'js', code:
+'const prix = produits.map(p => p.prix);\nconst enStock = produits.filter(p => p.stock > 0);\nconst gari = produits.find(p => p.nom === "gari");', legend: [
+              ['map(p => p.prix)', 'TRANSFORME chaque élément : tableau de même TAILLE, produits devenus prix — [A, B] devient [f(A), f(B)]'],
+              ['filter(p => p.stock > 0)', 'GARDE seulement les éléments qui passent le test : tableau plus court, voire vide'],
+              ['find(p => p.nom === "gari")', 'renvoie LE PREMIER élément qui passe le test — ou undefined si personne ne passe'],
+              ['p => …', 'la petite fonction fléchée appliquée à CHAQUE élément : p est l\'élément courant, tu choisis son nom'],
+              ['immuabilité', 'les trois NE MODIFIENT PAS le tableau d\'origine : ils construisent un nouveau résultat — le réflexe du JS moderne']
+            ]},
             { t: 'code', lang: 'js', code:
 'const prix = [100, 250, 80, 400];\n\n// map : TRANSFORME chaque élément -> nouveau tableau, MEME taille\nconst ttc = prix.map((p) => p * 1.18);        // [118, 295, 94.4, 472]\n\n// filter : GARDE ceux qui passent le test -> tableau plus petit\nconst chers = prix.filter((p) => p > 100);    // [250, 400]\n\n// find : le PREMIER qui passe le test (ou undefined si aucun)\nconst cible = prix.find((p) => p > 200);      // 250' },
             { t: 'p', h: 'Relis ces trois lignes : chacune dit exactement ce qu\'elle fait, sans `i`, sans `length`, sans tableau tampon à remplir à la main. Et le détail qui change tout en pratique : ces méthodes **ne modifient pas** le tableau d\'origine — elles en renvoient un NEUF. C\'est la porte ouverte au chaînage :' },
@@ -362,6 +463,14 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème : représenter une « chose » complète' },
             { t: 'p', h: 'Un tableau dit « une liste de valeurs ». Mais un produit de la Boutique Awa, ce n\'est pas une liste de valeurs anonymes : `3500` ne veut rien dire sans savoir que c\'est le PRIX, `12` que c\'est le STOCK. On pourrait jongler avec trois variables séparées (`prixGari`, `stockGari`, `nomGari`) — fragiles, non transmises ensemble, impossibles à passer en paramètre d\'un coup. L\'objet rattache chaque valeur à une CLÉ nommée : la structure elle-même porte le sens, et tout part en voyage d\'une seule pièce.' },
             { t: 'h3', h: 'Créer et lire un objet' },
+            { t: 'syntax', title: 'L\'objet littéral, décortiqué', lang: 'js', code:
+'const produit = {\n  nom: "gari premium",\n  prix: 1500,\n  enStock: true\n};\nproduit.prix;       // 1500\nproduit["nom"];     // "gari premium"', legend: [
+              ['{ … }', 'l\'objet LITTÉRAL : des couples clé: valeur, séparés par des virgules — une fiche avec des cases nommées'],
+              ['nom: "gari premium"', 'une PROPRIÉTÉ : la clé (sans guillemets si c\'est un identifiant valide), deux-points, puis la valeur de n\'importe quel type'],
+              ['produit.prix', 'la notation POINT : la lecture directe et lisible — ton réflexe par défaut'],
+              ['produit["nom"]', 'les CROCHETS : indispensables quand la clé arrive d\'une variable ou contient espaces et tirets (produit[critere])'],
+              ['une valeur = tout', 'nombre, texte, booléen, tableau, AUTRE objet, fonction : une propriété peut contenir tout JavaScript']
+            ]},
             { t: 'code', lang: 'js', code:
 'const produit = {\n  nom: "Gari premium",\n  prix: 3500,\n  stock: 12,\n  vendeur: "Boutique Awa"\n};\n\nproduit.nom;              // "Gari premium" — notation pointée, 95 % des cas\nproduit["prix"];          // 3500 — utile quand la clé est dans une VARIABLE\n\nconst cle = "stock";\nproduit[cle];             // 12\nproduit.auteur;           // undefined (pas de crash à la LECTURE d\'une clé absente)' },
             { t: 'p', h: 'La notation pointée est le défaut lisible ; les crochets entrent en scène dès que la clé est dynamique (choisie par l\'utilisateur, extraite d\'une variable, contenant des espaces ou des tirets : `data["prix-ht"]`). Note le contrat de lecture rassurant : accéder à une clé absente donne `undefined` — sans erreur. En revanche, lire une PROPRIÉTÉ D\'UN undefined (`produit.auteur.nom`) plante : c\'est exactement le rôle de `?.` vu aux Types.' },
@@ -370,6 +479,14 @@ DEVDOCS.js = {
 'produit.stock = 8;           // modifier\nproduit.reduction = 500;     // ajouter (la clé n\'existait pas)\ndelete produit.vendeur;      // supprimer\n\n"prix" in produit;           // true : la clé existe-t-elle ?\nObject.keys(produit);        // ["nom","prix","stock","reduction"]\nObject.values(produit);      // les valeurs, dans le même ordre\nObject.entries(produit);     // [["nom","Gari premium"], ...] : ideal pour boucler\n\nfor (const [cle, valeur] of Object.entries(produit)) {\n  console.log(cle + " : " + valeur);\n}' },
             { t: 'p', h: 'Ajouter une clé se fait par simple assignation — pas de déclaration préalable. Pour parcourir, `Object.entries` est ton ami fidèle (rappel : l\'objet n\'est pas itérable au `for…of`, il faut ce pont tableau). Note d\'ordre : les clés texte conservent l\'ordre d\'insertion ; les clés entièrement numériques (`"1"`, `"2"`) remontent en premier, triées. Si l\'ordre strict compte tout le temps, c\'est `Map` (fin de fiche).' },
             { t: 'h3', h: 'Destructuration : l\'élégance au quotidien' },
+            { t: 'syntax', title: 'La destructuration, décortiquée', lang: 'js', code:
+'const { nom, prix } = produit;\n// ⇔ const nom = produit.nom;\n// ⇔ const prix = produit.prix;', legend: [
+              ['const { nom, prix }', 'EXTRAIT les propriétés citées dans des variables du MÊME nom, en une seule ligne'],
+              ['= produit', 'la SOURCE à droite : l\'objet qu\'on déballe'],
+              ['{ nom: nomProduit }', 'la variante avec RENOMMAGE : la propriété nom arrive dans la variable nomProduit — anti-collision de noms'],
+              ['{ prix = 0 }', 'la variante avec DÉFAUT : si la propriété est absente, la variable vaut le défaut — une sécurité de plus'],
+              ['partout', 'fonctionne aussi en paramètre de fonction : function afficher({ nom, prix }) — très utilisé en React']
+            ]},
             { t: 'code', lang: 'js', code:
 'const { nom, prix: prixHT = 0, ...reste } = produit;\n// nom     -> "Gari premium"\n// prixHT  -> produit.prix (renommée, avec valeur par defaut)\n// reste   -> { stock, reduction } : tout le reste\n\n// Le pattern qui change tout dans les fonctions :\nfunction afficherProduit({ nom, prix, stock = 0 }) {\n  console.log(nom + " - " + prix + " FCFA - " + stock + " en stock");\n}\nafficherProduit(produit);   // un seul argument, des parametres nommes' },
             { t: 'p', h: 'La destructuration dans les paramètres mérite son statut de standard : la fonction annonce exactement ce qu\'elle consomme, l\'ORDRE des propriétés importe peu, et ajouter une option plus tard ne casse aucun appel existant. C\'est le pattern des fonctions au long cours — tu en verras partout.' },
@@ -418,6 +535,13 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Pourquoi ES6 a tout changé' },
             { t: 'p', h: 'Avant 2015 : pas de `let`, des chaînes assemblées au `+`, des tableaux copiés à la main, des fichiers qui se partagent les globales par collision. ES6 (surnommé ES2015) a aligné le langage avec les attentes réelles : portées saines, syntaxes expressives, modules officiels. Depuis, le rythme est annuel et tranquille (champs élégants du type `?.`, `??`, `??=`, `at()`, `toSorted()`). Bonne nouvelle pratique : tous les navigateurs récents parlent ES6 nativement — aucune étape de « build » n\'est requise pour l\'utiliser.' },
             { t: 'h3', h: 'Template literals : le texte enfin confortable' },
+            { t: 'syntax', title: 'Le template literal, décortiqué', lang: 'js', code:
+'const message = `Bonjour ${client.nom},\nton total est de ${total} FCFA.`;', legend: [
+              ['les backticks', 'AltGr+7 deux fois : une chaîne MODERNE qui accepte les sauts de ligne en direct, sans acrobatie'],
+              ['${ client.nom }', 'l\'INTERPOLATION : n\'importe quelle expression JS est évaluée puis insérée — fini "Bonjour " + nom + " !"'],
+              ['${ total }', 'ici aussi : toute expression passe, même ${total * 1.18} ou ${panier.length}'],
+              ['le piège', 'avec des apostrophes ou guillemets ordinaires, ${total} s\'afficherait tel quel : l\'interpolation n\'existe qu\'entre backticks']
+            ]},
             { t: 'code', lang: 'js', code:
 'const nom = "Awa";\nconst total = 2200;\n\n// Avec backticks ` : interpolation ${ } et multiligne\nconst message = `Bonjour ${nom},\nvotre commande de ${total} FCFA est confirmée.`;\n\n// Toute expression JS tient dans ${ } :\n`TTC : ${(total * 1.18).toFixed(0)} F`\n`Statut : ${stock > 0 ? "disponible" : "épuisé"}`' },
             { t: 'p', h: 'Le backtick (AltGr + 7 sur clavier AZERTY) transforme la fabrication de texte : interpolation directe, sauts de ligne naturels, expressions complètes dans le moule — y compris ternaires et appels. Comparé à l\'ancienne concaténation (`"Bonjour " + nom + ",\\nvotre commande de " + total + …`), la lisibilité n\'a tout simplement rien à voir. Dès que tu colles plus de deux fragments, c\'est backtick sans discussion.' },
@@ -426,6 +550,13 @@ DEVDOCS.js = {
 '// Tableaux : par POSITION\nconst [premier, ...reste] = [10, 20, 30];     // 10, [20, 30]\n\n// Objets : par NOM de clé (l\'ordre n\'importe pas)\nconst config = { theme: "dark", langue: "fr", taille: 16 };\nconst { theme, taille: px = 14 } = config;    // "dark", 16 (renommée + defaut)\n\n// Échange de variables en une ligne :\n[a, b] = [b, a];' },
             { t: 'p', h: 'Mémotechnique : la destructuration, c\'est la forme d\'un objet ou d\'un tableau écrite à GAUCHE de l\'assignation — on « moule » ce qu\'on veut extraire. Paramètres nommés (fiche Objets), retraits rapides, échange sans variable temporaire : c\'est la syntaxe qui rend le code auto-descriptif.' },
             { t: 'h3', h: 'Spread (...) : étaler et rassembler' },
+            { t: 'syntax', title: 'Le spread, décortiqué', lang: 'js', code:
+'const nouveauPanier = [...panier, "savon"];\nconst copie = { ...produit, prix: 1400 };', legend: [
+              ['...panier', 'ÉTALE les éléments : comme si on avait vidé le tableau à cet endroit précis'],
+              ['[...panier, "savon"]', 'la COPIE augmentée : nouveau tableau = ancien contenu + un élément, sans toucher l\'original'],
+              ['{ ...produit, prix: 1400 }', 'même magie sur les objets : copier TOUTES les propriétés, puis écraser prix au passage'],
+              ['le remède aux références', 'c\'est LA réponse au piège des références (fiche Objets) : crée un nouveau contenant au lieu de modifier l\'ancien']
+            ]},
             { t: 'code', lang: 'js', code:
 'const base = [1, 2];\nconst complet = [...base, 3, 4];              // [1,2,3,4]\nconst clone = { ...user, role: "admin" };     // copie + surcharge en une ligne\n\nMath.max(...notes);                            // étale le tableau en arguments\n\n// À l\'inverse, en PARAMÈTRE, ... rassemble (rest) :\nfunction journaliser(prefixe, ...messages) {\n  messages.forEach((m) => console.log(prefixe, m));\n}' },
             { t: 'p', h: 'Le même symbole, deux directions : en VALEUR, il étale (copie de tableau, fusion d\'objets, appels) ; en PARAMÈTRE, il rassemble. À retenir surtout : le spread crée des surfaces NEUVES sans mutation — c\'est le fondement du style « immuable » que ta future vie React/TanStack te rendra obligatoire.' },
@@ -438,6 +569,13 @@ DEVDOCS.js = {
 'class Panier {\n  #total = 0;                    // propriété PRIVÉE (# : inaccessible dehors)\n\n  constructor(proprietaire) {\n    this.proprietaire = proprietaire;\n    this.articles = [];\n  }\n\n  ajouter(article, prix) {\n    this.articles.push(article);\n    this.#total += prix;\n    return this;\n  }\n\n  get total() { return this.#total; }\n}\n\nconst panierMoi = new Panier("Awa");\npanierMoi.ajouter("Gari", 3500).ajouter("Huile", 1200);\npanierMoi.total;   // 4700 — et #total reste à l\'abri des modifications directes' },
             { t: 'p', h: 'La classe n\'ajoute RIEN de fondamentalement neuf au langage : c\'est du sucre syntaxique par-dessus le mécanisme des prototypes d\'objets, pour écrire des « moules » lisibles. À retenir : `constructor` s\'exécute au `new`, les méthodes se partagent entre toutes les instances, et `#champ` rend une propriété réellement privée (protège un solde, un jeton d\'API). Pour des applications orientées composants ou des services à état, c\'est propre ; pour des fonctions utilitaires, l\'objet littéral et les fonctions pures restent roi — évite les classes « par principe ».' },
             { t: 'h3', h: 'Modules : un fichier = une unité' },
+            { t: 'syntax', title: 'export / import : la circulation entre fichiers', lang: 'js', code:
+'// utils.js\nexport const tva = m => m * 0.18;\n\n// app.js\nimport { tva } from "./utils.js";', legend: [
+              ['export const tva', 'on EXPOSE explicitement ce que le fichier met à disposition — rien d\'autre n\'en sortira'],
+              ['import { tva } from "…"', 'on RÉCLAME nommément ce dont on a besoin, avec le chemin relatif (./ = même dossier)'],
+              ['les accolades', 'pour les exports NOMMÉS : import { tva, ttc }. L\'export default, lui, s\'importe sans accolades'],
+              ['le bénéfice', 'fini les variables globales qui se marchent dessus : chaque fichier a son périmètre, chaque dépendance se trace']
+            ]},
             { t: 'code', lang: 'js', code:
 '// === utils.js ===\nexport const TVA = 0.18;\nexport function formaterPrix(n) { return n.toLocaleString("fr-FR") + " F"; }\nexport default class Panier { /* ... */ }\n\n// === app.js ===\nimport Panier, { TVA, formaterPrix } from "./utils.js";\n//          defaut     nommés' },
             { t: 'code', lang: 'html', label: 'Côté HTML', code:
@@ -483,10 +621,24 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Sous le capot : de ton fichier HTML à un arbre d\'objets' },
             { t: 'p', h: 'Au chargement, le navigateur PARSE ton texte HTML et fabrique un arbre d\'objets : chaque balise devient un nœud avec ses propriétés (`textContent`, `className`, `children`…), accessible depuis la variable magique `document`. Quand tu modifies un de ces objets, le moteur relance (une partie de) son pipeline de rendu — tu as révisé le Layout/Paint du module CSS. Conséquence performance : les modifications groupées valent mieux que dix petites touchers (chaque changement visible peut recalculer la mise en page). Règle simple : **prépare tes éléments hors de l\'arbre, insère-les en une fois** ; le navigateur adore ça.' },
             { t: 'h3', h: 'Sélectionner : trouver ses éléments' },
+            { t: 'syntax', title: 'Sélectionner, décortiqué', lang: 'js', code:
+'const titre = document.querySelector("h1");\nconst cartes = document.querySelectorAll(".produit");\nconst panier = document.getElementById("panier");', legend: [
+              ['document.querySelector("h1")', 'le PREMIER élément qui correspond au sélecteur CSS — ou null si rien ne correspond'],
+              ['querySelectorAll(".produit")', 'TOUS les éléments correspondants, dans une liste parcourable avec forEach'],
+              ['getElementById("panier")', 'le spécialiste de l\'id — ATTENTION : il veut le nu, sans #, contrairement au sélecteur CSS ("#panier")'],
+              ['c\'est du CSS', 'tout sélecteur appris dans le module CSS fonctionne ici : ".produit .prix", "ul > li:first-child"… deux modules en un']
+            ]},
             { t: 'code', lang: 'js', code:
 'const titre = document.querySelector("h1");         // le PREMIER h1 trouvé\nconst boutons = document.querySelectorAll(".btn");  // TOUS les .btn (NodeList)\nconst champ = document.querySelector("#email");     // par id (le # du CSS !)\n\n// TOUS les sélecteurs du module CSS fonctionnent :\nconst premier = document.querySelector(".liste li:first-child");\nconst prixPromo = document.querySelectorAll(".carte[data-promo] .prix");' },
             { t: 'p', h: '`querySelector` (le premier) et `querySelectorAll` (tous, en NodeList statique itérable au forEach) sont LE standard : ils prennent n\'importe quel sélecteur CSS — ton investissement de la fiche Sélecteurs paie deux fois. Les vieilles méthodes `getElementById`/`getElementsByClassName` existent encore mais n\'apportent rien… sauf un piège : leurs collections sont « vivantes » et peuvent changer pendant ton parcours. NodeList est figée : aucune surprise.' },
             { t: 'h3', h: 'Lire et modifier le contenu' },
+            { t: 'syntax', title: 'Modifier la page, propriété par propriété', lang: 'js', code:
+'titre.textContent = "Nouveau catalogue";\ncarte.classList.add("promo");\nimg.src = "gari.jpg";', legend: [
+              ['textContent', 'remplace le TEXTE brut — sûr par nature, car jamais interprété comme du HTML (contrairement à innerHTML)'],
+              ['classList.add("promo")', 'pilote les CLASSES au lieu d\'écrire du style à la main : le visuel reste dans le CSS (remove et toggle existent aussi)'],
+              ['img.src = …', 'les attributs HTML deviennent des PROPRIÉTÉS modifiables : src, href, value, disabled…'],
+              ['l\'effet immédiat', 'chaque affectation rafraîchit l\'écran EN DIRECT — pas de rechargement, c\'est toute la magie du DOM']
+            ]},
             { t: 'code', lang: 'js', code:
 'const carte = document.querySelector(".carte");\n\ncarte.textContent;               // le TEXTE brut (lecture / écriture)\ncarte.innerHTML;                 // le HTML interprété (attention, encadré)\n\ntitre.textContent = "Boutique Awa - Soldes";   // remplace le texte, safe\n\n// Les classes : la vraie bonne manière de changer l\'apparence\ncarte.classList.add("en-promo");\ncarte.classList.remove("epuise");\ncarte.classList.toggle("ouverte");      // ajoute si absente, retire sinon\ncarte.classList.contains("en-promo");   // true / false' },
             { t: 'p', h: 'Face à trois outils, voici la hiérarchie pro. 1) **classList** pour TOUT ce qui est visuel : la mise en forme vit dans le CSS (fichier maintenable, thèmes, responsive), JS ne fait que dire « dans quel état on est ». 2) **textContent** pour le texte — toujours pour la donnée venant des utilisateurs. 3) **innerHTML** en dernier recours, uniquement pour du contenu que tu contrôles de bout en bout. Note aussi le réflexe dataset pour lire les marqueurs posés dans le HTML :' },
@@ -494,6 +646,13 @@ DEVDOCS.js = {
 '// <article class="carte" data-id="42" data-prix="3500">...</article>\nconst carte2 = document.querySelector(".carte");\ncarte2.dataset.id;     // "42"  (toujours des CHAÎNES : convertis si besoin)\ncarte2.dataset.prix;   // "3500"\n\nconst img = document.querySelector("img");\nimg.src = "photo-gari.png";              // les attributs deviennent des propriétés\nimg.setAttribute("alt", "Sac de gari premium");\n\n// Formulaire : .value lit et écrit le contenu saisi\nconst email = document.querySelector("#email").value;' },
             { t: 'callout', kind: 'warn', h: 'N\'injecte JAMAIS de saisie utilisateur via `innerHTML` : le texte est interprété comme du HTML et un simple message piégé peut exécuter du code dans ta page (attaque XSS). `textContent` affiche la saisie en toute sécurité. Et `innerHTML +=` de reboucle reparse TOUT le conteneur — détruisant les écouteurs posés sur les enfants (voir fiche Événements).' },
             { t: 'h3', h: 'Créer et insérer des éléments' },
+            { t: 'syntax', title: 'Créer puis insérer, décortiqué', lang: 'js', code:
+'const li = document.createElement("li");\nli.textContent = "Gari premium";\nliste.append(li);', legend: [
+              ['document.createElement("li")', 'fabrique l\'élément EN MÉMOIRE : il n\'existe nulle part dans la page tant qu\'on ne l\'a pas inséré'],
+              ['li.textContent = …', 'on le remplit tranquillement HORS écran : toutes les retouches avant la mise en vitrine'],
+              ['liste.append(li)', 'l\'INSERTION finale, à la fin du parent (prepend existe pour le début) — un seul mouvement, page fluide'],
+              ['le trio à retenir', 'créer → remplir → insérer : toujours dans cet ordre, jamais d\'élément à moitié vide montré au public']
+            ]},
             { t: 'code', lang: 'js', code:
 'const liste = document.querySelector("ul.courses");\n\n// 1. Créer en mémoire (hors de l\'arbre = pas de recalculs)\nconst item = document.createElement("li");\nitem.textContent = "Gari premium - 3500 F";\nitem.classList.add("article");\n\n// 2. Insérer une seule fois\nliste.append(item);          // a la FIN du parent\nliste.prepend(item);         // au tout DEBUT (le même nœud est DÉPLACÉ)\n\n// Variante HTML plein texte, position chirurgicale :\nliste.insertAdjacentHTML("afterbegin", "<li>Pain singo</li>");\n\nitem.remove();               // supprimer un élément de la page' },
             { t: 'p', h: 'Note le détail « déplacé » : un nœud ne peut exister qu\'à UN endroit — appeler `append` avec un élément déjà présent le TÉLÉPORTE, sans copie. Pour dupliquer, `element.cloneNode(true)` (copie profonde). Et pour du volume (une vingtaine de cartes produits), la balise `<template>` du HTML offre le moule idéal : `template.content.cloneNode(true)` à remplir puis insérer — même principe « hors arbre, insérer une fois ».' },
@@ -532,6 +691,14 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le problème : le code doit attendre l\'humain' },
             { t: 'p', h: 'Jusqu\'ici, ton code s\'exécutait d\'un trait, du haut vers le bas. Mais le bouton « Payer » ne sait pas quand le client cliquera — dans une seconde, jamais, dix fois de suite avec un réseau capricieux ? Impossible de l\'écrire en ligne droite. Le modèle événementiel inverse le rapport : ton code ENREGISTRE des fonctions de rappel (« si un clic arrive ICI, appelle ça »), puis se tait ; le navigateur joue le standardiste et déclenche chaque rappel quand son événement survient. Ton script ne décide plus du QUAND — il prépare le QUOI.' },
             { t: 'h3', h: 'addEventListener : la seule méthode à retenir' },
+            { t: 'syntax', title: 'addEventListener, décortiqué', lang: 'js', code:
+'btn.addEventListener("click", () => {\n  compteurEl.textContent = "+1 article";\n});', legend: [
+              ['btn.addEventListener', 'on ABONNE l\'élément à un type d\'événement : l\'élément écoute, le navigateur le réveillera le moment venu'],
+              ['"click"', 'le TYPE d\'événement entre guillemets : click, input, submit, keydown, scroll…'],
+              ['() => {…}', 'le GESTIONNAIRE : la fonction exécutée quand l\'événement arrive — ton code passe le relais au navigateur'],
+              ['le modèle mental', '« quand IL se passe ça SUR ça, fais ça » : élément . écouter ( quoi , réaction ) — tout l\'événementiel tient dans cette phrase'],
+              ['débrayable', 'plusieurs écouteurs sur le même événement, possible ; removeEventListener existe pour se désabonner proprement']
+            ]},
             { t: 'code', lang: 'js', code:
 'const bouton = document.querySelector("#commander");\n\nbouton.addEventListener("click", () => {\n  console.log("Commande envoyée !");\n});\n\n// Avec l\'objet événement en paramètre :\nbouton.addEventListener("click", (event) => {\n  console.log(event.target);          // l\'élément RÉELLEMENT cliqué\n  console.log(event.currentTarget);   // l\'élément ÉCOUTÉ (ici, bouton)\n});' },
             { t: 'p', h: 'Pourquoi `addEventListener` plutôt que l\'attribut `onclick="..."` vu en vieilleries ? Trois raisons : la séparation propre (le JS reste hors du HTML), la possibilité d\'empiler PLUSIEURS réactions sur le même événement, et le retrait propre via `removeEventListener`. L\'attribut onclick n\'accepte qu\'un seul gestionnaire, qui écrase le précédent. Ancien réflexe, nouvelle habitude.' },
@@ -549,12 +716,28 @@ DEVDOCS.js = {
               ['`DOMContentLoaded`', 'Le HTML est entièrement lu (scripts sans defer)']
             ]},
             { t: 'h3', h: 'Formulaires : submit et preventDefault' },
+            { t: 'syntax', title: 'submit + preventDefault, décortiqué', lang: 'js', code:
+'form.addEventListener("submit", (e) => {\n  e.preventDefault();\n  const saisie = champ.value.trim();\n});', legend: [
+              ['"submit" sur le form', 'l\'événement du FORMULAIRE (pas du bouton !) — il capte aussi la touche Entrée tapée dans un champ'],
+              ['e.preventDefault()', 'BLOQUE le comportement par défaut (le rechargement de la page) : tu gardes la main en JavaScript'],
+              ['champ.value', 'le contenu actuel d\'un champ — TOUJOURS une string : Number(champ.value) si tu veux calculer avec'],
+              ['.trim()', 'retire les espaces aux deux bouts : le réflexe hygiène avant toute validation de saisie'],
+              ['e, le témoin', 'l\'objet ÉVÉNEMENT : tout ce qui vient de se passer (touche tapée, élément cliqué, coordonnées…) t\'est raconté là']
+            ]},
             { t: 'code', lang: 'js', code:
 'const form = document.querySelector("form");\n\nform.addEventListener("submit", (event) => {\n  event.preventDefault();        // EMPÊCHE le rechargement de la page\n  const email = form.email.value.trim();\n  if (!email.includes("@")) {\n    afficherErreur("E-mail invalide");\n    return;\n  }\n  envoyerAuServeur(email);\n});' },
             { t: 'p', h: 'Par défaut, l\'envoi d\'un formulaire RECHARGE la page (comportement historique) — effaçant ton état JS, ta saisie, tout. `preventDefault()` suspend ce comportement natif pour le remplacer par ta logique : validation, envoi en `fetch`, message personnalisé. Même médicament pour les liens factices `<a href="#">` détournés en boutons. Le savoir-culture : `preventDefault` n\'arrête PAS la propagation ; ce sont deux mécanismes distincts.' },
             { t: 'h3', h: 'Propagation : l\'événement qui monte les étages' },
             { t: 'p', h: 'Sous le capot, un clic traverse trois phases : il descend de la fenêtre jusqu\'à la cible (capture), atteint la cible, puis REMONTE de parent en parent jusqu\'à la fenêtre (**bubbling**). Conséquence directe : un écouteur posé sur le parent entend les clics de toute sa descendance — c\'est le fondement de la délégation juste après. `event.stopPropagation()` coupe la remontée (une modale dont on veut « cliquer dehors pour fermer » mais pas à travers elle), mais ménage-la : elle empêche les autres mécanismes légitimes (délégation parentale, fermeture générale de fenêtres) de fonctionner.' },
             { t: 'h3', h: 'La délégation : UN écouteur au lieu de cent' },
+            { t: 'syntax', title: 'La délégation d\'événements, décortiquée', lang: 'js', code:
+'liste.addEventListener("click", (e) => {\n  if (e.target.matches(".supprimer")) {\n    e.target.closest("li").remove();\n  }\n});', legend: [
+              ['UN écouteur sur le parent', 'grâce à la propagation, le clic sur n\'importe quel enfant REMONTE jusqu\'à la liste : un seul guetteur suffit'],
+              ['e.target', 'l\'élément RÉELLEMENT cliqué — pas forcément celui qui écoute : c\'est toute la différence de la délégation'],
+              ['matches(".supprimer")', 'le FILTRE : « l\'élément cliqué correspond-il à ce sélecteur ? » — sinon on ignore'],
+              ['closest("li")', 'remonte au plus proche ancêtre li : parfait pour supprimer la ligne entière même si on a cliqué l\'icône du bouton'],
+              ['le bonus', 'les éléments ajoutés PLUS TARD (nouvel article du panier) sont couverts d\'office — aucun réabonnement à gérer']
+            ]},
             { t: 'code', lang: 'js', code:
 '// Le pattern des listes vivantes : écouter le PARENT,\n// puis identifier l\'enfant cliqué via closest()\ndocument.querySelector(".liste-produits").addEventListener("click", (event) => {\n  const carte = event.target.closest(".carte");\n  if (!carte || !event.currentTarget.contains(carte)) return;  // clic dehors\n\n  const id = carte.dataset.id;\n  if (event.target.closest(".btn-supprimer")) {\n    supprimerProduit(id);\n  } else {\n    ouvrirFiche(id);\n  }\n});' },
             { t: 'p', h: 'Deux avantages énormes : 1) **un seul** écouteur au lieu d\'un par carte (mémoire, clarté) ; 2) les cartes **ajoutées plus tard** (par fetch, par le DOM) fonctionnent instantanément, puisque l\'écouteur vit sur le parent toujours présent. C\'est LA technique des todo lists, tableaux de données, galeries de la Boutique Awa — et derrière le rideau, c\'est exactement ce raisonnement qu\'emploient les frameworks modernes.' },
@@ -595,10 +778,25 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Sous le capot : une requête HTTP, c\'est quoi ?' },
             { t: 'p', h: 'Quand fetch part, il envoie un message structuré : une **méthode** (l\'intention : GET, POST…), une **URL**, des **en-têtes** (méta : type de contenu, jeton d\'authentification), parfois un **corps** (les données envoyées). Le serveur répond par un message structuré pareil : un **statut** (200 tout va bien, 404 introuvable, 500 panne serveur), des en-têtes, et un corps — presque toujours du **texte JSON**. Retiens la symétrie : à l\'envoi, `JSON.stringify()` convertit ton objet en texte ; à la réception, `response.json()` convertit le texte en objet JS. Ce ne sont que des allers-retours de texte au bon format.' },
             { t: 'h3', h: 'Le cycle complet d\'une requête GET' },
+            { t: 'syntax', title: 'fetch en deux await, décortiqué', lang: 'js', code:
+'const reponse = await fetch("/api/produits");\nconst produits = await reponse.json();', legend: [
+              ['fetch("/api/produits")', 'envoie la requête HTTP et renvoie une PROMESSE de réponse — le réseau prend le temps qu\'il prend'],
+              ['await', 'met la fonction en pause JUSQU\'AU résultat, sans geler la page — uniquement autorisé dans une fonction async'],
+              ['reponse.json()', 'décode le CORPS de la réponse en données JS (objets, tableaux) : lui aussi est une promesse, d\'où le second await'],
+              ['attention au 404', 'fetch n\'échoue que sur panne RÉSEAU : une réponse 404 ou 500 doit être testée soi-même avec reponse.ok']
+            ]},
             { t: 'code', lang: 'js', code:
 'async function chargerProduits() {\n  try {\n    const reponse = await fetch("https://api.exemple.bj/produits");\n\n    if (!reponse.ok) {                     // 404, 500... arrivent ICI\n      throw new Error("HTTP " + reponse.status);\n    }\n\n    const produits = await reponse.json();  // texte JSON -> tableau d\'objets\n    afficherProduits(produits);\n  } catch (erreur) {\n    console.error("Chargement impossible :", erreur);\n    afficherMessage("Vérifie ta connexion et réessaie.");\n  }\n}\nchargerProduits();' },
             { t: 'p', h: 'Trois étapes à mémoriser comme un récit : `fetch()` envoie et rend une PROMESSE de réponse ; on vérifie `response.ok` soi-même (piège n°1 : fetch ne rejette PAS sur un 404 — seuls les vrais échecs réseau déclenchent le catch) ; `response.json()` parse le corps, ce qui est AUSSI asynchrone (piège n°2 : un deuxième `await` obligatoire). Trois étapes, deux await, un contrôle manuel du statut : ce squelette couvre 95 % de tes requêtes.' },
             { t: 'h3', h: 'Envoyer des données : POST et JSON' },
+            { t: 'syntax', title: 'POST + JSON : le trio indissociable', lang: 'js', code:
+'await fetch("/api/commandes", {\n  method: "POST",\n  headers: { "Content-Type": "application/json" },\n  body: JSON.stringify(commande)\n});', legend: [
+              ['method: "POST"', 'le VERBE : GET lit (la valeur par défaut), POST crée, PUT/PATCH modifient, DELETE supprime'],
+              ['headers', 'les EN-TÊTES : Content-Type annonce le format du corps — c\'est lui qui indique au serveur comment décoder'],
+              ['JSON.stringify(commande)', 'SÉRIALISE l\'objet JS en texte JSON : le réseau ne transporte que du texte, pas des objets vivants'],
+              ['le trio', 'POST + Content-Type json + stringify : oublie l\'un des trois et le serveur reçoit du charabia… ou rien'],
+              ['au retour', 'souvent le serveur répond la ressource créée : const data = await reponse.json() te la remet entre les mains']
+            ]},
             { t: 'code', lang: 'js', code:
 'const reponse = await fetch("https://api.exemple.bj/commandes", {\n  method: "POST",\n  headers: {\n    "Content-Type": "application/json",\n    "Authorization": "Bearer " + jeton      // si l\'API exige un jeton\n  },\n  body: JSON.stringify({\n    produitId: 42,\n    quantite: 2,\n    paiement: "mtn-momo"\n  })\n});' },
             { t: 'p', h: 'Oublie `body: monObjet` direct : il voyagerait sous la forme du texte inutile « [object Object] ». Le trio correct : `JSON.stringify` pour sérialiser + l\'en-tête `Content-Type: application/json` pour que le serveur sache comment le relire + éventuellement `Authorization` si un jeton d\'authentification est exigé. Pour un upload de fichier ou un formulaire classique, on utiliserait `FormData` à la place de JSON — le navigateur fabrique alors l\'en-tête lui-même (ne le redéfinis donc pas dans ce cas).' },
@@ -661,10 +859,24 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Sous le capot : la boucle d\'événements en trois images' },
             { t: 'p', h: 'Image 1 : JavaScript ne sait faire qu\'**une chose à la fois** (une seule « pile d\'appels »). Image 2 : les tâches longues (timers, réseau, clic) sont gérées par le NAVIGATEUR, en parallèle du JS ; quand elles finissent, elles déposent ton callback dans une **file d\'attente**. Image 3 : la **boucle d\'événements** (event loop) fait le vigile — dès que la pile est vide, elle pousse le prochain callback de la file dedans. Résultat pratique épatant : `setTimeout(fn, 0)` ne s\'exécute PAS « tout de suite » mais « dès que la pile est vide », c\'est-à-dire APRÈS la fin du script en cours. Et les promesses ont une file prioritaire (microtâches) qui passe AVANT les timers : d\'où l\'ordre parfois suprenant de tes console.log.' },
             { t: 'h3', h: 'La promesse : un « bon à valoir » résultat' },
+            { t: 'syntax', title: 'then / catch : brancher la suite', lang: 'js', code:
+'promesse\n  .then((donnees) => afficher(donnees))\n  .catch((erreur) => afficherErreur(erreur));', legend: [
+              ['.then(fn)', '« QUAND ça réussit, fais ça » : tu branches la suite sans savoir QUAND elle jouera — le navigateur te rappellera'],
+              ['.catch(fn)', 'le filet : attrape n\'importe quel échec de la chaîne, d\'où qu\'il vienne'],
+              ['les trois états', 'pending (en attente) → fulfilled (tenue) ou rejected (rompue) : une seule issue, définitive'],
+              ['la métaphore', 'la promesse n\'est PAS le colis : c\'est le TICKET de livraison qui promet le colis — d\'où le nom']
+            ]},
             { t: 'code', lang: 'js', code:
 'const promesse = fetch("https://api.exemple.bj/produits");\n// À cet instant précis : la promesse est EN COURS (pending).\n// Plus tard, exactement UNE fois :\n//   tenue (fulfilled, avec la valeur)  OU  rompue (rejected, avec l\'erreur)\n\npromesse\n  .then((reponse) => reponse.json())        // si succès : étape suivante\n  .then((donnees) => afficher(donnees))     // chaînage : chaque then attend le précédent\n  .catch((erreur) => console.error(erreur)) // UNE erreur, où qu\'elle naisse dans la chaîne\n  .finally(() => cacherSpinner());          // dans tous les cas' },
             { t: 'p', h: 'La promesse formalise ce que setTimeout improvisait : un CONTENEUR de résultat futur, avec trois états (pending / fulfilled / rejected) et une garantie solide — il ne peut changer d\'état qu\'UNE fois (ton callback ne peut pas être appelé deux fois). Le `.then()` chaîne les étapes (ce que chaque then retourne est l\'entrée du suivant), `.catch()` rattrape toute panne de la chaîne, `.finally()` fait le ménage. C\'est déjà bien ; async/await va rendre ça lumineux.' },
             { t: 'h3', h: 'async/await : l\'asynchrone qui se lit comme du synchrone' },
+            { t: 'syntax', title: 'async / await sous le capot du quotidien', lang: 'js', code:
+'async function chargerProduits() {\n  try {\n    const reponse = await fetch("/api/produits");\n    const produits = await reponse.json();\n    afficher(produits);\n  } catch (e) {\n    afficherErreur(e);\n  }\n}', legend: [
+              ['async function', 'le mot-clé qui AUTORISE await dans le corps — et qui transforme la fonction elle-même en promesse'],
+              ['await fetch(…)', '« mets CETTE fonction en pause jusqu\'au résultat » — le code se lit de haut en bas comme du synchrone, sans geler la page'],
+              ['try / catch', 'le filet classique : il attrape les rejets des promesses attendues — le rôle que jouait .catch dans la version .then'],
+              ['pendant la pause', 'le navigateur continue de vivre : clics, animations, autres scripts — seule CETTE fonction attend, pas ta page']
+            ]},
             { t: 'code', lang: 'js', code:
 'async function afficherSolde() {\n  try {\n    const reponse = await fetch("/api/solde");\n    const { solde, devise } = await reponse.json();\n    document.querySelector("#solde").textContent = solde + " " + devise;\n  } catch (erreur) {\n    console.error("Impossible de lire le solde :", erreur);\n  }\n}' },
             { t: 'p', h: 'Décomposons les deux mots, car tout est là : `async` devant une fonction (1) autorise `await` à l\'intérieur et (2) fait que la fonction **renvoie TOUJOURS une promesse**. `await` fait une chose qui semble magique mais ne l\'est pas : il met EN PAUSE la fonction (elle se rendormira quand la promesse se résoudra), **sans jamais bloquer la page** — la boucle d\'événements continue de vivre, les clics répondent, l\'interface reste fluide. Et `try/catch` retrouve enfin son usage naturel avec l\'asynchrone. Le code se lit de haut en bas, comme une histoire.' },
@@ -718,10 +930,24 @@ DEVDOCS.js = {
             { t: 'h3', h: 'Le débogueur : console.log en version tranchante' },
             { t: 'p', h: 'Dans les DevTools, onglet Sources, cliquer un numéro de ligne pause un **point d\'arrêt** : le code se FIGE à cet instant — et chaque variable révèle sa valeur exacte à ce moment. Ensuite on avance pas à pas (`F10` : ligne suivante ; `F11` : entrer dans l\'appel ; `Shift+F11` : en sortir), et l\'impossible devient trivial : on VOIT le moment où la valeur devient mauvaise. Le mot-clé `debugger;` posé dans le code déclenche l\'arrêt au bon endroit sans chercher la ligne. 90 % des bugs tombent en deux minutes ainsi, là où vingt console.log tourneraient en rond — essaie-le une fois et tu ne reviendras pas.' },
             { t: 'h3', h: 'try / catch / finally : anticiper le pire, proprement' },
+            { t: 'syntax', title: 'try / catch / finally, décortiqué', lang: 'js', code:
+'try {\n  const data = JSON.parse(saisie);\n} catch (erreur) {\n  afficherErreur("JSON illisible :", erreur.message);\n} finally {\n  champ.value = "";\n}', legend: [
+              ['try {…}', 'la zone à RISQUE : le code susceptible de planter y vit en confinement'],
+              ['catch (erreur)', 'exécuté SEULEMENT si le try a planté : le programme ne s\'arrête plus — il gère. erreur.message raconte l\'incident'],
+              ['finally {…}', 'TOUJOURS exécuté, succès OU échec : le rangement (vider le champ, masquer le chargeur, refermer la ressource)'],
+              ['la philosophie', 'on n\'enferme pas TOUT le programme : on entoure chaque opération risquée — réseau, JSON.parse, saisie utilisateur']
+            ]},
             { t: 'code', lang: 'js', code:
 'function lireJSON(texte) {\n  try {\n    return JSON.parse(texte);        // peut échouer sur du texte invalide\n  } catch (erreur) {\n    console.warn("JSON illisible :", erreur.message);\n    return null;                     // repli propre : le programme continue\n  } finally {\n    console.log("Tentative de lecture terminée");  // DANS TOUS LES CAS\n  }\n}' },
             { t: 'p', h: 'La doctrine du try/catch, car elle existe : réserve-le aux **frontières incertaines** — parsing de données venues d\'ailleurs, réseau, stockage local, environnement utilisateur. Ne l\'enroule PAS autour de tout ton code « au cas où » : un programme qui avale toutes ses erreurs devient indéboguable (tu ne sauras plus jamais pourquoi « ça ne fait rien »). Le rôle du catch n\'est pas de faire semblant — c\'est de DÉCIDER : informer, remplacer par une valeur sûre, réessayer, ou laisser remonter si tu ne peux pas réparer ici.' },
             { t: 'h3', h: 'Lancer ses propres erreurs : le rôle de throw' },
+            { t: 'syntax', title: 'throw : alerter soi-même, décortiqué', lang: 'js', code:
+'if (prix < 0) {\n  throw new Error("Un prix ne peut pas être négatif");\n}', legend: [
+              ['throw new Error(…)', 'FABRIQUE et LANCE une erreur : l\'exécution s\'arrête ici et la faute remonte jusqu\'au catch le plus proche'],
+              ['"Un prix ne peut pas…"', 'le message s\'adresse à l\'HUMAIN du futur (toi, en débogage) : précis, métier, actionnable'],
+              ['pourquoi lancer ?', 'signaler IMMÉDIATEMENT qu\'une règle est violée : mieux vaut un crash explicite qu\'un prix négatif qui se promène dans le système'],
+              ['la chaîne', 'throw dans une fonction appelante catch loin en amont : l\'erreur traverse les étages jusqu\'à trouver celui qui sait gérer']
+            ]},
             { t: 'code', lang: 'js', code:
 'function diviser(a, b) {\n  if (b === 0) {\n    throw new Error("Division par zéro interdite");\n  }\n  return a / b;\n}\n\n// L\'appelant décide :\ntry {\n  diviser(10, 0);\n} catch (erreur) {\n  afficherMessage(erreur.message);   // "Division par zéro interdite"\n}' },
             { t: 'p', h: '`throw` est la politesse d\'une fonction honnête : plutôt que rendre un résultat faux ou un `null` qui explosera plus loin, elle DIT « je ne peux pas » immédiatement, avec un message qui explique. Le voyage de l\'erreur est à mémoriser : elle remonte la pile d\'appels jusqu\'au premier try/catch capable — exactement comme les promesses rejettées cherchaient leur `.catch` dans la fiche Asynchrone. D\'où la règle d\'or du design : seuls les fichiers « frontière » attrapent (API, saisie, UI) ; le cœur du programme, lui, préfère signaler clairement.' },

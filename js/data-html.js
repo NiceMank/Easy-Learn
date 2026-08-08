@@ -29,10 +29,26 @@ DEVDOCS.html = {
             { t: 'p', h: 'Demande-toi ce qui se passerait sans ce cadre. Tu écrirais ton texte brut dans un fichier, le navigateur l\'afficherait, certes… mais avec quel encodage ? Selon quelles règles de mise en page ? Pour quel type d\'écran ? Dans les années 90, chaque navigateur répondait à ces questions à sa manière, et le même HTML s\'affichait différemment partout. Un enfer. Le doctype et la structure servent à verrouiller ces réponses une fois pour toutes : c\'est un **contrat** entre toi et le navigateur, pas une décoration.' },
             { t: 'p', h: 'Regarde la structure comme trois couches qui répondent chacune à une question précise du navigateur : la **déclaration** (le doctype : « selon quelles règles dois-je interpréter ce document ? »), la **racine** (`<html>` : « où commence et où finit le document ? »), et les **deux zones** (`<head>` et `<body>` : « qu\'est-ce qui concerne la page elle-même, et qu\'est-ce qui doit s\'afficher ? »). Une fois ces trois réponses comprises, tout le reste du HTML n\'est que du remplissage dans ces zones.' },
             { t: 'h3', h: 'Le squelette minimal' },
+            { t: 'syntax', title: 'Le squelette d\'une page, décortiqué balise par balise', lang: 'html', code:
+'<!DOCTYPE html>\n<html lang="fr">\n<head>\n  <meta charset="UTF-8">\n  <title>Ma page</title>\n</head>\n<body>\n  <!-- tout ce qui se voit vit ici -->\n</body>\n</html>', legend: [
+              ['<!DOCTYPE html>', 'pas une balise : la DÉCLARATION « je suis du HTML5 ». Sans elle, le navigateur bascule en mode de compatibilité bancal'],
+              ['<html lang="fr">', 'la RACINE : tout le document vit dedans. lang renseigne les lecteurs d\'écran et la traduction automatique'],
+              ['<head>…</head>', 'la carte d\'identité de la page (encodage, titre, réglages) : RIEN de son contenu ne s\'affiche à l\'écran'],
+              ['<meta charset="UTF-8">', 'l\'ENCODAGE : oublie-le et tes « é » deviennent « Ã© ». Toujours en tout premier dans le head'],
+              ['<body>…</body>', 'la partie VISIBLE : tout ce que l\'utilisateur voit vit ici, et uniquement ici']
+            ]},
             { t: 'p', h: 'Voici la page HTML la plus petite qui soit valide. Mémorise-la : chaque page que tu écriras partira de cette base. Ensuite, on la décortique ligne par ligne — car chaque ligne existe pour une raison précise.' },
             { t: 'code', lang: 'html', label: 'index.html — le point de départ', code:
 '<!DOCTYPE html>\n<html lang="fr">\n  <head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Ma première page</title>\n  </head>\n  <body>\n    <h1>Bonjour le monde !</h1>\n  </body>\n</html>' },
             { t: 'h3', h: 'Ligne par ligne, qu\'est-ce qui se passe ?' },
+            { t: 'syntax', title: 'Anatomie d\'une balise avec attributs', lang: 'html', code:
+'<img src="gari.jpg" alt="Sachet de gari premium">', legend: [
+              ['<img', 'le NOM de la balise : ce qu\'on demande au navigateur — ici, afficher une image'],
+              ['src="gari.jpg"', 'un ATTRIBUT : un réglage au format nom="valeur". Les guillemets autour de la valeur, toujours'],
+              ['alt="Sachet de gari premium"', 'le texte alternatif : lu à voix haute par les lecteurs d\'écran, affiché si l\'image ne charge pas'],
+              ['>', 'la balise se referme ici : img est « orpheline », elle n\'enveloppe rien — pas de balise fermante associée'],
+              ['la forme générale', '`<balise attribut="valeur">contenu</balise>` — tu retrouveras ce patron sur absolument tout le HTML']
+            ]},
             { t: 'ul', items: [
               '`<!DOCTYPE html>` — Ce n\'est **pas une balise**, c\'une déclaration, une instruction pour le navigateur : « interprète ce document selon les règles modernes du HTML ». Sans elle, le navigateur bascule en *quirks mode*, un mode de compatibilité qui imite les bugs des navigateurs des années 90 (notamment le mauvais calcul des dimensions des boîtes d\'Internet Explorer 5). Concrètement : tes largeurs CSS se comportent différemment et ta mise en page semble « cassée » alors que ton code est bon.',
               '`<html lang="fr">` — La racine du document : tout le reste vit à l\'intérieur. L\'attribut `lang` déclare la langue du contenu. Il ne traduit rien, mais il aide les traducteurs automatiques, les moteurs de recherche et surtout les lecteurs d\'écran — un synthétiseur vocal configuré en anglais qui tombe sur une page `lang="fr"` adaptera sa prononciation au lieu de massacrer ton texte.',
@@ -88,6 +104,13 @@ DEVDOCS.html = {
             { t: 'p', h: 'Imagine que tu dictes ta page à quelqu\'un au téléphone. Tu ne dirais pas « ensuite il y a du texte gros, puis du texte normal » : tu dirais « le titre du chapitre est…, puis un paragraphe…, et là appuie sur ce mot ». C\'est exactement ainsi que fonctionnent les lecteurs d\'écran : ils ne voient pas ta page, ils en écoutent la structure. Enquête après enquête, il ressort que la majorité de leurs utilisateurs naviguent **par les titres** — ils demandent la liste des `h1`-`h6` et sautent directement à la section qui les intéresse. Sans vraie hiérarchie de titres, ta page est pour eux un mur sonore indivisible.' },
             { t: 'p', h: 'Même logique pour Google : le robot ne « voit » pas ta mise en page, il extrait le **plan** du document pour comprendre de quoi parle chaque partie. Un bon plan de titres, c\'est du référencement gratuit. Morale : le HTML décrit le sens, le CSS décide du look. Retiens cette phrase, elle te servira dans tout le module.' },
             { t: 'h3', h: 'La hiérarchie des titres : d\'abord l\'intuition' },
+            { t: 'syntax', title: 'Titres et paragraphes, décortiqués', lang: 'html', code:
+'<h1>La Boutique d\'Awa</h1>\n<h2>Nos céréales</h2>\n<h3>Le gari</h3>\n<p>Un sachet de qualité, moulu sur place.</p>', legend: [
+              ['<h1>', 'LE titre de la page : UN seul par page — c\'est la une du journal, pas un moyen d\'obtenir du gros texte'],
+              ['<h2> <h3> …', 'les sous-titres par NIVEAUX logiques : on ne saute pas de h1 à h4. C\'est un plan de document, pas une taille de police'],
+              ['<p>', 'le paragraphe : l\'unité de texte de base. Le navigateur ajoute lui-même l\'espace entre deux p'],
+              ['</h1> et </p>', 'chaque balise ouverte se REFERME avec un slash : oublie-la et le titre avale tout le texte qui suit']
+            ]},
             { t: 'p', h: 'Les six niveaux `h1` à `h6` forment la **table des matières** de ta page. Pense à un livre : `h1` est le titre du livre (par convention, un seul par page), `h2` ses chapitres, `h3` les sections de chapitre, et ainsi de suite. Ce plan se lit en indentation, comme dans un éditeur de code.' },
             { t: 'code', lang: 'html', label: 'Le plan, minimal', code:
 '<h1>Guide du café</h1>\n  <h2>Les grandes familles</h2>\n    <h3>Arabica</h3>\n    <h3>Robusta</h3>\n  <h2>Les méthodes d\'infusion</h2>\n    <h3>Espresso</h3>\n    <h3>Filtre</h3>' },
@@ -106,6 +129,13 @@ DEVDOCS.html = {
               '`<hr>` — une **rupture thématique** entre deux sujets (ligne horizontale par défaut). Ce n\'est pas une « ligne décorative » : ressers-t\'en quand le sujet change vraiment.'
             ]},
             { t: 'h3', h: 'Le sens des mots : strong, em et leurs faux amis' },
+            { t: 'syntax', title: 'strong et em : le sens avant le style', lang: 'html', code:
+'<p>Prix <strong>non négociable</strong>,\nmais livraison <em>offerte</em> aujourd\'hui.</p>', legend: [
+              ['<strong>', 'l\'IMPORTANCE : « attention, ceci compte » — affiché en gras par défaut, mais c\'est le SENS qui compte, pas le gras'],
+              ['<em>', 'l\'ACCENT : ce qu\'une voix insisterait en lisant à haute voix — affiché en italique par défaut'],
+              ['plutôt que b et i', 'les balises `<b>` et `<i>` ne disent QUE « gras / italique », sans aucun sens — les lecteurs d\'écran les lisent à plat'],
+              ['le rendu se règle en CSS', 'tu veux un strong rouge et non gras ? C\'est une affaire de CSS, jamais une raison de changer la balise']
+            ]},
             { t: 'table', head: ['Balise', 'Sens déclaré', 'Rendu par défaut'], rows: [
               ['`strong`', 'Importance, gravité (à ne pas rater)', 'Gras'],
               ['`em`', 'Emphase : change le sens de la phrase à l\'oral', 'Italique'],
@@ -161,6 +191,13 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Pourquoi le lien change tout' },
             { t: 'p', h: 'Avant les liens, consulter deux documents impliquait de copier laborieusement une adresse, de la recoller, d\'attendre. Le lien rend la navigation **continue** : un clic, et tu passes d\'un article à sa source, d\'un produit à son paiement, d\'un sommaire à son chapitre. Et ce n\'est pas qu\'un confort humain : Google découvre littéralement tes pages en *suivant* les liens depuis d\'autres pages. Un site sans liens entrants est une île que personne ne visite ; une page sans lien sortant, une impasse.' },
             { t: 'h3', h: 'L\'anatomie d\'un lien, d\'abord en douceur' },
+            { t: 'syntax', title: 'Le lien, décortiqué', lang: 'html', code:
+'<a href="https://wa.me/22997000000">Écrire à Awa sur WhatsApp</a>', legend: [
+              ['<a', 'anchor, l\'ANCRE : la balise du lien — c\'est elle qui transforme un document en hypertexte, donc en web'],
+              ['href="…"', 'HYPERRÉFÉRENCE : la destination du lien. C\'est l\'attribut qui fait TOUT le travail — sans href, le lien est mort'],
+              ['Écrire à Awa sur WhatsApp', 'le texte VISIBLE et cliquable : il doit décrire la destination. Jamais « cliquez ici » — l\'utilisateur veut savoir OÙ il va'],
+              ['</a>', 'la fermeture : oublie-la et tout le reste de la page devient un unique lien géant']
+            ]},
             { t: 'code', lang: 'html', code:
 '<a href="https://developer.mozilla.org">MDN Web Docs</a>' },
             { t: 'p', h: 'Deux morceaux, deux rôles. L\'attribut `href` (*hypertext reference*) contient la **destination** ; le texte entre les balises est la **zone cliquable**. Et ce texte, crois-le ou non, est lu à voix haute par les lecteurs d\'écran quand on leur demande « la liste des liens de la page ». Écoute la différence : « Cliquez ici. Cliquez ici. Cliquez ici. » contre « Voir les tarifs. Télécharger le catalogue. Contacter Awa. » — dans le premier cas, la personne doit visiter chaque lien pour savoir où il mène. Un bon texte de lien se comprend **hors contexte**.' },
@@ -184,6 +221,13 @@ DEVDOCS.html = {
 'boutique/\n├── index.html\n├── pages/\n│   └── produits.html\n└── img/\n    └── gari.jpg\n\n<!-- Dans pages/produits.html, afficher gari.img : -->\n<img src="../img/gari.jpg" alt="Sac de gari premium">\n<!-- ../ -> remonte de pages/ à la racine, puis img/gari.jpg -->\n\n<!-- Dans index.html, lier la page produits : -->\n<a href="pages/produits.html">Voir nos produits</a>' },
             { t: 'p', h: 'Subtilité « sous le capot » qui explique 90 % des liens cassés : le navigateur résout les chemins relatifs par rapport à l\'**URL du document**, et **le slash final compte**. Si ta page est servie à `…/docs` (sans slash), un lien `page.html` pointera vers `…/page.html` ; servie à `…/docs/` (avec slash), le même lien visera `…/docs/page.html`. Même fichier HTML, deux résolutions différentes. Quand un lien « marche sur une page mais pas sur l\'autre », vérifie ce slash en premier.' },
             { t: 'h3', h: 'Naviguer dans la page : les ancres' },
+            { t: 'syntax', title: 'L\'ancre interne : cible + saut', lang: 'html', code:
+'<h2 id="livraison">La livraison</h2>\n<!-- plus haut dans la page : -->\n<a href="#livraison">Voir les infos livraison</a>', legend: [
+              ['id="livraison"', 'la CIBLE : un repère posé sur un élément. Un id est UNIQUE dans toute la page, comme une adresse'],
+              ['href="#livraison"', 'le # devant le nom signifie « va VERS l\'ancre » : le navigateur fait défiler jusqu\'à l\'élément qui porte cet id'],
+              ['sans rechargement', 'le saut se fait dans la page, sans demande au serveur : instantané, même hors-ligne'],
+              ['le bonus partage', 'l\'URL avec #livraison peut être envoyée à quelqu\'un : sa page s\'ouvrira directement au bon endroit']
+            ]},
             { t: 'code', lang: 'html', code:
 '<a href="#chapitre-3">Aller au chapitre 3</a>\n\n<h2 id="chapitre-3">Chapitre 3</h2>\n<!-- Le clic fait défiler la page jusqu\'à ce h2. -->' },
             { t: 'p', h: 'Deux détails à connaître. Un : la correspondance `href="#chapitre-3"` ↔ `id="chapitre-3"` est **sensible à la casse** (`#Chapitre` ne trouve pas `chapitre`). Deux : si tu as un en-tête fixe qui recouvre le haut de l\'écran, l\'ancre arrivera cachée dessous — deux lignes de CSS règlent ça : `scroll-margin-top: 90px;` sur l\'élément ciblé (ou `scroll-behavior: smooth` sur `html` pour un défilement doux). Bonus pour plus tard : le sélecteur CSS `:target` permet de surligner l\'élément atteint.' },
@@ -230,6 +274,13 @@ DEVDOCS.html = {
           intro: 'On pense en listes : courses au marché, étapes d\'une recette, classement des vendeuses du carré. Les machines aussi raisonnent en listes — mais elles ont besoin qu\'on leur dise **de quel type** il s\'agit. HTML propose trois familles de listes, et choisir la bonne n\'est pas une question de look (les puces, les numéros, ça se change en CSS) : c\'est une question de **sens**. L\'ordre compte-t-il ? On numérote. L\'ordre est indifférent ? Simple énumération. Des paires terme/définition ? Liste de descriptions. Trois balises, trois messages différents aux machines.',
           blocks: [
             { t: 'h3', h: 'Pourquoi trois types ? Parce que l\'ordre porte un sens' },
+            { t: 'syntax', title: 'ul ou ol : choisir selon le sens, décortiqué', lang: 'html', code:
+'<ul>\n  <li>Gari</li>\n  <li>Riz</li>\n</ul>\n\n<ol>\n  <li>Choisir le produit</li>\n  <li>Payer en Mobile Money</li>\n</ol>', legend: [
+              ['<ul>', 'liste NON ordonnée : l\'ordre ne compte pas (les courses du marché) — puces par défaut'],
+              ['<ol>', 'liste ORDONNÉE : l\'ordre PORTE un sens (les étapes d\'une commande) — numérotation automatique'],
+              ['<li>', 'l\'ÉLÉMENT de liste : la SEULE balise autorisée directement dans une ul ou une ol'],
+              ['la règle d\'or', 'jamais de texte ni d\'autre balise directement entre `<ul>` et `<li>` : tout contenu vit dans un li']
+            ]},
             { t: 'p', h: 'Quand un lecteur d\'écran rencontre une liste, il l\'annonce : « liste, 5 éléments ». L\'utilisateur sait immédiatement où il va et peut sauter d\'élément en élément — ou quitter la liste entière d\'une touche. Avec des `<div>` ou des `<p>` empilés, plus rien de tout cela : la page devient un flux sans repères. Choisir la bonne balise de liste, c\'est offrir ce GPS gratuitement.' },
             { t: 'table', head: ['Balise', 'Signification', 'Cas d\'usage'], rows: [
               ['`ul` (unordered)', 'L\'ordre n\'a **pas** d\'importance', 'Ingrédients, fonctionnalités, charactéristiques, menu de navigation'],
@@ -246,6 +297,12 @@ DEVDOCS.html = {
 '<!-- Caractéristiques : retirer l\'une ne casse rien -> ul -->\n<ul>\n  <li>Gari fin premium, mouture double</li>\n  <li>Sac de 5 kg, production de Savalou</li>\n</ul>\n\n<!-- Commande : étapes à suivre DANS L\'ORDRE -> ol -->\n<ol>\n  <li>Choisis ta quantité</li>\n  <li>Réserve par téléphone ou WhatsApp</li>\n  <li>Paye à la livraison (espèces ou MoMo)</li>\n</ol>\n\n<!-- Fiche technique : termes et valeurs associées -> dl -->\n<dl>\n  <dt>Origine</dt>\n  <dd>Savalou, Collines</dd>\n  <dt>Conservation</dt>\n  <dd>6 mois au sec, à l\'abri de l\'humidité</dd>\n  <dd>Refermer le sac après usage</dd>\n</dl>' },
             { t: 'p', h: 'Note la souplesse de `<dl>` : un terme peut avoir **plusieurs définitions** (plusieurs `dd` pour un seul `dt`, comme « Conservation » ici), et plusieurs termes peuvent partager **une** définition (plusieurs `dt` devant un `dd` — pratique pour les synonymes). C\'est la seule liste à deux colonnes logiques, et elle est trop méconnue.' },
             { t: 'h3', h: 'Imbriquer des listes : la règle d\'or du `<li>`' },
+            { t: 'syntax', title: 'Imbriquer proprement, décortiqué', lang: 'html', code:
+'<li>Céréales\n  <ul>\n    <li>Gari</li>\n  </ul>\n</li>', legend: [
+              ['la sous-liste DANS le li', 'une `<ul>` enfant va À L\'INTÉRIEUR du `<li>` parent — jamais entre deux li : c\'est LA règle qui évite le HTML cassé'],
+              ['</li> après la sous-liste', 'on ne referme le parent qu\'une fois la sous-liste ENTIÈRE rangée — comme des poupées russes'],
+              ['l\'indentation', 'le décalage à droite n\'aide que les humains : sans lui, tu ne vois plus qui contient qui — et les erreurs se cachent']
+            ]},
             { t: 'p', h: 'Pour créer une sous-liste, on place une **liste entière à l\'intérieur d\'un `<li>`** — jamais directement dans le `<ul>` parent. C\'est LA structure de tous les menus déroulants du web.' },
             { t: 'code', lang: 'html', code:
 '<ul>\n  <li>Fruits\n    <ul>\n      <li>Mangues</li>\n      <li>Ananas</li>\n    </ul>\n  </li>\n  <li>Tubercules</li>\n</ul>' },
@@ -303,6 +360,13 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Pourquoi l\'image est l\'ennemi public n°1 de la performance' },
             { t: 'p', h: 'Retiens deux chiffres qui font réfléchir : une photo brute de smartphone pèse 3 à 12 Mo, et une page web médiane fait ~2,5 Mo **au total**. Une seule photo non optimisée peut donc sextupler le temps de chargement. Et le mal est double : pendant que l\'image se télécharge, si tu n\'as pas réservé sa place, tout le texte **saute** quand elle arrive (le fameux *layout shift* qui fait cliquer à côté du bouton). Bien vendre des images, c\'est de l\'ergonomie autant que de la technique.' },
             { t: 'h3', h: 'La base : `<img>`, mais bien remplie' },
+            { t: 'syntax', title: 'img bien remplie, attribut par attribut', lang: 'html', code:
+'<img src="images/gari.jpg" alt="Sachet de gari premium de 5 kg" width="800" height="600">', legend: [
+              ['src', 'la SOURCE : le chemin vers le fichier — relatif (images/gari.jpg) ou absolu. Sans src, rien ne s\'affiche'],
+              ['alt', 'le plan B textuel : ENTENDU par les non-voyants, lu par Google, affiché quand l\'image ne charge pas sur une connexion capricieuse'],
+              ['width / height', 'les dimensions RÉSERVÉES à l\'avance : la page ne « saute » plus pendant le chargement'],
+              ['jamais vide sans raison', 'alt="" ne se justifie QUE pour une image purement décorative — sinon, décris ce que l\'image montre']
+            ]},
             { t: 'code', lang: 'html', code:
 '<img src="photos/cascade.jpg" alt="Cascade tombant dans une forêt tropicale" width="800" height="533" loading="lazy" decoding="async">' },
             { t: 'ul', items: [
@@ -323,6 +387,13 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Sous le capot : pixels CSS vs pixels réels' },
             { t: 'p', h: 'Pourquoi une image de 400 px paraît floue sur un bon téléphone ? Parce que le « pixel » du CSS est une unité **abstraite**. Un écran récent (densité 2x ou 3x, type Retina) remplit chaque pixel CSS avec 4 ou 9 pixels physiques. Pour rester nette sur un écran 2x, une image affichée 400 px de large doit donc être fournie en 800 px réels. C\'est exactement le problème que `srcset` résout, avec deux descripteurs : `w` (largeur réelle de chaque fichier, pour les tailles fluides) et `x` (densité, pour les tailles fixes).' },
             { t: 'h3', h: 'Des images adaptatives avec srcset et sizes' },
+            { t: 'syntax', title: 'srcset : laisser le navigateur choisir la bonne taille', lang: 'html', code:
+'<img srcset="gari-400.jpg 400w, gari-800.jpg 800w"\n     sizes="(max-width: 600px) 400px, 800px"\n     src="gari-800.jpg" alt="Gari premium">', legend: [
+              ['srcset', 'la CARTE des versions : la même image en plusieurs tailles, chacune étiquetée de sa largeur RÉELLE (400w = 400 pixels)'],
+              ['sizes', 'l\'indice donné au navigateur : « elle OCCUPERA environ 400 px sur mobile, 800 px sinon » — il choisit alors la plus petite version suffisante'],
+              ['src', 'le SECOURS : les navigateurs trop vieux pour srcset prennent src — on le garde toujours'],
+              ['le gain concret', 'sur le téléphone d\'un client : 400 px au lieu de 2000 px — image 5 fois plus légère, data économisée, page instantanée']
+            ]},
             { t: 'code', lang: 'html', code:
 '<img src="cascade-800.jpg"\n     srcset="cascade-400.jpg 400w,\n             cascade-800.jpg 800w,\n             cascade-1600.jpg 1600w"\n     sizes="(max-width: 600px) 100vw, 50vw"\n     alt="Cascade en forêt" width="800" height="533">' },
             { t: 'p', h: 'Traduction littérale : « voici trois versions du même visuel, voici leurs largeurs réelles (`w`) ; et par ailleurs l\'image occupera 100 % de la largeur de l\'écran jusqu\'à 600 px, puis la moitié de l\'écran (`sizes`). » À partir de ces deux informations **et de la densité de l\'écran**, le navigateur calcule tout seul le fichier optimal. Un smartphone 390 px à densité 2 prendra `cascade-800.jpg` (390 × 2 ≈ 800, c\'est pile) — pas les 1600. Tu n\'as rien à programmer.' },
@@ -377,6 +448,14 @@ DEVDOCS.html = {
           intro: 'Le tableau HTML traîne une réputation volée. Dans les années 2000, faute de CSS digne de ce nom, on s\'en servait pour découper la mise en page des sites — une colonne pour le menu, une pour le contenu. Ce détournement a fait tant de dégâts que « tableau » est devenu un gros mot. Aujourd\'hui, la règle est limpide et facile à mémoriser : `<table>` présente des **données** (un relevé, un planning, un comparatif), le CSS fait la mise en page. Et bien construit, un tableau n\'est pas un truc ringard : c\'est l\'un des composants les plus accessibles du web.',
           blocks: [
             { t: 'h3', h: 'D\'abord l\'intuition : deux dimensions, deux directions de lecture' },
+            { t: 'syntax', title: 'Le squelette d\'un tableau, cellule par cellule', lang: 'html', code:
+'<table>\n  <tr>\n    <th>Membre</th>\n    <th>Mise</th>\n  </tr>\n  <tr>\n    <td>Awa</td>\n    <td>5 000 F</td>\n  </tr>\n</table>', legend: [
+              ['<table>', 'le tableau entier — réservé aux VRAIES données tabulaires (jamais pour faire la mise en page d\'un site !)'],
+              ['<tr>', 'table row : UNE LIGNE du tableau, qui enveloppe ses cellules'],
+              ['<th>', 'table heading : une cellule d\'EN-TÊTE — affichée en gras et ANNONCÉE comme titre par les lecteurs d\'écran'],
+              ['<td>', 'table data : une cellule de DONNÉES. Chaque tr compte ses td, et les colonnes s\'alignent toutes seules'],
+              ['th ou td ?', 'si la cellule NOMME sa ligne ou sa colonne (« Membre », « Mise ») → th ; si elle PORTE une valeur → td']
+            ]},
             { t: 'p', h: 'Qu\'est-ce qui différencie des données tabulaires d\'une liste ? La **relation croisée**. Dans « Février → 1 510 ventes », la cellule n\'a de sens qu\'à l\'intersection d\'une ligne et d\'une colonne : elle répond à deux questions à la fois (« quel mois ? quelle mesure ? »). Tant que ton information répond à une seule question, reste sur une liste ; dès qu\'elle en répond à deux, c\'est un tableau. Ce test en deux secondes tranche 95 % des hésitations.' },
             { t: 'code', lang: 'html', label: 'La structure correcte, version minimale', code:
 '<table>\n  <caption>Ventes du trimestre</caption>\n  <thead>\n    <tr>\n      <th scope="col">Mois</th>\n      <th scope="col">Ventes</th>\n      <th scope="col">Évolution</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th scope="row">Janvier</th>\n      <td>1 240</td>\n      <td>+4 %</td>\n    </tr>\n    <tr>\n      <th scope="row">Février</th>\n      <td>1 510</td>\n      <td>+21 %</td>\n    </tr>\n  </tbody>\n</table>' },
@@ -397,6 +476,12 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Sous le capot : comment le navigateur mesure les colonnes' },
             { t: 'p', h: 'Par défaut, un tableau se met en page en mode **automatique** : le navigateur lit TOUT le contenu, puis répartit les largeurs de colonnes selon ce qu\'elles contiennent. Deux conséquences utiles à connaître. D\'abord, le tableau grandit si le contenu grandit — c\'est pourquoi une URL longue peut « exploser » une colonne (le CSS `word-break` sert là). Ensuite, ce double passage coûte du temps de rendu sur les très grosses tables : `table-layout: fixed` fige les largeurs dès la première ligne (prévisible et rapide), au prix d\'un rognage possible des contenus longs. Et `border-collapse: collapse` — LE réflexe n°1 de tout tableau stylé — fusionne les doubles bordures apparentes entre cellules.' },
             { t: 'h3', h: 'Fusions : colspan et rowspan sans drame' },
+            { t: 'syntax', title: 'colspan / rowspan : étaler une cellule', lang: 'html', code:
+'<td colspan="2">Total général</td>\n<td rowspan="3">Zone Abomey-Calavi</td>', legend: [
+              ['colspan="2"', 'la cellule s\'ÉTALE sur 2 colonnes horizontalement — parfaite pour la ligne « Total » d\'une tontine'],
+              ['rowspan="3"', 'la cellule descend sur 3 LIGNES — utile pour regrouper (un même quartier commun à 3 membres)'],
+              ['le compte change', 'une fusion supprime les cellules « recouvertes » des autres lignes : chaque ligne doit toujours couvrir le même total de colonnes, sinon tout se décale']
+            ]},
             { t: 'code', lang: 'html', code:
 '<tr>\n  <td colspan="2">Total semestre</td>\n  <td>7 890</td>\n</tr>\n<tr>\n  <td rowspan="2">Zone Afrique de l\'Ouest</td>\n  <td>Bénin</td>\n  <td>420</td>\n</tr>\n<tr>\n  <td>Togo</td>\n  <td>310</td>\n</tr>' },
             { t: 'p', h: '`colspan="n"` étire une cellule sur n colonnes, `rowspan="n"` sur n lignes. La règle d\'or qui évite tous les drames : **après une fusion, la rangée contient moins de cellules écrites, mais toujours le même total de colonnes logiques**. Compte en colonnes, pas en balises : si ton tableau a 3 colonnes et qu\'une cellule en vaut 2, la ligne n\'en écrira que 2 (2 + 1 = 3). Une cellule mal comptée, et le tableau « tire » d\'un côté ou crée un trou — réflexe : recompte chaque rangée concernée par une fusion.' },
@@ -442,6 +527,14 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Pourquoi les formulaires méritent ta meilleure attention' },
             { t: 'p', h: 'Sur un écran de téléphone tenu d\'une main, chaque chiffre compte. Une étiquette floue, et l\'utilisateur hésite ; un mauvais clavier qui s\'ouvre (lettres au lieu de chiffres pour un numéro), et il soupire ; une erreur non expliquée à l\'envoi, et il part commander ailleurs. Tu ne le verras jamais dans tes logs : ce sera juste un client de moins. Tout ce qu\'on va voir dans cette fiche — `label`, bons `type`, validation native — sert un seul objectif : **réduire le coût d\'effort** de celui qui te donne quelque chose.' },
             { t: 'h3', h: 'Le trio de base : form, label, input — d\'abord l\'intuition' },
+            { t: 'syntax', title: 'Le formulaire minimal correct, décortiqué', lang: 'html', code:
+'<form action="/commande" method="post">\n  <label for="tel">Téléphone</label>\n  <input type="tel" id="tel" name="telephone" required>\n  <button>Commander</button>\n</form>', legend: [
+              ['<form>', 'le conteneur : à l\'envoi, toutes les données nommées qu\'il contient partent au serveur. action dit OÙ, method dit COMMENT'],
+              ['<label for="tel">', 'l\'ÉTIQUETTE reliée au champ par son id : le clic sur le texte active le champ, le lecteur d\'écran l\'annonce'],
+              ['<input>', 'le CHAMP : type choisit le clavier et la validation, name est le nom sous lequel la valeur partira au serveur'],
+              ['id ≠ name', 'id relie le label (vie dans la page), name transporte la donnée (vie vers le serveur) — deux métiers différents'],
+              ['required', 'la validation native GRATUITE : le navigateur bloque l\'envoi tant que le champ est vide, sans une ligne de JavaScript']
+            ]},
             { t: 'p', h: 'Imagine le formulaire papier d\'une boutique : le carton imprimé (le `form`), le libellé imprimé devant chaque case (le `label`), la case elle-même (l\'`input`), et le cachet final (« Envoyé pour traitement » = le bouton submit). HTML reproduit fidèlement cette logique. Le détail que personne ne soupçonne au début : un libellé posé **à côté** d\'une case n\'est pas *relié* à elle — il faut les attacher explicitement.' },
             { t: 'code', lang: 'html', label: 'Le minimum vital qui fonctionne', code:
 '<form action="/inscription" method="post">\n  <label for="email">Adresse e-mail</label>\n  <input type="email" id="email" name="email" required>\n\n  <label for="mdp">Mot de passe</label>\n  <input type="password" id="mdp" name="password" minlength="8" required>\n\n  <button type="submit">Créer mon compte</button>\n</form>' },
@@ -457,6 +550,14 @@ DEVDOCS.html = {
             ]},
             { t: 'p', h: 'Le réflexe à développer : **si le résultat doit être partageable par lien** (une recherche « gari », une page filtrée), c\'est `GET` — et ne mets jamais un mot de passe ni une donnée privée dans une URL. Pour tout le reste, `POST`. C\'est aussi une question de sémantique HTTP : GET annonce « je lis », POST « je transmets ». Les modules PHP/Laravel reprendront cette distinction côté serveur.' },
             { t: 'h3', h: 'Les types d\'input qui te font gagner du code (et le clavier magique)' },
+            { t: 'syntax', title: 'Le bon type = le bon clavier + la bonne validation', lang: 'html', code:
+'<input type="email">\n<input type="number" min="1">\n<input type="date">\n<input type="tel">', legend: [
+              ['type="email"', 'clavier avec @ en façade sur mobile + vérification du format intégrée — gratuite, sans JavaScript'],
+              ['type="number"', 'flèches +/− et clavier numérique ; min et max bornent les valeurs acceptées'],
+              ['type="date"', 'le sélecteur de date NATIF du téléphone : mieux que n\'importe quel calendrier bricolé à la main'],
+              ['type="tel"', 'le clavier TÉLÉPHONIQUE sur smartphone — le détail qui fait gagner dix secondes à chaque client'],
+              ['le réflexe', 'chaque champ bien typé économise du JavaScript ET soigne l\'expérience mobile — là où sont tes clients']
+            ]},
             { t: 'p', h: 'Chaque `type` fait trois cadeaux d\'un coup : le bon **clavier** sur mobile (chiffres pour `tel`, arobase en évidence pour `email`), une **validation** gratuite, et de meilleures **aides à la saisie**. Tableau de chasse :' },
             { t: 'table', head: ['type', 'Comportement offert'], rows: [
               ['`email`', 'Clavier avec @ en évidence + vérifie la forme de l\'e-mail'],
@@ -543,6 +644,14 @@ DEVDOCS.html = {
               ['`address`', 'Coordonnées de **contact** de l\'article ou du site (pas n\'importe quelle adresse)']
             ]},
             { t: 'h3', h: 'À quoi ressemble une vraie page' },
+            { t: 'syntax', title: 'Le plan d\'une page sémantique, zone par zone', lang: 'html', code:
+'<header>…logo et baseline…</header>\n<nav>…menu principal…</nav>\n<main>\n  <article>…fiche produit…</article>\n  <aside>…promos liées…</aside>\n</main>\n<footer>…contacts…</footer>', legend: [
+              ['<header> / <footer>', 'l\'en-tête et le pied de page : repérés d\'office par les outils d\'accessibilité comme repères de navigation'],
+              ['<nav>', 'les liens de NAVIGATION principaux — un lecteur d\'écran peut sauter directement au menu, sans tout écouter'],
+              ['<main>', 'le CONTENU principal de CETTE page : UN seul main par page, et rien de commun à toutes les pages n\'y vit'],
+              ['<article>', 'un bloc AUTONOME : une fiche produit, un article de blog — quelque chose qui aurait du sens partagé seul, ailleurs'],
+              ['<aside>', 'le contenu ANNEXE : promos, liens liés, publicité — à côté de l\'essentiel, jamais dedans']
+            ]},
             { t: 'code', lang: 'html', label: 'Une structure complète, lisible à voix haute', code:
 '<body>\n  <header>\n    <nav><!-- logo + menu --></nav>\n  </header>\n\n  <main>\n    <h1>Le marché Dantokpa en pratique</h1>\n\n    <article>\n      <h2>Se repérer dans les allées</h2>\n      <p>Publié le <time datetime="2026-07-21">21 juillet 2026</time></p>\n\n      <section>\n        <h3>Le carré des céréales</h3>\n        <p>...</p>\n      </section>\n    </article>\n\n    <article>\n      <h2>Négocier les prix</h2>\n      <p>...</p>\n    </article>\n  </main>\n\n  <aside>\n    <h2>À lire aussi</h2>\n    <!-- ... -->\n  </aside>\n\n  <footer>© 2026 — Boutique Awa</footer>\n</body>' },
             { t: 'demo', height: 250, caption: 'Les grandes zones d\'une page sémantique', html:
@@ -600,6 +709,13 @@ DEVDOCS.html = {
             { t: 'h3', h: 'Pourquoi soigner une zone que personne ne voit ?' },
             { t: 'p', h: 'Pose-toi la question inverse : quand tu colles un lien vers ta boutique dans une discussion WhatsApp, qu\'est-ce qui s\'affiche ? Une carte avec image et titre soignés… ou un lien gris sans visage ? Cette différence, elle se joue **entièrement** dans quatre lignes de `<meta>`. De même, l\'onglet que l\'utilisateur retrouve parmi trente autres, c\'est ton `<title>` + ton favicon ; le résumé qui donne envie de cliquer dans Google, c\'est ta `description`. Le head est le réceptionniste de ton site : le visiteur ne le voit pas travailler, mais toute la première impression passe par lui.' },
             { t: 'h3', h: 'Les indispensables, dans l\'ordre' },
+            { t: 'syntax', title: 'Le trio de tête, dans le bon ordre', lang: 'html', code:
+'<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>Boutique Awa — Gari premium à Cotonou</title>', legend: [
+              ['charset="UTF-8"', 'EN PREMIER, toujours : l\'encodage doit être lu avant le moindre texte, sinon les accents partent en hiéroglyphes'],
+              ['name="viewport"', 'le réflexe MOBILE : sans cette ligne, le téléphone affiche la page rétrécie comme sur un écran d\'ordinateur'],
+              ['<title>', 'le titre de l\'ONGLET et du résultat Google : la première chose que lit ton visiteur, avant même d\'arriver'],
+              ['l\'ordre compte', 'charset, puis viewport, puis title : le navigateur lit le head de haut en bas — donne-lui d\'abord ses clés de lecture']
+            ]},
             { t: 'code', lang: 'html', label: 'Le head de base, commenté par position', code:
 '<head>\n  <!-- 1. L\'encodage D\'ABORD : tout le texte qui suit en dépend -->\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n\n  <!-- 2. Ce qui parle aux humains et aux moteurs -->\n  <title>Guide CSS Flexbox — Easy Learn</title>\n  <meta name="description" content="Apprends Flexbox en 15 minutes :\n        explications claires, exemples copiables, pièges déjoués.">\n\n  <!-- 3. L\'identité visuelle de l\'onglet -->\n  <link rel="icon" href="/favicon.svg" type="image/svg+xml">\n\n  <!-- 4. Les ressources -->\n  <link rel="stylesheet" href="css/main.css">\n  <script src="js/app.js" defer></script>\n</head>' },
             { t: 'ul', items: [
@@ -610,6 +726,13 @@ DEVDOCS.html = {
               '`canonical` — quand la même page est joignable par plusieurs URL (`?ref=wa`, www vs sans www), elle déclare l\'URL **officielle** et évite la dilution en « contenu dupliqué ».'
             ]},
             { t: 'h3', h: 'Briller au partage : Open Graph' },
+            { t: 'syntax', title: 'Open Graph : la vignette de partage, décortiquée', lang: 'html', code:
+'<meta property="og:title" content="Gari premium — Boutique Awa">\n<meta property="og:image" content="https://boutique-awa.bj/og.jpg">', legend: [
+              ['og:title', 'Open Graph (le protocole lu par WhatsApp, Facebook, LinkedIn…) : le titre affiché quand ton lien est PARTAGÉ en message'],
+              ['content="…"', 'la valeur affichée dans la vignette : soigne-la comme une accroche publicitaire, c\'est ton affichage gratuit'],
+              ['og:image', 'l\'IMAGE du partage : sans elle, WhatsApp montre un carré gris — avec, ta page vend avant même le clic'],
+              ['property et non name', 'les métas Open Graph utilisent property (pas name) : le détail qui fait silencieusement rater toutes les vignettes']
+            ]},
             { t: 'p', h: 'Quand tu colles un lien sur WhatsApp, X ou LinkedIn, la carte avec image et titre ne sort pas de nulle part : la plateforme va lire les balises **Open Graph** de ta page. Sans elles, elle devine — et elle devine mal.' },
             { t: 'code', lang: 'html', label: 'Le minimum Open Graph, qui change tout', code:
 '<meta property="og:title" content="Boutique Awa — Gari premium de Savalou">\n<meta property="og:description" content="Commande avant 15 h, livrée le soir même à Cotonou.">\n<meta property="og:image" content="https://boutique-awa.bj/couverture.jpg">\n<meta property="og:type" content="website">\n<meta name="theme-color" content="#0a84ff">' },

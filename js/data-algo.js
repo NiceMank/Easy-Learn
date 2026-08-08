@@ -34,6 +34,13 @@ DEVDOCS.algo = {
             { t: 'p', h: '**2. L\'itinéraire du zémidjan.** « Départ marché Dantokpa. Prendre la rue vers le carrefour Sainte-Rita. Au rond-point, prendre la 2e sortie. Continuer 500 m jusqu\'au portail bleu. » C\'est un algorithme de navigation : un point de départ, une destination, et des décisions à chaque carrefour (c\'est ce qu\'on appellera une « condition »).' },
             { t: 'p', h: '**3. Le tri des pièces de monnaie.** Tu vides ta poche : des pièces de 500 F, 200 F, 100 F, 50 F. Tu veux les ranger de la plus grosse à la plus petite. Algorithme : « Prendre toutes les pièces. Chercher la plus grosse, la mettre de côté. Recommencer avec ce qui reste. » C\'est un algorithme de TRI — le sujet de plusieurs fiches du module.' },
             { t: 'h3', h: 'La définition officielle, maintenant que l\'intuition est là' },
+            { t: 'syntax', title: 'La forme canonique d\'un algorithme, décortiquée', lang: 'text', code:
+'ALGORITHME totalPanier\nDÉBUT\n  total ← 0\n  AFFICHER total\nFIN', legend: [
+              ['ALGORITHME totalPanier', 'la DÉCLARATION : on baptise la recette d\'un nom en MAJUSCULES, par convention du module'],
+              ['DÉBUT … FIN', 'les BORNES : tout ce qui se trouve entre les deux s\'exécute de haut en bas, une ligne à la fois, sans exception'],
+              ['total ← 0', 'une AFFECTATION : la flèche range la valeur de droite dans la boîte nommée à gauche — l\'opération nº 1 de tout algorithme'],
+              ['AFFICHER total', 'une SORTIE : montrer le résultat à l\'utilisateur. Un algorithme se juge à ce trio : entrées → traitement fini → résultat']
+            ]},
             { t: 'p', h: 'Un **algorithme** est une suite finie d\'opérations élémentaires, exécutées dans un ordre précis, qui transforme des **données d\'entrée** en un **résultat de sortie**. Chaque terme compte : « finie » signifie qu\'il se termine (pas de boucle infinie) ; « élémentaire » signifie que chaque étape est assez simple pour être exécutée sans ambiguïté ; « ordre précis » signifie que les étapes ne sont pas interchangeables. Le processeur de ton téléphone ne « comprend » rien — il exécute bêtement des instructions, une par une, dans l\'ordre. La magie vient de la combinaison de ces instructions simples.' },
             { t: 'h3', h: 'Les trois propriétés d\'un bon algorithme' },
             { t: 'ul', items: [
@@ -81,6 +88,13 @@ DEVDOCS.algo = {
             { t: 'p', h: 'Parce que les langages de programmation sont remplis de détails qui n\'ont rien à voir avec la logique. En JavaScript, tu dois écrire `let x = 5;` (le `let`, le point-virgule). En Python, `x = 5` suffit. En C, `int x = 5;` (il faut déclarer le type). Trois syntaxes différentes pour la MÊME idée : « je range 5 dans une boîte appelée x ». Le pseudo-code te libère de ces détails. Tu écris `x ← 5` et tu passes à la suite. La syntaxe exacte, tu l\'apprendras plus tard, dans le langage de ton choix.' },
             { t: 'p', h: 'Deuxième raison, encore plus importante : **quand tu écris du vrai code, ton cerveau fait deux choses à la fois** — résoudre le problème ET respecter la syntaxe du langage. C\'est comme essayer de composer un poème dans une langue que tu apprends : tu passes plus de temps à chercher tes mots qu\'à réfléchir à ce que tu veux dire. Le pseudo-code sépare les deux : d\'abord la logique (en français), ensuite la syntaxe (dans le vrai langage).' },
             { t: 'h3', h: 'Notre convention de pseudo-code pour tout le module' },
+            { t: 'syntax', title: 'Lire une ligne de pseudo-code, token par token', lang: 'text', code:
+'prix ← 1500        // la flèche range la valeur\nSI prix > 1000 ALORS\n  AFFICHER "Livraison offerte"\nFIN SI', legend: [
+              ['←', 'l\'AFFECTATION : « range la valeur de droite dans la variable de gauche ». Ce n\'est PAS le « égal » des maths !'],
+              ['SI … ALORS … FIN SI', 'la DÉCISION : le bloc indenté ne s\'exécute que si la condition est VRAIE ; FIN SI ferme proprement la porte'],
+              ['"Livraison offerte"', 'le texte se note TOUJOURS entre guillemets — sinon Livraison serait pris pour une variable'],
+              ['// …', 'un commentaire : une note pour les humains, totalement ignorée à l\'exécution']
+            ]},
             { t: 'p', h: 'Pour que tu puisses lire n\'importe quelle fiche sans te demander « ça veut dire quoi ce symbole ? », on va utiliser les MÊMES conventions partout. Les voici — imprime-les ou garde-les sous les yeux pour les premières fiches :' },
             { t: 'table', head: ['En pseudo-code', 'Signification', 'Équivalent en français'], rows: [
               ['`x ← 5`', 'Affectation : ranger 5 dans x', '« x prend la valeur 5 »'],
@@ -158,6 +172,13 @@ DEVDOCS.algo = {
             { t: 'h3', h: 'L\'analogie de la boîte étiquetée' },
             { t: 'p', h: 'Imagine une étagère avec des boîtes. Chaque boîte porte une étiquette (son NOM). Tu peux ranger UNE chose à la fois dans chaque boîte (sa VALEUR). Tu peux ouvrir la boîte pour VOIR ce qu\'il y a dedans, REMPLACER le contenu par autre chose, ou COPIER le contenu dans une autre boîte. Une variable, c\'est exactement ça. `x ← 5` signifie : « prends une boîte, colle une étiquette `x` dessus, mets `5` dedans ». Plus tard, `AFFICHER x` signifie : « ouvre la boîte `x` et montre ce qu\'il y a dedans ».' },
             { t: 'h3', h: 'Déclaration, affectation, lecture' },
+            { t: 'syntax', title: 'Les trois gestes d\'une variable, décortiqués', lang: 'text', code:
+'score ← 0\nscore ← score + 10\nAFFICHER score', legend: [
+              ['score ← 0', 'DÉCLARER + initialiser : créer la boîte « score » et y ranger 0. Une variable doit TOUJOURS avoir une valeur de départ'],
+              ['score ← score + 10', 'RELIRE puis ÉCRASER : la machine lit l\'ancienne valeur (0), ajoute 10, et range le résultat (10) à la place. La flèche n\'est pas une égalité !'],
+              ['AFFICHER score', 'LIRE la valeur : à cet instant précis, la boîte contient 10 — c\'est ce contenu qui part vers l\'écran'],
+              ['la règle d\'or', 'à droite de ← on CALCULE avec l\'ancien contenu ; à gauche, on ÉCRIT le nouveau. Lecture d\'abord, écrasement ensuite']
+            ]},
             { t: 'code', lang: 'text', label: 'Les trois opérations de base sur une variable', code:
 '// 1. AFFECTATION : ranger une valeur dans la boîte\nprix_gari ← 500\nnombre_sacs ← 12\nvendeuse ← "Awa Mensah"\nest_disponible ← VRAI\n\n// 2. LECTURE : utiliser le contenu de la boîte\nAFFICHER prix_gari           // affiche 500\ntotal ← prix_gari * nombre_sacs   // utilise les VALEURS des boîtes\nAFFICHER total                // affiche 6000\n\n// 3. MODIFICATION : changer le contenu\nprix_gari ← 550              // la boîte contient maintenant 550\n// L\'ancienne valeur (500) est PERDUE — écrasée' },
             { t: 'p', h: 'Deux choses cruciales dans cet exemple. D\'abord, `prix_gari ← 500` ne signifie PAS « prix_gari est égal à 500 pour toujours ». C\'est une AFFECTATION : « à cet instant, je mets 500 dans la boîte prix_gari ». La flèche `←` n\'est pas un signe égal mathématique — c\'est un geste, une action. Ensuite, quand on écrit `total ← prix_gari * nombre_sacs`, on ne range pas le CALCUL dans la boîte — on range le RÉSULTAT du calcul (6000). La boîte contient une valeur, jamais une formule.' },
@@ -225,6 +246,13 @@ DEVDOCS.algo = {
             { t: 'h3', h: 'Type 4 : le booléen (vrai/faux)' },
             { t: 'p', h: 'Un **booléen** (boolean), c\'est une simple réponse OUI/NON, VRAI/FAUX. Il n\'y a que DEUX valeurs possibles : `VRAI` ou `FAUX`. C\'est le type des CONDITIONS : « le stock est-il vide ? » → `FAUX` (il reste 12 sacs). « Le client a-t-il payé ? » → `VRAI`. Les booléens semblent minuscules, mais ils sont les plus puissants : ce sont eux qui pilotent les `SI` (si c\'est VRAI, fais ceci) et les `TANT QUE` (continue tant que c\'est VRAI). C\'est le type des DÉCISIONS.' },
             { t: 'h3', h: 'Résumé visuel des quatre types' },
+            { t: 'syntax', title: 'Les quatre littéraux à reconnaître à vue', lang: 'text', code:
+'age ← 25              // ENTIER\nprix ← 1499.99        // DÉCIMAL\nnom ← "Awa"           // TEXTE\nenStock ← VRAI        // BOOLÉEN', legend: [
+              ['25', 'ENTIER : un nombre sans virgule — quantités, compteurs, âges. Gare à 25 / 10 qui peut donner 2 en division entière'],
+              ['1499.99', 'DÉCIMAL : un nombre à virgule, pour les prix et les mesures — avec la fameuse imprécision 0.1 + 0.2 ≈ 0.3 dans les vrais langages'],
+              ['"Awa"', 'TEXTE (chaîne de caractères) : toujours entre guillemets. Et "25" entre guillemets est du TEXTE, pas un nombre !'],
+              ['VRAI', 'BOOLÉEN : seulement VRAI ou FAUX — le résultat naturel de toutes les comparaisons, et le carburant des SI et des TANT QUE']
+            ]},
             { t: 'table', head: ['Type', 'Exemples', 'Opérations possibles', 'Anecdotique'], rows: [
               ['Entier', '`500`, `-3`, `0`, `42`', '`+`, `-`, `*`, `/`, `%`', 'Pas de virgule. Souvent utilisé pour compter.'],
               ['Décimal', '`499.99`, `1.5`, `0.18`', '`+`, `-`, `*`, `/`', 'Le point, jamais la virgule. Imprécision binaire.'],
@@ -268,8 +296,22 @@ DEVDOCS.algo = {
           intro: 'Jusqu\'ici, nos algorithmes travaillaient avec des valeurs « en dur » : `prix ← 500`. Mais dans la vraie vie, c\'est l\'UTILISATEUR qui donne les valeurs. À la caisse de la boutique, on ne code pas le prix de chaque article — on le LIT (saisie, code-barres). Et une fois le total calculé, on ne le garde pas pour soi — on l\'AFFICHE. Ces deux opérations — LIRE (recevoir une donnée) et AFFICHER (montrer un résultat) — sont les portes d\'entrée et de sortie de tout programme interactif. Cette fiche les présente en pseudo-code, avec la subtilité cruciale : TOUT ce que l\'utilisateur tape arrive en TEXTE, même les nombres — il faut les convertir.',
           blocks: [
             { t: 'h3', h: 'LIRE : la porte d\'entrée' },
+            { t: 'syntax', title: 'LIRE : bloquer et recueillir, décortiqué', lang: 'text', code:
+'LIRE nomClient\nAFFICHER "Bonjour " + nomClient', legend: [
+              ['LIRE nomClient', 'met le programme en PAUSE, attend que l\'utilisateur tape quelque chose, puis range sa réponse dans la variable indiquée'],
+              ['nomClient', 'la boîte RÉCEPTRICE : après le LIRE, elle contient ce que l\'humain a tapé — du TEXTE, le plus souvent'],
+              ['AFFICHER "Bonjour " + nomClient', 'preuve immédiate : on peut réutiliser la saisie dans la foulée, comme si elle avait toujours été là'],
+              ['la règle d\'hygiène', 'ce qui vient d\'un LIRE est une entrée EXTERNE : imprévisible — les vrais programmes la vérifient avant de la croire']
+            ]},
             { t: 'p', h: '`LIRE x` signifie : « attends que l\'utilisateur tape quelque chose, et range cette valeur dans la variable `x` ». C\'est l\'équivalent d\'un champ de formulaire, d\'une question dans un terminal, d\'un prompt. Le programme s\'ARRÊTE et attend. Quand l\'utilisateur a fini de taper (touche Entrée), la valeur est stockée dans `x` et le programme continue. Ce qui est tapé est TOUJOURS du texte. Si l\'utilisateur tape `500`, tu reçois la CHAÎNE `"500"`, pas le nombre `500`.' },
             { t: 'h3', h: 'AFFICHER : la porte de sortie' },
+            { t: 'syntax', title: 'AFFICHER : assembler une phrase, décortiqué', lang: 'text', code:
+'AFFICHER "Total : " + total + " FCFA"', legend: [
+              ['AFFICHER …', 'envoie une SORTIE vers l\'écran. L\'utilisateur ne voit QUE ce qui est affiché — jamais tes variables ni tes calculs internes'],
+              ['"Total : "', 'un morceau de texte fixe, avec son espace final — il ne s\'invente pas tout seul !'],
+              ['+', 'la CONCATÉNATION : le plus colle les morceaux de texte et les valeurs de variables en une seule phrase'],
+              ['total', 'la VARIABLE lue à cet instant : sa valeur actuelle remplace son nom dans la phrase affichée']
+            ]},
             { t: 'p', h: '`AFFICHER x` signifie : « montre le contenu de la variable `x` à l\'écran ». On peut afficher une variable (`AFFICHER total`), du texte fixe (`AFFICHER "Bonjour"`), ou les deux ensemble (`AFFICHER "Total : " + total`). C\'est le seul moyen pour ton programme de COMMUNIQUER avec l\'utilisateur. Sans `AFFICHER`, ton programme travaille dans le noir — il calcule, mais personne ne voit le résultat.' },
             { t: 'h3', h: 'Exemple complet : le calculateur de prix du marché' },
             { t: 'code', lang: 'text', label: 'Pseudo-code — calcul du prix total', code:
@@ -334,6 +376,13 @@ DEVDOCS.algo = {
           intro: 'Une variable, c\'est bien. Mais ce qui rend la programmation puissante, c\'est ce qu\'on PEUT FAIRE avec ces variables. Comparer deux prix, vérifier si un stock est vide, calculer une remise — tout ça passe par des **opérateurs**. Il en existe trois familles, et les connaître couvre 90 % de ce que tu écriras : les opérateurs ARITHMÉTIQUES (calculer), les opérateurs de COMPARAISON (décider), et les opérateurs LOGIQUES (combiner des décisions). Cette fiche est dense — garde-la comme référence et reviens-y quand les fiches Conditions et Boucles utiliseront ces symboles.',
           blocks: [
             { t: 'h3', h: 'Famille 1 : les opérateurs arithmétiques (calculer)' },
+            { t: 'syntax', title: 'DIV et MOD : les deux stars méconnues', lang: 'text', code:
+'quotient ← 17 DIV 5   // → 3\nreste ← 17 MOD 5      // → 2', legend: [
+              ['DIV', 'la division ENTIÈRE : combien de fois 5 rentre au complet dans 17 — 3, sans virgule ni arrondi'],
+              ['MOD', 'le RESTE de la division : 17 = 3 × 5 + 2. Star discrète de l\'algorithmique'],
+              ['à quoi ça sert ?', 'pair/impair (n MOD 2 vaut 0 ou 1), boucler sur les jours de la semaine, répartir en colonnes, convertir des minutes en heures'],
+              ['17 / 5', 'au contraire, la simple barre donne 3.4 : le DÉCIMAL complet. Trois divisions, trois résultats différents — choisis la bonne !']
+            ]},
             { t: 'p', h: 'Ce sont les opérateurs que tu connais depuis l\'école primaire, avec deux ajouts propres à l\'informatique :' },
             { t: 'table', head: ['Opérateur', 'Nom', 'Exemple', 'Résultat'], rows: [
               ['`+`', 'Addition', '`5 + 3`', '`8`'],
@@ -345,6 +394,13 @@ DEVDOCS.algo = {
             ] },
             { t: 'p', h: 'Le **modulo** (`%`) mérite une explication : c\'est le RESTE de la division entière. `17 % 5` = 2 (car 17 = 3×5 + 2). À quoi ça sert ? À savoir si un nombre est pair (`n % 2 = 0`), à faire une action tous les N tours de boucle, à distribuer des éléments dans des colonnes. C\'est l\'opérateur le plus sous-estimé — et le plus utile une fois qu\'on le comprend.' },
             { t: 'h3', h: 'Famille 2 : les opérateurs de comparaison (décider)' },
+            { t: 'syntax', title: 'Comparer : la matière première des décisions', lang: 'text', code:
+'stock > 0        // VRAI si on peut vendre\nprix = 1500      // égalité stricte\nnom ≠ ""         // différent d\'un texte vide', legend: [
+              ['>  >=  <  <=', 'les comparaisons d\'ordre : le résultat est TOUJOURS VRAI ou FAUX, jamais un nombre'],
+              ['=', 'le test d\'égalité. En pseudo-code on reste simple avec = ; en vrai langage ce sera == ou === — ne confonds plus avec l\'affectation ←'],
+              ['≠', '« différent de » : deviendra != ou !== en programmation'],
+              ['""', 'le texte VIDE : un contenu légitime, différent de « rien » — tester nom ≠ "" vérifie qu\'un champ a bien été rempli']
+            ]},
             { t: 'p', h: 'Ces opérateurs répondent à une question par VRAI ou FAUX. Ils sont le cœur des CONDITIONS (`SI`).' },
             { t: 'table', head: ['Opérateur', 'Signification', 'Exemple', 'Résultat'], rows: [
               ['`=`', 'Égal à', '`5 = 3`', '`FAUX`'],
@@ -356,6 +412,13 @@ DEVDOCS.algo = {
             ] },
             { t: 'callout', kind: 'warn', h: 'En pseudo-code, on utilise `=` pour l\'égalité et `←` pour l\'affectation. Mais dans presque tous les vrais langages, c\'est l\'inverse : `=` pour l\'affectation, `==` pour l\'égalité. C\'est LA confusion à anticiper quand tu passeras à Python ou JavaScript.' },
             { t: 'h3', h: 'Famille 3 : les opérateurs logiques (combiner)' },
+            { t: 'syntax', title: 'ET, OU, NON : combiner les conditions', lang: 'text', code:
+'SI age >= 18 ET carteValide ALORS\n  AFFICHER "Entrée autorisée"\nFIN SI', legend: [
+              ['ET', 'les DEUX côtés doivent être vrais — un seul faux fait tout basculer à FAUX. Chaque contrainte ajoutée DURCIT le filtre'],
+              ['OU', 'il suffit qu\'UN côté soit vrai — il faut les deux faux pour échouer. Idéal pour « paiement MoMo OU carte OU espèces »'],
+              ['NON condition', 'l\'INVERSE logique : NON VRAI vaut FAUX. Sert à exprimer « tant que le client N\'est PAS servi »'],
+              ['le réflexe pro', 'dès qu\'une condition dépasse deux morceaux, pose-toi la question des parenthèses : ET l\'emporte sur OU, comme × sur +']
+            ]},
             { t: 'p', h: 'Ces opérateurs combinent des conditions. « Je veux un gari ET de l\'huile », « Je prends le zémidjan OU le taxi » : tu fais déjà de la logique combinatoire sans le savoir.' },
             { t: 'table', head: ['Opérateur', 'Signification', 'Est VRAI si…', 'Exemple'], rows: [
               ['`ET`', 'Conjonction', 'Les DEUX conditions sont vraies', '`age ≥ 18 ET pays = "Bénin"`'],
@@ -414,6 +477,14 @@ DEVDOCS.algo = {
             { t: 'h3', h: 'L\'analogie de l\'arbre de décision' },
             { t: 'p', h: 'Imagine que tu es à un carrefour. Ton GPS te dit : « SI le feu est vert, ALORS avance tout droit. SINON, tourne à droite. » Cette phrase contient TOUTE la structure conditionnelle : une CONDITION (le feu est-il vert ?), une branche VRAI (avancer), une branche FAUX (tourner). C\'est exactement ce que fait un `SI / SINON`.' },
             { t: 'h3', h: 'La structure SI / SINON en pseudo-code' },
+            { t: 'syntax', title: 'SI / SINON / FIN SI : la bifurcation, décortiquée', lang: 'text', code:
+'SI stock >= quantiteDemandee ALORS\n  AFFICHER "Vente acceptée"\nSINON\n  AFFICHER "Stock insuffisant"\nFIN SI', legend: [
+              ['SI condition ALORS', 'le TEST : si la condition vaut VRAI, le bloc indenté s\'exécute ; sinon on l\'enjambé d\'un bond'],
+              ['>=', 'le choix de l\'opérateur est la moitié du métier : stock >= demande accepte le « juste assez », stock > demande le refuse'],
+              ['SINON', 'le plan B : ne s\'exécute QUE si la condition est fausse. UN des deux blocs tourne, jamais les deux, jamais aucun'],
+              ['FIN SI', 'la fermeture obligatoire : sans elle, l\'ordinateur ne sait plus où la décision se termine'],
+              ['l\'indentation', 'le décalage à droite n\'est pas décoratif : il montre visuellement ce qui DÉPEND du test — relire devient instantané']
+            ]},
             { t: 'code', lang: 'text', label: 'Forme simple', code:
 'SI condition ALORS\n  // instructions si la condition est VRAIE\nSINON\n  // instructions si la condition est FAUSSE\nFIN SI' },
             { t: 'p', h: 'Le `SINON` est OPTIONNEL. Si tu n\'as rien à faire quand la condition est fausse, tu peux écrire simplement `SI … ALORS … FIN SI` sans le `SINON`. Et note l\'indentation : les instructions à l\'intérieur du SI sont DÉCALÉES VERS LA DROITE. Ce n\'est pas décoratif — ça montre visuellement ce qui « appartient » à la condition.' },
@@ -421,6 +492,13 @@ DEVDOCS.algo = {
             { t: 'code', lang: 'text', label: 'Boutique — vente avec contrôle de stock', code:
 'LIRE quantite_demandee\nSI quantite_demandee ≤ stock_disponible ALORS\n  stock_disponible ← stock_disponible - quantite_demandee\n  AFFICHER "Vente effectuée. Stock restant : " + stock_disponible\nSINON\n  AFFICHER "Stock insuffisant. Disponible : " + stock_disponible\nFIN SI' },
             { t: 'h3', h: 'Exemple 2 : plusieurs branches avec SINON SI' },
+            { t: 'syntax', title: 'SINON SI : la cascade de cas, décortiquée', lang: 'text', code:
+'SI total >= 50000 ALORS\n  taux ← 10\nSINON SI total >= 20000 ALORS\n  taux ← 5\nSINON\n  taux ← 0\nFIN SI', legend: [
+              ['SINON SI … ALORS', 'enchaîne les tests : chaque condition n\'est évaluée QUE si toutes les précédentes sont fausses'],
+              ['l\'ORDRE compte', 'on teste du plus exigeant au plus tolérant : un total de 60 000 passe le 1er test et ne redescend JAMAIS aux suivants'],
+              ['taux ← 10', 'chaque branche fait sa petite cuisine : remplir la même variable permet de la lire après le FIN SI, quel que soit le chemin'],
+              ['SINON final', 'le filet de sécurité : il attrape tous les cas restants — le programme ne reste jamais « sans réponse »']
+            ]},
             { t: 'p', h: 'Quand il y a plus de deux chemins possibles, on enchaîne les `SINON SI` :' },
             { t: 'code', lang: 'text', label: 'Boutique — tarifs selon la quantité', code:
 'LIRE nb_sacs\nprix_unitaire ← 0\nSI nb_sacs ≥ 100 ALORS\n  prix_unitaire ← 400    // tarif grossiste\nSINON SI nb_sacs ≥ 50 ALORS\n  prix_unitaire ← 450    // tarif demi-gros\nSINON SI nb_sacs ≥ 10 ALORS\n  prix_unitaire ← 480    // tarif détaillant\nSINON\n  prix_unitaire ← 500    // prix public\nFIN SI\nAFFICHER "Prix unitaire : " + prix_unitaire + " FCFA"\nAFFICHER "Total : " + (nb_sacs * prix_unitaire) + " FCFA"' },
@@ -464,16 +542,37 @@ DEVDOCS.algo = {
           intro: 'Imagine qu\'on te demande d\'afficher les nombres de 1 à 100. Tu pourrais écrire `AFFICHER 1`, `AFFICHER 2`… cent fois. Mais imagine maintenant qu\'on te demande d\'afficher les nombres de 1 à N, où N est saisi par l\'utilisateur. Impossible d\'écrire « N lignes » si tu ne connais pas N à l\'avance. Les **boucles** sont la solution : tu écris le traitement UNE FOIS, et tu demandes à la machine de le RÉPÉTER automatiquement. Trois types de boucles couvrent tous les besoins : `TANT QUE` (répéter tant qu\'une condition est vraie), `POUR` (répéter un nombre connu de fois), et `RÉPÉTER JUSQU\'À` (faire au moins une fois).',
           blocks: [
             { t: 'h3', h: 'TANT QUE : la boucle conditionnelle' },
+            { t: 'syntax', title: 'TANT QUE : répéter sous condition, décortiqué', lang: 'text', code:
+'stock ← 10\nTANT QUE stock > 0 FAIRE\n  AFFICHER "Vente d\'un article"\n  stock ← stock - 1\nFIN TANT QUE', legend: [
+              ['TANT QUE condition FAIRE', 'répète le bloc TANT QUE la condition reste vraie — le test se fait AVANT chaque tour : zéro tour est possible'],
+              ['stock ← stock - 1', 'LA ligne vitale : quelque chose dans la boucle doit faire ÉVOLUER la condition. Oublie-la et la boucle tourne pour toujours — le crash classique'],
+              ['stock ← 10', 'l\'initialisation AVANT la boucle : sans valeur de départ, la condition n\'a rien à tester'],
+              ['le rythme exact', 'tester → exécuter → retester → réexécuter… jusqu\'au test FAUX : la sortie se fait proprement, entre deux tours']
+            ]},
             { t: 'p', h: '`TANT QUE` répète un bloc d\'instructions AUSSI LONGTEMPS qu\'une condition reste vraie. Si la condition est fausse dès le départ, le bloc n\'est JAMAIS exécuté (zéro tour). C\'est la boucle la plus souple, mais aussi la plus dangereuse — si la condition ne devient jamais fausse, la boucle tourne À L\'INFINI.' },
             { t: 'code', lang: 'text', label: 'Boutique — servir les clients un par un', code:
 'nb_clients ← 10\nclients_servis ← 0\nTANT QUE clients_servis < nb_clients FAIRE\n  AFFICHER "Client suivant : " + (clients_servis + 1)\n  clients_servis ← clients_servis + 1\nFIN TANT QUE\nAFFICHER "Tous les clients ont été servis"' },
             { t: 'p', h: 'Trace pas à pas : au début, `clients_servis = 0`. Condition `0 < 10` → VRAIE, on entre. On incrémente → `clients_servis = 1`. Condition `1 < 10` → VRAIE. … Au 10e tour, `clients_servis = 10`. Condition `10 < 10` → FAUSSE, on sort.' },
             { t: 'h3', h: 'POUR : la boucle comptée' },
+            { t: 'syntax', title: 'POUR : le nombre de tours connu d\'avance', lang: 'text', code:
+'POUR i DE 1 À 5 FAIRE\n  AFFICHER "7 × " + i + " = " + (7 * i)\nFIN POUR', legend: [
+              ['POUR i DE 1 À 5 FAIRE', 'la boucle COMPTÉE : i prend 1, puis 2, 3, 4, 5 — tu SAIS d\'avance qu\'il y aura 5 tours, ni plus ni moins'],
+              ['i', 'le compteur : une variable offerte par la boucle, relisible à chaque tour — parfaite pour numéroter, indexer, calculer'],
+              ['FIN POUR', 'fermeture du bloc ; le compteur avance TOUT SEUL à chaque retour — pas de ligne i ← i + 1 à écrire, pas de boucle infinie possible'],
+              ['POUR ou TANT QUE ?', 'nombre de tours connu → POUR ; répéter jusqu\'à un événement imprévisible (saisie correcte, stock épuisé) → TANT QUE']
+            ]},
             { t: 'p', h: '`POUR` répète un nombre CONNU de fois. Tu sais exactement combien de tours la boucle va faire AVANT de commencer. C\'est la boucle la plus utilisée — et la plus sûre, car le nombre d\'itérations est borné.' },
             { t: 'code', lang: 'text', label: 'Calculer le total des ventes du jour', code:
 'total ← 0\nAFFICHER "Nombre de ventes à saisir ?"\nLIRE nb_ventes\nPOUR i DE 1 À nb_ventes FAIRE\n  AFFICHER "Montant de la vente " + i + " ?"\n  LIRE montant_texte\n  montant ← CONVERTIR_EN_NOMBRE(montant_texte)\n  total ← total + montant\nFIN POUR\nAFFICHER "Total des ventes : " + total + " FCFA"' },
             { t: 'p', h: 'La variable `i` est le « compteur de boucle » : elle prend les valeurs 1, 2, 3… jusqu\'à `nb_ventes`. Tu peux l\'utiliser dans le corps de la boucle (par exemple pour afficher « Vente n°3 »). Elle est automatiquement incrémentée à chaque tour.' },
             { t: 'h3', h: 'RÉPÉTER JUSQU\'À : la boucle qui s\'exécute au moins une fois' },
+            { t: 'syntax', title: 'RÉPÉTER JUSQU\'À : au moins un tour, garanti', lang: 'text', code:
+'RÉPÉTER\n  AFFICHER "Mot de passe ?"\n  LIRE saisie\nJUSQU\'À saisie = "zemi2024"', legend: [
+              ['RÉPÉTER', 'le corps s\'exécute D\'ABORD, sans poser de question : ici on demande le mot de passe une première fois, quoi qu\'il arrive'],
+              ['JUSQU\'À condition', 'le test se fait APRÈS le corps — et attention au sens : on SORT quand la condition devient VRAIE. C\'est l\'inverse du TANT QUE'],
+              ['au moins 1 tour', 'c\'est la seule boucle qui garantit une exécution : parfaite pour les saisies obligatoires (mot de passe, choix de menu)'],
+              ['le piège symétrique', 'comme TANT QUE, elle exige que le corps fasse évoluer la condition — ici le LIRE saisie — sinon : boucle infinie']
+            ]},
             { t: 'p', h: '`RÉPÉTER … JUSQU\'À` vérifie la condition APRÈS avoir exécuté le corps. Conséquence : le bloc est exécuté AU MOINS UNE FOIS, même si la condition est fausse au départ. C\'est la boucle des validations (« demande le mot de passe, répète jusqu\'à ce qu\'il soit correct ») et des menus interactifs.' },
             { t: 'code', lang: 'text', label: 'Validation de mot de passe', code:
 'RÉPÉTER\n  AFFICHER "Mot de passe :"\n  LIRE saisie\n  SI saisie ≠ mot_de_passe_secret ALORS\n    AFFICHER "Mot de passe incorrect. Réessaie."\n  FIN SI\nJUSQU\'À saisie = mot_de_passe_secret\nAFFICHER "Accès autorisé."' },
@@ -537,6 +636,13 @@ DEVDOCS.algo.categories.push(
           { t: 'h3', h: 'L\'analogie du casier de marché' },
           { t: 'p', h: 'Imagine un casier avec 50 compartiments numérotés de 1 à 50. Chaque compartiment peut contenir UNE valeur. Le casier entier s\'appelle `cotisations`. Pour accéder au compartiment n°12, tu écris `cotisations[12]`. Pour connaître le nombre total de compartiments : `TAILLE(cotisations)`. Un tableau, c\'est exactement ça : une variable qui contient PLUSIEURS valeurs, accessibles par leur NUMÉRO (l\'index).' },
           { t: 'h3', h: 'Déclaration, lecture, écriture, parcours' },
+          { t: 'syntax', title: 'Le tableau : quatre gestes, décortiqués', lang: 'text', code:
+'notes ← [12, 15, 9, 18]\nAFFICHER notes[1]        // → 12 : le premier casier\nnotes[3] ← 17            // écrase le 9\nPOUR i DE 1 À 4 FAIRE\n  AFFICHER notes[i]\nFIN POUR', legend: [
+              ['notes ← [12, 15, 9, 18]', 'UN seul nom pour une COLLECTION ordonnée — adieu note1, note2, note3 qui interdisaient toute boucle'],
+              ['notes[1]', 'l\'INDICE entre crochets vise UN casier. Convention du module : on compte à partir de 1 — (la plupart des vrais langages commencent à 0, piège nº 1 !)'],
+              ['notes[3] ← 17', 'même mécanique en ÉCRITURE : on vise le casier, on écrase son contenu — les autres casiers ne bougent pas'],
+              ['notes[i] dans un POUR', 'le PARCOURS : la boucle + l\'indice variable = visiter chaque casier sans copier-coller. C\'est là que le tableau décolle']
+            ]},
           { t: 'code', lang: 'text', label: 'Pseudo-code — manipulations de base', code:
 '// Déclarer un tableau de 5 éléments\nventes ← [12000, 8500, 15000, 9200, 11000]\n\n// Lire un élément (index 1 = premier !)\nAFFICHER ventes[1]        // 12000\nAFFICHER ventes[3]        // 15000\n\n// Modifier un élément\nventes[2] ← 9000         // remplace 8500 par 9000\n\n// Ajouter un élément à la fin\nAJOUTER(ventes, 13000)    // le tableau a maintenant 6 éléments\n\n// Parcourir tout le tableau\nPOUR i DE 1 À TAILLE(ventes) FAIRE\n  AFFICHER "Vente " + i + " : " + ventes[i] + " FCFA"\nFIN POUR' },
           { t: 'callout', kind: 'warn', h: 'Dans la plupart des langages (C, Java, JavaScript, Python…), les indices de tableau commencent à **0**, pas à 1. Le premier élément est `tableau[0]`, le dernier est `tableau[n-1]`. En pseudo-code, on commence à 1 pour la lisibilité — mais garde ça en tête pour le passage au vrai code !' },
@@ -544,6 +650,13 @@ DEVDOCS.algo.categories.push(
           { t: 'code', lang: 'text', label: 'Tontine — calculs sur un tableau de cotisations', code:
 'cotisations ← [5000, 5000, 5000, 3000, 5000, 5000]\n\n// 1. SOMME : total des cotisations\ntotal ← 0\nPOUR i DE 1 À TAILLE(cotisations) FAIRE\n  total ← total + cotisations[i]\nFIN POUR\nAFFICHER "Total cotisé : " + total + " FCFA"\n\n// 2. RECHERCHE : trouver la première cotisation < 5000\ni ← 1\ntrouve ← FAUX\ntant_que i ≤ TAILLE(cotisations) ET NON trouve FAIRE\n  SI cotisations[i] < 5000 ALORS\n    AFFICHER "Cotisation incomplète au membre " + i\n    trouve ← VRAI\n  FIN SI\n  i ← i + 1\nFIN TANT QUE\nSI NON trouve ALORS\n  AFFICHER "Toutes les cotisations sont complètes"\nFIN SI\n\n// 3. MAXIMUM : qui a le plus cotisé ?\nmax ← cotisations[1]\nAFFICHER "Recherche du maximum…"\nPOUR i DE 2 À TAILLE(cotisations) FAIRE\n  SI cotisations[i] > max ALORS\n    max ← cotisations[i]\n  FIN SI\nFIN POUR\nAFFICHER "Cotisation maximale : " + max + " FCFA"' },
           { t: 'h3', h: 'Le tri à bulles : ton premier algorithme de tri' },
+          { t: 'syntax', title: 'L\'échange en trois temps : le cœur du tri', lang: 'text', code:
+'SI notes[j] > notes[j+1] ALORS\n  temp ← notes[j]\n  notes[j] ← notes[j+1]\n  notes[j+1] ← temp\nFIN SI', legend: [
+              ['notes[j] > notes[j+1]', 'la question posée des MILLIERS de fois : deux VOISINS sont-ils dans le bon ordre ?'],
+              ['temp ← notes[j]', 'la variable TAMPON : elle garde la valeur à l\'abri pendant le va-et-vient. Sans elle, notes[j] ← notes[j+1] détruit une des deux valeurs à jamais'],
+              ['les trois lignes', 'sauvegarder → écraser → reposer : cet échange en 3 temps est un motif universel, à connaître par cœur'],
+              ['pourquoi « à bulles »', 'à force d\'échanges voisins, les grandes valeurs MONTENT vers la fin du tableau… comme des bulles vers la surface']
+            ]},
           { t: 'p', h: 'Trier, c\'est ranger dans l\'ordre. Le **tri à bulles** est le plus simple à comprendre — on compare chaque paire d\'éléments voisins et on les échange s\'ils sont dans le mauvais ordre. Comme des bulles qui remontent à la surface, les plus grandes valeurs « flottent » vers la fin.' },
           { t: 'code', lang: 'text', label: 'Tri à bulles — pseudo-code complet', code:
 '// Trier le tableau "notes" par ordre croissant\nnotes ← [12, 8, 15, 10, 7]\nn ← TAILLE(notes)\n\nPOUR i DE 1 À n-1 FAIRE\n  POUR j DE 1 À n-i FAIRE\n    SI notes[j] > notes[j+1] ALORS\n      // Échanger les deux éléments\n      temp ← notes[j]\n      notes[j] ← notes[j+1]\n      notes[j+1] ← temp\n    FIN SI\n  FIN POUR\nFIN POUR\n\n// Après tri : [7, 8, 10, 12, 15]\nAFFICHER "Notes triées :"\nPOUR i DE 1 À n FAIRE\n  AFFICHER notes[i]\nFIN POUR' },
@@ -596,6 +709,13 @@ DEVDOCS.algo.categories.push(
           { t: 'h3', h: 'L\'analogie du cuisinier spécialisé' },
           { t: 'p', h: 'Dans un restaurant, le chef ne fait pas tout lui-même. Il a un cuisinier spécialisé dans les sauces, un autre dans les desserts. Quand le chef a besoin d\'une sauce, il ne réexplique pas la recette — il appelle le cuisinier sauces : « Prépare-moi une sauce tomate pour 4 personnes ». Le cuisinier travaille, puis rend le résultat. Une fonction, c\'est ce cuisinier : un bloc de code spécialisé, qu\'on appelle avec des paramètres (la commande) et qui retourne un résultat (le plat).' },
           { t: 'h3', h: 'Définir et appeler une fonction' },
+          { t: 'syntax', title: 'FONCTION … RETOURNER : le sous-programme, décortiqué', lang: 'text', code:
+'FONCTION tva(montant)\n  RETOURNER montant * 0.18\nFIN FONCTION\n\ntotal ← 10000 + tva(10000)', legend: [
+              ['FONCTION tva(montant)', 'la DÉFINITION : on emballe un calcul réutilisable. montant est le PARAMÈTRE — l\'ingrédient attendu, pas encore une vraie valeur'],
+              ['RETOURNER …', 'le RÉSULTAT renvoyé à l\'appelant : c\'est lui qui distingue la FONCTION (rend une valeur) de la procédure (agit sans rien rendre)'],
+              ['FIN FONCTION', 'fermeture de la définition. À ce stade, RIEN n\'a encore été calculé — on a écrit la recette, pas cuisiné'],
+              ['tva(10000)', 'L\'APPEL : on fournit une valeur concrète, la fonction calcule, et son résultat (1800) prend la place de l\'appel dans l\'expression → total = 11800']
+            ]},
           { t: 'code', lang: 'text', label: 'Pseudo-code — fonction de calcul du total', code:
 '// DÉFINITION de la fonction (écrite une seule fois)\nFONCTION calculer_total(prix, quantite)\n  resultat ← prix * quantite\n  RETOURNER resultat\nFIN FONCTION\n\n// APPELS de la fonction (autant de fois qu\'on veut)\ntotal1 ← calculer_total(500, 3)    // 1500\ntotal2 ← calculer_total(1200, 5)   // 6000\ntotal3 ← calculer_total(350, 10)   // 3500\n\nAFFICHER total1\nAFFICHER total2\nAFFICHER total3' },
           { t: 'p', h: '`prix` et `quantite` sont les **paramètres** — les entrées de la fonction. `resultat` est la **valeur de retour** — ce que la fonction renvoie à l\'appelant. À l\'intérieur de la fonction, les paramètres se comportent comme des variables locales : elles n\'existent QUE pendant l\'exécution de la fonction.' },
@@ -653,6 +773,14 @@ DEVDOCS.algo.categories.push(
         intro: 'Certaines personnes pensent mieux en images qu\'en texte. Pour elles, un bloc de pseudo-code de 20 lignes est intimidant, mais un dessin avec des flèches et des losanges devient immédiatement clair. Les **organigrammes** (ou algorigrammes) sont la traduction VISUELLE d\'un algorithme : chaque forme a une signification précise, et les flèches montrent le chemin suivi. Cette fiche te donne les symboles standard et t\'apprend à passer du texte au dessin — et inversement.',
         blocks: [
           { t: 'h3', h: 'Les symboles standard (norme ISO)' },
+          { t: 'syntax', title: 'Lire un organigramme : les cinq symboles vitaux', lang: 'text', code:
+'[ovale]            → DÉBUT / FIN\n[parallélogramme]  → ENTRÉE / SORTIE\n[rectangle]        → TRAITEMENT\n[losange]          → DÉCISION\n[flèche]           → fil d\'exécution', legend: [
+              ['[ovale]', 'les BORNES : un seul DÉBUT en haut, une ou plusieurs FIN. Tout organigramme commence et finit dans des ovales'],
+              ['[parallélogramme]', 'les ÉCHANGES avec l\'extérieur : LIRE (entrée) et AFFICHER (sortie)'],
+              ['[rectangle]', 'le TRAITEMENT : calculs et affectations — total ← 0, prix ← prix × 1.18'],
+              ['[losange]', 'la DÉCISION : une question à réponse OUI/NON, dont partent DEUX flèches étiquetées — le seul symbole à deux sorties'],
+              ['[flèche]', 'le FIL de l\'exécution : elle dit où l\'on va ensuite ; remonter vers le haut = une boucle']
+            ]},
           { t: 'table', head: ['Forme', 'Signification', 'Exemple'], rows: [
             ['Ovale', 'DÉBUT ou FIN', '« Début » / « Fin du programme »'],
             ['Rectangle', 'TRAITEMENT (action)', '« total ← prix * qte »'],
@@ -733,6 +861,13 @@ DEVDOCS.algo.categories.push(
 'prix_sac ← 500\nbudget ← 1600\nTANT QUE budget ≥ prix_sac FAIRE\n  budget ← budget - prix_sac\nFIN TANT QUE\nAFFICHER "Reste : " + budget + " FCFA"' },
           { t: 'p', h: 'La convention : 2 espaces (ou 4) par niveau d\'imbrication. Sois constant — si tu changes de style au milieu du programme, tu perds le bénéfice visuel. Et surtout : l\'indentation est OBLIGATOIRE dans certains langages (Python), où elle DÉFINIT les blocs.' },
           { t: 'h3', h: 'Commentaires : expliquer POURQUOI, pas QUOI' },
+          { t: 'syntax', title: 'Le bon commentaire, décortiqué', lang: 'text', code:
+'// On arrondit au franc supérieur pour couvrir\n// les courses du zémidjan (livraison)\ntotalArrondi ← arrondirSup(total)', legend: [
+              ['// …', 'le commentaire : ignoré par la machine, écrit pour l\'humain qui relira — toi, dans trois mois'],
+              ['POURQUOI > QUOI', 'le code montre déjà CE qu\'il fait ; le commentaire précieux explique POURQUOI ce choix — la règle d\'or'],
+              ['totalArrondi', 'remarque le nom : il rend déjà la moitié du commentaire inutile. Le meilleur commentaire reste un bon nom de variable'],
+              ['l\'anti-exemple', '« totalArrondi ← arrondirSup(total)  // arrondit au supérieur » = bruit pur : il répète le QUOI sans ajouter de sens']
+            ]},
           { t: 'p', h: 'Un commentaire explique la RAISON d\'un choix, pas ce que fait le code. « Incrémenter le compteur » comme commentaire sur `i ← i + 1` est inutile — le code le dit déjà. « On commence à 1 car le tableau de la tontine n\'a pas de mois 0 » — ÇA, c\'est utile. Le code dit COMMENT ; le commentaire dit POURQUOI.' },
           { t: 'h3', h: 'Ce que les débutants comprennent mal' },
           { t: 'ul', items: [
@@ -769,6 +904,13 @@ DEVDOCS.algo.categories.push(
         intro: 'Ça y est — tu sais écrire des algorithmes en français structuré. Tu maîtrises les variables, les conditions, les boucles, les tableaux, les fonctions. Maintenant, il est temps de franchir le pont : traduire cette logique dans un VRAI langage de programmation. Cette fiche prend plusieurs algorithmes déjà vus dans le module et te montre leur équivalent en **Python** et en **JavaScript** — les deux langages documentés sur Easy Learn. Le but n\'est PAS de tout mémoriser, mais de voir LE PATTERN : la logique est toujours la même, seule la « forme » change.',
         blocks: [
           { t: 'h3', h: 'Table de correspondance : pseudo-code → Python → JavaScript' },
+          { t: 'syntax', title: 'La même idée, trois habillages', lang: 'text', code:
+'SI age >= 18 ALORS       // pseudo-code\nif age >= 18:            # Python\nif (age >= 18) {         // JavaScript', legend: [
+              ['SI … ALORS → if', 'la même NOTION dans trois langues : la logique ne change pas, seule la syntaxe — c\'est la grande leçon de cette fiche'],
+              [': et le retrait (Python)', 'Python délimite le bloc par les deux-points ET l\'indentation — pas d\'accolades, l\'alignement fait foi'],
+              ['(…) et {…} (JavaScript)', 'JavaScript exige le test entre PARENTHÈSES et le bloc entre ACCOLADES — l\'indentation, elle, ne sert qu\'aux humains'],
+              ['la stratégie', 'maîtrise les notions en pseudo-code : chaque nouveau langage devient un simple exercice de traduction, pas un nouveau monde']
+            ]},
           { t: 'table', head: ['Pseudo-code', 'Python', 'JavaScript', 'Ce qui change'], rows: [
             ['`x ← 5`', '`x = 5`', '`let x = 5;`', '`←` devient `=`, JS veut `let`'],
             ['`AFFICHER x`', '`print(x)`', '`console.log(x);`', 'Le nom de la fonction change'],

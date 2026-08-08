@@ -27,11 +27,26 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Le problème que les sélecteurs résolvent' },
             { t: 'p', h: 'Imagine le catalogue en ligne de la Boutique Awa : soixante fiches produits, chacune avec son prix. Sans sélecteurs, il faudrait écrire le style dans chaque balise prix, soixante fois — et le jour où Awa décide que les prix passent du bleu au vert, tu rouvrirais soixante fichiers. Avec une seule règle `.prix { color: green; }`, toute la boutique change instantanément. C\'est ça, un sélecteur : **le contrat entre ton HTML et ta présentation**. Plus ce contrat est stable (des classes nommées par le rôle), plus ton site vieillit bien.' },
             { t: 'h3', h: 'La syntaxe d\'une règle' },
+            { t: 'syntax', title: 'Anatomie d\'une règle CSS', lang: 'css', code:
+'p {\n  color: #333;\n  font-size: 16px;\n}', legend: [
+              ['{', 'le BLOC de déclarations : tout ce que cette règle applique vit entre les accolades'],
+              ['color :', 'la PROPRIÉTÉ : la case précise qu\'on règle (couleur du texte, taille, marge…)'],
+              ['#333', 'la VALEUR : le réglage choisi pour cette propriété'],
+              [';', 'le POINT-VIRGULE : il sépare les déclarations — l\'oublier casse la déclaration suivante'],
+              ['la forme', '`sélecteur { propriété: valeur; }` — trois rôles, toujours les mêmes, sur tout le CSS']
+            ]},
             { t: 'code', lang: 'css', code:
 '/* sélecteur */        /* bloc de déclarations */\n.carte {\n  background: white;    /* propriété: valeur; */\n  border-radius: 16px;\n}' },
             { t: 'p', h: 'Une règle = un **sélecteur** + un bloc de **déclarations** `propriété: valeur;`. Le point-virgule est facultatif sur la toute dernière déclaration, mais mets-le toujours : le jour où tu ajoutes une ligne en oubliant le précédent, tu obtiens un bug muet — aucune erreur affichée, juste un style qui « ne marche pas ».' },
             { t: 'p', h: 'D\'ailleurs, parlons de cette tolérance : **le CSS n\'affiche jamais d\'erreur**. Une déclaration invalide est silencieusement ignorée par le navigateur — c\'est voulu, ça permet aux nouveautés CSS d\'exister sans casser les vieux navigateurs (ils ignorent ce qu\'ils ne connaissent pas). Conséquence pratique : une faute de frappe ne plante rien, elle fait juste « rien ». Quand un style semble ignoré, la première chose à faire est d\'ouvrir les DevTools et de vérifier que ta déclaration n\'est pas barrée ou marquée d\'un avertissement.' },
             { t: 'h3', h: 'Les sélecteurs fondamentaux' },
+            { t: 'syntax', title: 'Les trois sélecteurs de survie', lang: 'css', code:
+'h2 { }        /* tous les h2 */\n.promo { }    /* tout élément class="promo" */\n#menu { }     /* L\'élément id="menu" */', legend: [
+              ['h2', 'sélecteur BALISE : vise tous les éléments de ce type — large, à réserver aux réglages généraux'],
+              ['.promo', 'sélecteur CLASSE (le POINT) : vise tout élément portant class="promo" — réutilisable partout, c\'est ton outil nº 1'],
+              ['#menu', 'sélecteur ID (le #) : vise L\'élément portant cet id, unique dans la page — puissant mais rigide, à doser'],
+              ['le mnémo', 'point = classe (plusieurs), dièse = id (un seul) — les mêmes symboles que dans querySelector côté JS']
+            ]},
             { t: 'table', head: ['Sélecteur', 'Cible', 'Exemple'], rows: [
               ['`p`', 'Tous les éléments de ce type', '`p { line-height: 1.6; }`'],
               ['`.classe`', 'Tout élément portant cette classe (réutilisable à volonté)', '`.btn { padding: 10px; }`'],
@@ -45,6 +60,13 @@ DEVDOCS.css = {
             ]},
             { t: 'p', h: 'Trois philosophies à bien distinguer. Le sélecteur d\'**élément** (`p`, `table`) sert aux réglages globaux de base. La **classe** est votre outil de travail quotidien : réutilisable, nommée par le rôle (`.prix`, `.carte-produit`, `.btn`), elle survit aux réorganisations du HTML. L\'**id**, lui, est unique par page — on l\'a vu dans le module HTML : il sert aux ancres et aux labels, pas au style (sa spécificité énorme crée des guerres de priorité, voir la fiche Cascade).' },
             { t: 'h3', h: 'Combiner : dire « dedans », « enfant direct », « juste après »' },
+            { t: 'syntax', title: 'Les combinateurs, décortiqués', lang: 'css', code:
+'.carte p { }        /* p DANS .carte, à n\'importe quelle profondeur */\n.carte > p { }      /* p ENFANT DIRECT seulement */\nh2 + p { }          /* le p JUSTE APRÈS un h2 */', legend: [
+              ['l\'ESPACE', 'descendant : « n\'importe où À L\'INTÉRIEUR » — y compris très profondément imbriqué'],
+              ['>', 'enfant DIRECT : le premier niveau seulement — plus précis, il évite de tacher les p d\'un composant voisin'],
+              ['+', 'voisin suivant : « l\'élément qui SUIT immédiatement » — parfait pour espacer un paragraphe après un titre, sans toucher aux autres'],
+              ['l\'ordre de lecture', 'on lit de DROITE à gauche : « .carte > p » = les p dont le parent direct est .carte']
+            ]},
             { t: 'p', h: 'Le vrai pouvoir des sélecteurs, ce sont les **combinateurs**. L\'espace (`A B`) descend à n\'importe quelle profondeur. Le chevron (`A > B`) s\'arrête aux enfants directs — précieux pour un menu : `.menu > li` touche les entrées principales sans polluer les sous-menus. Le plus (`A + B`) vise le frère immédiatement suivant, parfait pour le « chapô » qui suit un titre. Le tilde (`A ~ B`) vise tous les frères suivants.' },
             { t: 'code', lang: 'css', code:
 '.carte-produit .prix { color: green; } /* tout prix DANS une carte, à toute profondeur */\n.menu > li { }         /* entrées du 1er niveau seulement, pas les sous-menus */\nh2 + p { font-size: 1.15rem; }  /* le paragraphe qui suit directement un h2 = chapo */\nh2 ~ p { }            /* TOUS les paragraphes qui suivent un h2 */\n.carte-produit.promo { }  /* la carte qui porte les DEUX classes (aucun espace !) */' },
@@ -102,6 +124,14 @@ DEVDOCS.css = {
               '**L\'ordre d\'apparition** — à spécificité strictement égale, la règle écrite **en dernier** dans la feuille gagne. Pas celle du HTML : celle du CSS.'
             ]},
             { t: 'h3', h: 'Le calcul de spécificité, en clair' },
+            { t: 'syntax', title: 'Qui gagne ? Le podium des sélecteurs', lang: 'css', code:
+'p { color: black; }            /* 1 point */\n.info p { color: blue; }       /* 11 points */\n#prix { color: red; }          /* 100 points : gagne */', legend: [
+              ['balise = 1 point', 'le plus FAIBLE : un type d\'élément ne pèse presque rien dans la balance'],
+              ['classe = 10 points', 'une classe suffit à battre N\'IMPORTE quelle combinaison de balises — même 20 balises imbriquées'],
+              ['id = 100 points', 'bats les classes, perds contre le style inline — c\'est pour ça qu\'on évite les id en CSS'],
+              ['à égalité', 'la DERNIÈRE règle écrite gagne : l\'ordre de ton fichier est le dernier juge de paix'],
+              ['le réflexe', 'ravale la spécificité au lieu de l\'escalader : préfère raccourcir un sélecteur que d\'en rajouter pour « gagner »']
+            ]},
             { t: 'p', h: 'Imagine trois colonnes de points `(ID, classes, éléments)`. Chaque morceau de ton sélecteur tombe dans une colonne : un `#id` dans la première ; chaque classe, pseudo-classe ou sélecteur d\'attribut dans la deuxième ; chaque nom d\'élément ou pseudo-élément dans la troisième. On compare colonne par colonne, de gauche à droite — et **les colonnes ne débordent jamais l\'une sur l\'autre** : onze classes restent en dessous d\'un seul id.' },
             { t: 'table', head: ['Sélecteur', 'Points (ID, classe, élément)'], rows: [
               ['`p`', '(0, 0, 1)'],
@@ -117,6 +147,13 @@ DEVDOCS.css = {
             { t: 'h3', h: 'À spécificité égale : la dernière règle gagne (et l\'ordre des classes dans le HTML ne compte PAS)' },
             { t: 'p', h: 'Piège vécu par absolument tout le monde : `<p class="rouge vert">` n\'est **pas** vert « parce que vert est en dernier ». L\'ordre dans l\'attribut `class` n\'a aucun effet, jamais. Ce qui compte, c\'est l\'ordre des règles **dans la feuille de style** : si `.vert` est déclaré après `.rouge`, le texte sera vert, même écrit `class="vert rouge"`. Quand deux sélecteurs de même poids se disputent, le dernier écrit parle.' },
             { t: 'h3', h: 'L\'héritage : l\'autre moitié de l\'histoire' },
+            { t: 'syntax', title: 'L\'héritage, décortiqué', lang: 'css', code:
+'body {\n  font-family: sans-serif;   /* descend partout tout seul */\n  color: #222;                 /* pareil */\n  /* margin: 0 : PAS hérité ! */\n}', legend: [
+              ['font-family', 'les propriétés de TEXTE (font, color, line-height, text-align) se TRANSMETTENT aux descendants — on les pose une fois sur body'],
+              ['margin / padding / border', 'les propriétés de BOÎTE ne s\'héritent PAS : chaque élément gère sa propre enveloppe'],
+              ['inherit', 'le mot-clé qui FORCE l\'héritage d\'une propriété normalement non héritée (ou annule un réglage en revenant au parent)'],
+              ['à retenir', 'héritage = le texte coule en cascade ; les boîtes restent étanches — d\'où le reset * { margin: 0 } en début de projet']
+            ]},
             { t: 'p', h: 'Certaines propriétés se **transmettent automatiquement aux descendants** : `color`, `font-family`, `font-size`, `line-height`, `text-align`, `visibility`… C\'est pourquoi définir la police sur `body` suffit à toute la page. Les propriétés de boîte (`margin`, `padding`, `border`, `width`, `background`) ne s\'héritent pas — heureusement : chaque élément a sa propre géométrie. Sous le capot, c\'est la **valeur calculée** qui descend le long de l\'arbre ; on verra au chapitre Typographie pourquoi ça rend `line-height` sans unité si important.' },
             { t: 'code', lang: 'css', code:
 'a { color: inherit; }       /* un lien dans un titre prend la couleur du titre */\n.icone { fill: currentcolor; } /* suit la couleur du texte environnant */\n.reset { all: unset; }      /* remet TOUT à plat : pratique pour un composant \"nu\" */\n/* inherit : force l\'héritage | initial : valeur CSS par défaut\n   unset : hérite si la propriété hérite, sinon initial */' },
@@ -172,6 +209,13 @@ DEVDOCS.css = {
               ['`fr`', 'Fraction de l\'espace dispo (Grid uniquement)', '`grid-template-columns: 1fr 2fr`']
             ]},
             { t: 'h3', h: 'rem vs px : pourquoi le web a tranché' },
+            { t: 'syntax', title: 'rem : l\'unité de référence, décortiquée', lang: 'css', code:
+'html { font-size: 16px; }  /* la racine de référence */\nh1 { font-size: 2rem; }    /* 2 × 16 = 32px */\n.card { padding: 0.75rem; } /* 12px */', legend: [
+              ['rem', 'root em : relatif à la taille de base du DOCUMENT (16 px par défaut) — 1rem vaut 16px, 2rem vaut 32px…'],
+              ['pourquoi pas px', 'si l\'utilisateur agrandit la taille de base dans son navigateur (vue fatiguée), TOUT le site rem enfollow suit — l\'accessibilité gratuite'],
+              ['le réflexe', 'tailles de texte et espacements en rem ; px gardé pour les bordures fines et détails qui ne doivent pas bouger'],
+              ['le calcul', 'valeur rem × taille de base = pixels réels : 0.75rem × 16 = 12px. Divise par 16 dans ta tête : /2 /4 /8…']
+            ]},
             { t: 'p', h: 'Un utilisateur malvoyant peut régler la taille de police de base de son navigateur (disons 20 px au lieu de 16). Avec des tailles en `rem`, toute ta page suit son réglage — `1rem` vaut 20 px chez lui ; avec des `px`, tu ignores sa préférence et tu lui imposes ta taille. C\'est la raison d\'être du `rem` : à 16 px par défaut c\'est confortable à calculer (`1.5rem` = 24 px), et ça respecte la liberté de chacun. Sous le capot, le navigateur finit toujours par convertir en pixels CSS — le `rem` est juste un multiplicateur appliqué à `html { font-size }`.' },
             { t: 'p', h: 'Et pendant qu\'on est sous le capot : **1 px CSS n\'est pas un pixel physique**. Sur un écran de téléphone haute densité (×3), 1 px CSS couvre 3 × 3 pixels réels — le navigateur gère la conversion. Morale : le « pixel précis » n\'existe pas vraiment, alors autant choisir des unités qui respectent l\'utilisateur.' },
             { t: 'h3', h: 'em : le relatif à double face' },
@@ -184,6 +228,13 @@ DEVDOCS.css = {
             { t: 'h3', h: 'ch : l\'unité discrète qui rend les textes lisibles' },
             { t: 'p', h: '`1ch` = la largeur du caractère « 0 » dans la police courante. Son usage vedette : `max-width: 65ch` limite un paragraphe à environ 65 caractères par ligne — la mesure que la recherche en lisibilité recommande, et le secret des articles agréables. On y revient en Typographie.' },
             { t: 'h3', h: 'calc(), clamp(), min(), max() : les valeurs calculées' },
+            { t: 'syntax', title: 'clamp() : la valeur élastique, décortiquée', lang: 'css', code:
+'font-size: clamp(1rem, 2.5vw, 2rem);\nwidth: clamp(280px, 90%, 1200px);', legend: [
+              ['clamp(min, idéal, max)', 'la valeur suit l\'idéal… sans JAMAIS passer sous le min ni au-dessus du max — trois réglages en une ligne'],
+              ['2.5vw', 'la partie ÉLASTIQUE : 2,5 % de la largeur de la fenêtre — elle bouge toute seule avec l\'écran'],
+              ['font-size fluide', 'un titre qui grandit doucement avec l\'écran, sans UNE media query — le responsive intrinsèque'],
+              ['l\'encadrement', 'min protège la lisibilité sur petit écran, max évite les titres géants sur grand écran : l\'élasticité avec garde-fous']
+            ]},
             { t: 'code', lang: 'css', code:
 'width: calc(100% - 2rem);              /* mélanger les unités ! */\nfont-size: clamp(1.1rem, 2.5vw, 1.6rem);  /* min, idéal, max */\nmargin-inline: max(2rem, 10vw);\npadding: min(5vw, 3rem);' },
             { t: 'p', h: '`clamp(1.1rem, 2.5vw, 1.6rem)` se lit : « le vise 2,5 % de la largeur de l\'écran, mais jamais moins de 1,1rem ni plus de 1,6rem ». C\'est la **typographie fluide** : le texte grandit avec l\'écran, borné des deux côtés, sans une seule media query. `min()` et `max()` sont des clamp à une seule borne. Sous le capot, ces fonctions sont résolues au moment de l\'utilisation — elles restent donc **vivantes** et se recalculent quand la fenêtre change. Tu les retrouveras partout : c\'est le premier réflexe du responsive intrinsèque (fiche Responsive).' },
@@ -192,6 +243,13 @@ DEVDOCS.css = {
 'color: #0a84ff;              /* hexadécimal */\ncolor: #0af;                 /* forme courte (#00aaff) */\ncolor: rgb(10 132 255);      /* décimal, syntaxe moderne */\ncolor: rgb(10 132 255 / 0.5);/* avec transparence (alpha de 0 a 1) */\ncolor: hsl(210 100% 52%);    /* teinte, saturation, luminosite */\ncolor: hsl(210 100% 52% / 0.5);' },
             { t: 'p', h: 'L\'hexadécimal n\'a rien de magique : ce sont trois nombres de 0 à 255 écrits en base 16 — `#RRGGBB`. `#FF0000` = rouge à fond, `#000000` = noir, `#FFFFFF` = blanc. La forme courte `#0af` double chaque caractère (`#00aaff`). La notation `rgb()` lit les mêmes nombres en décimal et ajoute l\'**alpha** après une barre `/` : note que la transparence d\'une couleur n\'a RIEN à voir avec `opacity`, qui rend TOUT l\'élément translucide, texte et enfants compris (et crée même un contexte d\'empilement — voir la fiche Position).' },
             { t: 'h3', h: 'HSL : penser couleur comme un humain' },
+            { t: 'syntax', title: 'hsl() : les trois molettes de la couleur', lang: 'css', code:
+'color: hsl(14 85% 45%);\nbackground: hsl(14 85% 45% / 0.1);', legend: [
+              ['14 (teinte)', 'HUE : la position sur la roue des couleurs, de 0 à 360 — 0 rouge, 120 vert, 240 bleu'],
+              ['85% (saturation)', 'l\'INTENSITÉ : 0 % = gris terne, 100 % = couleur pure et vibrante'],
+              ['45% (luminosité)', 'la CLARTÉ : 0 % = noir, 50 % = couleur normale, 100 % = blanc — c\'est LA molette des variantes'],
+              ['/ 0.1', 'l\'ALPHA optionnel : l\'opacité de 0 (invisible) à 1 (opaque) — ici un fond très léger de la même teinte']
+            ]},
             { t: 'p', h: 'HSL décrit une couleur par sa **teinte** (0-360 sur la roue : 0 rouge, 120 vert, 210 bleu), sa **saturation** (l\'intensité) et sa **luminosité** (0 % noir, 50 % la couleur pure, 100 % blanc). Pour une variante claire, tu montes juste le 3e nombre ; pour une version désaturée, tu baisses le 2e. En hexadécimal, ces variations simples exigent un éditeur de couleur. Encore mieux, les fonctions modernes déclinent une variable de marque sans connaître sa valeur :' },
             { t: 'code', lang: 'css', code:
 '/* Decliner la couleur de marque sans la connaître */\n.btn:hover {\n  background: color-mix(in oklab, var(--accent), black 15%); /* assombri */\n}\n.badge {\n  background: hsl(from var(--accent) h s calc(l + 25));    /* éclairci */\n}' },
@@ -225,6 +283,13 @@ DEVDOCS.css = {
           intro: 'On le répète souvent : le web design, c\'est 90 % de typographie. Une page avec une belle typographie et aucune décoration paraît déjà « professionnelle » ; l\'inverse est impossible. La bonne nouvelle, c\'est que le résultat tient à une poignée de réglages — interligne, mesure, hiérarchie des tailles — et non au prix de la police. Voici chacun de ces réglages, avec le pourquoi derrière le comment.',
           blocks: [
             { t: 'h3', h: 'La pile de polices : pourquoi une liste et pas une seule' },
+            { t: 'syntax', title: 'La font-family dégradée, décortiquée', lang: 'css', code:
+'font-family: "Segoe UI", system-ui, sans-serif;', legend: [
+              ['"Segoe UI"', 'le 1er CHOIX : utilisée si elle existe sur l\'appareil du visiteur — la guillemeter car son nom contient un espace'],
+              ['system-ui', 'le PLAN B malin : « la police du système d\'exploitation » — gratuite, nette, déjà chargée'],
+              ['sans-serif', 'le FILET final : une FAMILLE GÉNÉRIQUE, pas une police précise — le navigateur prend sa meilleure sans-serif'],
+              ['l\'ordre = priorité', 'le navigateur parcourt la liste de gauche à droite et s\'arrête à la première disponible : toujours finir par la générique']
+            ]},
             { t: 'p', h: 'Une police n\'existe que si elle est installée ou téléchargée : `font-family` prend donc une **liste de repli** que le navigateur parcourt jusqu\'à trouver la première disponible. La fameuse « system stack » ci-dessous affiche la police native de l\'OS (SF Pro sur Apple, Segoe UI sur Windows, Roboto sur Android) : chargement instantané, rendu impeccable, zéro fichier à télécharger, et une sensation « native » immédiate. C\'est exactement celle du site que tu lis en ce moment.' },
             { t: 'code', lang: 'css', code:
 'body {\n  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",\n               Roboto, Helvetica, Arial, sans-serif;\n}' },
@@ -242,6 +307,13 @@ DEVDOCS.css = {
               'Taille fluide : `clamp()` fait grandir les titres avec l\'écran, borné des deux côtés (fiche Unités).'
             ]},
             { t: 'h3', h: 'line-height sans unité : le détail qui change tout' },
+            { t: 'syntax', title: 'line-height sans unité, le réflexe pro', lang: 'css', code:
+'p {\n  font-size: 1rem;\n  line-height: 1.5;      /* 1,5 × la taille du texte */\n}\nsmall { font-size: 0.75rem; } /* hérite du ratio : 1,5 × 12px */', legend: [
+              ['1.5 sans unité', 'un RATIO : l\'interligne vaut 1,5 × la taille du texte — quelle que soit la taille future'],
+              ['pourquoi pas 24px', 'en px, l\'interligne est FIGÉ : un titre de 40px garderait 24px d\'interligne, texte qui se chevauche'],
+              ['la fourchette', '1,4 à 1,6 pour le corps de texte ; 1,1 à 1,25 pour les gros titres ; jamais sous 1 sauf effet voulu'],
+              ['l\'héritage bonus', 'le ratio se TRANSMET aux enfants : chaque élément calcule son interligne sur SA taille — le bon comportement par défaut']
+            ]},
             { t: 'p', h: 'Retour sur le mécanisme d\'héritage vu en Cascade : ce qui descend dans les enfants, c\'est la **valeur calculée**. Avec `body { line-height: 24px; }`, c\'est « 24 px » qui s\'hérite — et un titre à 48 px se retrouve avec un interligne de 24 px : il s\'écrase. Avec `body { line-height: 1.5; }`, c\'est le **facteur** 1,5 qui s\'hérite : chaque élément le multiplie par SA propre taille. Même piège avec `150%` — les pourcentages héritent eux aussi de la valeur calculée. Conclusion ferme : l\'interligne se déclare toujours **sans unité**.' },
             { t: 'h3', h: 'Graisse, chasse et capitales' },
             { t: 'p', h: '`font-weight` va de 100 à 900 — `bold` vaut exactement `700`, `normal` vaut `400`. Sans fichier de graisse chargé, le navigateur **simule** le gras en épaississant les traits (rendu médiocre) : d\'où l\'intérêt des polices variables. Le `letter-spacing` (la chasse) se règle subtil : légèrement **négatif** sur les gros titres (l\'œil voit les espaces optiques grandir avec la taille), légèrement **positif** sur les petites capitales `.etiquette { text-transform: uppercase; letter-spacing: .08em; }` qui sinon se collent.' },
@@ -290,6 +362,14 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Pourquoi un « modèle » de boîte ?' },
             { t: 'p', h: 'Sous le capot, le navigateur transforme ton DOM en un arbre de **rectangles**. Chaque élément devient une boîte constituée de quatre zones, et TOUT le reste du moteur de rendu — tailles, espacements, débordements, collisions — se calcule à partir de ces zones. C\'est le « modèle de boîte » (box model). Ce n\'est pas un concept abstrait : c\'est littéralement la structure de données que le navigateur manipule pour peindre ta page.' },
             { t: 'h3', h: 'Les quatre couches' },
+            { t: 'syntax', title: 'La boîte de l\'intérieur vers l\'extérieur', lang: 'css', code:
+'.produit {\n  width: 200px;        /* 1. le contenu */\n  padding: 16px;       /* 2. l\'air intérieur */\n  border: 2px solid;   /* 3. la paroi */\n  margin: 24px;        /* 4. la distance aux voisins */\n}', legend: [
+              ['width', 'la largeur du CONTENU — par défaut, padding et border s\'AJOUTENT à cette largeur (d\'où les mauvaises surprises)'],
+              ['padding', 'l\'ESPACE INTÉRIEUR, entre le contenu et la bordure — il prend la couleur de fond de l\'élément'],
+              ['border', 'la PAROI : le contour visible, entre le dedans et le dehors'],
+              ['margin', 'l\'ESPACE EXTÉRIEUR : la distance de sécurité avec les voisins — toujours transparente'],
+              ['l\'image mentale', 'un tableau accroché au mur : la photo (contenu), le passe-partout (padding), le cadre (border), l\'espace avec les autres cadres (margin)']
+            ]},
             { t: 'demo', height: 190, caption: 'Le box model en action (inspecte mentalement chaque couche)', html:
 '<div style="background:#ffd9ad;padding:14px;text-align:center;font-size:13px">margin<div style="background:#fff;padding:0"><div style="border:3px solid #0a84ff;background:#b6dcff;padding:16px">padding<div style="background:#0a84ff;color:#fff;padding:14px;border-radius:4px">contenu</div></div></div></div>' },
             { t: 'ul', items: [
@@ -300,6 +380,13 @@ DEVDOCS.css = {
               'Cas particulier : les éléments dits « remplacés » (`img`, `video`, `input`) — leur contenu vient de l\'extérieur, et `width`/`height` agissent directement sur la boîte entière.'
             ]},
             { t: 'h3', h: 'content-box vs border-box : le réglage qui change le sens de width' },
+            { t: 'syntax', title: 'border-box : le réglage qui rend width honnête', lang: 'css', code:
+'*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}', legend: [
+              ['box-sizing: border-box', 'width inclut DÉSORMAIS contenu + padding + border : « 200px » mesure vraiment 200px au total'],
+              ['*, *::before…', 'le RITUEL d\'ouverture de tout projet : on l\'applique à tous les éléments et pseudo-éléments, une fois pour toutes'],
+              ['le drame évité', 'sans lui (content-box), width: 200px + padding: 16px + border: 2px = 236px réels — les colonnes « 50% + 50% » débordaient'],
+              ['margin reste dehors', 'la marge n\'entre JAMAIS dans le calcul de width — même avec border-box : elle sert à espacer, pas à dimensionner']
+            ]},
             { t: 'p', h: 'Par défaut (`content-box`, un héritage historique conservé pour compatibilité), `width: 300px` signifie « le contenu fait 300 px » — puis le padding et la bordure s\'**ajoutent** par-dessus : 300 + 16×2 + 2×2 = 336 px affichés. C\'est contre-intuitif : tu demandes 300 et tu reçois 336. Cette incohérence est la cause de mille bugs de mise en page « qui déborde de quelques pixels ».' },
             { t: 'code', lang: 'css', code:
 'html { box-sizing: border-box; }\n*, *::before, *::after { box-sizing: inherit; }' },
@@ -344,6 +431,13 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Deux questions en une : comment JE me place, comment MES ENFANTS se placent' },
             { t: 'p', h: 'Le modèle moderne voit `display` comme deux rôles distincts. Le rôle **extérieur** (outer) : comment l\'élément se comporte vis-à-vis de ses voisins — `block` (nouvelle ligne, pleine largeur) ou `inline` (dans la ligne, à la taille du contenu). Le rôle **intérieur** (inner) : comment ses enfants sont disposés — `flow` (le flux classique) ou un contexte spécial (`flex`, `grid`). Quand tu écris `display: flex`, tu dis en réalité « extérieur block, intérieur flex ». Cette lecture à deux faces rend tous les comportements prévisibles.' },
             { t: 'h3', h: 'Block vs inline : les deux natures' },
+            { t: 'syntax', title: 'block vs inline, décortiqué', lang: 'css', code:
+'p, h1, div     { display: block; }   /* toute la ligne */\na, span, strong { display: inline; } /* dans le flux du texte */', legend: [
+              ['block', 'prend TOUTE la largeur disponible et impose un retour à la ligne après lui — empilable comme des briques'],
+              ['inline', 'occupe juste sa place DANS le texte, comme un mot souligné — et ignore width, height et les marges verticales'],
+              ['le test réflexe', '« doit-il avoir une taille et des marges ? » → block (ou inline-block) ; « vit-il dans une phrase ? » → inline'],
+              ['on peut changer de nature', 'display: block sur un lien pour faire un gros bouton ; display: inline-block pour des puces dimensionnables en rangée']
+            ]},
             { t: 'table', head: ['', 'block', 'inline'], rows: [
               ['Exemples', '`div`, `p`, `h1-h6`, `section`, `form`, `li`', '`span`, `a`, `strong`, `em`, `code`'],
               ['Largeur', 'Toute la ligne disponible', 'Juste le contenu'],
@@ -361,6 +455,13 @@ DEVDOCS.css = {
             { t: 'code', lang: 'css', code:
 '.toolbar {\n  display: flex;      /* les enfants directs s\'alignent en ligne */\n  gap: 12px;          /* espacement entre eux, sans marges */\n}\n/* Même un <span> enfant devient un « item » blockifié automatiquement. */' },
             { t: 'h3', h: 'Cacher un élément : none, visibility, opacity — trois façons très différentes' },
+            { t: 'syntax', title: 'Trois façons de cacher, trois conséquences', lang: 'css', code:
+'.supprime { display: none; }\n.discret  { visibility: hidden; }\n.fantome  { opacity: 0; }', legend: [
+              ['display: none', 'RETRAIT TOTAL : l\'élément quitte la mise en page (les voisins se resserrent) et disparaît des lecteurs d\'écran'],
+              ['visibility: hidden', 'invisible MAIS la place reste — un siège vide qui garde sa rangée'],
+              ['opacity: 0', 'transparent MAIS présent : garde sa place ET reste cliquable — piège : un bouton invisible peut être activé par accident'],
+              ['la règle', 'retirer de la page → none ; garder la place → hidden ; animer un fondu → opacity (souvent avec pointer-events: none)']
+            ]},
             { t: 'table', head: ['Technique', 'Effet réel', 'Quand l\'utiliser'], rows: [
               ['`display: none`', 'Retiré du flux, aucune place, ignoré des lecteurs d\'écran', 'Fermeture complète (menu mobile fermé, panneau masqué)'],
               ['`visibility: hidden`', 'Invisible mais la place est GARDÉE ; plus cliquable', 'Réserver l\'emplacement sans trou visuel'],
@@ -417,6 +518,13 @@ DEVDOCS.css = {
             ]},
             { t: 'p', h: 'Une fois positionné (tout sauf `static`), l\'élément se règle avec `top`, `right`, `bottom`, `left` — ou le raccourci `inset: 0` pour les quatre à zéro, très pratique pour couvrir un parent. Retiens la distinction clé : `relative` et `sticky` **conservent leur réservation** dans le flux ; `absolute` et `fixed` la libèrent.' },
             { t: 'h3', h: 'Le combo fondateur : relative + absolute' },
+            { t: 'syntax', title: 'relative + absolute : l\'ancrage précis, décortiqué', lang: 'css', code:
+'.carte {\n  position: relative;   /* devient le repère */\n}\n.badge {\n  position: absolute;   /* se place PAR RAPPORT à .carte */\n  top: 8px;\n  right: 8px;\n}', legend: [
+              ['position: relative', 'le PARENT devient le repère de positionnement — sans bouger lui-même d\'un pixel'],
+              ['position: absolute', 'L\'ENFANT quitte le flux et se place par rapport au PLUS PROCHE ancêtre positionné (ici .carte)'],
+              ['top: 8px; right: 8px', 'les COORDONNÉES depuis les bords du repère : coin haut-droit, à 8px des bords'],
+              ['le piège classique', 'sans ancêtre positionné, absolute se réfère à TOUTE la page : le badge part se coller en haut du document']
+            ]},
             { t: 'code', lang: 'css', code:
 '.carte {\n  position: relative;  /* devient la référence, sans bouger d\'un pixel */\n}\n.badge {\n  position: absolute;  /* se place DANS .carte, hors du flux */\n  top: 12px;\n  right: 12px;\n}' },
             { t: 'demo', height: 130, caption: 'Un badge « -20 % » en absolute, ancré à sa carte (relative)', html:
@@ -427,6 +535,13 @@ DEVDOCS.css = {
 '.barre-paiement {\n  position: fixed;\n  left: 0; right: 0; bottom: 0;\n  padding-bottom: env(safe-area-inset-bottom, 0); /* encoche iPhone */\n  background: rgba(255,255,255,.85);\n  backdrop-filter: blur(12px);\n  z-index: 100;\n}' },
             { t: 'p', h: 'Le schéma des barres d\'action façon applications de paiement : toujours visibles, le contenu scrolle derrière. Deux subtilités. D\'abord `env(safe-area-inset-bottom)` évite que la barre passe sous l\'indicateur de geste des iPhone — détail d\'artisan. Ensuite le piège moderne et vicieux : **un ancêtre avec `transform`, `filter` ou `backdrop-filter` devient le nouveau référentiel du `fixed`** — ta barre « fixe » se met alors à scaler avec lui et cesse d\'être fixe à l\'écran. Si un jour un `fixed` « suit » un parent animé, tu sais où chercher.' },
             { t: 'h3', h: 'sticky : l\'hybride sous-estimé' },
+            { t: 'syntax', title: 'sticky : collant après le scroll, décortiqué', lang: 'css', code:
+'.menu-jours {\n  position: sticky;\n  top: 0;             /* à partir de quand il colle */\n}', legend: [
+              ['position: sticky', 'l\'élément suit le flux NORMALEMENT… jusqu\'à ce que le scroll amène son bord au seuil top: il s\'y COLLE'],
+              ['top: 0', 'le SEUIL d\'accrochage, obligatoire : sans lui, sticky ne colle jamais — l\'oubli nº 1'],
+              ['le cas d\'usage', 'l\'en-tête de catégorie d\'un menu de restaurant, les jours d\'un planning, la barre de filtres d\'une liste de produits'],
+              ['ses limites', 'il ne colle qu\'à l\'intérieur de son parent : si le parent est court, le sticky « s\'échappe » avec lui']
+            ]},
             { t: 'code', lang: 'css', code:
 '.table-prix thead th {\n  position: sticky;\n  top: 0;            /* INDISPENSABLE : le seuil de collage */\n  background: white; /* sinon le contenu qui défile transparaît */\n}\n\n.section h2 {\n  position: sticky;\n  top: 12px;         /* les titres de rayons « suivent » le scroll */\n}' },
             { t: 'p', h: '`sticky` reste dans le flux jusqu\'au seuil, puis colle… **à l\'intérieur de son parent uniquement** : quand le parent a fini de défiler, l\'élément repart avec lui. C\'est parfait pour l\'en-tête d\'un long tableau de prix du marché ou les lettres d\'un annuaire. Les trois causes de « sticky ne marche pas » : 1) le seuil (`top`, `bottom`…) est oublié — sans lui, rien ne colle ; 2) un ancêtre a `overflow: hidden`/`auto`/`scroll` — le scroll s\'y déroule au lieu de la fenêtre et neutralise l\'effet ; 3) le parent fait la même hauteur que l\'élément collant — il n\'a nulle part où coller.' },
@@ -471,6 +586,13 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Le problème que Flexbox a résolu' },
             { t: 'p', h: 'Avant 2015, aligner proprement exigeait des tables, des floats détournés, des `line-height` truqués et des `position: absolute` approximatifs — des techniques qui cassaient dès que le contenu changeait. Flexbox part du bon constat : dans une barre d\'outils, un menu, une rangée de cartes, ce qu\'on veut n\'est pas « tant de pixels » mais **« répartir l\'espace disponible intelligemment »**. Le navigateur fait les calculs ; tu déclares l\'intention.' },
             { t: 'h3', h: 'Le parent commande, les enfants obéissent' },
+            { t: 'syntax', title: 'Le flex minimal, décortiqué', lang: 'css', code:
+'.toolbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 12px;\n}', legend: [
+              ['display: flex', 'posé sur le PARENT : il transforme ses enfants en rangée souple — le contexte change, pas les enfants'],
+              ['justify-content', 'la répartition sur l\'AXE PRINCIPAL (horizontal par défaut) : space-between pousse les extrémités aux bords'],
+              ['align-items', 'l\'alignement sur l\'AXE CROISÉ (vertical ici) : center centre tout le monde en hauteur'],
+              ['gap', 'l\'ESPACE entre enfants, sans marges bidouillées : fini le margin négatif sur le dernier élément']
+            ]},
             { t: 'code', lang: 'css', code:
 '.toolbar {\n  display: flex;        /* active le mode flex sur les enfants DIRECTS */\n  flex-direction: row;  /* défaut : en ligne (column pour en colonne) */\n  gap: 12px;            /* gouttière entre enfants — fini les marges */\n}' },
             { t: 'demo', height: 120, caption: 'justify-content: space-between + align-items: center', html:
@@ -490,6 +612,13 @@ DEVDOCS.css = {
             { t: 'code', lang: 'css', code:
 '.nav { display: flex; align-items: center; gap: 1rem; }\n.nav .actions { margin-left: auto; } /* pousse tout le bloc a droite */' },
             { t: 'h3', h: 'Grandir et rétrécir : grow, shrink, basis — l\'algorithme enfin clair' },
+            { t: 'syntax', title: 'flex: l\'allocation d\'espace, décortiquée', lang: 'css', code:
+'.main { flex: 1; }        /* grandit, prend la place libre */\n.side { flex: 0 0 240px; } /* largeur fixe garantie */', legend: [
+              ['flex: 1', 'raccourci de flex: 1 1 0 — « je grandis pour prendre MA PART de l\'espace libre ». Deux enfants à flex: 1 → parts égales'],
+              ['flex-grow', 'l\'APPÉTIT : 0 = garde sa taille, 1 = prend une part, 2 = part double — au prorata, au pixel près'],
+              ['flex: 0 0 240px', 'grow 0 (ne grandit pas), shrink 0 (ne rétrécit pas), basis 240px : une colonne FIGÉE en toute sécurité'],
+              ['flex-basis', 'la taille de DÉPART avant répartition de l\'espace libre — pas une taille finale, un point de départ de négociation']
+            ]},
             { t: 'p', h: 'Voici ce que le navigateur calcule réellement, sous le capot, pour chaque item. 1) Il part du **`basis`** : la taille de départ (`auto` = la width ou le contenu). 2) Il compare la somme des basis à la largeur du conteneur : s\'il reste de la place, **`grow`** se la partage au prorata — deux items à `flex-grow: 1` prennent chacun la moitié, un `2` prend le double d\'un `1`. 3) Si ça déborde, **`shrink`** réduit au prorata… mais JAMAIS sous le contenu minimal (un mot long, une image, un `pre`) sans intervention de ta part.' },
             { t: 'code', lang: 'css', code:
 '.sidebar { flex: 0 0 280px; }    /* figée : ni grandit, ni rétrécit, 280px */\n.contenu { flex: 1; }            /* prend TOUT l\'espace restant */\n.media   { flex: 0 1 auto; }     /* ne grandit pas, peut rétrécir */\n\n.item.special { align-self: flex-end; } /* exception locale sur l\'axe croisé */\n.item.prioritaire { order: -1; }        /* affiché en premier (défaut : 0) */' },
@@ -537,10 +666,24 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Le problème que Grid résout : aligner dans DEUX dimensions' },
             { t: 'p', h: 'Revenons une seconde sur la limite de Flexbox vue à la fiche précédente : en `wrap`, chaque ligne vit sa vie et les cartes de lignes différentes ne s\'alignent PAS en colonnes. Normal — flex ne pense qu\'en 1D. Grid considère ta mise en page comme un damier où les **pistes** (tracks) traversent toute la grille : la 2e colonne de la ligne 1 EST la 2e colonne de la ligne 5. Tout ce qui demande un alignement croisé — dashboard, page produit, galerie — devient trivial.' },
             { t: 'h3', h: 'Créer une grille : les pistes explicites' },
+            { t: 'syntax', title: 'La grille explicite, décortiquée', lang: 'css', code:
+'.grille {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr;\n  gap: 16px;\n}', legend: [
+              ['display: grid', 'posé sur le PARENT : il découpe l\'espace en grille, et les enfants viennent remplir les cellules dans l\'ordre'],
+              ['grid-template-columns', 'les PISTES verticales : ici 3 colonnes. On n\'indique que les colonnes — les lignes se créent toutes seules'],
+              ['1fr', 'la FRACTION : « une part de l\'espace disponible ». 1fr 1fr 1fr = trois colonnes égales, quelle que soit la largeur'],
+              ['gap', 'les gouttières entre cellules, horizontales ET verticales — jamais de marge négative à compenser']
+            ]},
             { t: 'code', lang: 'css', code:
 '.page {\n  display: grid;\n  grid-template-columns: 240px 1fr;   /* 2 colonnes : fixe + le reste */\n  grid-template-rows: auto 1fr auto;  /* 3 lignes : auto calculées sur le contenu */\n  gap: 16px;                          /* row-gap + column-gap */\n}' },
             { t: 'p', h: 'L\'unité star est le **`fr`** (fraction) : il se partage l\'espace RESTANT une fois les tailles fixes et les gaps retirés. `240px 1fr` = une colonne fixe de 240 px plus une colonne qui prend tout le reste. Trois colonnes égales : `1fr 1fr 1fr`, ou mieux `repeat(3, 1fr)`. Et `minmax(180px, 1fr)` borne une piste entre un plancher et un plafond — héros discret de la fiche.' },
             { t: 'h3', h: 'Placer les éléments : numéros, span… ou dessin' },
+            { t: 'syntax', title: 'span : occuper plusieurs cellules', lang: 'css', code:
+'.vedette {\n  grid-column: span 2;   /* 2 colonnes de large */\n  grid-row: span 2;      /* 2 lignes de haut */\n}', legend: [
+              ['grid-column: span 2', 'l\'élément s\'ÉTALE sur 2 pistes verticales — la case « produit vedette » qui prend double large'],
+              ['grid-row: span 2', 'même idée en hauteur : deux lignes occupées'],
+              ['aucun calcul', 'la grille REFAIT les comptes automatiquement autour de l\'élément étalé — les autres se réorganisent sans casse'],
+              ['usage type', 'page produit d\'Awa : la photo en span 2 × 2, le titre et le prix dans les cases restantes — un magazine en 4 lignes']
+            ]},
             { t: 'code', lang: 'css', code:
 '/* Par numéros de lignes de grille (les lignes, pas les cellules !) */\nheader { grid-column: 1 / 3; }        /* de la ligne 1 à la ligne 3 */\n.hero  { grid-column: 1 / -1; }       /* toute la largeur (-1 = la fin) */\n.pub   { grid-row: span 2; }          /* s\'étire sur 2 lignes */\n\n/* L\'élégance maximale : les zones nommées */\n.page {\n  grid-template-areas:\n    "header header"\n    "nav    main"\n    "footer footer";\n}\nheader { grid-area: header; }\nnav    { grid-area: nav; }\nmain   { grid-area: main; }\nfooter { grid-area: footer; }' },
             { t: 'demo', height: 200, caption: 'Une mise en page complète en template-areas', html:
@@ -551,6 +694,13 @@ DEVDOCS.css = {
 '.carte  { display: grid; place-items: center; }  /* centrage en 1 ligne */\n.page   {\n  display: grid;\n  justify-items: stretch;   /* items dans leurs cellules (horizontal) */\n  align-items: start;       /* items dans leurs cellules (vertical) */\n  justify-content: center;  /* la GRILLE elle-même si pistes < conteneur */\n}' },
             { t: 'p', h: 'Deux niveaux d\'alignement à ne pas confondre : `*-items` règle les éléments **dans leurs cellules** (une cellule n\'est pas l\'élément : par défaut celui-ci s\'y étire, `stretch`), et `*-content` déplace **la grille complète** quand elle est plus petite que le conteneur. Et `place-items: center` est le raccourci de centrage le plus court de tout CSS — 3 mots pour le graal.' },
             { t: 'h3', h: 'La grille légendaire qui se fait toute seule' },
+            { t: 'syntax', title: 'auto-fill + minmax : la galerie magique, décortiquée', lang: 'css', code:
+'.galerie {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));\n  gap: 16px;\n}', legend: [
+              ['minmax(220px, 1fr)', 'chaque colonne vaut AU MOINS 220 px et au plus une part égale : le plancher et le plafond en un mot'],
+              ['auto-fill', '« mets AUTANT de colonnes que l\'espace le permet » : 1 colonne sur téléphone, 4 sur grand écran — SANS media query'],
+              ['repeat(…)', 'évite de réécrire la même piste : répète le motif autant de fois que demandé'],
+              ['pourquoi légendaire', 'UNE ligne pour une galerie de produits parfaitement responsive : c\'est souvent tout le CSS d\'un catalogue']
+            ]},
             { t: 'code', lang: 'css', code:
 '.cartes {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));\n  gap: 1rem;\n}' },
             { t: 'p', h: 'Cette ligne se lit : « mets autant de colonnes que possible, chacune d\'au moins 220 px, et partage le reste équitablement ». Résultat : une galerie **100 % responsive sans media query** — 1 colonne sur téléphone, 4 sur grand écran, transitions automatiques. La nuance `auto-fill` vs `auto-fit` : `fill` conserve des pistes fantômes vides (utile pour aligner de futures lignes), `fit` les écrase à 0 et laisse les éléments restants s\'étirer — pour une galerie qui doit remplir, `auto-fit` est souvent le bon choix.' },
@@ -597,6 +747,13 @@ DEVDOCS.css = {
             { t: 'code', lang: 'html', code:
 '<meta name="viewport" content="width=device-width, initial-scale=1.0">' },
             { t: 'h3', h: 'Mobile-first : partir du petit écran' },
+            { t: 'syntax', title: 'La media query mobile-first, décortiquée', lang: 'css', code:
+'.cartes {\n  display: grid;\n  grid-template-columns: 1fr;      /* mobile d\'abord */\n}\n@media (min-width: 640px) {\n  .cartes { grid-template-columns: 1fr 1fr; }\n}', legend: [
+              ['le CSS hors media', 'le cas MOBILE est le CSS de base : simple, une colonne, toujours vrai'],
+              ['@media (min-width: 640px)', '« À PARTIR de 640 px de large, AJOUTE ceci » — on monte en complexité, on ne déshabille jamais'],
+              ['min-width, pas max-width', 'mobile-first = min-width : chaque palier ENRICHIT pour les écrans plus grands, direction naturelle et sans conflit'],
+              ['la logique', 'petit écran d\'abord (tes clients !), puis on profite de la place quand elle existe — pas l\'inverse']
+            ]},
             { t: 'code', lang: 'css', code:
 '/* Base = mobile : le CSS simple, en une colonne */\n.cartes { display: grid; gap: 1rem; }\n\n/* On ENRICHISSIT quand l\'écran grandit */\n@media (min-width: 640px) {\n  .cartes { grid-template-columns: 1fr 1fr; }\n}\n@media (min-width: 1024px) {\n  .cartes { grid-template-columns: 1fr 1fr 1fr; }\n}' },
             { t: 'p', h: 'Pourquoi ce sens-là et pas l\'inverse ? 1) **La contrainte d\'abord** : concevoir pour 360 px force l\'essentiel — contenu hiérarchisé, actions claires ; l\'espace supplémentaire devient un enrichissement, pas une compression à subir. 2) **La cascade travaille pour toi** : avec `min-width`, chaque palier ajoute des règles et les précédentes restent vraies ; avec `max-width` (le triste « desktop-second »), tu écris le desktop complet puis tu passes ton temps à **annuler** — les correctifs s\'empilent et se contredisent. 3) **La performance** : le mobile, souvent l\'appareil le moins puissant, reçoit le CSS le plus léger et gaspille moins de données — précieux sur un forfait limité.' },
@@ -617,6 +774,13 @@ DEVDOCS.css = {
 '@media (hover: hover) {\n  .carte:hover { transform: translateY(-4px); } /* pas de survol au tactile */\n}\n@media (pointer: coarse) {\n  button { min-height: 44px; }  /* cibles tactiles généreuses */\n}\n@media (prefers-reduced-motion: reduce) {\n  * { animation: none !important; transition: none !important; }\n}\n@media (prefers-color-scheme: dark) {\n  :root { --fond: #000; --texte: #f5f5f7; } /* thème OS automatique */\n}' },
             { t: 'p', h: 'Les media queries les plus élégantes ne regardent pas la taille : elles respectent **comment** l\'utilisateur interagit (doigt vs souris) et **ce qu\'il préfère** (mouvement réduit pour les sensibilités vestibulaires, thème sombre système). C\'est de l\'accessibilité écrite en CSS — et ces tests sont supportés partout.' },
             { t: 'h3', h: 'Container queries : le composant enfin autonome' },
+            { t: 'syntax', title: 'La container query, décortiquée', lang: 'css', code:
+'.zone {\n  container-type: inline-size;   /* la zone devient repère */\n}\n@container (min-width: 400px) {\n  .carte { display: flex; }       /* réagit à SA zone */\n}', legend: [
+              ['container-type: inline-size', 'on DÉSIGNÉ un parent comme référence de mesure — c\'est SA largeur qui compte désormais, pas celle de l\'écran'],
+              ['@container (min-width: 400px)', 'la condition porte sur la ZONE : « si MOI, la carte, j\'ai 400 px de place, je passe en layout horizontal »'],
+              ['la révolution', 'le MÊME composant s\'adapte dans une sidebar étroite et dans une zone large — réutilisable partout, vraiment'],
+              ['vs media query', '@media mesure la FENÊTRE, @container mesure la BOÎTE : le composant devient autonome de son contexte']
+            ]},
             { t: 'p', h: 'Les media queries regardent la **fenêtre**. Mais un composant réutilisable ne se soucie pas de la fenêtre : une même carte peut finir dans la colonne principale (large) ou la sidebar (étroite). Les **container queries** répondent à cette demande vieille de quinze ans : le composant réagit à **sa propre boîte**.' },
             { t: 'code', lang: 'css', code:
 '.zone { container-type: inline-size; }  /* la boîte devient référence */\n\n@container (min-width: 400px) {\n  .carte { display: flex; }  /* la carte s\'adapte a SON conteneur */\n}' },
@@ -661,6 +825,13 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Pourquoi animer (et pourquoi si peu) ?' },
             { t: 'p', h: 'Le cerveau déteste les téléportations : un panneau qui apparaît instantanément « vient de nulle part » ; le même panneau qui glisse depuis la droite raconte son origine — et retournera logiquement à droite. C\'est la fonction narrative du mouvement. Mais une interface qui s\'agite partout fatigue : les micro-interactions professionnelles tiennent entre **150 et 300 ms** et restent discrètes. Au-delà de 400 ms, l\'utilisateur attend ; en dessous de 100 ms, il ne voit rien.' },
             { t: 'h3', h: 'La transition : l\'état A vers l\'état B' },
+            { t: 'syntax', title: 'transition : lisser un changement d\'état', lang: 'css', code:
+'.btn {\n  background: #ee3820;\n  transition: background 0.25s ease;\n}\n.btn:hover {\n  background: #c52a18;\n}', legend: [
+              ['transition: background', 'la PROPRIÉTÉ surveillée : « si background change, ne saute pas — glisse ». Posée sur l\'état NORMAL, pas sur :hover'],
+              ['0.25s', 'la DURÉE : assez courte pour rester réactive (0,15–0,3 s au quotidien ; au-delà, l\'interface semble lente)'],
+              ['ease', 'la COURBE : démarrage doux, fin douce — le réglage par défaut qui fait « naturel »'],
+              ['le déclencheur', 'la transition se joue à CHAQUE changement d\'état (:hover, :focus, classe ajoutée par JS) — tu ne la lances jamais à la main']
+            ]},
             { t: 'code', lang: 'css', code:
 '.bouton {\n  background: #0a84ff;\n  transform: scale(1);\n  /* propriété durée courbe retard */\n  transition: background 0.25s ease,\n              transform 0.15s cubic-bezier(0.34, 1.4, 0.64, 1);\n}\n.bouton:hover  { background: #0066d6; }\n.bouton:active { transform: scale(0.94); }' },
             { t: 'demo', height: 110, caption: 'Survole puis clique : transition douce + effet de pression', html:
@@ -685,6 +856,14 @@ DEVDOCS.css = {
             { t: 'h3', h: 'La performance : pourquoi transform et opacity règnent' },
             { t: 'p', h: 'Sous le capot, le rendu suit trois grandes étapes : **Layout** (calcul des tailles/positions de toutes les boîtes), **Paint** (peinture des pixels), **Composite** (assemblage des calques par le GPU). Animer `width`, `top` ou `margin` repasse par le Layout à CHAQUE image — recalculs CPU en cascade, saccades garanties surtout sur téléphone modeste. Animer `transform` ou `opacity` ne touche ni layout ni peinture : c\'est de la pure composition, souvent sur un thread séparé à 60 images/seconde. D\'où la règle d\'or : n\'anime que `transform` et `opacity` (et `filter` avec parcimonie — le flou coûte cher en paint). Pour le dire autrement : joue l\'illusion du mouvement avec transform, jamais la géométrie réelle.' },
             { t: 'h3', h: '@keyframes : la chorégraphie complète' },
+            { t: 'syntax', title: '@keyframes + animation, décortiqué', lang: 'css', code:
+'@keyframes pulse {\n  from { transform: scale(1); }\n  to   { transform: scale(1.06); }\n}\n.badge-promo {\n  animation: pulse 1.2s ease-in-out infinite alternate;\n}', legend: [
+              ['@keyframes pulse', 'la CHORÉGRAPHIE nommée : les étapes clés du mouvement, définies une fois, réutilisables'],
+              ['from / to', 'début et fin (0 % et 100 %) — on peut ajouter des étapes intermédiaires en pourcentages'],
+              ['animation: pulse 1.2s', 'BRANCHE la chorégraphie sur l\'élément : nom + durée, puis les options'],
+              ['infinite alternate', 'en BOUCLE, en aller-retour : le badge « respire » sans à-coup — l\'accroche visuelle d\'une promo'],
+              ['avec modération', 'UNE animation d\'accroche par page, pas dix : l\'attention est une denrée rare — et pense à prefers-reduced-motion']
+            ]},
             { t: 'code', lang: 'css', code:
 '.toast {\n  animation: apparition 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;\n}\n@keyframes apparition {\n  from { opacity: 0; transform: translateY(16px); }\n  to   { opacity: 1; transform: translateY(0); }\n}\n\n.pointille {\n  animation: pulse 2s ease-in-out 0.5s infinite alternate;\n  /* nom duree courbe retard répétitions direction */\n}\n@keyframes pulse {\n  50% { opacity: 0.4; }\n}\n\n/* Des étapes plus riches encore : */\n@keyframes rebond {\n  0%   { transform: scale(.3); opacity: 0; }\n  60%  { transform: scale(1.1); }\n  100% { transform: scale(1); opacity: 1; }\n}' },
             { t: 'p', h: 'Les options essentielles : `infinite` boucle sans fin, `alternate` fait l\'aller-retour (idéal pour les pulsations), le délai décale le départ (superbe en cascade : `animation-delay` croissant via `nth-child` fait apparaître une liste en escalier — la touche premium des listes d\'articles). Le mot-clé **`both`** (`animation-fill-mode`) mérite son explication : il applique l\'état `from` PENDANT le délai et conserve l\'état `to` APRÈS la fin — sans lui, l\'élément revient brutalement à son état initial une fois l\'animation terminée. Enfin, `animation-play-state: paused` met sur pause (pratique pour un carrousel au survol).' },
@@ -723,6 +902,14 @@ DEVDOCS.css = {
             { t: 'h3', h: 'Le problème : la même valeur écrite quarante fois' },
             { t: 'p', h: 'Ouvre n\'importe quel vieux projet : la couleur de marque est copiée dans trente-sept règles — et pas toujours la même, car entre `#0a84ff` et `#0b85ff` personne ne voit la différence. Le jour où la Boutique Awa passe du bleu au vert, tu cherches/remplaces en priant de ne pas rater un fichier ou d\'en casser un autre bleu sans rapport. La variable inverse le rapport de force : **une seule source de vérité, des références partout**. Modifier un thème devient éditer une poignée de lignes.' },
             { t: 'h3', h: 'Déclarer et consommer' },
+            { t: 'syntax', title: 'La variable CSS : déclarer ici, consommer partout', lang: 'css', code:
+':root {\n  --marque: #ee3820;\n}\n.btn {\n  background: var(--marque);\n}\n.badge {\n  border-color: var(--marque);\n}', legend: [
+              [':root', 'le théâtre GLOBAL : les variables posées ici sont visibles de TOUTE la page (c\'est l\'élément `<html>`)'],
+              ['--marque: #ee3820', 'la DÉCLARATION : double tiret + nom libre. On écrit la valeur UNE fois'],
+              ['var(--marque)', 'la CONSOMMATION : « prends la valeur de --marque » — lisible, traçable'],
+              ['le gain', 'rebranding en une ligne : tu changes --marque une seule fois, et les 40 endroits qui l\'utilisent suivent instantanément'],
+              ['fallback', 'var(--marque, #ee3820) : une valeur de SECOURS si la variable n\'existe pas — la ceinture ET les bretelles']
+            ]},
             { t: 'code', lang: 'css', code:
 ':root {\n  --accent: #0a84ff;\n  --rayon: 16px;\n  --espace: 1rem;\n}\n\n.bouton {\n  background: var(--accent);\n  border-radius: var(--rayon);\n  padding: var(--espace) calc(var(--espace) * 1.5);\n}' },
             { t: 'p', h: 'On déclare avec `--nom: valeur;` — sensible à la casse, et libre : couleurs, longueurs, ombres, chaînes (`--icone: "→"`)… — et on consomme avec `var(--nom)` **dans une valeur de propriété** (jamais dans un sélecteur). `:root` n\'est que le sélecteur de l\'élément `<html>` avec la spécificité d\'une pseudo-classe — c\'est simplement la case la plus haute de la boîte, pour une portée globale. Petite précaution : le deuxième argument de `var()` est un **repli** utilisé si la variable n\'est pas définie : `color: var(--accent, blue)`.' },
@@ -740,6 +927,13 @@ DEVDOCS.css = {
 ':root {\n  /* Échelle d\'espacements : multiples d\'une base */\n  --space-1: .25rem; --space-2: .5rem; --space-3: 1rem; --space-4: 2rem;\n  /* Rayons */\n  --radius-s: 8px; --radius-m: 14px; --radius-l: 24px;\n  /* Couches d\'empilement ordonnées — fini la guerre des 9999 */\n  --z-dropdown: 100; --z-overlay: 500; --z-modal: 1000;\n  /* Mouvement cohérent */\n  --duree: .25s; --ease: cubic-bezier(.34, 1.2, .64, 1);\n}\n\n.toast {\n  z-index: var(--z-overlay);\n  border-radius: var(--radius-m);\n  padding: var(--space-3) var(--space-4);\n  animation: apparition var(--duree) var(--ease) both;\n}' },
             { t: 'p', h: 'Ces variables systémiques — les **design tokens** — sont le secret de la cohérence : tous les espacements sont multiples de la même base, les trois rayons se répètent partout, les z-index s\'ordonnent sur une échelle unique (souvenir de la fiche Position), les durées et courbes sont partagées (souvenir de la fiche Animations). Quand tout le site « se ressemble », ce n\'est jamais un hasard : c\'est une échelle de tokens respectée.' },
             { t: 'h3', h: 'Piloter depuis JavaScript' },
+            { t: 'syntax', title: 'Changer une variable CSS depuis JS', lang: 'css', code:
+'document.documentElement.style\n  .setProperty("--marque", "#00599C");', legend: [
+              ['document.documentElement', 'l\'élément `<html>` = :root — c\'est là que vivent les variables globales'],
+              ['.style.setProperty(…)', 'écrit une PROPRIÉTÉ personnalisée : nom de la variable entre guillemets, nouvelle valeur'],
+              ['l\'effet cascade', 'TOUS les var(--marque) de la page se mettent à jour d\'un coup — bouton, badges, liens…'],
+              ['à quoi ça sert', 'le sélecteur de thème, la couleur de boutique choisie par l\'utilisateur, le mode sombre : un pont propre entre JS et CSS']
+            ]},
             { t: 'code', lang: 'js', code:
 '// Lire\ngetComputedStyle(document.documentElement).getPropertyValue("--accent");\n\n// Modifier -> toutes les propriétés qui l\'utilisent se mettent à jour\ndocument.documentElement.style.setProperty("--accent", "#ff9500");\n\n// La bascule de thème complète (comme le bouton lune/soleil de ce site)\ndocument.documentElement.setAttribute("data-theme", "dark");\nlocalStorage.setItem("theme", "dark");' },
             { t: 'p', h: 'C\'est la porte ouverte aux interactions impossibles autrement : un nuancier de personnalisation en direct, une barre de progression pilotée par une variable `--avancement`, une carte qui se teinte selon la catégorie du produit. Et c\'est la preuve définitive que les variables CSS sont vivantes : aucun autre mécanisme de style n\'est modifiable à chaud avec une couverture aussi totale.' },
