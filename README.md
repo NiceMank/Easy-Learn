@@ -28,7 +28,7 @@ devdocs/
     ├── data-typescript.js # ← CONTENU : 25 fiches TypeScript (accent bleu TS #3178C6)
     ├── data-tailwind.js# ← CONTENU : 15 fiches Tailwind CSS (accent cyan)
     ├── data-php.js     # ← CONTENU : 36 fiches PHP (accent violet PHP #777BB4)
-    ├── data-laravel.js # ← CONTENU : 19 fiches Laravel (accent rouge brique) — fiche d'entrée « Notions de base » + 22 schémas visuels (blocs diagram)
+    ├── data-laravel.js # ← CONTENU : 19 fiches Laravel (accent rouge brique) — fiche d'entrée « Notions de base » + 22 schémas visuels (blocs diagram) + notions séparées une à une avec 78 cartes « Syntaxe » décortiquées (blocs syntax)
     ├── data-react.js   # ← CONTENU : 21 fiches React JS (accent bleu ciel)
     ├── data-tanstack.js# ← CONTENU : 14 fiches TanStack Query (accent corail)
     ├── data-python.js  # ← CONTENU : 18 fiches Python (accent bleu Python)
@@ -78,6 +78,7 @@ Dans le `data-*.js` du langage, ajouter un objet dans le tableau `fiches` d'une 
 | `table` | `{ t:'table', head:[…], rows:[[…]] }` | Tableau de référence |
 | `demo` | `{ t:'demo', html:'…', height:150, caption:'…' }` | Démo réelle dans iframe sandboxée |
 | `diagram` | `{ t:'diagram', title:'…', svg:'<svg …/>', caption:'…' }` | Schéma pédagogique : SVG inline, coloré automatiquement par le thème via les classes `dg-*` de `main.css` (boîtes `dg-b`/`dg-ba`, textes `dg-t`/`dg-m`/`dg-ms`, flèches `dg-e`/`dg-ea`/`dg-dash`, badges `dg-num`, verdicts `dg-ok`/`dg-ko`/`dg-warn`) — titre et légende passés par `md()`, le `svg` injecté brut (contenu de confiance) |
+| `syntax` | `{ t:'syntax', title:'…', file:'routes/web.php'?, lang:'php'?, code:'…', legend:[[token, description], …] }` | Carte « Syntaxe » : la forme canonique minimale d'UNE notion (un extrait de code coloré par `lang`, `php` par défaut) + légende qui décortique chaque token (`code inline` à gauche, explication passée par `md()` à droite). Badge « Syntaxe », nom de fichier optionnel — une carte par notion, posée dans sa section « Notion N · … » |
 
 L'index de recherche, le temps de lecture, la navigation précédent/suivant et les compteurs se génèrent **automatiquement**.
 

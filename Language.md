@@ -27,7 +27,7 @@
 | Langage | Rôle | Fiches | Exercices | Correction | Accent | Contenu |
 |---|---|---|---|---|---|---|
 | **PHP** | Langage serveur | 36 | 5 | Auto-évaluation en local | `#777BB4` | `js/data-php.js` |
-| **Laravel** | Framework PHP | 19 | 5 | Auto-évaluation en local | `#ee3820` | `js/data-laravel.js` — depuis août 2026 : fiche d'entrée « Notions de base » + 22 schémas visuels (`diagram`) pour débutants |
+| **Laravel** | Framework PHP | 19 | 5 | Auto-évaluation en local | `#ee3820` | `js/data-laravel.js` — depuis août 2026 : fiche d'entrée « Notions de base » + 22 schémas visuels (`diagram`) pour débutants + notions séparées une à une, chacune avec sa carte « Syntaxe » décortiquée token par token (78 blocs `syntax`) |
 | **TanStack Query** | Gestion des données serveur | 14 | 5 | Auto-évaluation en local | `#e8364f` | `js/data-tanstack.js` |
 | **Python** | Langage polyvalent | 18 | 5 | Auto-évaluation en local | `#306998` | `js/data-python.js` |
 | **Flask** | Micro-framework Python | 17 | 5 | Auto-évaluation en local | `#3a3a3c` | `js/data-flask.js` |

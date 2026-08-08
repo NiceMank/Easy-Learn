@@ -88,6 +88,13 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Le terminal : piloter l\'ordinateur en tapant du texte' },
             { t: 'p', h: 'Le TERMINAL (aussi appelé « console » ou « invite de commandes ») est cette fenêtre sombre où l\'on tape des ordres au lieu de cliquer. Pourquoi s\'en servir ? Parce que les outils de développement (Composer, artisan…) n\'ont pas d\'interface graphique : on leur parle EN TEXTANT. L\'ouvrir : **Windows** → touche Windows, tape « Terminal » ; **macOS** → Cmd+Espace, tape « Terminal » ; **Linux** → Ctrl+Alt+T. Une commande se lit de gauche à droite : dans `php artisan serve`, `php` est le programme appelé, `artisan serve` ce qu\'on lui demande — ici « démarre le serveur, s\'il te plaît ».' },
             { t: 'code', lang: 'bash', label: 'Les cinq commandes de survie (essaie-les, aucun danger)', code: 'pwd                    # « où suis-je ? » : affiche le dossier courant\ncd boutique-awa        # « entre DANS le dossier boutique-awa » (change directory)\ncd ..                  # « remonte d\'un dossier »\nls                     # liste les fichiers du dossier courant (sous Windows : dir)\nphp -v                 # demande sa version à PHP — ta première discussion avec lui' },
+            { t: 'syntax', title: 'Anatomie d\'une commande — chaque mot a un rôle', lang: 'bash', code:
+'php artisan serve', legend: [
+              ['php', 'le PROGRAMME qu\'on appelle : l\'interpréteur PHP. C\'est toujours lui qui démarre quand on parle à Laravel en texte'],
+              ['artisan', 'le FICHIER-script posé à la racine de ton projet (la console de Laravel). « php artisan » = « PHP, exécute le script artisan »'],
+              ['serve', 'l\'ORDRE passé à artisan — ici « démarre le serveur de dev ». D\'autres ordres : migrate, make:model, tinker…'],
+              ['php artisan serve', 'se lit donc : « PHP, exécute la console de Laravel, et dis-lui serve » — trois mots, trois rôles, toujours dans cet ordre']
+            ]},
             { t: 'callout', kind: 'warn', h: 'Deux pièges qui font perdre des heures la première semaine. **Le `$` (ou `>`) affiché au début des commandes dans les tutoriels ne se tape PAS** : c\'est l\'invite, le signe « à toi de parler ». Et les commandes se tapent **dans le bon dossier** : `php artisan …` ne fonctionne que dans le dossier du projet — fais d\'abord `cd boutique-awa`, sinon : « Could not open input file: artisan ».' },
             { t: 'h3', h: 'La base de données : le cahier où rien ne s\'efface' },
             { t: 'p', h: 'Ton application PHP s\'arrête après chaque réponse (la fiche suivante l\'expliquera en détail) : tout ce qui doit survivre — produits, clients, commandes — est rangé dans la **base de données**. Elle ressemble à un classeur de tableaux : une **table** par sujet (`produits`, `clients`, `commandes`), une **colonne** par information (`nom`, `prix`, `stock`), une **ligne** par élément concret. On l\'interroge dans un langage de questions appelé **SQL** — et bonne nouvelle : Eloquent, la fiche phare du module, traduira ce SQL pour toi. Pour débuter tu utiliseras **SQLite** : la base entière tient en UN fichier, rien à installer ; **MySQL** viendra plus tard, en production.' },
@@ -188,6 +195,13 @@ DEVDOCS.laravel = {
             { t: 'code', lang: 'bash', label: 'Terminal — de zéro au projet qui tourne', code:
 '# 1) Vérifier le socle — ces deux lignes DOIVENT répondre avant tout :\nphp -v                # → PHP 8.2.x ou plus\ncomposer --version    # → Composer 2.x\n\n# 2) Créer le projet « boutique-awa » (télécharge le framework + le squelette)\ncomposer create-project laravel/laravel boutique-awa\ncd boutique-awa\n\n# 3) La clé de chiffrement (OBLIGATOIRE — sessions, cookies chiffrés)\nphp artisan key:generate\n\n# 4) Créer la base SQLite (un simple fichier) et la préparer\ntype nul > database\\database.sqlite   :: Windows\ntouch database/database.sqlite        # macOS / Linux\nphp artisan migrate                   # crée users, cache, jobs…\n\n# 5) Lancer le serveur de développement\nphp artisan serve\n#   → « Server running on http://127.0.0.1:8000 » —\n#     la page d\'accueil Laravel s\'affiche : l\'atelier fonctionne.' },
             { t: 'p', h: 'Relis chaque geste : `create-project` télécharge le framework dans `vendor/` ET le squelette applicatif (routes/, app/, config/) — c\'est l\'équivalent de `npm create vite@latest` + `npm install` réunis. `key:generate` écrit une clé dans `.env` : sans elle, tout le chiffrement (sessions !) refuse de tourner — l\'erreur n°2 en bas. `migrate` construit les tables de base (users, cache, jobs) dans ta base fraîche. Et `serve` lance un serveur PHP intégré — pratique en dev, jamais en prod.' },
+            { t: 'syntax', title: 'La commande de création, mot par mot', lang: 'bash', code:
+'composer create-project laravel/laravel boutique-awa', legend: [
+              ['composer', 'le gestionnaire de paquets PHP — le magasin où l\'on commande le framework'],
+              ['create-project', 'l\'ordre : « télécharge un projet COMPLET, prêt à ouvrir » (pas juste une bibliothèque au milieu d\'un projet existant)'],
+              ['laravel/laravel', 'le PAQUET-squelette officiel : vendeur « laravel », produit « laravel » — le framework + l\'arborescence de départ'],
+              ['boutique-awa', 'le NOM du dossier à créer — libre à toi. Cette commande se tape UNE FOIS par projet, avant le premier cd']
+            ]},
             { t: 'callout', kind: 'info', h: 'Comment lire `http://127.0.0.1:8000` : `127.0.0.1` est l\'adresse spéciale qui désigne **toujours ta propre machine** (son surnom : `localhost` — « l\'hôte local »). Le `:8000` est le **port** : un numéro de guichet qui permet à plusieurs serveurs de cohabiter sur la même machine. Traduction complète : « la page servie par MON serveur de dev, guichet 8000 » — elle n\'est visible que chez toi, personne d\'autre ne peut la voir, et c\'est normal.' },
             { t: 'h3', h: 'Le fichier .env et la connexion à la base' },
             { t: 'p', h: '`.env` est le TROUSSEAU de réglages par machine : identifiants de base, clé secrète, URL — différent en dev, en staging, en prod, et JAMAIS commité (`.gitignore` le sait). Laravel le lit à chaque démarrage, et `config/database.php` s\'y réfère. Pour débuter, SQLite est le bonheur : pas de serveur MySQL à installer, un fichier à sauvegarder avec le projet. La fiche **Configuration** du module détaillera `config:cache` et le piège associé ; ici retiens seulement : tu changes `.env`, tu relances `php artisan serve`.' },
@@ -310,6 +324,13 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Tout framework sérieux a un talon : le « boilerplate », ce code de cadrage répétitif (en-têtes de classe, namespaces, squelettes vides). artisan l\'efface : chaque `make:*` génère un fichier PARFAITEMENT conforme aux conventions — bon dossier, bon namespace, bonne signature — en une seconde, sans faute de frappe. Tu gardes ton énergie pour la logique métier, pas pour retenir si les contrôleurs vont au singulier ou au pluriel.' },
             { t: 'code', lang: 'php', label: 'Les commandes du premier mois', code:
 'php artisan serve                        # serveur de dev sur http://127.0.0.1:8000\nphp artisan route:list                   # TOUTES les routes, d\'un coup d\'œil\n\n# Les générateurs — les fichiers naissent au bon endroit :\nphp artisan make:model Produit -mcr\n#   -m : migration   -c : contrôleur   -r : contrôleur RESOURCE (7 méthodes CRUD)\n\nphp artisan make:controller PanierController --resource\nphp artisan make:request StoreProduitRequest    # validation dédiée (fiche Validation)\nphp artisan make:migration create_produits_table\nphp artisan migrate                             # jouer les migrations en attente\nphp artisan migrate:fresh --seed                # TOUT reconstruire + données de test\nphp artisan tinker                              # console PHP interactive dans ton app' },
+            { t: 'syntax', title: 'Une commande artisan, décortiquée', lang: 'bash', code:
+'php artisan make:model Produit -mcr', legend: [
+              ['php artisan', 'le duo d\'appel — « PHP, exécute la console Laravel » (fiche Notions de base)'],
+              ['make:model', 'l\'ordre : « fabrique un MODÈLE ». Toute la famille make:* génère des fichiers conformes aux conventions'],
+              ['Produit', 'le NOM de la classe à créer — singulier, première lettre majuscule : c\'est la convention sur laquelle tout repose'],
+              ['-mcr', 'les OPTIONS combinées : -m la migration, -c le contrôleur, -r ce contrôleur en version RESOURCE (les 7 méthodes CRUD). Une ligne, trois fichiers cohérents']
+            ]},
             { t: 'callout', kind: 'tip', h: '`php artisan` seul liste TOUTES les commandes, et `php artisan help make:model` détaille chaque option. L\'habitude à prendre : avant de créer un fichier à la main, demande-toi s\'il existe un `make:` — il existe presque toujours (contrôleur, modèle, migration, request, policy, job, listener, test, resource, middleware…).' },
             { t: 'h3', h: 'tinker : le laboratoire intégré' },
             { t: 'code', lang: 'php', code:
@@ -351,8 +372,26 @@ DEVDOCS.laravel = {
             { t: 'p', h: 'Le flux exact à graver : au démarrage, Laravel lit le fichier `.env` (non versionné, propre à chaque machine) et injecte ses valeurs dans les variables d\'environnement PHP. Les fichiers de `config/` — versionnés, partagés — piochent dans ces variables avec `env(\'CLE\')` et leur donnent une FORME (tableaux, valeurs par défaut, libellés stables). TON code, lui, ne lit JAMAIS `.env` directement : il passe par `config(\'services.mtn_momo.secret\')`. Trois acteurs, trois rôles : `.env` = les valeurs de CETTE machine ; `config/` = la cartouche de toutes les options de l\'app ; `config()` = l\'unique porte de lecture dans ton code.' },
             { t: 'code', lang: 'php', label: '.env (cette machine uniquement — JAMAIS commité)', code:
 'APP_NAME="Boutique Awa"\nAPP_ENV=local          # local sur ton PC, production sur le serveur\nAPP_DEBUG=true         # true en dev, ABSOLUMENT false en prod\nAPP_URL=http://localhost:8000\n\nDB_CONNECTION=mysql\nDB_HOST=127.0.0.1\nDB_DATABASE=boutique_dev\nDB_USERNAME=root\n\nMTN_MOMO_API_KEY=sk_test_51AbC…     # le secret vit ICI, hors git' },
+            { t: 'h3', h: 'Notion 1 · env(\'CLE\') : piocher dans .env — depuis config/ SEULEMENT' },
+            { t: 'p', h: 'Premier geste du couple : les fichiers de `config/` vont CHERCHER les valeurs du `.env` et leur donnent une forme stable. La fonction `env()` est le seul pont vers ce fichier — et elle n\'a le droit de cité que dans `config/` (la carte « Sous le capot » explique pourquoi un usage ailleurs casse en production).' },
+            { t: 'syntax', title: 'La lecture env(), dans un fichier de config', file: 'config/services.php', lang: 'php', code:
+'return [\n    \'mtn_momo\' => [\n        \'api_key\'  => env(\'MTN_MOMO_API_KEY\'),\n        \'base_url\' => env(\'MTN_MOMO_URL\', \'https://sandbox.momodeveloper.mtn.com\'),\n    ],\n];', legend: [
+              ['return [ … ];', 'un fichier de config est un simple PHP qui RENVOIE un tableau — chaque clé de premier niveau règle un service (mail, mtn_momo…)'],
+              ['\'api_key\' => …', 'le LIBELLÉ stable sous lequel ton code lira la valeur — identique sur toutes les machines'],
+              ['env(\'MTN_MOMO_API_KEY\')', 'pioche la valeur dans le .env de CETTE machine — null si la clé n\'y figure pas'],
+              ['env(\'MTN_MOMO_URL\', \'https://…\')', 'le 2ᵉ argument est la valeur PAR DÉFAUT : utilisée quand la clé manque du .env — le sandbox marche sans rien régler']
+            ]},
             { t: 'code', lang: 'php', label: 'config/services.php — le formateur de valeurs', code:
 '<?php\n\nreturn [\n\n    \'mtn_momo\' => [\n        \'api_key\' => env(\'MTN_MOMO_API_KEY\'),        // pioché dans .env\n        \'base_url\' => env(\'MTN_MOMO_URL\', \'https://sandbox.momodeveloper.mtn.com\'),\n        \'timeout\' => 15,\n    ],\n\n];\n\n// Ton code métier lit UNIQUEMENT ceci :\n// config(\'services.mtn_momo.api_key\')   → la valeur de CETTE machine\n// config(\'services.mtn_momo.timeout\')  → 15 (même sans .env, le défaut tient)' },
+            { t: 'h3', h: 'Notion 2 · config(\'services.mtn_momo.api_key\') : l\'unique porte de lecture dans ton code' },
+            { t: 'p', h: 'Second geste, celui que tu feras mille fois : ton code métier (contrôleur, service, job…) lit les réglages avec `config()` et sa **notation à points**. Jamais `env()` — la raison exacte arrive à la carte suivante.' },
+            { t: 'syntax', title: 'La lecture config(), notation à points', lang: 'php', code:
+'$cle = config(\'services.mtn_momo.api_key\');', legend: [
+              ['config(…)', 'la fonction de lecture — la SEULE autorisée dans ton code métier pour toucher un réglage'],
+              ['services.mtn_momo.api_key', 'le CHEMIN en notation à points : fichier config/services.php → clé mtn_momo → clé api_key. Chaque point descend d\'un tableau'],
+              ['$cle = …', 'reçoit la valeur de CETTE machine : lue dans .env en local, dans le CACHE figé en production — c\'est ce détour qui la rend fiable partout'],
+              ['config(\'app.name\')', 'autre exemple : config/app.php → clé name. Tous les réglages de Laravel s\'atteignent ainsi, sans exception']
+            ]},
             { t: 'diagram', title: 'Le voyage d\'une valeur : du .env jusqu\'à ton code', svg: `<svg viewBox="0 0 680 190">
   <defs><marker id="lv-c1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
   <rect x="30" y="40" width="170" height="56" rx="12" class="dg-b"/>
@@ -372,7 +411,7 @@ DEVDOCS.laravel = {
   <text x="46" y="134" class="dg-m">En production, config:cache fige le tout dans UN fichier plat : le .env n'est PLUS lu.</text>
   <text x="46" y="154" class="dg-m">Conséquence : env() appelé hors de config/ retourne null en prod — le piège vu juste après.</text>
 </svg>`, caption: 'Trois acteurs, trois rôles : .env stocke (jamais commité), config/ structure (versionné), config() lit (ton code). La flèche ne va JAMAIS dans l\'autre sens : ton code ne lit pas .env directement.' },
-            { t: 'h3', h: 'Sous le capot : config:cache, et pourquoi env() hors de config/ te piégera' },
+            { t: 'h3', h: 'Notion 3 · Sous le capot : config:cache, et pourquoi env() hors de config/ te piégera' },
             { t: 'p', h: 'En production, on lance `php artisan config:cache` : Laravel lit UNE FOIS tous les fichiers `config/`, les aplatit en un seul PHP ultra-rapide à charger, et écrit le résultat dans `bootstrap/cache/config.php`. À partir de ce moment — retiens bien — **le fichier `.env` n\'est tout simplement PLUS lu**. Conséquence qui a fait souffrir des générations de débutants : si ton code appelle `env(\'MTN_MOMO_API_KEY\')` directement (hors `config/`), il obtient `null` en production, alors que tout marchait en local. Le crash est silencieux, incompréhensible… et disparaît dès que tu remplaces par `config(\'services.mtn_momo.api_key\')` : la valeur était bien dans le cache, c\'est la porte d\'entrée qui était fausse.' },
             { t: 'callout', kind: 'warn', h: 'La règle d\'or en une phrase : **`env()` n\'a le droit de cité QUE dans les fichiers de `config/`** — ailleurs, uniquement `config()`. Et réciproquement, après chaque changement de config en production : `php artisan config:cache` pour régénérer le cache, sinon l\'ancienne version continue de servir.' },
             { t: 'h3', h: 'Les commandes à connaître par cœur' },
@@ -427,7 +466,25 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Le problème : pourquoi une table d\'aiguillage' },
             { t: 'p', h: 'Sans routeur, chaque URL publique correspond à un FICHIER à un emplacement FIXE. Trois douleurs sans fin : renommer ou déplacer un fichier casse tous les liens du site (et ceux des clients) ; l\'URL `/commande/valider.php?montant=4500` révèle ta technologie et ta structure (une invitation pour qui cherche des failles) ; et tu ne peux pas avoir la BELLE adresse `/boutique/gari-premium` sans créer physiquement ce chemin. Le routeur découple : **l\'URL publique est une promesse, ton organisation interne un détail**. Tu déclares « `/boutique` répondît `CatalogueController@index` » — et demain tu peux réorganiser `app/` entièrement sans qu\'aucun client ne s\'en aperçoive.' },
-            { t: 'h3', h: 'Déclarer une route : le contrat minimal' },
+            { t: 'h3', h: 'Notion 1 · La route minimale : une URL → une réponse' },
+            { t: 'p', h: 'Une route, c\'est un CONTRAT en une ligne : « quand quelqu\'un demande TELLE adresse avec TEL verbe, voici la réponse ». La forme la plus courte du monde Laravel emploie une **closure** — une fonction anonyme, sans nom, écrite directement dans le fichier des routes. Elle est idéale pour débuter : la question et la réponse se lisent au même endroit.' },
+            { t: 'syntax', title: 'La route minimale (closure)', file: 'routes/web.php', code: 'Route::get(\'/bonjour\', function () {\n    return \'Bienvenue à la Boutique Awa\';\n});', legend: [
+              ['Route::', 'l\'aiguilleur du framework (une façade : on l\'appelle, on ne l\'instancie jamais)'],
+              ['get(', 'le VERBE HTTP exigé : ici, lecture seule — un POST sur /bonjour serait refusé'],
+              ['\'/bonjour\'', 'l\'URL publique écoutée — uniquement le chemin (sans https:// ni le domaine)'],
+              ['function () { … }', 'la CLOSURE : la fonction exécutée à chaque visite de cette URL'],
+              ['return \'…\';', 'la réponse envoyée au navigateur — du texte brut ici, une vraie page plus loin']
+            ] },
+            { t: 'h3', h: 'Notion 2 · La forme réelle : la route AIGUILLE vers un contrôleur' },
+            { t: 'p', h: 'Dans un vrai projet, la route ne TRAVAILLE pas : elle dit QUI travaille. La closure laisse sa place à un couple [classe, méthode] — le code métier déménage dans un contrôleur (la fiche suivante lui est dédiée), plus facile à tester, relire et réutiliser. C\'est la forme que tu écriras 95 % du temps.' },
+            { t: 'syntax', title: 'Aiguiller vers un contrôleur', file: 'routes/web.php', code: 'Route::get(\'/boutique\', [CatalogueController::class, \'index\']);', legend: [
+              ['Route::get(', 'le même principe : verbe HTTP + URL écoutés'],
+              ['\'/boutique\'', 'l\'adresse publique promise aux visiteurs'],
+              ['CatalogueController::class', 'LA CLASSE appelée — ::class désigne le contrôleur sans faute de frappe'],
+              ['\'index\'', 'LA MÉTHODE de cette classe à exécuter, écrite entre guillemets'],
+              ['[ … , … ]', 'le couple classe + méthode forme un tableau de deux cases, dans cet ordre']
+            ] },
+            { t: 'h3', h: 'Les deux formes réunies (dans le même fichier)' },
             { t: 'code', lang: 'php', label: 'routes/web.php', code:
 'use Illuminate\\Support\\Facades\\Route;\nuse App\\Http\\Controllers\\CatalogueController;\n\n// FORME MINIMALE (didactique) — une closure directement dans la route :\nRoute::get(\'/bonjour\', function () {\n    return \'Bienvenue à la Boutique Awa\';\n});\n\n// FORME RÉELLE — le contrôleur : la route AIGUILLE, ne TRAVAILLE pas\nRoute::get(\'/boutique\', [CatalogueController::class, \'index\']);\nRoute::post(\'/boutique/panier\', [PanierController::class, \'ajouter\']);\n\n// Voir TOUTE la table d\'aiguillage :\n// $ php artisan route:list' },
             { t: 'diagram', title: 'Comment le routeur choisit : verbe + URL, première ligne qui matche', svg: `<svg viewBox="0 0 680 240">
@@ -458,7 +515,14 @@ DEVDOCS.laravel = {
   <circle cx="501" cy="116" r="9" class="dg-num"/><text x="501" y="120" class="dg-numt" text-anchor="middle">2</text>
 </svg>`, caption: 'Le routeur compare la requête (verbe + URL) à CHAQUE ligne, dans l\'ordre de déclaration, et s\'arrête au premier motif qui matche — sans se demander « laquelle tu pensais ». Le paramètre {produit} capture le segment « gari-premium » et le transmet au contrôleur. C\'est pourquoi l\'ordre et les contraintes comptent tant (pièges en bas de page).' },
             { t: 'p', h: 'Les deux formes sont légales, mais tiens-toi à la règle d\'or : **une closure ne dépasse jamais trois lignes de logique**. Dès qu\'une route fait quelque chose (base de données, validation, vrai métier), elle déménage dans un contrôleur — la prochaine fiche explique pourquoi (injection de dépendances, testabilité, lisibilité). La closure garde un usage honorable : la page statique, le ping de santé, le lien temporaire.' },
-            { t: 'h3', h: 'Les verbes HTTP ont un sens — utilise-les' },
+            { t: 'h3', h: 'Notion 3 · Choisir le verbe : get, post, put, patch, delete' },
+            { t: 'p', h: 'Une seule URL peut recevoir plusieurs routes — une par VERBE. `GET /produits` affiche la liste, `POST /produits` crée un produit : même adresse, deux intentions, deux routes distinctes. La méthode Route::… que tu choisis est donc la moitié du contrat.' },
+            { t: 'syntax', title: 'Une route par intention', file: 'routes/web.php', code: 'Route::post(\'/commandes\', [CommandeController::class, \'store\']);\nRoute::patch(\'/commandes/{commande}\', [CommandeController::class, \'update\']);\nRoute::delete(\'/commandes/{commande}\', [CommandeController::class, \'destroy\']);', legend: [
+              ['Route::post(', 'CRÉER un élément nouveau — le navigateur demande confirmation avant de renvoyer'],
+              ['Route::patch(', 'MODIFIER partiellement une chose existante (PUT = la remplacer entièrement)'],
+              ['Route::delete(', 'SUPPRIMER — jamais en GET : un simple clic ne doit rien détruire'],
+              ['store / update / destroy', 'les noms de méthodes consacrés pour ces intentions (fiche Contrôleurs)']
+            ] },
             { t: 'table', head: ['Verbe', 'Intention', 'Exemple Boutique Awa'], rows: [
               ['`GET`', 'LIRE — sans effet de bord, partageable, marquable en favori', '`GET /boutique/gari-premium` : la fiche produit'],
               ['`POST`', 'CRÉER une nouvelle chose (commande, avis, cotisation)', '`POST /commandes` : valider le panier'],
@@ -466,17 +530,58 @@ DEVDOCS.laravel = {
               ['`DELETE`', 'SUPPRIMER', '`DELETE /avis/7` : retirer un commentaire']
             ]},
             { t: 'p', h: 'Pourquoi insister ? Parce que les verbes portent une PROMESSE technique : `GET` est relançable sans danger (le navigateur le recharge librement), alors que `POST` lui demande « faut-il renvoyer le formulaire ? ». Utiliser `GET /supprimer-produit/4` côté est non seulement une hérésie sémantique, c\'est dangereux : un lien préchargé par le navigateur ou cliqué par un robot supprime tes produits. Pour les formulaires HTML qui ne connaissent que GET/POST, Laravel fournit la convention `@method(\'DELETE\')` — le fameux « method spoofing » que tu verras dans `lv-blade`.' },
-            { t: 'h3', h: 'Paramètres de route : l\'URL devient une donnée' },
+            { t: 'h3', h: 'Notion 4 · Le paramètre {obligatoire} : l\'URL porte une donnée' },
+            { t: 'p', h: 'Ta boutique a 200 produits — tu n\'écriras pas 200 routes. Le segment entre accolades est un JOKER : il capture ce que le visiteur a tapé à sa place et le livre au contrôleur comme un argument de méthode. `/boutique/gari-premium` et `/boutique/huile-rouge` passent par LA MÊME ligne de route.' },
+            { t: 'syntax', title: 'Capturer un segment d\'URL', file: 'routes/web.php', code: 'Route::get(\'/boutique/{produit}\', [CatalogueController::class, \'show\']);', legend: [
+              ['{produit}', 'le JOKER : capture un segment entier de l\'URL (ce qui se trouve entre deux /)'],
+              ['produit', 'son NOM, libre — tu retrouves la capture sous ce nom dans la méthode'],
+              ['show', 'la méthode qui la reçoit : show(\'gari-premium\') si l\'URL est /boutique/gari-premium']
+            ] },
             { t: 'code', lang: 'php', code:
-'// {} = segment variable, capturé et transmis au contrôleur :\nRoute::get(\'/boutique/{produit}\', [CatalogueController::class, \'show\']);\n//   /boutique/gari-premium  →  show(\'gari-premium\')\n\n// Plusieurs paramètres, dans l\'ordre :\nRoute::get(\'/tontines/{tontine}/membres/{membre}\', [TontineController::class, \'membre\']);\n\n// Paramètre OPTIONNEL (avec valeur par défaut dans le contrôleur) :\nRoute::get(\'/boutique/categorie/{categorie?}\', [CatalogueController::class, \'categorie\']);\n\n// CONTRAINTES : le segment doit respecter un motif pour matcher :\nRoute::get(\'/produits/{produit}\', …)->whereNumber(\'produit\');           // chiffres only\nRoute::get(\'/archives/{annee}/{mois}\', …)\n    ->where([\'annee\' => \'[0-9]{4}\', \'mois\' => \'0?[1-9]|1[0-2]\']);' },
-            { t: 'h3', h: 'Nommer les routes : la corde de sécurité' },
+'// {produit} = segment variable, capturé et transmis au contrôleur :\nRoute::get(\'/boutique/{produit}\', [CatalogueController::class, \'show\']);\n//   /boutique/gari-premium  →  show(\'gari-premium\')\n\n// Plusieurs paramètres cohabitent, transmis dans l\'ordre de l\'URL :\nRoute::get(\'/tontines/{tontine}/membres/{membre}\', [TontineController::class, \'membre\']);\n//   /tontines/3/membres/12  →  membre(3, 12)' },
+            { t: 'h3', h: 'Notion 5 · Le paramètre {optionnel ?}' },
+            { t: 'p', h: 'Un point d\'interrogation dans les accolades rend le segment FACULTATIF : la même route répond à `/boutique/categorie` (tout afficher) et à `/boutique/categorie/cereales` (filtrer). Compagnon obligatoire : une VALEUR PAR DÉFAUT dans la méthode du contrôleur, pour le cas où rien n\'est capturé — sinon PHP plante sur un argument manquant.' },
+            { t: 'syntax', title: 'Rendre un paramètre facultatif', code: 'Route::get(\'/boutique/categorie/{categorie?}\', [CatalogueController::class, \'categorie\']);\n\n// côté contrôleur, la valeur de secours est OBLIGATOIRE :\npublic function categorie($categorie = null)\n{\n    // $categorie vaut null si l\'URL n\'en précisait pas\n}', legend: [
+              ['{categorie?}', 'le ? rend le segment facultatif : avec ou sans, la route matche'],
+              ['$categorie = null', 'la valeur de secours quand le segment est absent — sans elle, erreur PHP'],
+              ['null', 'l\'état « rien de précisé » : à toi de décider (tout afficher ? catégorie vedette ?)']
+            ] },
+            { t: 'h3', h: 'Notion 6 · Les contraintes ->where… : mettre un filet au joker' },
+            { t: 'p', h: 'Sans filet, `{produit}` avale TOUT — y compris le mot « nouveau » que tu réservais à la route de création (l\'erreur n°1 en bas de page). La contrainte exige une FORME précise pour la capture : chiffres, lettres, slug… Si l\'URL ne respecte pas la forme, le routeur passe à la ligne suivante au lieu de se tromper de route.' },
+            { t: 'syntax', title: 'Contraindre un paramètre', file: 'routes/web.php', code: 'Route::get(\'/produits/{produit}\', [ProduitController::class, \'show\'])\n    ->whereNumber(\'produit\');', legend: [
+              ['->whereNumber(\'produit\')', 'le segment DOIT être un nombre : 42 matche, « nouveau » non'],
+              ['->whereAlpha(\'nom\')', 'variante : lettres uniquement'],
+              ['->where(\'slug\', \'[a-z0-9-]+\')', 'variante libre : une expression régulière (minuscules, chiffres, tirets)'],
+              ['->whereIn(\'tri\', [\'prix\', \'nom\'])', 'variante : une liste fermée de valeurs autorisées']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// Les contraintes s\'enchaînent après la route et se combinent :\nRoute::get(\'/produits/{produit}\', …)->whereNumber(\'produit\');           // chiffres only\nRoute::get(\'/archives/{annee}/{mois}\', …)\n    ->where([\'annee\' => \'[0-9]{4}\', \'mois\' => \'0?[1-9]|1[0-2]\']);      // 2 contraintes d\'un coup' },
+            { t: 'h3', h: 'Notion 7 · Nommer une route : ->name() puis route()' },
+            { t: 'p', h: 'Nommer une route, c\'est lui donner un surnom IMMUABLE, indépendant de son URL. Partout où tu dois pointer vers elle — lien dans Blade, redirection, test — tu appelles le surnom, jamais l\'adresse en dur. Le jour où l\'URL change (refonte, /boutique → /catalogue), UNE ligne bouge et les 300 liens du site suivent.' },
+            { t: 'syntax', title: 'Signer une route, puis l\'invoquer', file: 'routes/web.php', code: 'Route::get(\'/boutique/{produit}\', [CatalogueController::class, \'show\'])\n    ->name(\'produits.show\');\n\n// ailleurs (Blade, contrôleur, test) — jamais l\'URL en dur :\nroute(\'produits.show\', [\'produit\' => $p->slug])\n//   → fabrique /boutique/gari-premium tout seul', legend: [
+              ['->name(\'produits.show\')', 'le surnom signé : convention « ressource.méthode », en minuscules à points'],
+              ['route(\'produits.show\', …)', 'le helper qui reconstruit l\'URL à partir du surnom'],
+              ['[\'produit\' => $p->slug]', 'les valeurs des jokers, données par NOM dans un tableau']
+            ] },
             { t: 'code', lang: 'php', code:
 'Route::get(\'/boutique/{produit}\', [CatalogueController::class, \'show\'])\n    ->name(\'produits.show\');     // → le NOM, stable, indépendant de l\'URL\n\n// Dans Blade et le code : JAMAIS l\'URL en dur, TOUJOURS le nom\n<a href=\"{{ route(\'produits.show\', [\'produit\' => $p->slug]) }}\">\n    {{ $p->nom }}\n</a>\n// → /boutique/gari-premium\n\n// Demain, l\'URL change ? /boutique → /catalogue : UNE ligne modifiée,\n// les 300 liens du site suivent automatiquement. C\'est ÇA, nommer.\n\n// Et la redirection, même combat :\nreturn redirect()->route(\'commandes.confirmation\', [\'commande\' => $commande]);' },
-            { t: 'h3', h: 'Groupes : préfixer, nommer, protéger en une passe' },
+            { t: 'h3', h: 'Notion 8 · Les groupes : prefix(), name(), middleware() en une passe' },
+            { t: 'p', h: 'Douze routes d\'administration partagent les mêmes réglages : URL préfixée par `/admin`, surnoms en `admin.`, connexion exigée. Au lieu de répéter ces trois règles douze fois (et d\'en oublier une — la faille classique), on les déclare UNE fois sur un GROUPE : chaque route à l\'intérieur hérite de tout.' },
+            { t: 'syntax', title: 'Le squelette d\'un groupe', file: 'routes/web.php', code: 'Route::prefix(\'admin\')\n    ->name(\'admin.\')\n    ->middleware(\'auth\')\n    ->group(function () {\n        // … les routes ici héritent des trois réglages\n    });', legend: [
+              ['->prefix(\'admin\')', 'toutes les URLs du groupe commencent par /admin'],
+              ['->name(\'admin.\')', 'tous les surnoms commencent par admin. — note le POINT final, il fait la couture'],
+              ['->middleware(\'auth\')', 'toutes exigent d\'être connecté (fiche Middleware) — impossible d\'en oublier une'],
+              ['->group(function () { … })', 'les routes concernées, posées dans la closure']
+            ] },
             { t: 'code', lang: 'php', code:
 '// Un espace admin : même préfixe d\'URL, même préfixe de nom, même\n// contrôle d\'accès — déclarés UNE SEULE FOIS pour 12 routes :\nRoute::prefix(\'admin\')\n    ->name(\'admin.\')\n    ->middleware(\'auth\')                        // tout le groupe exige le login\n    ->group(function () {\n        Route::get(\'/produits\', [AdminProduitController::class, \'index\'])\n            ->name(\'produits.index\');          // → /admin/produits, nom « admin.produits.index »\n        Route::get(\'/commandes\', [AdminCommandeController::class, \'index\'])\n            ->name(\'commandes.index\');\n        // … chaque route hérite DU GROUPE : rien à répéter,\n        // rien à oublier (le jour où auth manque sur UNE route…)\n    });' },
-            { t: 'h3', h: 'Le route model binding : Laravel devine le modèle' },
+            { t: 'h3', h: 'Notion 9 · Le route model binding : Laravel trouve le modèle pour toi' },
             { t: 'p', h: 'Voici la finesse qui vend le framework. Une route `/produits/{produit}` reçoit un identifiant (id ou slug). Ton réflexe honnête : `$produit = Produit::findOrFail($id)` en première ligne du contrôleur. Le binding fait cette recherche PENDANT l\'aiguillage : si le paramètre de route s\'appelle `{produit}` et que la méthode type-hint `Produit $produit`, Laravel injecte le modèle TROUVÉ — et répond 404 tout seul s\'il n\'existe pas. Ta première ligne disparaît ; le contrôleur reçoit un objet prêt à l\'emploi, garanti existant.' },
+            { t: 'syntax', title: 'Le contrat du binding en trois points', code: 'Route::get(\'/produits/{produit}\', [ProduitController::class, \'show\']);\n\npublic function show(Produit $produit)   // ① même nom ② la classe\n{\n    // $produit est DÉJÀ l\'objet trouvé — sinon ③ 404 automatique\n}', legend: [
+              ['{produit}', '① côté route : le joker, et SON nom'],
+              ['Produit $produit', '② côté contrôleur : MÊME nom + la classe du modèle écrite devant — c\'est le déclencheur'],
+              ['404 automatique', '③ aucun produit avec cet id ? Laravel répond 404 sans que tu écrives une ligne']
+            ] },
             { t: 'code', lang: 'php', code:
 '// Route : nom du paramètre = nom de la variable (c\'est LA convention)\nRoute::get(\'/produits/{produit}\', [ProduitController::class, \'show\']);\n\npublic function show(Produit $produit)\n{\n    // $produit est DÉJÀ l\'objet trouvé (findOrFail automatique) :\n    return view(\'produits.show\', [\'produit\' => $produit]);\n}\n\n// Par défaut la recherche se fait sur l\'id. Pour utiliser le slug :\n// public function getRouteKeyName() { return \'slug\'; }   // dans le modèle' },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
@@ -540,16 +645,57 @@ DEVDOCS.laravel = {
   <path d="M 105,178 L 105,210" class="dg-e" marker-end="url(#lv-ct1)"/>
   <text x="119" y="206" class="dg-m">réponse HTML → navigateur</text>
 </svg>`, caption: '**M**odèle = les données (Eloquent parle à la base), **V**ue = l\'affichage (Blade produit le HTML), **C**ontrôleur = le chef d\'orchestre : il reçoit la requête, demande les données au modèle et décide de la réponse. Toute l\'architecture de Laravel tourne autour de ce trio — et le contrôleur reste MINCE : il coordonne, il ne calcule pas.' },
-            { t: 'h3', h: 'Créer et câbler : le contrôleur resource en une commande' },
+            { t: 'h3', h: 'Notion 1 · Le squelette : une classe, des méthodes publiques' },
+            { t: 'p', h: 'Un contrôleur est une classe PHP posée dans `app/Http/Controllers/`, qui hérite de `Controller` et expose des MÉTHODES PUBLIQUES : chacune répond à une action HTTP. Une méthode reçoit ce dont elle a besoin en arguments (on y revient — notions 3 à 5) et RETOURNE une réponse : une vue, une redirection, du JSON.' },
+            { t: 'syntax', title: 'Le contrôleur minimal', file: 'app/Http/Controllers/ProduitController.php', code: 'class ProduitController extends Controller\n{\n    public function show(Produit $produit)\n    {\n        return view(\'produits.show\', [\'produit\' => $produit]);\n    }\n}', legend: [
+              ['extends Controller', 'hérite de la classe de base de Laravel (helpers, middleware de contrôleur…)'],
+              ['public function show(', 'UNE action = UNE méthode publique, appelée par le routeur'],
+              ['Produit $produit', 'un besoin déclaré en argument — Laravel le fournit (notions 3 à 5)'],
+              ['return view(…)', 'la RÉPONSE : ici, rendre la vue produits/show avec sa variable'],
+              ['[\'produit\' => $produit]', 'les données transmises à la vue : clé = nom de variable dans Blade']
+            ] },
+            { t: 'h3', h: 'Notion 2 · Générer et câbler : make:controller puis Route::resource' },
+            { t: 'syntax', title: 'Câbler les 7 actions CRUD en une ligne', file: 'routes/web.php', code: 'Route::resource(\'produits\', ProduitController::class);', legend: [
+              ['Route::resource(', 'génère les 7 routes CRUD conventionnelles d\'un coup'],
+              ['\'produits\'', 'la ressource : base des URLs (/produits, /produits/{produit}…)'],
+              ['ProduitController::class', 'le contrôleur qui doit posséder les 7 méthodes'],
+              ['->only([\'index\', \'show\'])', 'à ajouter pour n\'exposer qu\'une partie (ex. lecture seule publique)'],
+              ['->except([\'destroy\'])', 'ou pour exclure certaines actions']
+            ] },
             { t: 'code', lang: 'php', code:
 'php artisan make:controller ProduitController --resource\n// → app/Http/Controllers/ProduitController.php avec les 7 méthodes CRUD :\n\n//   index()    GET    /produits              liste (paginée !)\n//   create()   GET    /produits/create       formulaire de création\n//   store()    POST   /produits              enregistre le nouveau\n//   show()     GET    /produits/{produit}    fiche détail\n//   edit()     GET    /produits/{p}/edit     formulaire d\'édition\n//   update()   PUT/PATCH /produits/{p}       enregistre la modif\n//   destroy()  DELETE /produits/{p}          supprime\n\n// Le câblage en UNE ligne (routes/web.php) :\nRoute::resource(\'produits\', ProduitController::class);\n// → les 7 routes, nommées, contraintes nommées produits.index,\n//   produits.show… : php artisan route:list pour vérifier' },
             { t: 'p', h: '`Route::resource` est LE standard Laravel : quand tu vois un contrôleur « resource », tu connais déjà les 7 méthodes sans lire le fichier. Tu peux exclure ou restreindre (`->only([\'index\', \'show\'])`, `->except([\'destroy\'])`) — par exemple une ressource publique en lecture seule. Cette convention n\'est pas une prison : c\'est un vocabulaire partagé qui te fait gagner dix minutes par ressource, pour toujours.' },
             { t: 'h3', h: 'L\'injection de dépendances : tu demandes, Laravel fournit' },
-            { t: 'p', h: 'Habituellement, ton code CRÉE ce dont il a besoin : `$service = new MoMoService(...)`. L\'inversion : tu DÉCLARES le besoin dans la signature de la méthode, et le **container** de Laravel le résout pour toi. Trois collisions magnifiques avec le reste du framework — la `Request` HTTP, la Form Request typée (validation automatique avant ta première ligne, fiche Validation), et le route model binding (le modèle déjà trouvé, fiche Routing) : trois besoins, trois objets livrés, zéro `new`.' },
+            { t: 'p', h: 'Habituellement, ton code CRÉE ce dont il a besoin : `$service = new MoMoService(...)`. L\'inversion : tu DÉCLARES le besoin dans la signature de la méthode, et le **container** de Laravel le résout pour toi. Trois collisions magnifiques avec le reste du framework — la `Request` HTTP, la Form Request typée (validation automatique avant ta première ligne, fiche Validation), et le route model binding (le modèle déjà trouvé, fiche Routing) : trois besoins, trois objets livrés, zéro `new`. Décortiquons-les une par une.' },
+            { t: 'h3', h: 'Notion 3 · Recevoir la requête HTTP : Request $request' },
+            { t: 'syntax', title: 'L\'objet requête, servi sur demande', code: 'public function index(Request $request)\n{\n    $q = $request->query(\'q\', \'\');      // ?q=… dans l\'URL\n    $nom = $request->input(\'nom\');       // champ POST ou query\n}', legend: [
+              ['Request $request', 'l\'objet qui représente LA requête du visiteur — injecté parce que tu l\'as demandé'],
+              ['->query(\'q\', \'\')', 'lit un paramètre d\'URL (?q=gari), avec valeur par défaut si absent'],
+              ['->input(\'nom\')', 'lit une donnée envoyée (formulaire POST ou query) — NON validée ici'],
+              ['->user()', 'l\'utilisateur connecté s\'il y en a un (fiche Authentification)']
+            ] },
+            { t: 'h3', h: 'Notion 4 · La requête déjà validée : StoreProduitRequest $request' },
+            { t: 'syntax', title: 'Validation + données propres, avant ta première ligne', code: 'public function store(StoreProduitRequest $request)\n{\n    $produit = Produit::create($request->validated());\n}', legend: [
+              ['StoreProduitRequest $request', 'une Form Request (fiche Validation) : si les règles échouent, ta méthode n\'est JAMAIS appelée'],
+              ['$request->validated()', 'SEULEMENT les champs déclarés dans les règles — rien d\'autre, jamais $request->all()'],
+              ['Produit::create(…)', 'remplissage en masse, sous la double garde validated() + $fillable']
+            ] },
+            { t: 'h3', h: 'Notion 5 · Le modèle déjà trouvé : Produit $produit' },
+            { t: 'syntax', title: 'Le binding, rappel de la fiche Routing', code: 'public function show(Produit $produit)   // route : /produits/{produit}\n{\n    return view(\'produits.show\', [\'produit\' => $produit]);\n}', legend: [
+              ['Produit $produit', 'classe + nom identique au joker {produit} → Laravel fait findOrFail à ta place'],
+              ['404 garantie', 'l\'id n\'existe pas ? La méthode n\'est pas appelée : 404 propre et gratuite']
+            ] },
+            { t: 'h3', h: 'Les trois injections réunies (exemple complet)' },
             { t: 'code', lang: 'php', code:
 '// app/Http/Controllers/ProduitController.php\n\npublic function index(Request $request)\n{\n    // $request : l\'objet HTTP complet (query, input, headers, user…)\n    $recherche = $request->query(\'q\', \'\');\n    $produits = Produit::query()\n        ->when($recherche, fn ($q) => $q->where(\'nom\', \'like\', "%$recherche%"))\n        ->paginate(20);                                 // PAGINE, jamais all()\n    return view(\'produits.index\', [\'produits\' => $produits]);\n}\n\npublic function store(StoreProduitRequest $request)   // validé AVANT d\'entrer ici\n{\n    // $request->validated() : SEULEMENT les champs validés — rien d\'autre\n    $produit = Produit::create($request->validated());\n    return redirect()->route(\'produits.show\', $produit)\n        ->with(\'succes\', \'Produit ajouté au catalogue.\');\n}\n\npublic function show(Produit $produit)                // binding : objet garanti\n{\n    return view(\'produits.show\', [\'produit\' => $produit]);\n}' },
             { t: 'callout', kind: 'info', h: 'Sous le capot : le container lit la signature de ta méthode par réflexion (les type-hints), construit ou récupère chaque dépendance (les classes concrètes sont construites à la volée, les INTERFACES résolues via les bindings de `AppServiceProvider`), puis appelle ta méthode. L\'injection fonctionne aussi dans le CONSTRUCTEUR du contrôleur (un service partagé par toutes les méthodes) — même mécanisme.' },
-            { t: 'h3', h: 'Le contrôleur à une seule action (invokable)' },
+            { t: 'h3', h: 'Notion 6 · Le contrôleur à une seule action (invokable)' },
+            { t: 'p', h: 'Certaines actions sont solitaires : télécharger une facture, valider un panier, lancer un export. Plutôt que de tordre un resource pour les y loger, Laravel offre le contrôleur **invokable** : UNE classe, UNE méthode magique `__invoke`, et une route qui pointe sur la classe elle-même — sans nom de méthode.' },
+            { t: 'syntax', title: 'Classe + __invoke + route sans méthode', code: 'php artisan make:controller GenererFactureController --invokable\n\nRoute::get(\'/commandes/{commande}/facture\', GenererFactureController::class);', legend: [
+              ['--invokable', 'l\'option qui génère la classe avec __invoke au lieu des méthodes CRUD'],
+              ['__invoke(', 'la méthode appelée quand on utilise la classe « comme une fonction »'],
+              ['GenererFactureController::class', 'dans la route : la classe SEULE, pas de [classe, \'méthode\']']
+            ] },
             { t: 'code', lang: 'php', code:
 'php artisan make:controller GenererFactureController --invokable\n\nclass GenererFactureController extends Controller\n{\n    public function __invoke(Commande $commande)\n    {\n        // UNE action = UNE classe. La route est limpide :\n        //   Route::get(\'/commandes/{commande}/facture\', GenererFactureController::class);\n        return $commande->telechargerFacture();\n    }\n}\n\n// Quand choisir ? Une action SINGULIÈRE qui n\'appartient à aucune\n// ressource CRUD : exporter un rapport, valider un panier, envoyer\n// une newsletter. Mieux que de tordre un resource pour l\'y loger.' },
             { t: 'h3', h: 'Garder le contrôleur MINCE : la règle et le critère' },
@@ -621,9 +767,25 @@ DEVDOCS.laravel = {
   <path d="M 603,127 L 603,178 L 72,178 L 72,130" class="dg-e dg-dash" marker-end="url(#lv-m1)"/>
   <text x="334" y="170" class="dg-m" text-anchor="middle">la réponse repasse par les mêmes couches au retour (en-têtes, mesures…)</text>
 </svg>`, caption: 'Chaque couche peut BLOQUER (403, 419, redirection login) — et alors le contrôleur n\'est JAMAIS appelé. C\'est le point fort : une règle écrite une fois protège toutes les routes du groupe. À l\'aller, chaque couche décide ; au retour (pointillés), elle peut peaufiner la réponse.' },
+            { t: 'h3', h: 'Notion 1 · Le squelette : handle($request, $next)' },
+            { t: 'p', h: 'Un middleware tient en une classe d\'UNE méthode : `handle()`. Elle reçoit deux choses — la requête en cours, et `$next`, le « passe au suivant ». Toute la pensée se organise autour de CE point : ce que tu fais AVANT `$next` contrôle l\'entrée ; ce que tu fais APRÈS retouche la réponse au retour.' },
+            { t: 'syntax', title: 'Le squelette minimal d\'un middleware', file: 'app/Http/Middleware/CouvreFeu.php', code: 'public function handle(Request $request, Closure $next): Response\n{\n    // ① AVANT : bloquer ? → return abort(403) / redirect(…)\n    //           et la méthode s\'arrête LÀ (contrôleur jamais appelé)\n\n    $response = $next($request);   // ② laisser passer : l\'oignon continue\n\n    // ③ APRÈS : la réponse repasse — retouches possibles ici\n    return $response;              // ④ TOUJOURS retourner une réponse\n}', legend: [
+              ['Request $request', 'la requête entrante (lis user(), is(), input()…)'],
+              ['Closure $next', 'le reste du tunnel sous forme de fonction à appeler'],
+              ['$next($request)', 'LAISSE PASSER : appelle la couche suivante (puis le contrôleur)'],
+              ['abort(403)', 'BLOQUE : la réponse d\'erreur part, le contrôleur n\'est jamais appelé'],
+              ['return $response;', 'un middleware DOIT toujours rendre une réponse, jamais rien']
+            ] },
+            { t: 'h3', h: 'Exemple complet : le couvre-feu de la boutique' },
             { t: 'code', lang: 'php', label: 'app/Http/Middleware/CouvreFeu.php', code:
 '<?php\n\nnamespace App\\Http\\Middleware;\n\nuse Closure;\nuse Illuminate\\Http\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass CouvreFeu\n{\n    public function handle(Request $request, Closure $next): Response\n    {\n        // AVANT $next : BLOQUER ou transformer la REQUÊTE —\n        $heure = (int) now()->format(\'H\');\n        if ($heure >= 22 || $heure < 6) {\n            // Couvre-feu maintenance : la boutique ferme la nuit\n            if ($request->is(\'admin/*\')) {\n                abort(503, \'Maintenance nocturne — réessaie à 6 h.\');\n            }\n        }\n\n        $response = $next($request);   // le reste de l\'oignon s\'exécute\n\n        // APRÈS $next : transformer la RÉPONSE si besoin —\n        $response->headers->set(\'X-Boutique\', \'Awa\');\n\n        return $response;              // TOUJOURS retourner une réponse\n    }\n}' },
-            { t: 'h3', h: 'Enregistrer et appliquer (Laravel 11+)' },
+            { t: 'h3', h: 'Notion 2 · Appliquer le filtre : ->middleware() sur les routes' },
+            { t: 'syntax', title: 'Brancher un middleware sur des routes', file: 'routes/web.php', code: '// une route seule :\nRoute::get(\'/admin\', [AdminController::class, \'index\'])->middleware(\'couvre-feu\');\n\n// tout un groupe (la forme recommandée) :\nRoute::middleware(\'auth\')->group(function () {\n    Route::get(\'/commandes\', [CommandeController::class, \'index\']);\n});', legend: [
+              ['->middleware(\'couvre-feu\')', 'applique le filtre par son ALIAS (déclaré dans bootstrap/app.php, juste après)'],
+              ['Route::middleware(\'auth\')->group(…)', 'toutes les routes du groupe passent le filtre — impossible d\'en oublier une'],
+              ['\'auth\'', 'un alias fourni par Laravel : « connecté exigé » (le tableau des alias utiles suit)']
+            ] },
+            { t: 'h3', h: 'Notion 3 · Enregistrer le tien : alias, global, groupe (bootstrap/app.php)' },
             { t: 'code', lang: 'php', label: 'bootstrap/app.php — la centrale de branchements', code:
 '<?php\n\nreturn Application::configure(basePath: dirname(__DIR__))\n    ->withRouting(\n        web: __DIR__.\'/../routes/web.php\',\n        api: __DIR__.\'/../routes/api.php\',\n        commands: __DIR__.\'/../routes/console.php\',\n        health: \'/up\',\n    )\n    ->withMiddleware(function (Middleware $middleware) {\n        // ALIAS : nom court → classe (utilisable dans les routes)\n        $middleware->alias([\n            \'couvre-feu\' => \\App\\Http\\Middleware\\CouvreFeu::class,\n        ]);\n\n        // GLOBAL : s\'exécute sur TOUTES les requêtes\n        $middleware->append(\\App\\Http\\Middleware\\LogLent::class);\n\n        // GROUPE existant : ajouter AU groupe web ou api\n        $middleware->web(append: [\\App\\Http\\Middleware\\Annonce::class]);\n    })\n    ->create();\n\n// Puis dans les routes — par nom d\'alias :\n//   Route::middleware(\'couvre-feu\')->group(…);\n//   Route::get(\'/admin\', …)->middleware(\'couvre-feu\');' },
             { t: 'p', h: 'Avant Laravel 11, ce câblage vivait dans `app/Http/Kernel.php` (`$middlewareAliases`, `$middlewareGroups`) — tu rencontreras ce fichier dans la documentation et les vieux projets ; la PHILOSOPHIE est identique, seule l\'adresse a changé. Le réflexe à garder : alias courts pour les usages ciblés (`->middleware(\'auth\')`), groupe pour les familles (`web`, `api`), global pour ce qui concerne VRAIMENT chaque requête (logs, métriques).' },
@@ -669,17 +831,74 @@ DEVDOCS.laravel = {
           tagline: '{{ }}, @if, @foreach, layouts hérités et composants `<x-*>` : le moteur de templates qui reste du PHP.', 
           intro: 'Blade est la réponse de Laravel à une question vieille comme le web : comment mélanger données et HTML sans que ni l\'un ni l\'autre ne souffre ? La réponse : un moteur de templates qui se compile en PHP pur, garde les accolades naturelles `{{ }}`, échappe TOUT par défaut (la sécurité d\'abord), et compose tes pages par héritage de layouts puis par composants `<x-*>`. Cette fiche couvre les quatre niveaux dans l\'ordre où tu les utiliseras : afficher, structurer, assembler, factoriser.', 
           blocks: [
-            { t: 'h3', h: 'Afficher des données — en sécurité par défaut' },
+            { t: 'h3', h: 'Notion 1 · Afficher une variable : {{ }} — en sécurité par défaut' },
             { t: 'p', h: 'Le réflexe PHP de base, `<?= $produit->nom ?>`, affiche la valeur TELLE QUELLE — y compris si un client malveillant a saisi `<script>…</script>` dans le nom de son produit (la XSS, injection n°1 du web). Blade corrige le défaut à la racine : **`{{ }}` ÉCHAPPE systématiquement** (les chevrons deviennent `&lt;script&gt;`, inoffensifs). Le rendu d\'une saisie utilisateur est donc sûr PAR DÉFAUT — la porte blindée est fermée sans que tu y penses. Le contre-pied exact : `{!! !!}` qui affiche BRUT, réservé au HTML que TU maîtrises (un rendu de Markdown interne, jamais une saisie).' },
             { t: 'callout', kind: 'info', h: 'Deux mots nouveaux, expliqués vite. Un **moteur de templates** : le logiciel qui prend un fichier « HTML + trous » (les `{{ }}` et `@if`) et le remplit avec tes données pour produire le HTML final. Et la **XSS** (« Cross-Site Scripting ») : le piège où un visiteur injecte du code (un script) dans TON site via un champ (nom, commentaire) — si le site affiche sa saisie telle quelle, le script s\'exécute chez tous les autres visiteurs. D\'où l\'importance de l\'échappement automatique de `{{ }}`.' },
+            { t: 'syntax', title: 'Afficher une donnée', file: 'resources/views/produits/show.blade.php', code: '<h1>{{ $produit->nom }}</h1>\n<p>{{ number_format($produit->prix, 0, \',\', \' \') }} F</p>', legend: [
+              ['{{ … }}', 'affiche la valeur APRÈS échappement : tout HTML injecté devient du texte inerte — l\'anti-XSS gratuit'],
+              ['$produit->nom', 'n\'importe quelle expression PHP valide : propriété, calcul, appel de fonction'],
+              ['number_format(…)', 'tout helper PHP reste utilisable entre les accolades — ce n\'est pas un autre langage']
+            ] },
+            { t: 'h3', h: 'Notion 2 · Afficher du HTML brut : {!! !!} — le danger maîtrisé' },
+            { t: 'p', h: 'Le contre-pied exact : `{!! !!}` affiche la valeur BRUTE, sans aucun échappement — le navigateur interprète le HTML qu\'elle contient. Usage UNIQUE : du HTML dont tu maîtrises totalement la source (rendu de Markdown interne, contenu rédigé par toi). Jamais une saisie utilisateur — sinon tu réouvres à la main la porte XSS que `{{ }}` vient de fermer pour toi.' },
+            { t: 'syntax', title: 'Le brut, en connaissance de cause', code: '{!! $guideHtml !!}', legend: [
+              ['{!! … !!}', 'affiche SANS échapper : le HTML est interprété tel quel par le navigateur'],
+              ['$guideHtml', 'uniquement un contenu dont TU es la source — une saisie visiteur repasse par {{ }}']
+            ] },
+            { t: 'h3', h: 'Notion 3 · Valeur de secours et commentaires : ?? et {{-- --}}' },
+            { t: 'syntax', title: 'Le « sinon » inline et le commentaire invisible', code: '<p>Stock : {{ $produit->stock ?? \'non renseigné\' }}</p>\n\n{{-- un commentaire Blade : invisible dans le HTML envoyé au navigateur --}}', legend: [
+              ['?? \'non renseigné\'', 'opérateur PHP « sinon » : valeur de secours si la donnée est null ou absente'],
+              ['{{-- … --}}', 'commentaire Blade : reste côté serveur — un commentaire HTML classique serait lisible par tout visiteur']
+            ] },
+            { t: 'p', h: 'Ces trois notions réunies donnent déjà une vraie fiche produit complète — les voici dans leur contexte, ligne par ligne :' },
             { t: 'code', lang: 'php', label: 'resources/views/produits/show.blade.php', code:
 '<h1>{{ $produit->nom }}</h1>\n<p>{{ $produit->description }}</p>\n\n{{-- affichage avec défaut (syntaxe courte et sûre) --}}\n<p>Stock : {{ $produit->stock ?? \'non renseigné\' }}</p>\n\n{{-- une saisie utilisateur : --}}\n{{-- {{ $avis->texte }} échappe → le <script> devient du texte inerte --}}\n\n{{-- le HTML maîtrisé UNIQUEMENT (ici : contenu rédigé par toi) --}}\n{!! $guideHtml !!}\n\n{{-- un commentaire Blade : NI dans le HTML envoyé, NI dans la page vue --}}\n{{-- utile pour documenter le template ; <!-- --> serait visible publiquement --}}' },
-            { t: 'h3', h: 'Les directives de tous les jours' },
+            { t: 'h3', h: 'Notion 4 · Les conditions : @if / @elseif / @else / @endif' },
+            { t: 'p', h: 'Les **directives** sont les mots-clés de Blade : elles commencent par `@` et remplacent le PHP encombrant (`<?php if (…): ?>`). La première famille : les conditions. Chaque directive d\'ouverture (`@if`) exige sa fermeture (`@endif`) — pas d\'accolades ici, la directive tient lieu de fin de bloc. Et Blade compile le tout en vrai PHP : rien d\'autre n\'est à apprendre.' },
+            { t: 'syntax', title: 'Afficher selon une condition', code: '@if ($produit->stock === 0)\n    <em>Rupture</em>\n@elseif ($produit->stock < 5)\n    <strong>Plus que {{ $produit->stock }} !</strong>\n@else\n    <span>En stock</span>\n@endif', legend: [
+              ['@if (…)', 'la condition PHP à tester — comme un if classique'],
+              ['@elseif (…) / @else', 'les branches suivantes, optionnelles et dans cet ordre'],
+              ['@endif', 'la fermeture OBLIGATOIRE du bloc'],
+              ['@unless ($compacte)', 'le contraire : afficher SAUF si la condition est vraie']
+            ] },
             { t: 'code', lang: 'php', code:
-'{{-- conditions --}}\n@if ($produit->stock === 0)\n    <em>Rupture — réappro en cours</em>\n@elseif ($produit->stock < 5)\n    <strong>Plus que {{ $produit->stock }} en stock !</strong>\n@else\n    <span>En stock</span>\n@endif\n\n{{-- boucle avec $loop qui connaît tout --}}\n@foreach ($produits as $produit)\n    <li class=\"{{ $loop->first ? \'premier\' : \'\' }}\">\n        {{ $loop->iteration }}/{{ $loop->count }} — {{ $produit->nom }}\n    </li>\n@endforeach\n\n{{-- authentification sans if PHP --}}\n@auth\n    <p>Bonjour {{ auth()->user()->name }}</p>\n@endauth\n@guest\n    <a href=\"{{ route(\'login\') }}\">Se connecter</a>\n@endguest\n\n{{-- inclusion d\'un bout de vue partagé --}}\n@include(\'partials.alerte-promo\', [\'jusque\' => \'samedi\'])' },
+'{{-- conditions --}}\n@if ($produit->stock === 0)\n    <em>Rupture — réappro en cours</em>\n@elseif ($produit->stock < 5)\n    <strong>Plus que {{ $produit->stock }} en stock !</strong>\n@else\n    <span>En stock</span>\n@endif' },
+            { t: 'h3', h: 'Notion 5 · La boucle : @foreach et l\'assistant $loop' },
+            { t: 'p', h: 'Pour lister des produits, `@foreach` boucle comme le `foreach` de PHP — avec un cadeau en plus : la variable `$loop`, qui connaît sa propre position (premier tour ? n° combien ? sur combien ?). De quoi numéroter, alterner des styles ou marquer le premier élément sans aucun compteur manuel.' },
+            { t: 'syntax', title: 'Répéter pour chaque élément', code: '@foreach ($produits as $produit)\n    <li class=\"{{ $loop->first ? \'premier\' : \'\' }}\">\n        {{ $loop->iteration }}/{{ $loop->count }} — {{ $produit->nom }}\n    </li>\n@endforeach', legend: [
+              ['@foreach ($produits as $produit)', 'pour CHAQUE élément de la collection, répète le contenu — exactement comme foreach en PHP'],
+              ['$loop->first', 'vrai au premier tour (aussi ->last, ->even, ->odd)'],
+              ['$loop->iteration / ->count', 'le numéro du tour (1, 2, 3…) et le nombre total d\'éléments'],
+              ['@endforeach', 'la fermeture obligatoire de la boucle']
+            ] },
+            { t: 'code', lang: 'php', code:
+'{{-- boucle avec $loop qui connaît tout --}}\n@foreach ($produits as $produit)\n    <li class=\"{{ $loop->first ? \'premier\' : \'\' }}\">\n        {{ $loop->iteration }}/{{ $loop->count }} — {{ $produit->nom }}\n    </li>\n@endforeach' },
+            { t: 'h3', h: 'Notion 6 · @auth / @guest : l\'affichage qui connaît le visiteur' },
+            { t: 'p', h: 'Ces deux directives lisent directement l\'authentification (la fiche Authentification la posera) : `@auth` n\'affiche que si le visiteur est CONNECTÉ, `@guest` que s\'il ne l\'est PAS. Le menu « Se connecter / Bonjour Awa » tient en quatre lignes, sans un seul if PHP.' },
+            { t: 'syntax', title: 'Connecté ou pas, deux blocs', code: '@auth\n    <p>Bonjour {{ auth()->user()->name }}</p>\n@endauth\n@guest\n    <a href=\"{{ route(\'login\') }}\">Se connecter</a>\n@endguest', legend: [
+              ['@auth', 'contenu affiché UNIQUEMENT si le visiteur est connecté'],
+              ['@guest', 'l\'inverse : uniquement les visiteurs NON connectés'],
+              ['auth()->user()', 'l\'utilisateur connecté (fiche Authentification) — disponible partout dans Blade']
+            ] },
+            { t: 'code', lang: 'php', code:
+'{{-- authentification sans if PHP --}}\n@auth\n    <p>Bonjour {{ auth()->user()->name }}</p>\n@endauth\n@guest\n    <a href=\"{{ route(\'login\') }}\">Se connecter</a>\n@endguest' },
+            { t: 'h3', h: 'Notion 7 · @include : réutiliser un fragment de vue' },
+            { t: 'syntax', title: 'Insérer un morceau partagé', code: '@include(\'partials.alerte-promo\', [\'jusque\' => \'samedi\'])', legend: [
+              ['@include(', 'insère ici le contenu d\'une autre vue — pour factoriser bannières, alertes, pieds…'],
+              ['\'partials.alerte-promo\'', 'le chemin de la vue en NOTATION À POINTS : resources/views/partials/alerte-promo.blade.php'],
+              ['[\'jusque\' => \'samedi\']', 'des variables passées AU fragment, en plus de celles héritées de la page']
+            ] },
+            { t: 'code', lang: 'php', code:
+'{{-- inclusion d\'un bout de vue partagé --}}\n@include(\'partials.alerte-promo\', [\'jusque\' => \'samedi\'])' },
             { t: 'p', h: 'Note le style général : les directives `@…` remplacent le PHP encombrant (`<?php if (…): ?>`) tout en restant du PHP compilé. Ce n\'est pas un nouveau langage à apprendre, c\'est du PHP raccourci vers sa partie STRUCTURE — et toute expression PHP reste utilisable entre `{{ }}` (`{{ number_format($prix) }} F`, `{{ now()->format(\'d/m\') }}`).' },
-            { t: 'h3', h: 'Layouts : une coquille, mille pages' },
+            { t: 'h3', h: 'Notion 8 · Le layout : @extends / @section / @yield — une coquille, mille pages' },
             { t: 'p', h: 'Chaque page de ta boutique partage la même coquille (en-tête, navigation, pied) — la dupliquer dans 50 templates assure 50 divergences. L\'héritage de layout résout : un template MAÎTRE déclare des zones (`@yield`), chaque page les REMPLIT (`@section`). Modifier la coquille = modifier UN fichier, les 50 pages héritent aussitôt. C\'est la même idée que la composition React, transposée au serveur.' },
+            { t: 'syntax', title: 'Coquille et page, la poignée de main', code: '{{-- layouts/app.blade.php : la coquille --}}\n<title>@yield(\'titre\', \'Boutique Awa\')</title>\n<main>@yield(\'contenu\')</main>\n\n{{-- produits/index.blade.php : la page --}}\n@extends(\'layouts.app\')\n@section(\'titre\', \'Catalogue\')\n@section(\'contenu\') … @endsection', legend: [
+              ['@yield(\'contenu\')', 'côté coquille : « zone à remplir par les pages » — une valeur par défaut est possible'],
+              ['@extends(\'layouts.app\')', 'côté page : « j\'utilise CETTE coquille » (notation à points → resources/views/layouts/app.blade.php)'],
+              ['@section(\'titre\', \'…\')', 'remplir une zone en UNE ligne'],
+              ['@section(\'contenu\') … @endsection', 'remplir une zone avec un BLOC multi-lignes']
+            ] },
             { t: 'code', lang: 'php', label: 'resources/views/layouts/app.blade.php (la coquille)', code:
 '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <meta charset="utf-8">\n    <title>@yield(\'titre\', \'Boutique Awa\')</title>\n</head>\n<body>\n    <nav>\n        <a href="{{ route(\'produits.index\') }}">Catalogue</a>\n        @auth <a href="{{ route(\'commandes.index\') }}">Mes commandes</a> @endauth\n    </nav>\n\n    <main>\n        @yield(\'contenu\')          {{-- la zone que chaque page remplit --}}\n    </main>\n\n    <footer>© {{ date(\'Y\') }} Boutique Awa — Cotonou</footer>\n</body>\n</html>' },
             { t: 'code', lang: 'php', label: 'resources/views/produits/index.blade.php (la page)', code:
@@ -710,7 +929,14 @@ DEVDOCS.laravel = {
   <text x="602" y="150" class="dg-ms" text-anchor="middle">→ au navigateur</text>
   <path d="M 510,124 L 538,124" class="dg-e" marker-end="url(#lv-b1)"/>
 </svg>`, caption: 'La page déclare « j\'hérite de la coquille » (@extends), remplit la zone prévue (@section alimente @yield), et utilise des morceaux réutilisables (composants). Modifier la coquille = UN fichier, toutes les pages suivent — c\'est tout l\'intérêt.' },
+            { t: 'h3', h: 'Notion 9 · Les composants `<x-*>` : @props et $slot' },
             { t: 'p', h: 'L\'héritage traite la coquille ; les COMPOSANTS traitent les morceaux réutilisables : carte produit, badge promo, alerte, bouton danger. Crée `resources/views/components/carte-produit.blade.php` et tu obtiens la balise `<x-carte-produit />` — avec Props typées (`@props`), attributs fusionnés (`$attributes`), et slots pour le contenu. C\'est la composition `<Composant />` de React, côté serveur : le point où Blade cesse d\'être « un moteur de templates » et devient un système de composants.' },
+            { t: 'syntax', title: 'Un composant et son usage', file: 'resources/views/components/carte-produit.blade.php', code: '@props([\'produit\'])\n\n<article>\n    <h3>{{ $produit->nom }}</h3>\n    <div>{{ $slot }}</div>\n</article>\n\n{{-- dans une page : --}}\n<x-carte-produit :produit=\"$p\">\n    <a href=\"{{ route(\'produits.show\', $p) }}\">Voir</a>\n</x-carte-produit>', legend: [
+              ['@props([\'produit\'])', 'déclare les données attendues par le composant (valeurs par défaut possibles : [\'compacte\' => false])'],
+              ['{{ $slot }}', 'l\'endroit où s\'insère le contenu placé ENTRE les balises à l\'usage'],
+              ['<x-carte-produit>', 'la balise du composant — le nom découle du FICHIER dans resources/views/components/'],
+              [':produit=\"$p\"', 'les DEUX-POINTS devant = valeur PHP ; sans eux, l\'attribut est du simple texte']
+            ] },
             { t: 'code', lang: 'php', label: 'resources/views/components/carte-produit.blade.php', code:
 '@props([\'produit\', \'compacte\' => false])\n\n<article {{ $attributes->merge([\'class\' => \'carte\']) }}>\n    <h3>{{ $produit->nom }}</h3>\n    <p>{{ number_format($produit->prix, 0, \',\', \' \') }} F</p>\n\n    @if ($produit->stock === 0)\n        <em>Rupture</em>\n    @endif\n\n    {{-- slot : contenu libre placé entre les balises au moment de l\'usage --}}\n    @unless($compacte)\n        <div class="actions">{{ $slot }}</div>\n    @endunless\n</article>\n\n{{-- usage dans une page :\n<x-carte-produit :produit="$p" class="vedette">\n    <a href="{{ route(\'produits.show\', $p) }}">Voir la fiche</a>\n</x-carte-produit>\n--}}' },
             { t: 'callout', kind: 'warn', h: '`@csrf` est OBLIGATOIRE dans tout formulaire POST/PUT/DELETE — sans jeton, Laravel répond 419 Page Expired. Et pour un verbe que HTML ne connaît pas : `@method(\'DELETE\')` dans le même formulaire (le « method spoofing » rencontré dans la fiche Routing).' },
@@ -747,12 +973,25 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Pourquoi le navigateur ne peut pas être ta seule douane' },
             { t: 'p', h: 'Ton formulaire HTML a `required`, `type="email"`, `min="1000"` ? Merveilleux pour le confort — et complètement inutile pour la sécurité : n\'importe qui soumet la même requête avec `curl` ou Postman, sans passer par ton formulaire. **La validation côté client sert l\'utilisateur, la validation côté serveur protège l\'application.** Tu ne choisis pas entre les deux : tu écris la seconde de toute façon, la première quand tu as le temps. Cette fiche ne parle que de la seconde — celle qui garde ta base propre quand le monde envoie n\'importe quoi.' },
-            { t: 'h3', h: 'La voie rapide : validate() dans le contrôleur' },
+            { t: 'h3', h: 'Notion 1 · Valider directement : $request->validate([…])' },
+            { t: 'syntax', title: 'La forme des règles', code: '$donnees = $request->validate([\n    \'nom\'  => [\'required\', \'string\', \'max:120\'],\n    \'prix\' => [\'required\', \'integer\', \'min:100\'],\n]);', legend: [
+              ['$request->validate(', 'la méthode de la requête : elle vérifie TOUT, ou renvoie au formulaire'],
+              ['\'nom\'', 'la clé = l\'attribut name du champ HTML — c\'est le pont avec ton formulaire'],
+              ['[\'required\', …]', 'les RÈGLES du champ, en liste : présent, quel type, quelles bornes'],
+              ['max:120 / min:100', 'règle « à paramètre » : deux-points puis la valeur (caractères pour du texte, valeur pour un nombre)'],
+              ['$donnees', 'le RETOUR : uniquement les champs validés — jamais le reste de la requête']
+            ] },
             { t: 'code', lang: 'php', code:
 'public function store(Request $request)\n{\n    $donnees = $request->validate([\n        \'nom\'          => [\'required\', \'string\', \'max:120\'],\n        \'prix\'         => [\'required\', \'integer\', \'min:100\'],\n        \'description\'  => [\'nullable\', \'string\', \'max:2000\'],\n        \'categorie_id\' => [\'required\', \'exists:categories,id\'],\n    ]);\n    // Échec → redirection auto avec les erreurs en session (web)\n    //      ou 422 JSON (api) — ta ligne suivante n\'est JAMAIS exécutée\n    // Succès → $donnees ne contient QUE les champs validés\n\n    $produit = Produit::create($donnees);\n    return redirect()->route(\'produits.show\', $produit);\n}' },
             { t: 'p', h: 'Cette voie est parfaite pour les petits formulaires (3-4 champs, une seule utilisation). La règle à retenir d\'ici : **`validate()` retourne les données VALIDÉES** — un tableau qui ne contient que les champs que tu as déclarés. Tout le reste (`_token`, champs injectés en douce par un curieux) est dehors. C\'est la différence entre « ce que l\'utilisateur a envoyé » et « ce que l\'application accepte ».' },
-            { t: 'h3', h: 'La voie pro : le Form Request' },
+            { t: 'h3', h: 'Notion 2 · Le Form Request : une classe douanière dédiée' },
             { t: 'p', h: 'Dès que les règles deviennent sérieuses (conditionnelles, métier, réutilisées dans l\'API), elles DÉMÉNAGENT dans une classe dédiée : le Form Request. Trois avantages nets : le contrôleur reste mince (injection directe — la fiche Contrôleurs en parle) ; les règles sont testables et réutilisables ; et `authorize()` y accueille le contrôle d\'accès pour la requête (« ce vendeur peut-il modifier CE produit ? »), fusionnant validation de DONNÉES et autorisation d\'ACTION au bon endroit.' },
+            { t: 'syntax', title: 'Le squelette d\'un Form Request', file: 'app/Http/Requests/StoreProduitRequest.php', code: 'php artisan make:request StoreProduitRequest\n\nclass StoreProduitRequest extends FormRequest\n{\n    public function authorize(): bool  { return true; }  // ① les droits\n    public function rules(): array     { return […]; }   // ② les règles\n}', legend: [
+              ['make:request', 'artisan génère la classe au bon endroit, déjà conforme'],
+              ['authorize(): bool', '① qui a le DROIT de faire cette action ? (false → 403 direct)'],
+              ['rules(): array', '② la même forme de règles que validate(), dans une méthode dédiée'],
+              ['messages(): array', '③ (méthode bonus) tes phrases d\'erreur à toi, en bon français']
+            ] },
             { t: 'code', lang: 'php', label: 'app/Http/Requests/StoreProduitRequest.php', code:
 '<?php\n\nnamespace App\\Http\\Requests;\n\nuse Illuminate\\Foundation\\Http\\FormRequest;\n\nclass StoreProduitRequest extends FormRequest\n{\n    // 1) DROITS : cette action est-elle permise, indépendamment des champs ?\n    public function authorize(): bool\n    {\n        return $this->user()->can(\'create\', \\App\\Models\\Produit::class);\n    }\n\n    // 2) RÈGLES : qu\'est-ce qui a le droit d\'entrer ?\n    public function rules(): array\n    {\n        return [\n            \'nom\'          => [\'required\', \'string\', \'max:120\', \'unique:produits,nom\'],\n            \'prix\'         => [\'required\', \'integer\', \'min:100\'],\n            \'stock\'        => [\'required\', \'integer\', \'min:0\'],\n            \'description\'  => [\'nullable\', \'string\', \'max:2000\'],\n            \'promo\'        => [\'nullable\', \'boolean\'],\n            \'image\'        => [\'nullable\', \'image\', \'max:2048\'],       // Ko\n        ];\n    }\n\n    // 3) MESSAGES (optionnel) : parler humain, pas regex\n    public function messages(): array\n    {\n        return [\n            \'nom.unique\' => \'Ce nom de produit est déjà pris par le catalogue.\',\n            \'prix.min\'   => \'Un prix doit être d\'au moins 100 F.\',\n        ];\n    }\n}\n\n// Dans le contrôleur — INJECTION DIRECTE (fiche Contrôleurs) :\npublic function store(StoreProduitRequest $request)\n{\n    // arrivé ici, TOUT est validé ET autorisé :\n    $produit = Produit::create($request->validated());\n    return redirect()->route(\'produits.show\', $produit);\n}' },
             { t: 'diagram', title: 'La douane avant la base : rien n\'entre sans être vérifié', svg: `<svg viewBox="0 0 680 222">
@@ -781,7 +1020,7 @@ DEVDOCS.laravel = {
   <text x="444" y="200" class="dg-ko" text-anchor="middle">✗ retour au formulaire + erreurs</text>
   <text x="444" y="216" class="dg-ms" text-anchor="middle">(en API : réponse 422 JSON) — et rien ne touche la base</text>
 </svg>`, caption: 'Trois barrières, dans l\'ordre : authorize() (as-tu le droit d\'AGIR ?), rules() (les données sont-elles saines ?), et seulement alors ton contrôleur — qui ne reçoit que validated(), les champs déclarés et propres. En cas d\'échec, la requête repart avec les erreurs : la donnée douteuse ne touche JAMAIS ta base.' },
-            { t: 'h3', h: 'Les règles à connaître par cœur' },
+            { t: 'h3', h: 'Notion 3 · Les règles à connaître par cœur' },
             { t: 'table', head: ['Règle', 'Sens', 'Exemple typique'], rows: [
               ['`required`', 'le champ doit être présent ET non vide', 'nom, prix'],
               ['`nullable`', 'peut être vide, MAIS si présent, respecte les autres règles', 'description, promo'],
@@ -795,12 +1034,23 @@ DEVDOCS.laravel = {
               ['`date` / `after:tomorrow` / `before:`', 'validité et bornes de dates', 'livraison après-demain au plus tôt']
             ]},
             { t: 'callout', kind: 'tip', h: 'Deux formes pour écrire les règles : la CHAÎNE `\'required|string|max:120\'` (compacte) ou le TABLEAU `[\'required\', \'string\', \'max:120\']` (obligatoire dès qu\'on ajoute des objets de règle comme `Rule::unique(…)->ignore($id)` — voir la carte d\'erreur en bas). Dès que la ligne chaîne dépasse 4 éléments ou devient dynamique, le tableau gagne.' },
-            { t: 'h3', h: 'Afficher les erreurs côté Blade' },
+            { t: 'h3', h: 'Notion 4 · Afficher les erreurs côté Blade : old() et @error' },
+            { t: 'syntax', title: 'Re-remplir et signaler, dans le formulaire', code: '<input name="nom" value="{{ old(\'nom\') }}">\n@error(\'nom\')\n    <p class="erreur">{{ $message }}</p>\n@enderror', legend: [
+              ['old(\'nom\')', 'la saisie PRÉCÉDENTE de ce champ : après un refus, le formulaire se re-remplit tout seul'],
+              ['@error(\'nom\')', 'affiche le contenu SEULEMENT si ce champ précis a été refusé'],
+              ['{{ $message }}', 'le message de la règle tombée (automatique, ou le tien via messages())'],
+              ['@enderror', 'la fermeture du bloc conditionnel']
+            ] },
             { t: 'code', lang: 'php', code:
 '<form method="POST" action="{{ route(\'produits.store\') }}">\n    @csrf\n\n    <label>Nom\n        {{-- old() : RE-REMPLIR avec la saisie précédente --}}\n        <input name="nom" value="{{ old(\'nom\') }}" required>\n    </label>\n    @error(\'nom\')\n        <p class="erreur">{{ $message }}</p>     {{-- le message de LA règle tombée --}}\n    @enderror\n\n    <label>Prix (F)\n        <input name="prix" value="{{ old(\'prix\') }}" inputmode="numeric">\n    </label>\n    @error(\'prix\')<p class="erreur">{{ $message }}</p>@enderror\n\n    <button>Ajouter au catalogue</button>\n</form>\n\n{{-- et le récapitulatif global en haut, si tu préfères :\n@if ($errors->any())\n    <ul>@foreach ($errors->all() as $erreur)<li>{{ $erreur }}</li>@endforeach</ul>\n@endif\n--}}' },
             { t: 'p', h: 'La magie discrète à comprendre : quand la validation échoue, Laravel REDIRIGE avec les erreurs ET les anciennes entrées en session — `old(\'nom\')` et `@error` n\'ont rien à faire d\'autre que les lire. C\'est pourquoi le cycle « soumettre → règle tombée → formulaire réaffiché rempli » est gratuit : tu n\'écris que l\'AFFICHAGE.' },
-            { t: 'h3', h: 'validated() vs all() : la ligne de sécurité' },
+            { t: 'h3', h: 'Notion 5 · validated() vs all() : la ligne de sécurité' },
             { t: 'p', h: '`$request->all()` est « tout ce qui est arrivé » — y compris ce que tu n\'as jamais déclaré : un client curieux qui ajoute `"role": "admin"` ou `"solde": 999999` à sa requête voit ces champs passer DIRECTEMENT à ta base si tu fais `User::create($request->all())`. `validated()` est l\'inverse exact : seuls les champs déclarés dans les règles sortent. Entre les deux, il n\'y a pas de débat — il y a ce qu\'on appelle le **mass assignment**, la vulnérabilité historique des frameworks, désamorcée par une habitude : jamais `all()` vers la base.' },
+            { t: 'syntax', title: 'La seule habitude qui compte', code: '// ✓ les champs que TU as déclarés, rien d\'autre :\nProduit::create($request->validated());\n\n// ✗ tout ce qui est arrivé, injections comprises :\nProduit::create($request->all());', legend: [
+              ['$request->validated()', 'le retour de la validation : uniquement les champs des règles, vérifiés'],
+              ['$request->all()', 'brut de décoffrage : champs injectés compris — jamais vers la base'],
+              ['…$request->validated(), \'boutique_id\' => …', 'les données SYSTÈME (propriétaire…) s\'ajoutent côté serveur, par toi']
+            ] },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
             { t: 'ol', items: [
               '**« La validation HTML/JS suffit si elle est bien faite. »** Elle saute au premier `curl` venu. Client = confort, serveur = sécurité : les deux vocabulaires, jamais un seul.',
@@ -832,12 +1082,19 @@ DEVDOCS.laravel = {
           tagline: 'abort(), handler d\'exceptions, pages d\'erreur, logs : transformer les pannes en réponses propres.', 
           intro: 'Une application qui ne plante jamais n\'existe pas ; il n\'y a que des applications qui plantent PROPREMENT. La question n\'est pas « comment éviter toute erreur » mais « que voit l\'utilisateur, que sais-je MOI, et comment je reprends la main ». Laravel répond par trois mécanismes à connaître : `abort()` pour les erreurs HTTP volontaires (404, 403), le gestionnaire central d\'exceptions pour tout le reste (et ta séparation web/JSON), et les logs pour ton journal de bord. Plus un dossier d\'exceptions métier qui feront de tes règles du jeu des citoyennes de premier ordre.', 
           blocks: [
-            { t: 'h3', h: 'Produire une erreur HTTP proprement : abort()' },
+            { t: 'h3', h: 'Notion 1 · Produire une erreur HTTP volontaire : abort()' },
             { t: 'p', h: 'Une erreur HTTP n\'est pas un échec à cacher — c\'est un MESSAGE protocolaire. `abort(404)` dit « cette ressource n\'existe pas » (pas la peine de chercher plus loin) et `abort(403)` dit « tu n\'as pas le droit » (même si elle existe — ou justement parce qu\'elle existe, on ne confirme rien aux curieux). À l\'intérieur de l\'application, ces codes ont une valeur : les middleware, les policies et les tests comprennent le protocole. L\'anti-modèle : `return \'Erreur\'` ou une 500 générique là où un code précis raconte la vérité.' },
+            { t: 'syntax', title: 'Arrêter net avec le bon code', code: 'abort(403);                                   // interdit, stop\nabort_if($stock < $quantite, 422, \'Stock insuffisant.\');   // seulement si…\nabort_unless($user->estAdmin(), 403);            // sauf si…', legend: [
+              ['abort(403)', 'stoppe la méthode IMMÉDIATEMENT et répond avec ce code — rien après cette ligne ne s\'exécute'],
+              ['403 / 404', 'les codes du quotidien : interdit / introuvable (401 non connecté, 422 validation, 419 CSRF, 429 débit)'],
+              ['abort_if(cond, …)', 'abort en version conditionnelle : SI la condition est vraie'],
+              ['abort_unless(cond, …)', 'l\'inverse : SAUF si la condition est vraie']
+            ] },
             { t: 'code', lang: 'php', code:
 'public function show(Commande $commande)      // binding → 404 auto si absente\n{\n    if ($commande->user_id !== auth()->id()) {\n        abort(403);                        // « interdit » — on ne détaille PAS\n    }\n    return view(\'commandes.show\', [\'commande\' => $commande]);\n}\n\n// Les codes parlent : 401 (non connecté), 403 (connecté mais interdit),\n// 404 (inconnu), 419 (CSRF expiré), 422 (validation), 429 (débit), 500 (panne).\nabort_if($stock < $quantite, 422, \'Stock insuffisant pour cette commande.\');' },
-            { t: 'h3', h: 'Le gestionnaire central : withExceptions (Laravel 11+)' },
+            { t: 'h3', h: 'Notion 2 · Le gestionnaire central : withExceptions (Laravel 11+)' },
             { t: 'p', h: 'Toute exception NON attrapée dans ton code finit sa course dans le **gestionnaire d\'exceptions** — le filet central. Là, trois décisions sont prises pour toi, configurables : **rapporter** (écrire dans les logs / notifier Sentry), **rendre** (transformer l\'exception en réponse HTTP), et **masquer** (ne jamais envoyer les détails internes au client). En Laravel 11+, ce câblage vit dans `bootstrap/app.php`, à côté du middleware.' },
+            { t: 'callout', kind: 'info', h: 'Mot nouveau — une **exception**, c\'est un objet-signal lancé (`throw`) quand quelque chose d\'anormal arrive : il REMONTE la pile des appels jusqu\'à trouver un gardien (`try/catch`) ou le gestionnaire central. Ce n\'est pas une « erreur qui s\'affiche » : c\'est un message d\'alerte transporté à travers ton code, avec sa trace complète (quel fichier, quelle ligne, quel chemin d\'appels).' },
             { t: 'code', lang: 'php', label: 'bootstrap/app.php — le filet central', code:
 '->withExceptions(function (Exceptions $exceptions) {\n    // 1) Ne JAMAIS rapporter les erreurs « attendues » (422, 404…) :\n    //    elles polluent les logs de bruit normal.\n    $exceptions->dontReport([\n        \\Illuminate\\Validation\\ValidationException::class,\n    ]);\n\n    // 2) RENDRE une exception métier de manière personnalisée —\n    //    web ET api en même endroit :\n    $exceptions->render(function (SoldeInsuffisant $e, $request) {\n        if ($request->expectsJson()) {\n            return response()->json([\n                \'erreur\' => \'solde_insuffisant\',\n                \'message\' => $e->getMessage(),\n            ], 422);\n        }\n        return back()->withErrors([\'montant\' => $e->getMessage()]);\n    });\n\n    // 3) Enrichir le CONTEXTE des rapports (utilisateur, requête) :\n    $exceptions->context(function () {\n        return [\'boutique\' => auth()->user()?->boutique?->slug];\n    });\n})' },
             { t: 'diagram', title: 'Une exception attrapée par le filet : deux destinations', svg: `<svg viewBox="0 0 680 220">
@@ -861,13 +1118,26 @@ DEVDOCS.laravel = {
   <text x="582" y="184" class="dg-ms" text-anchor="middle">web : page sobre (404, 500…)</text>
   <text x="582" y="200" class="dg-ms" text-anchor="middle">api : JSON { erreur: … }</text>
 </svg>`, caption: 'Toute exception non attrapée finit au gestionnaire central, qui fait DEUX choses distinctes : t\'en informer TOI proprement (logs, alertes — avec tous les détails techniques), et répondre au visiteur sobrement (page d\'erreur ou JSON, SANS les détails). En production avec APP_DEBUG=false, cette séparation est une question de sécurité.' },
-            { t: 'h3', h: 'Les exceptions métier : de simples classes' },
+            { t: 'h3', h: 'Notion 3 · L\'exception métier : une classe qui porte un nom' },
+            { t: 'syntax', title: 'Créer et lancer TON type d\'erreur', code: '// app/Exceptions/SoldeInsuffisant.php\nclass SoldeInsuffisant extends Exception {}\n\n// dans ton code métier :\nif ($tontine->solde < $montant) {\n    throw new SoldeInsuffisant($tontine->solde, $montant);\n}', legend: [
+              ['extends Exception', 'une vraie exception PHP : elle remontera jusqu\'au gestionnaire central'],
+              ['throw new …', 'LANCE le signal (« jette » l\'exception) — la méthode s\'arrête là'],
+              ['SoldeInsuffisant', 'le NOM est le sens : au fil des logs et des tests, on sait de quelle règle il s\'agit'],
+              ['($solde, $montant)', 'les données du cas, transportées avec l\'objet pour le diagnostic']
+            ] },
+            { t: 'h3', h: 'L\'exemple complet, avec sa propre réponse HTTP' },
             { t: 'p', h: 'L\'exception générique `throw new Exception(\'solde insuffisant\')` est un panneau sans nom — impossible à distinguer d\'une panne à l\'arrivée. Une EXCEPTION MÉTIER est une petite classe nommée qui porte le sens : `SoldeInsuffisant`, `CommandeDejaLivree`, `TontineComplete`. Elle peut même porter sa propre RÉPONSE (méthode `render()`) : l\'endroit où elle naît (ton service de tontine) n\'a plus à savoir comment on l\'affiche — il la jette, le protocole fait le reste.' },
             { t: 'code', lang: 'php', label: 'app/Exceptions/SoldeInsuffisant.php', code:
 '<?php\n\nnamespace App\\Exceptions;\n\nuse Exception;\n\nclass SoldeInsuffisant extends Exception\n{\n    public function __construct(public readonly int $solde, public readonly int $montant)\n    {\n        parent::__construct(\n            "Solde insuffisant : {$solde} F disponibles pour une demande de {$montant} F."\n        );\n    }\n\n    // (optionnel) sa propre réponse — sans même câbler le handler :\n    public function render($request)\n    {\n        return response()->json([\'erreur\' => \'solde_insuffisant\', \'solde\' => $this->solde], 422);\n    }\n}\n\n// Dans le service métier — clair, testable, typé :\nif ($tontine->solde < $montant) {\n    throw new SoldeInsuffisant($tontine->solde, $montant);\n}' },
-            { t: 'h3', h: 'Web ou JSON : la même erreur, deux visages' },
+            { t: 'h3', h: 'Notion 4 · Web ou JSON : la même erreur, deux visages' },
             { t: 'p', h: 'Laravel choisit le FORMAT de la réponse d\'erreur à l\'en-tête `Accept` de la requête : un navigateur reçoit la page 404/500 Blade (personnalisable dans `resources/views/errors/`), un client API reçoit du JSON structuré. `$request->expectsJson()` est l\'interrupteur si tu veux forcer une branche (cas du handler métier ci-dessus). Le principe d\'or de l\'API : le client programme sur TES codes et TES champs (`erreur: solde_insuffisant`) — jamais sur tes messages en clair, que tu dois pouvoir réécrire librement pour les humains.' },
-            { t: 'h3', h: 'Les logs : ton journal de bord' },
+            { t: 'h3', h: 'Notion 5 · Les logs : ton journal de bord' },
+            { t: 'syntax', title: 'Écrire dans le journal', code: 'Log::info(\'Commande créée\', [\'commande\' => $commande->id]);', legend: [
+              ['Log::info(', 'le niveau « normal » — aussi warning (à surveiller) et error (panne)'],
+              ['\'Commande créée\'', 'le fait, en une phrase humaine'],
+              ['[\'commande\' => $commande->id]', 'le CONTEXTE structuré : des champs filtrables, pas du texte noyé dans une phrase'],
+              ['storage/logs/laravel.log', 'l\'endroit où tout s\'écrit en dev ; en prod, channel « daily » + Sentry pour être alerté']
+            ] },
             { t: 'code', lang: 'php', code:
 'use Illuminate\\Support\\Facades\\Log;\n\nLog::info(\'Commande créée\', [\'commande\' => $commande->id, \'montant\' => $total]);\nLog::warning(\'Paiement MoMo lent\', [\'duree_ms\' => $ms, \'operateur\' => \'MTN\']);\nLog::error(\'Échec de livraison zémidjan\', [\n    \'commande\' => $commande->id,\n    \'chauffeur\' => $chauffeur->telephone,\n    \'exception\' => $e->getMessage(),\n]);\n\n// Le contexte STRUCTURÉ (tableaux) est indexable dans un agrégateur\n// (Sentry, Meilisearch des logs…) ; pas besoin de greps sur du texte.\n\n// Storage/logs/laravel.log — en prod : channel « daily » (rotation)\n// + Sentry/Flare pour être ALERTÉ au lieu d\'aller voir quand il est trop tard.' },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
@@ -942,10 +1212,32 @@ DEVDOCS.laravel = {
   <text x="538" y="126" class="dg-ms">· prix</text>
   <text x="538" y="144" class="dg-tt">· + seuil_alerte</text>
 </svg>`, caption: '`migrate` compare les fichiers au registre : seule la migration « en attente » est jouée — le schéma gagne sa colonne, le registre sa ligne ✔. Rejouer la commande mille fois ne change plus rien. Et c\'est exactement pour ça qu\'on ne retouche JAMAIS un fichier déjà marqué ✔ : personne ne le relira.' },
-            { t: 'h3', h: 'Créer une table : la migration comme contrat' },
+            { t: 'h3', h: 'Notion 1 · Créer le fichier : make:migration et le nommage daté' },
+            { t: 'syntax', title: 'Naître un fichier de migration', code: 'php artisan make:migration create_produits_table\n# → database/migrations/2026_07_22_000001_create_produits_table.php', legend: [
+              ['make:migration', 'artisan crée le fichier — daté à la seconde près, ce qui fixe l\'ORDRE d\'exécution'],
+              ['create_produits_table', 'le nom DÉCRIT l\'action : artisan en déduit même le squelette (create = nouvelle table)'],
+              ['2026_07_22_000001_', 'le préfixe date automatique : les migrations se jouent dans l\'ordre des fichiers — crucial pour les clés étrangères'],
+              ['add_seuil_to_produits_table', 'l\'autre motif courant : « add_X_to_Y_table » pour MODIFIER une table existante']
+            ] },
+            { t: 'h3', h: 'Notion 2 · up() et down() : chaque migration signe deux fois' },
+            { t: 'syntax', title: 'Le contrat en deux méthodes', code: 'public function up(): void\n{\n    Schema::create(\'produits\', function (Blueprint $table) { … });   // AVANCER\n}\n\npublic function down(): void\n{\n    Schema::dropIfExists(\'produits\');                                 // RECULER (l\'inverse exact)\n}', legend: [
+              ['up()', 'ce que `php artisan migrate` EXÉCUTE : construire / modifier'],
+              ['down()', 'ce que `migrate:rollback` exécute : DÉFAIRE proprement le up()'],
+              ['Schema::create(\'produits\', …)', 'créer la table ; Schema::table(…) pour en modifier une existante'],
+              ['Blueprint $table', 'l\'objet-crayon qui dessine les colonnes, une ligne à la fois']
+            ] },
+            { t: 'h3', h: 'Notion 3 · Exemple complet : la table produits, contrat par contrat' },
             { t: 'code', lang: 'php', label: 'database/migrations/2026_07_22_000001_create_produits_table.php', code:
 '<?php\n\nuse Illuminate\\Database\\Migrations\\Migration;\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nreturn new class extends Migration\n{\n    // up() : ce qu\'il faut FAIRE pour avancer — le contrat « créer »\n    public function up(): void\n    {\n        Schema::create(\'produits\', function (Blueprint $table) {\n            $table->id();                                  // PK auto incrémentée\n            $table->string(\'nom\', 120);\n            $table->string(\'slug\')->unique();\n            $table->unsignedInteger(\'prix\');             // en FRANCS, pas de float !\n            $table->unsignedInteger(\'stock\')->default(0);\n            $table->text(\'description\')->nullable();     // peut être vide\n            $table->boolean(\'promo\')->default(false);\n            $table->foreignId(\'categorie_id\')            // la clé étrangère…\n                  ->constrained()                        // …vers categories.id\n                  ->cascadeOnDelete();                   // catégorie supprimée → produits aussi\n            $table->timestamps();                         // created_at + updated_at\n        });\n    }\n\n    // down() : l\'INVERSE exact — ce qu\'il faut faire pour RECULER\n    public function down(): void\n    {\n        Schema::dropIfExists(\'produits\');\n    }\n};' },
             { t: 'p', h: 'Deux détails à graver. `nullable()` n\'est pas une paresse — c\'est une DÉCISION : toute colonne que le client peut légalement laisser vide doit l\'accepter en base, sinon c\'est la base qui dira non à ta place (avec une exception SQL peu aimable). Et l\'`up/down` en miroir : chaque `up` doit avoir un `down` qui défait proprement — le `rollback` (annulation du dernier lot) en dépend entièrement. Un `down` qui ne fait rien est une porte de sortie condamnée.' },
+            { t: 'h3', h: 'Notion 4 · Déclarer une colonne : $table->…' },
+            { t: 'syntax', title: 'Une ligne = une colonne', code: '$table->string(\'nom\', 120);\n$table->unsignedInteger(\'stock\')->default(0);\n$table->text(\'description\')->nullable();', legend: [
+              ['$table->string(\'nom\', 120)', 'TYPE puis NOM : un texte court, borné à 120 caractères'],
+              ['->default(0)', 'modificateur : la valeur si rien n\'est fourni à l\'insertion'],
+              ['->nullable()', 'modificateur : la colonne accepte l\'ABSENCE de valeur (NULL)'],
+              ['->unique()', 'modificateur : deux lignes ne peuvent pas partager cette valeur'],
+              ['$table->timestamps()', 'la commande spéciale : poses created_at + updated_at d\'un coup']
+            ] },
             { t: 'table', head: ['Type de colonne', 'Usage typique Boutique Awa'], rows: [
               ['`string(n)`', 'noms, slugs, téléphones (varchars courts bornés)'],
               ['`text`', 'descriptions, avis — texte long sans limite pratique'],
@@ -956,14 +1248,20 @@ DEVDOCS.laravel = {
               ['`dateTime` / `date`', 'livraison prévue, cotisation du mois de…'],
               ['`foreignId` + `constrained()`', 'la clé étrangère standard (voir section 5)']
             ]},
-            { t: 'h3', h: 'Modifier une table : la nouvelle migration, jamais l\'histoire' },
+            { t: 'h3', h: 'Notion 5 · Modifier une table : la nouvelle migration, jamais l\'histoire' },
             { t: 'p', h: 'La tentation est grande : « la colonne `stock_seuil_alerte` aurait dû être dans la migration des produits, je l\'ajoute DANS le vieux fichier ». STOP. La règle d\'or : **une migration déjà commitée ne se retouche plus** — on ajoute une NOUVELLE migration, datée d\'aujourd\'hui, qui fait la modification. Pourquoi ? Parce que la vieille est peut-être déjà exécutée en production, chez les collègues, en CI : le registre `migrations` dit « fait », personne ne la rejouera — seul ton PC aurait le bon schéma, l\'exact inverse du but des migrations.' },
             { t: 'code', lang: 'php', label: '2026_07_25_000002_add_seuil_alerte_to_produits_table.php', code:
 'public function up(): void\n{\n    Schema::table(\'produits\', function (Blueprint $table) {\n        $table->unsignedInteger(\'seuil_alerte\')->default(5)->after(\'stock\');\n    });\n}\n\npublic function down(): void\n{\n    Schema::table(\'produits\', function (Blueprint $table) {\n        $table->dropColumn(\'seuil_alerte\');    // le miroir exact de up()\n    });\n}\n\n// Changer le TYPE d\'une colonne existante :\nSchema::table(\'produits\', function (Blueprint $table) {\n    $table->string(\'nom\', 200)->change();       // nécessite doctrine/dbal\n    // (souvent : faire deux migrations — ajouter une colonne neuve,\n    //  migrer les données, supprimer l\'ancienne — plus sûr)\n});' },
             { t: 'h3', h: 'Les commandes du cycle de vie' },
             { t: 'code', lang: 'php', code:
 'php artisan migrate                # jouer les migrations EN ATTENTE (le quotidien)\nphp artisan migrate:status         # qui a tourné, qui attend — avant/après un pull\nphp artisan migrate:rollback       # annuler le DERNIER lot (via les down())\nphp artisan migrate:rollback --step=3   # remonter de 3 lots précisément\n\nphp artisan migrate:fresh          # DANGER : DROP TOUTES les tables puis relance tout\nphp artisan migrate:fresh --seed   # idem + données de démo (le reset dev parfait)\n\n# fresh = données PERDUES : interdit en production, parfait en local.\n# En prod : migrate seul, et des migrations ADDITIONNELLES SÛRES\n# (pas de drop de colonne le même commit que le code qui l\'utilise encore).' },
-            { t: 'h3', h: 'Clés étrangères : ordre et responsabilité' },
+            { t: 'h3', h: 'Notion 6 · Clés étrangères : ordre et responsabilité' },
+            { t: 'syntax', title: 'Relier deux tables', code: '$table->foreignId(\'categorie_id\')\n      ->constrained()\n      ->cascadeOnDelete();', legend: [
+              ['foreignId(\'categorie_id\')', 'une colonne « id d\'une autre table » — convention : nomModèle_id'],
+              ['->constrained()', 'transforme la colonne en vraie CONTRAINTE : la valeur doit exister dans la table devinée (categories.id)'],
+              ['->cascadeOnDelete()', 'si le parent est supprimé, les enfants suivent — un choix MÉTIER, pas un défaut'],
+              ['->constrained(\'users\')', 'si la convention ne devine pas la table, nomme-la explicitement']
+            ] },
             { t: 'p', h: 'La contrainte `cascadeOnDelete` soulève la vraie question architecturale : que devient l\'enfant quand le parent disparaît ? La cascade est confortable (supprimer une catégorie nettoie ses produits) mais dangereuse pour les données de valeur : supprimer un client qui effacerait ses commandes détruit ta comptabilité — là, `restrictOnDelete()` (le défaut prudent : refus si des enfants existent) ou `nullOnDelete()` (la commande reste, sans client) sont tes amis. Deuxième loi mécanique : la table RÉFÉRENCÉE doit exister AVANT la table qui la référence — d\'où l\'importance du nommage daté des fichiers (carte d\'erreur en bas).' },
             { t: 'code', lang: 'php', code:
 '// Trois politiques, trois métiers différents :\n$table->foreignId(\'categorie_id\')->constrained()->cascadeOnDelete();\n//   supprimer la catégorie → ses produits partent (cohérent si catalogue flexible)\n\n$table->foreignId(\'client_id\')->constrained(\'users\')->restrictOnDelete();\n   // un client AVEC des commandes ne peut pas être supprimé (compta protégée)\n\n$table->foreignId(\'livreur_id\')->nullable()->constrained(\'users\')->nullOnDelete();\n//   le livreur part, la commande reste — son livreur devient « non assigné »' },
@@ -998,7 +1296,13 @@ DEVDOCS.laravel = {
           tagline: 'Un modèle = une table : requêtes fluides, mass assignment, casts et accessors/mutators.', 
           intro: 'Eloquent est l\'ORM de Laravel : chaque table devient une classe, chaque ligne un objet, chaque requête une phrase fluide en PHP. `Produit::where(\'promo\', true)->orderBy(\'nom\')->paginate(20)` se lit comme de la prose — alors que la même requête en SQL brut exige chaînage de strings, échappement et mapping manuel ligne par ligne. Cette fiche te donne le fonctionnement complet du modèle : les conventions qui le font marcher gratuitement, les requêtes du quotidien (avec la garde `paginate` contre `all`), le mass assignment sécurisé, les scopes qui nomment tes filtres, et les casts/accessors qui adaptent les valeurs à la frontière.', 
           blocks: [
-            { t: 'h3', h: 'Le modèle minimal — et les conventions qui le font marcher' },
+            { t: 'h3', h: 'Notion 1 · Le modèle minimal — et les conventions qui le font marcher' },
+            { t: 'syntax', title: 'La classe la plus courte qui fonctionne', file: 'app/Models/Produit.php', code: 'php artisan make:model Produit\n\nclass Produit extends Model\n{\n    protected $fillable = [\'nom\', \'prix\', \'stock\'];\n}', legend: [
+              ['extends Model', 'hérite de toute la machinerie Eloquent (requêtes, sauvegarde, relations)'],
+              ['Produit ↔ produits', 'la CONVENTION magique : classe singulière PascalCase ↔ table plurielle snake_case'],
+              ['$fillable', 'la LISTE BLANCHE : seuls ces champs peuvent être remplis en masse (create/update)'],
+              ['make:model Produit -mcr', 'artisan peut générer modèle + migration + contrôleur resource d\'un coup']
+            ] },
             { t: 'p', h: 'Eloquent respecte la philosophie « convention sur configuration » au sommet : une classe VIDE de 10 lignes fonctionne ENTIÈREMENT, si tu respectes ses habitudes de nommage. La classe `Produit` (singulier, PascalCase) correspond à la table `produits` (pluriel, snake_case) ; la clé primaire s\'appelle `id` ; les colonnes `created_at`/`updated_at` sont remplies MAGICIEMENT à chaque sauvegarde. Respecte les conventions : zéro configuration. Déroge (table au singulier, clé `code_produit`) : dis-le explicitement — trois propriétés suffisent, lisibles au premier regard.' },
             { t: 'code', lang: 'php', label: 'app/Models/Produit.php — la forme minimale qui marche', code:
 '<?php\n\nnamespace App\\Models;\n\nuse Illuminate\\Database\\Eloquent\\Model;\n\nclass Produit extends Model\n{\n    // Rien d\'autre n\'est REQUIS, grâce aux conventions :\n    //   table       → produits         (déduite du nom de classe)\n    //   clé prim.   → id               (auto-incrémentée)\n    //   timestamps  → created_at / updated_at gérés tout seuls\n\n    // La SEULE chose à décider : le mass assignment (sécurité)\n    protected $fillable = [\n        \'nom\', \'slug\', \'prix\', \'stock\', \'description\', \'categorie_id\',\n    ];\n\n    // Les casts : la valeur PHP native à la frontière de la base\n    protected $casts = [\n        \'promo\'     => \'boolean\',\n        \'prix\'      => \'integer\',\n        \'options\'   => \'array\',          // colonne json → tableau PHP\n        \'publie_le\' => \'date\',\n    ];\n}\n\n// Dérogations explicites, si besoin :\n// protected $table = \'catalogue_produits\';\n// protected $primaryKey = \'code\';\n// public $timestamps = false;' },
@@ -1024,16 +1328,61 @@ DEVDOCS.laravel = {
   <text x="511" y="196" class="dg-m" text-anchor="middle">la classe Produit parle à la TABLE entière —</text>
   <text x="511" y="214" class="dg-ms" text-anchor="middle">et chaque LIGNE devient un objet avec ses attributs</text>
 </svg>`, caption: '**ORM** = « Object-Relational Mapping » : le traducteur officiel entre le monde SQL (tables, lignes) et le monde PHP (classes, objets). Fini le SQL à la main et la copie de chaque champ : `Produit::all()` retourne une **collection** d\'objets (un tableau enrichi, avec des méthodes pratiques), et `$produit->prix` lit la colonne directement. Tu parles PHP, Eloquent parle SQL.' },
-            { t: 'h3', h: 'Les requêtes du quotidien — fluides et lisibles' },
+            { t: 'h3', h: 'Notion 2 · Trouver UNE ligne : find() et findOrFail()' },
+            { t: 'syntax', title: 'Chercher par clé primaire', code: '$produit = Produit::findOrFail($id);', legend: [
+              ['Produit::', 'la CLASSE parle à la table entière (méthodes statiques = côté table)'],
+              ['findOrFail($id)', 'donne-moi la ligne d\'ID $id — ou réponds 404 si elle n\'existe pas'],
+              ['find($id)', 'la variante douce : retourne null au lieu de la 404 (si l\'absence est un cas normal)'],
+              ['$produit', 'le RETOUR : un objet du modèle — $produit->nom lit la colonne']
+            ] },
             { t: 'code', lang: 'php', code:
-'// Trouver UNE ligne (par clé primaire) — avec le 404 honnête :\n$produit = Produit::findOrFail($id);\n\n// Filtrer — la phrase fluide du query builder Eloquent :\n$promos = Produit::where(\'promo\', true)\n    ->where(\'stock\', \'>\', 0)\n    ->orderBy(\'nom\')\n    ->paginate(20);                          // JAMAIS all() en prod\n\n// Le premier qui matche (ou la création si absent) :\n$categorie = Categorie::firstOrCreate([\'nom\' => \'Céréales\']);\n\n// Le contenu brut pour un select HTML :\n$categories = Categorie::orderBy(\'nom\')->pluck(\'nom\', \'id\');\n// → collection [1 => \'Céréales\', 2 => \'Huiles\', …]\n\n// Créer (mass assignment sécurisé) / mettre à jour / supprimer :\n$produit = Produit::create($request->validated());     // fiche Validation\n$produit->update([\'stock\' => $produit->stock - $quantite]);\n$produit->delete();\n\n// Compter, sommer — la base travaille, pas PHP :\nProduit::where(\'promo\', true)->count();\nProduit::sum(\'prix\');' },
+'// Trouver UNE ligne (par clé primaire) — avec le 404 honnête :\n$produit = Produit::findOrFail($id);' },
+            { t: 'h3', h: 'Notion 3 · Filtrer, trier, paginer : la phrase fluide' },
+            { t: 'p', h: 'Pour chercher plusieurs lignes, Eloquent offre une phrase qui se lit de gauche à droite : chaque `->…(…)` précise la requête, et le dernier mot la DÉCLENCHE (`paginate`, `get`, `first`). Tant qu\'aucun mot final n\'arrive, AUCUNE requête SQL n\'est partie — tu construis, puis tu exécutes.' },
+            { t: 'syntax', title: 'Construire puis déclencher', code: '$promos = Produit::where(\'promo\', true)\n    ->where(\'stock\', \'>\', 0)\n    ->orderBy(\'nom\')\n    ->paginate(20);', legend: [
+              ['where(\'promo\', true)', 'filtre : colonne = valeur'],
+              ['where(\'stock\', \'>\', 0)', 'filtre à opérateur : colonne, opérateur, valeur'],
+              ['orderBy(\'nom\')', 'tri (ascendant ; \'desc\' en second argument pour l\'inverse)'],
+              ['paginate(20)', 'le mot FINAL qui exécute : 20 lignes par page — JAMAIS all() en production']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// Filtrer — la phrase fluide du query builder Eloquent :\n$promos = Produit::where(\'promo\', true)\n    ->where(\'stock\', \'>\', 0)\n    ->orderBy(\'nom\')\n    ->paginate(20);                          // JAMAIS all() en prod' },
             { t: 'callout', kind: 'warn', h: '`paginate()` est la règle d\'hygiène de toute liste côté serveur : `Produit::all()` charge TOUTE la table en mémoire — anodin avec 12 produits, fatal avec 40 000 (la 500 en prod, le samedi soir). En bonus, `{{ $produits->links() }}` dans Blade rend toute la pagination, styles inclus.' },
-            { t: 'h3', h: 'Mass assignment : la frontière à bien garder' },
+            { t: 'h3', h: 'Notion 4 · Créer, modifier, supprimer : create, update, delete' },
+            { t: 'syntax', title: 'Les trois écritures', code: '$produit = Produit::create($request->validated());   // créer\n$produit->update([\'stock\' => $produit->stock - $qte]);  // modifier\n$produit->delete();                                      // supprimer', legend: [
+              ['Produit::create([…])', 'INSERT : remplit le modèle d\'un coup — uniquement les champs $fillable (notion 6)'],
+              ['$produit->update([…])', 'UPDATE sur l\'objet en main (méthode d\'INSTANCE = côté ligne)'],
+              ['$produit->delete()', 'DELETE la ligne — softDeletes possible plus tard pour une corbeille']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// Créer (mass assignment sécurisé) / mettre à jour / supprimer :\n$produit = Produit::create($request->validated());     // fiche Validation\n$produit->update([\'stock\' => $produit->stock - $quantite]);\n$produit->delete();' },
+            { t: 'h3', h: 'Notion 5 · Les raccourcis du quotidien : firstOrCreate, pluck, count' },
+            { t: 'syntax', title: 'Quatre outils à connaître', code: 'Categorie::firstOrCreate([\'nom\' => \'Céréales\']);\nCategorie::orderBy(\'nom\')->pluck(\'nom\', \'id\');\nProduit::where(\'promo\', true)->count();\nProduit::sum(\'prix\');', legend: [
+              ['firstOrCreate([…])', 'donne-moi la ligne qui matche — et crée-la si elle n\'existe pas'],
+              ['pluck(\'nom\', \'id\')', 'un tableau simple clé → valeur (parfait pour remplir une liste déroulante `<select>` en HTML)'],
+              ['count() / sum(…)', 'compte / additionne EN BASE : SQL travaille, PHP ne charge rien'],
+              ['exists(…)', 'variante : vrai/faux sur l\'existence d\'une ligne, sans la charger']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// Le premier qui matche (ou la création si absent) :\n$categorie = Categorie::firstOrCreate([\'nom\' => \'Céréales\']);\n\n// Le contenu brut pour un select HTML :\n$categories = Categorie::orderBy(\'nom\')->pluck(\'nom\', \'id\');\n// → collection [1 => \'Céréales\', 2 => \'Huiles\', …]\n\n// Compter, sommer — la base travaille, pas PHP :\nProduit::where(\'promo\', true)->count();\nProduit::sum(\'prix\');' },
+            { t: 'h3', h: 'Notion 6 · Mass assignment : la frontière à bien garder' },
             { t: 'p', h: '`create($tableau)` remplit le modèle d\'un coup — pratique et dangereux si le tableau vient de la requête sans filtrage (la fiche Validation insiste déjà). `$fillable` déclare la LISTE BLANCHE des attributs remplissables en masse : tout autre champ passé est silencieusement ignoré. La meilleure architecture combine les DEUX garde-fous : `validated()` à l\'entrée (la requête ne contient que ce que tu as déclaré — fiche Validation) ET `$fillable` dans le modèle (paranoïa structurelle si un jour `validated()` est contourné).' },
-            { t: 'h3', h: 'Scopes : donner un nom à tes filtres' },
+            { t: 'h3', h: 'Notion 7 · Scopes : donner un nom à tes filtres' },
+            { t: 'syntax', title: 'Du where au vocabulaire métier', file: 'app/Models/Produit.php', code: 'public function scopeEnStock($query)\n{\n    return $query->where(\'stock\', \'>\', 0);\n}\n\n// à l\'usage, dans n\'importe quel fichier :\nProduit::enStock()->paginate(20);', legend: [
+              ['scopeEnStock($query)', 'dans le modèle : le préfixe scope + le NomChameau du filtre'],
+              ['$query', 'la requête en cours de construction — tu lui ajoutes tes where et tu la retournes'],
+              ['Produit::enStock()', 'à l\'usage : scopeEnStock devient enStock(), comme un mot du vocabulaire'],
+              ['scopeRecherche($query, $terme)', 'avec paramètre : ->recherche($q) à l\'arrivée']
+            ] },
             { t: 'code', lang: 'php', code:
 '// Dans app/Models/Produit.php — le filtre devient du vocabulaire :\npublic function scopeEnStock($query)\n{\n    return $query->where(\'stock\', \'>\', 0);\n}\n\npublic function scopeRecherche($query, string $terme)\n{\n    return $query->where(\'nom\', \'like\', "%{$terme}%");\n}\n\n// À l\'usage, la requête LIT comme la phrase qu\'elle exécute :\nProduit::enStock()->recherche($q)->paginate(20);\n// au lieu de (re)écrire les where dans chaque contrôleur —\n// et un jour la règle « en stock » change de formule : UN endroit.' },
-            { t: 'h3', h: 'Accessors & mutators : la valeur qui s\'adapte à la frontière' },
+            { t: 'h3', h: 'Notion 8 · Accessors, mutators & casts : la valeur qui s\'adapte à la frontière' },
+            { t: 'syntax', title: 'Transformer à la lecture / à l\'écriture', file: 'app/Models/Produit.php', code: 'use Illuminate\\Database\\Eloquent\\Casts\\Attribute;\n\nprotected function prixFormate(): Attribute\n{\n    return Attribute::get(fn () => number_format($this->prix, 0, \',\', \' \') . \' F\');\n}\n// → $produit->prix_formate vaut « 21 000 F » (la colonne reste 21000)', legend: [
+              ['prixFormate(): Attribute', 'méthode Chameau → propriété snake_case : prix_formate à la lecture'],
+              ['Attribute::get(fn () => …)', 'ACCESSOR : recalcule la valeur CHAQUE lecture, rien n\'est stocké'],
+              ['Attribute::set(fn ($v) => …)', 'MUTATOR : transforme la valeur AVANT stockage (ex. slug auto)'],
+              ['protected $casts = [\'promo\' => \'boolean\']', 'le passage natif : JSON→tableau, 0/1→vrai/faux, date→Carbon']
+            ] },
             { t: 'code', lang: 'php', code:
 '// Dans app/Models/Produit.php — syntaxe Laravel 9+ :\nuse Illuminate\\Database\\Eloquent\\Casts\\Attribute;\n\n// ACCESSOR : la base stocke, PHP compose —\nprotected function prixFormate(): Attribute\n{\n    return Attribute::get(fn () =>\n        number_format($this->prix, 0, \',\', \' \') . \' F\'\n    );\n}\n//   $produit->prix_formate  →  « 21 000 F »   (la colonne reste 21000)\n\n// MUTATOR : PHP compose, la base stocke —\nprotected function slug(): Attribute\n{\n    return Attribute::set(fn ($value) => str()->slug($value ?: $this->nom));\n}\n\n// Casts (rappel du modèle) : le passage natif <-> stockage —\n//   \'options\' => \'array\'      json dans la base, tableau en PHP\n//   \'publie_le\' => \'date\'     string SQL → objet Carbon\n//   \'promo\' => \'boolean\'      0/1 → vrai booléen' },
             { t: 'p', h: 'Sous le capot : le modèle fait référence à la fois à l\'objet (ton produit) et au lanceur de requêtes (`Produit::where(…)` démarre un query builder Eloquent). Cette dualité est le prix d\'entrée mental : les méthodes STATIQUES parlent à la table, les méthodes d\'INSTANCE à la ligne. Eloquent gère le passage entre les deux avec élégance, mais quand tu écris tes propres méthodes sur le modèle, choisis consciemment ton camp : scope (requête, statique-de-fait) ou accessor/mutator (instance).' },
@@ -1070,12 +1419,41 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'One-to-many : le couple hasMany / belongsTo' },
             { t: 'p', h: 'La relation la plus fréquente : UNE catégorie a PLUSIEURS produits, et chaque produit APPARTIENT à une catégorie. La clé de lecture à graver : **la clé étrangère vit chez l\'enfant** (le produit porte `categorie_id` — la fiche Migrations l\'a créée). Du côté Eloquent, chacun des deux modèles DÉCLARE son versant : le parent dit `hasMany`, l\'enfant répond `belongsTo`. Ce couple n\'est pas de la redondance : il donne LES DEUX sens de lecture — `$categorie->produits` ET `$produit->categorie` — en deux lignes chacune.' },
+            { t: 'h3', h: 'Notion 1 · belongsTo : « j\'appartiens à » — l\'enfant parle' },
+            { t: 'syntax', title: 'Celui qui PORTE la clé étrangère', file: 'app/Models/Produit.php', code: 'class Produit extends Model\n{\n    public function categorie()\n    {\n        return $this->belongsTo(Categorie::class);\n    }\n}', legend: [
+              ['public function categorie()', 'la relation est une MÉTHODE, au singulier (UNE catégorie)'],
+              ['belongsTo(Categorie::class)', '« j\'appartiens à » — Eloquent cherche la colonne categorie_id ICI (fiche Migrations)'],
+              ['$produit->categorie', 'à l\'usage : la catégorie du produit, objet complet, en une propriété']
+            ] },
             { t: 'code', lang: 'php', code:
-'// app/Models/Categorie.php — le PARENT\nclass Categorie extends Model\n{\n    public function produits()\n    {\n        return $this->hasMany(Produit::class);   // « j\'ai PLUSIEURS »\n    }\n}\n\n// app/Models/Produit.php — l\'ENFANT (il porte la clé categorie_id)\nclass Produit extends Model\n{\n    public function categorie()\n    {\n        return $this->belongsTo(Categorie::class);   // « j\'appartiens À »\n    }\n}\n\n// À l\'usage — les deux sens, tout aussi naturels :\n$categorie->produits()->where(\'stock\', \'>\', 0)->get();\n$produit->categorie->nom;                      // « Céréales »\n\n// ATTENTION à la nuance PROPERTY vs MÉTHODE :\n//   $categorie->produits      → COLLECTION déjà chargée (lazy)\n//   $categorie->produits()    → QUERY BUILDER (tu continues à filtrer)' },
-            { t: 'h3', h: 'Many-to-many : la table pivot avec ses données' },
+'// app/Models/Produit.php — l\'ENFANT (il porte la clé categorie_id)\nclass Produit extends Model\n{\n    public function categorie()\n    {\n        return $this->belongsTo(Categorie::class);   // « j\'appartiens À »\n    }\n}' },
+            { t: 'h3', h: 'Notion 2 · hasMany : « j\'en ai plusieurs » — le parent répond' },
+            { t: 'syntax', title: 'Le sens inverse, deux lignes', file: 'app/Models/Categorie.php', code: 'class Categorie extends Model\n{\n    public function produits()\n    {\n        return $this->hasMany(Produit::class);\n    }\n}', legend: [
+              ['public function produits()', 'la méthode au PLURIEL (PLUSIEURS produits)'],
+              ['hasMany(Produit::class)', '« j\'en ai plusieurs » — Eloquent cherche categorie_id chez LES PRODUITS'],
+              ['$categorie->produits', 'à l\'usage : la COLLECTION des produits de la catégorie']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// app/Models/Categorie.php — le PARENT\nclass Categorie extends Model\n{\n    public function produits()\n    {\n        return $this->hasMany(Produit::class);   // « j\'ai PLUSIEURS »\n    }\n}' },
+            { t: 'h3', h: 'Lire dans les deux sens — et le piège propriété vs méthode' },
+            { t: 'code', lang: 'php', code:
+'// À l\'usage — les deux sens, tout aussi naturels :\n$categorie->produits()->where(\'stock\', \'>\', 0)->get();\n$produit->categorie->nom;                      // « Céréales »\n\n// ATTENTION à la nuance PROPERTY vs MÉTHODE :\n//   $categorie->produits      → COLLECTION déjà chargée (lazy)\n//   $categorie->produits()    → QUERY BUILDER (tu continues à filtrer)' },
+            { t: 'h3', h: 'Notion 3 · belongsToMany : plusieurs des deux côtés, la table pivot au milieu' },
+            { t: 'syntax', title: 'La relation plusieurs-à-plusieurs', file: 'app/Models/Commande.php', code: 'public function produits()\n{\n    return $this->belongsToMany(Produit::class)\n        ->withPivot(\'quantite\', \'prix_unitaire\');\n}', legend: [
+              ['belongsToMany(Produit::class)', '« plusieurs des DEUX côtés » — Eloquent devine la table pivot : commande_produit'],
+              ['commande_produit', 'la table pivot (fiche Migrations) : commande_id + produit_id, par convention noms singuliers alphabétiques'],
+              ['withPivot(…)', 'rend lisibles les DONNÉES DU LIEN (quantité, prix figé) via $ligne->pivot'],
+              ['->withTimestamps()', 'si la pivot a created_at/updated_at : les remplir à chaque attach']
+            ] },
             { t: 'p', h: 'Une commande a PLUSIEURS produits, un produit apparaît dans PLUSIEURS commandes — la relation many-to-many exige une TABLE PIVOT entre les deux (créée en migration : `commande_produit` avec ses deux clés + des COLONNES MÉTIER : la quantité commandée, le prix AU MOMENT de l\'achat). Eloquent la rend invisible quand tu n\'en as pas besoin, accessible quand tu en as : `belongsToMany` des deux côtés, `->withPivot()` pour lire, `attach`/`sync` pour écrire.' },
             { t: 'code', lang: 'php', code:
 '// app/Models/Commande.php\npublic function produits()\n{\n    return $this->belongsToMany(Produit::class)\n        ->withPivot(\'quantite\', \'prix_unitaire\')   // les données DU LIEN\n        ->withTimestamps();\n}\n\n// Attacher un produit AU PANIER avec ses données de lien :\n$commande->produits()->attach($produit->id, [\n    \'quantite\' => 3,\n    \'prix_unitaire\' => $produit->prix,   // figé à l\'instant de l\'achat !\n]);\n\n// Synchroniser (remplacer TOUT le contenu — le fidèle du panier) :\n$commande->produits()->sync([\n    $idGari  => [\'quantite\' => 2, \'prix_unitaire\' => 21000],\n    $idHuile => [\'quantite\' => 1, \'prix_unitaire\' => 6500],\n]);\n\n// Lire : la ligne de commande est un produit + ses données pivot\nforeach ($commande->produits as $ligne) {\n    echo $ligne->nom, \' × \', $ligne->pivot->quantite,\n         \' = \', $ligne->pivot->prix_unitaire * $ligne->pivot->quantite;\n}' },
+            { t: 'syntax', title: 'Écrire dans la pivot : attach, sync, detach', code: '$commande->produits()->attach($produit->id, [\'quantite\' => 3]);\n$commande->produits()->sync([$id => [\'quantite\' => 2]]);\n$commande->produits()->detach($produit->id);', legend: [
+              ['attach($id, […])', 'AJOUTE une ligne au lien, avec ses données pivot'],
+              ['sync([…])', 'REMPLACE tout le contenu du lien par la liste donnée (parfait pour un panier)'],
+              ['detach($id)', 'retire UNE ligne du lien — sans argument : tout vider'],
+              ['$ligne->pivot->quantite', 'à la lecture : les données DU LIEN vivent sur ->pivot']
+            ] },
             { t: 'callout', kind: 'tip', h: 'La colonne `prix_unitaire` au pivot n\'est PAS de la duplication bête : c\'est de l\'HISTORIQUE. Le prix du catalogue changera la semaine prochaine ; ta commande livrée doit se souvenir du prix du jour de l\'achat. La règle : copie les valeurs d\'instantané (montants, taux, adresses) dans le pivot — et référence, ne copie pas, ce qui doit rester vivant.' },
             { t: 'diagram', title: 'Les trois relations du quotidien, posées sur le schéma', svg: `<svg viewBox="0 0 680 250">
   <defs><marker id="lv-rel1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
@@ -1103,8 +1481,14 @@ DEVDOCS.laravel = {
   <text x="476" y="182" class="dg-ms">au moment de l'achat</text>
   <text x="340" y="234" class="dg-m" text-anchor="middle">le pivot rend possible la relation plusieurs-à-plusieurs commandes ⇔ produits</text>
 </svg>`, caption: 'La règle d\'or de lecture : **la clé étrangère vit chez l\'enfant** — produits porte categorie_id, le pivot porte les deux clés. Et la table pivot n\'est pas qu\'un « tuyau » : elle stocke les données DU LIEN (la quantité, le prix figé à l\'achat). Voilà pourquoi belongsToMany existe : cette table est obligatoire physiquement, Eloquent la rend simplement invisible quand tu n\'as pas besoin de ses données.' },
-            { t: 'h3', h: 'LE piège : le N+1, et l\'eager loading qui le tue' },
+            { t: 'h3', h: 'Notion 4 · LE piège : le N+1, et with() qui le tue (eager loading)' },
             { t: 'p', h: 'Scène de crime connue d\'avance : ta vue liste 20 commandes et affiche le client de chacune (`$commande->user->name` dans la boucle Blade). Eloquent exécute 1 requête pour les commandes… puis **une requête PAR LIGNE** pour aller chercher chaque client : 21 requêtes pour une page, chaque requête ajoutant sa latence. Avec 100 lignes, 101 requêtes — et ton hébergeur partagé de Cotonou toussote. C\'est le problème N+1 : le coût caché du chargement PARESSEUX (lazy loading), invisible tant qu\'on ne compte pas les requêtes.' },
+            { t: 'syntax', title: 'Charger les relations par lots', code: '$commandes = Commande::with(\'user\')->paginate(20);\n$categorie = Categorie::withCount(\'produits\')->get();', legend: [
+              ['with(\'user\')', 'pré-charge la relation en 1 requête par lot : 2 requêtes au lieu de 21'],
+              ['with(\'user:id,name\')', 'ne charger que certaines colonnes — l\'id est OBLIGATOIRE pour la couture'],
+              ['with(\'produits.categorie\')', 'relation IMBRIQUÉE : les produits, ET leur catégorie'],
+              ['withCount(\'produits\')', 'un compteur sans charger les lignes : $categorie->produits_count']
+            ] },
             { t: 'code', lang: 'php', code:
 '// AVANT (N+1) : la relation est chargée À CHAQUE TOUR dans la vue\n$commandes = Commande::paginate(20);\n// la vue fera 20 requêtes supplémentaires, une par $commande->user\n\n// APRÈS : with() charge TOUT en 2 requêtes — la relation PRÉ-CHARGÉE :\n$commandes = Commande::with(\'user\')->paginate(20);\n//   requête 1 : SELECT * FROM commandes LIMIT 20\n//   requête 2 : SELECT * FROM users WHERE id IN (1, 7, 9, …)\n//   puis Eloquent COUSIT : chaque commande reçoit son user. Fini.\n\n// plusieurs relations : ->with(\'user\', \'produits\')\n// relation imbriquée : ->with(\'produits.categorie\')\n// colonnes limitées : ->with(\'user:id,name\')   (précise toujours l\'id !)\n// compter SANS charger : ->withCount(\'produits\')   $categorie->produits_count' },
             { t: 'diagram', title: 'Le N+1 en chiffres : 21 requêtes contre 2, pour la MÊME page', svg: `<svg viewBox="0 0 680 214">
@@ -1174,14 +1558,20 @@ DEVDOCS.laravel = {
             { t: 'h3', h: 'Le problème : « j\'écris mon login moi-même »' },
             { t: 'p', h: 'Le login semble trivial (un formulaire, une comparaison) — jusqu\'à ce que tu listes ce qui l\'entoure vraiment : hachage SÛR des mots de passe (bcrypt/argon, salage) ; protection contre le brute force (throttle) ; « se souvenir de moi » (cookies persistants) ; réinitialisation par e-mail avec jeton expirant ; vérification d\'adresse ; gestion des sessions multi-appareils. Chacune de ces briques est un champ de mines documenté — et le moindre écart est une faille de sécurité publiée. Breeze fournit tout cela, AUDITÉ, prêt, avec des vues sobres que tu personnalises : ton énergie va sur TON métier, pas sur la réécriture pour la millième fois du wheel de l\'authentification.' },
             { t: 'p', h: 'Ancrage dans tes acquis : l\'authentification répond « QUI es-tu ? » (identité). L\'AUTORISATION — la fiche suivante — répond « as-tu le DROIT de faire ça, sur cet objet précis ? ». Connecté ≠ autorisé : Awa est bien connectée à la boutique, elle n\'a pas pour autant le droit de supprimer la catégorie de sa sœur. Retiens dès maintenant les deux questions séparées, elles ont deux outils séparés.' },
-            { t: 'h3', h: 'Breeze : l\'auth web complète, prête à l\'emploi' },
+            { t: 'h3', h: 'Notion 1 · Installer Breeze : l\'auth web complète, en quatre commandes' },
             { t: 'code', lang: 'php', code:
 'composer require laravel/breeze --dev\nphp artisan breeze:install blade     # stack : Blade (ou vue / react / api)\nphp artisan migrate                  # users, password_reset_tokens, sessions…\nnpm install && npm run dev           # compiler les vues d\'auth (sobres, modifiables)\n\n# Il apparaît alors, déjà câblé :\n#   /register  /login  /forgot-password  /reset-password  /verify-email\n#   routes/auth.php (lisible — chaque route est explicite)\n#   app/Http/Controllers/Auth/* (les contrôleurs, TON code désormais)\n#   resources/views/auth/* (Blade Tailwind, à ta charte)\n\n# Protéger une zone ? Ton acquis de la fiche Middleware :\nRoute::middleware(\'auth\')->group(function () {\n    Route::get(\'/commandes\', [CommandeController::class, \'index\']);\n    Route::resource(\'produits\', ProduitController::class)->only([\'create\', \'store\']);\n});' },
             { t: 'p', h: 'Le détail qui change tout par rapport aux anciens kits : **Breeze n\'installe pas de « boîte noire » — il génère du code DANS TON PROJET** (contrôleurs `Auth/`, requêtes `Auth/`, vues). Tu lis chaque ligne, tu modifies chaque ligne : c\'est TA base d\'auth, simplement écrite par des experts et auditée. Les variantes : `breeze:install vue`/`react` pour SPA du même webpack, ou `breeze:install api` qui laisse place à Sanctum seul pour un front externe.' },
-            { t: 'h3', h: 'Utiliser l\'utilisateur connecté, partout' },
+            { t: 'h3', h: 'Notion 2 · Savoir qui est connecté : auth()->user() et sa famille' },
+            { t: 'syntax', title: 'L\'identité, en trois questions', code: '$user = $request->user();      // QUI est connecté ? (null si invité)\n$ok   = auth()->check();        // est-il connecté ? (vrai / faux)\n$id   = auth()->id();           // son id, ou null', legend: [
+              ['$request->user()', 'l\'objet User connecté — la forme préférée dans un contrôleur'],
+              ['auth()->user()', 'la même chose, disponible PARTOUT (helper global) — aussi Auth::user()'],
+              ['auth()->check() / ->guest()', 'les deux tests : connecté ? visiteur ?'],
+              ['auth()->id()', 'juste son id — sans charger toute la ligne users']
+            ] },
             { t: 'code', lang: 'php', code:
 '// L\'access global, trois formes équivalentes :\n$request->user();                       // dans une méthode (la préférée)\nauth()->user();                         // via le helper\nAuth::user();                           // via la facade (use Illuminate\\Support\\Facades\\Auth)\n\n// → l\'instance du modèle User connecté, ou null si invité.\n//   Le TEST honnête : auth()->check()  /  auth()->guest()\n\n// Dans Blade (fiche Blade) — sans un if PHP :\n@auth\n    <p>Bonjour {{ auth()->user()->name }} — {{ auth()->user()->boutique->nom }}</p>\n@endauth\n@guest\n    <a href="{{ route(\'login\') }}">Se connecter pour commander</a>\n@endguest\n\n// Lier la donnée à la personne, au moment de la création :\n$commande = $request->user()->commandes()->create([\n    ...$request->validated(),\n    \'reference\' => str()->upper(str()->random(8)),\n]);   // user_id rempli via la relation (fiche Relations) — jamais via le form' },
-            { t: 'h3', h: 'Sanctum : les tokens pour API, SPA, mobile' },
+            { t: 'h3', h: 'Notion 3 · Sanctum : les tokens pour API, SPA et mobile' },
             { t: 'p', h: 'La session-cookie (Breeze) est parfaite pour LE navigateur de TON site — elle ne marche plus pour l\'application mobile, le SPA déployée ailleurs, ou l\'intégration d\'un partenaire (un agrégateur de livraison zémidjan qui consulte tes commandes). Sanctum résout avec des **tokens** : une longue chaîne générée PAR utilisateur, stockée HASHÉE en base, présentée à chaque requête dans l\'en-tête `Authorization: Bearer …`. Chaque token porte des **abilities** (permissions : `commandes:lire`, `commandes:ecrire`) — le partenaire peut lire sans jamais écrire.' },
             { t: 'code', lang: 'php', code:
 '// Générer un token (une seule fois côté serveur) :\n$user = User::find(3);\n$token = $user->createToken(\'zemidjan-app\', [\'commandes:lire\']);\n$token->plainTextToken;   // « 4|sU… » — MONTRÉ UNE SEULE FOIS, à copier\n//                          // (en base : le HASH — la fuite du fichier ne vole rien)\n\n// routes/api.php — protéger par token ET par ability :\nRoute::middleware(\'auth:sanctum\')->group(function () {\n    Route::get(\'/commandes\', [ApiCommandeController::class, \'index\'])\n        ->middleware(\'abilities:commandes:lire\');\n    Route::post(\'/commandes\', [ApiCommandeController::class, \'store\'])\n        ->middleware(\'abilities:commandes:ecrire\');\n});\n\n// Le client (module JavaScript — fiche fetch de data-js) :\n//   fetch(\'/api/commandes\', {\n//       headers: { Authorization: \'Bearer \' + token, Accept: \'application/json\' }\n//   })' },
@@ -1225,8 +1615,20 @@ DEVDOCS.laravel = {
   <text x="20" y="222" class="dg-ko">✗</text>
   <text x="34" y="222" class="dg-ms">token absent ou faux → 401 Unauthorized</text>
 </svg>`, caption: 'Session = le serveur garde un registre et ton NAVIGATEUR présente un cookie à chaque visite (parfait pour ton site). Token = une longue chaîne-secrète présentée dans l\'en-tête de CHAQUE requête (parfait pour mobile et partenaires — pas besoin de cookies). Dans les deux cas, le mot de passe servi de clé une fois : ensuite c\'est la session ou le token qui parle.' },
-            { t: 'h3', h: 'Les mots de passe : le réflexe unique, gratuit' },
+            { t: 'syntax', title: 'Émettre un token, protéger une route', code: '// côté serveur, une fois — le client copie la valeur MONTRÉE UNE FOIS :\n$token = $user->createToken(\'zemidjan-app\', [\'commandes:lire\']);\n\necho $token->plainTextToken;      // « 4|sU… »\n\n// routes/api.php — protéger par token :\nRoute::middleware(\'auth:sanctum\')->group(function () {\n    Route::get(\'/commandes\', [ApiCommandeController::class, \'index\']);\n});', legend: [
+              ['createToken(\'nom\', [abilities])', 'fabrique un jeton d\'accès nommé, avec ses permissions (abilities)'],
+              ['plainTextToken', 'la valeur en clair, montrée UNE SEULE FOIS — en base, seul son hash est gardé'],
+              ['auth:sanctum', 'le middleware qui vérifie l\'en-tête Authorization: Bearer … de chaque requête'],
+              ['abilities:commandes:lire', 'restreindre encore : ce token peut LIRE, pas écrire']
+            ] },
+            { t: 'h3', h: 'Notion 4 · Les mots de passe : le réflexe unique, gratuit' },
             { t: 'p', h: 'Un mot de passe ne se STOCKE jamais : on stocke son HASH (bcrypt — lent, salé, spécifiquement conçu pour résister au brute-force). Laravel a intégré la règle dans le modèle User moderne : le cast `\'password\' => \'hashed\'` hâche AUTOMATIQUEMENT à chaque écriture de l\'attribut, et la vérification `password_verify` est faite par le système d\'auth. Tu n\'as RIEN à écrire — et surtout rien à hacher toi-même : c\'est le péché de la carte d\'erreur en bas (le double hash qui casse le login sans bruit).' },
+            { t: 'syntax', title: 'La ligne qui protège tout', file: 'app/Models/User.php', code: 'protected function casts(): array\n{\n    return [\n        \'password\' => \'hashed\',\n    ];\n}', legend: [
+              ['casts()', 'les conversions automatiques des attributs (fiche Eloquent, notion 8)'],
+              ['\'password\' => \'hashed\'', 'toute ÉCRITURE sur password est hachée (bcrypt) avant stockage — toi, tu n\'haches RIEN'],
+              ['bcrypt', 'l\'algorithme LENT exprès : des années de calcul au brute-force, là où md5 tient des minutes'],
+              ['vérification', 'en tinker : User::first()->password commence par « $2y$ » = ça marche']
+            ] },
             { t: 'code', lang: 'php', label: 'app/Models/User.php — le cast qui fait le travail', code:
 'protected function casts(): array\n{\n    return [\n        \'email_verified_at\' => \'datetime\',\n        \'password\' => \'hashed\',        // → hachage automatique :\n        // User::create([\'password\' => \'mot2passe\']) stocke le HASH.\n    ];\n}\n\n// Le login, par le système (Breeze) — jamais de comparaison soi-même :\n//   Auth::attempt([\'email\' => $e, \'password\' => $motEnClair])\n// → recalcule le hash du candidat avec le SEL stocké, compare,\n//   ouvre la session si égalité. Le mot de passe en clair n\'est\n//   JAMAIS stocké, JAMAIS logué, vu une seule fois : à la réception.' },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
@@ -1287,14 +1689,37 @@ DEVDOCS.laravel = {
   <path d="M 471,160 L 471,196" class="dg-e" marker-end="url(#lv-g1)"/>
   <text x="471" y="214" class="dg-ko" text-anchor="middle" font-size="12">✗ 403 : pas SA commande</text>
 </svg>`, caption: 'L\'authentification (portière ①) répond « QUI es-tu ? » ; l\'autorisation (portière ②) répond « as-tu le droit de faire ÇA, sur CET objet précis ? ». Un utilisateur connecté qui tape l\'URL d\'une commande d\'un autre passe la première porte… et se fait arrêter net à la seconde. Voilà pourquoi cacher le bouton ne suffit JAMAIS : la vraie frontière est serveur, pas visuelle.' },
-            { t: 'h3', h: 'Gate : la règle simple et rapide' },
+            { t: 'h3', h: 'Notion 1 · Gate::define : la règle nommée, testée partout' },
+            { t: 'syntax', title: 'Définir une règle générale', file: 'app/Providers/AppServiceProvider.php', code: 'Gate::define(\'gerer-boutique\', function ($user) {\n    return $user->estAdmin() || $user->boutique?->estActive();\n});', legend: [
+              ['Gate::define(', 'enregistre une règle d\'accès sous un NOM, au démarrage (méthode boot)'],
+              ['\'gerer-boutique\'', 'le nom de la règle — appelé depuis contrôleurs, Blade, jobs…'],
+              ['function ($user)', 'reçoit TOUJOURS l\'utilisateur connecté en premier argument'],
+              ['return …', 'true = autorisé, false = refusé — la logique est du PHP ordinaire']
+            ] },
+            { t: 'syntax', title: 'Utiliser la règle : trois formes, un verdict', code: 'Gate::authorize(\'gerer-boutique\');        // contrôleur : 403 si refus, sinon continue\nGate::allows(\'gerer-boutique\');           // code : true / false, à toi de composer\n\n@can(\'gerer-boutique\') … @endcan         // Blade : afficher seulement si autorisé', legend: [
+              ['Gate::authorize(…)', 'la forme « garde du corps » : arrête tout avec une 403'],
+              ['Gate::allows(…)', 'la forme « question » : retourne vrai/faux (aussi Gate::denies())'],
+              ['@can(…) / @else / @endcan', 'la forme affichage : le bouton REFLÈTE la règle serveur — il ne la remplace pas']
+            ] },
             { t: 'code', lang: 'php', label: 'app/Providers/AppServiceProvider.php', code:
 'use Illuminate\\Support\\Facades\\Gate;\n\npublic function boot(): void\n{\n    // La règle PONCTUELLE, hors modèle précis — parfaite en Gate :\n    Gate::define(\'gerer-boutique\', function ($user) {\n        return $user->estAdmin() || $user->boutique?->estActive();\n    });\n}\n\n// À l\'usage, trois formes — même règle :\n// 1) dans un contrôleur :\nGate::authorize(\'gerer-boutique\');            // 403 si refus, sinon continue\n\n// 2) dans Blade :\n@can(\'gerer-boutique\')\n    <a href="{{ route(\'admin.produits.index\') }}">Administration</a>\n@endcan\n\n// 3) dans du code (valeur booléenne, pour composer) :\nif (Gate::allows(\'gerer-boutique\')) { /* … */ }' },
-            { t: 'h3', h: 'Policy : les droits d\'un modèle, réunis en une classe' },
+            { t: 'h3', h: 'Notion 2 · Policy : les droits d\'un modèle, réunis en une classe' },
+            { t: 'syntax', title: 'La forme d\'une méthode de policy', file: 'app/Policies/ProduitPolicy.php', code: 'php artisan make:policy ProduitPolicy --model=Produit\n\npublic function update($user, Produit $produit): bool\n{\n    return $user->boutique_id === $produit->boutique_id;\n}', legend: [
+              ['make:policy … --model=', 'artisan génère la classe AVEC les méthodes CRUD prêtes à remplir'],
+              ['update($user, Produit $produit)', 'chaque ACTION est une méthode : l\'utilisateur, puis l\'objet précis'],
+              [': bool', 'true = autorisé — le verdict est toujours un booléen'],
+              ['viewAny / view / create / update / delete', 'les actions conventionnelles, reliées aux méthodes du contrôleur resource']
+            ] },
             { t: 'code', lang: 'php', code:
 'php artisan make:policy ProduitPolicy --model=Produit\n→ app/Policies/ProduitPolicy.php avec les squelettes CRUD.\n\nclass ProduitPolicy\n{\n    // Voir LA fiche d\'un produit : tout le monde ? ou boutique→membres ?\n    public function view($user, Produit $produit): bool\n    {\n        return true;   // catalogue public\n    }\n\n    // Modifier CE produit : son propriétaire seulement\n    public function update($user, Produit $produit): bool\n    {\n        return $user->boutique_id === $produit->boutique_id;\n    }\n\n    // Supprimer : propriétaire, et pas s\'il a des commandes en cours\n    public function delete($user, Produit $produit): bool\n    {\n        return $user->boutique_id === $produit->boutique_id\n            && !$produit->commandes()->exists();\n    }\n}\n\n// Laravel devine le lien Produit <-> ProduitPolicy par convention\n// (même nom + « Policy »). Sinon :\n// Gate::policy(Produit::class, ProduitPolicy::class);   dans boot()' },
             { t: 'p', h: 'La policy est le rangement qui change tout : chaque modèle « sensible » a sa classe de droits, chaque action une méthode, chaque règle DEUX MINUTES à relire. Quand le client demande « et aussi, les gestionnaires peuvent modifier les produits des autres », tu touches UNE méthode (`update`), pas quinze contrôleurs.' },
-            { t: 'h3', h: 'Appliquer la policy : les quatre endroits' },
+            { t: 'h3', h: 'Notion 3 · Appliquer la policy : les quatre endroits' },
+            { t: 'syntax', title: 'La ligne qui garde chaque méthode', code: '$this->authorize(\'update\', $produit);', legend: [
+              ['$this->authorize(', 'dans un contrôleur : appelle la méthode update() de la policy correspondante'],
+              ['\'update\'', 'le nom de l\'action = le nom de la méthode dans ProduitPolicy'],
+              ['$produit', 'l\'objet précis — sa classe indique QUELLE policy interroger (Produit → ProduitPolicy)'],
+              ['403 automatique', 'si la policy répond faux, la requête s\'arrête là — propre et testée']
+            ] },
             { t: 'code', lang: 'php', code:
 '// 1) Contrôleur, à la main (le plus explicite) :\npublic function update(UpdateProduitRequest $request, Produit $produit)\n{\n    $this->authorize(\'update\', $produit);        // 403 si refusé\n    $produit->update($request->validated());\n    return redirect()->route(\'produits.show\', $produit);\n}\n\n// 2) Contrôleur Resource, d\'un coup (méthode policy vs action CRUD) :\npublic function __construct()\n{\n    $this->authorizeResource(Produit::class, \'produit\');\n}   // index→viewAny, show→view, store→create, update→update, destroy→delete…\n\n// 3) Dans la ROUTE (middleware can) :\nRoute::delete(\'/produits/{produit}\', …)->middleware(\'can:delete,produit\');\n\n// 4) Dans BLADE (l\'affichage suit les droits — la cerise cosmétique) :\n@can(\'update\', $produit)\n    <a href="{{ route(\'produits.edit\', $produit) }}">Modifier</a>\n@endcan' },
             { t: 'callout', kind: 'info', h: 'Sous le capot : les méthodes de policy reçoivent TOUJOURS l\'utilisateur connecté en premier argument — un INVITÉ ne les atteint pas par défaut (refus immédiat, 403), sauf si tu marques la méthode avec `?User $user` (nullable) pour autoriser explicitement des invités. Et la porte de service : `Gate::before(fn ($user) => $user->estAdmin() ? true : null)` laisse les admins passer PARTOUT (`true` accorde, `null` continue vers la règle normale).' },
@@ -1367,14 +1792,44 @@ DEVDOCS.laravel = {
   <rect x="236" y="212" width="430" height="30" rx="10" class="dg-zone"/>
   <text x="451" y="231" class="dg-ms" text-anchor="middle">+ future réaction : un NOUVEAU fichier, jamais une modif du contrôleur</text>
 </svg>`, caption: 'Le contrôleur crie « une commande est payée » et n\'en sait pas plus — il ne connaît ni mail, ni SMS, ni stats. Chaque réaction est une classe à part, branchée ailleurs. Ajouter « notifier par WhatsApp » demain = UN nouveau listener, zéro modification de store() : le code qui marche n\'est plus jamais réouvert.' },
+            { t: 'h3', h: 'Notion 1 · L\'événement : la classe-fait (les données, rien d\'autre)' },
+            { t: 'syntax', title: 'Déclarer le fait', file: 'app/Events/CommandePayee.php', code: 'php artisan make:event CommandePayee\n\nclass CommandePayee\n{\n    public function __construct(\n        public readonly Commande $commande,\n        public readonly int $montant,\n    ) {}\n}', legend: [
+              ['CommandePayee', 'le nom au PASSÉ : un fait, pas une action (« payée », pas « payer »)'],
+              ['__construct(public …)', 'les données du fait, stockées en propriétés publiques — lisibles par les listeners'],
+              ['readonly', 'le fait ne change plus une fois crié : sécurité de conception'],
+              ['aucune logique', 'l\'événement ne FAIT rien — il raconte. Les réactions vivent ailleurs']
+            ] },
             { t: 'code', lang: 'php', code:
-'// 1) L\'ÉVÉNEMENT — le fait, avec ses données, rien d\'autre\n//    php artisan make:event CommandePayee\nnamespace App\\Events;\n\nclass CommandePayee\n{\n    public function __construct(\n        public readonly \\App\\Models\\Commande $commande,\n        public readonly int $montant,\n    ) {}\n}\n\n// 2) LE LISTENER — UNE réaction, une classe\n//    php artisan make:listener EnvoyerConfirmationMail --event=CommandePayee\nnamespace App\\Listeners;\n\nclass EnvoyerConfirmationMail\n{\n    public function handle(\\App\\Events\\CommandePayee $evenement): void\n    {\n        \\Illuminate\\Support\\Facades\\Mail::to($evenement->commande->user)\n            ->queue(new \\App\\Mail\\ConfirmationCommande($evenement->commande));\n    }\n}\n\n// 3) LA PUBLICATION — le contrôleur crie le fait, sans savoir qui écoute\npublic function store(StoreCommandeRequest $request)\n{\n    $commande = Commande::create([...]);\n    event(new \\App\\Events\\CommandePayee($commande, $total));\n    // ou : CommandePayee::dispatch($commande, $total);\n    return redirect()->route(\'commandes.confirmation\', $commande);\n}' },
-            { t: 'h3', h: 'Enregistrement : découverte automatique vs explicite' },
+'// 1) L\'ÉVÉNEMENT — le fait, avec ses données, rien d\'autre\n//    php artisan make:event CommandePayee\nnamespace App\\Events;\n\nclass CommandePayee\n{\n    public function __construct(\n        public readonly \\App\\Models\\Commande $commande,\n        public readonly int $montant,\n    ) {}\n}' },
+            { t: 'h3', h: 'Notion 2 · Le listener : la classe-réaction (une réaction = une classe)' },
+            { t: 'syntax', title: 'Réagir au fait', file: 'app/Listeners/EnvoyerConfirmationMail.php', code: 'php artisan make:listener EnvoyerConfirmationMail --event=CommandePayee\n\nclass EnvoyerConfirmationMail\n{\n    public function handle(CommandePayee $evenement): void\n    {\n        // ta réaction ici\n    }\n}', legend: [
+              ['EnvoyerConfirmationMail', 'le nom dit la RÉACTION (un verbe) — une classe par réaction'],
+              ['handle(CommandePayee $evenement)', 'la méthode appelée quand le fait est publié ; le type-hint est l\'ABONNEMENT'],
+              ['$evenement->commande', 'les données du fait, reçues telles quelles'],
+              ['--event=CommandePayee', 'artisan pré-remplit la signature pour toi']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// 2) LE LISTENER — UNE réaction, une classe\n//    php artisan make:listener EnvoyerConfirmationMail --event=CommandePayee\nnamespace App\\Listeners;\n\nclass EnvoyerConfirmationMail\n{\n    public function handle(\\App\\Events\\CommandePayee $evenement): void\n    {\n        \\Illuminate\\Support\\Facades\\Mail::to($evenement->commande->user)\n            ->queue(new \\App\\Mail\\ConfirmationCommande($evenement->commande));\n    }\n}' },
+            { t: 'h3', h: 'Notion 3 · Publier : event() ou ::dispatch, une seule ligne' },
+            { t: 'syntax', title: 'Crier le fait (sans savoir qui écoute)', code: 'event(new CommandePayee($commande, $total));\n// ou, équivalent :\nCommandePayee::dispatch($commande, $total);', legend: [
+              ['event(new …)', 'PUBLIE le fait : tous les listeners abonnés sont appelés (synchrone par défaut)'],
+              ['CommandePayee::dispatch(…)', 'la même publication, en style orienté classe'],
+              ['($commande, $total)', 'les données remises au constructeur de l\'événement'],
+              ['le point clé', 'le code qui publie ne nomme AUCUN listener — c\'est ça, le découplage']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// 3) LA PUBLICATION — le contrôleur crie le fait, sans savoir qui écoute\npublic function store(StoreCommandeRequest $request)\n{\n    $commande = Commande::create([...]);\n    event(new \\App\\Events\\CommandePayee($commande, $total));\n    // ou : CommandePayee::dispatch($commande, $total);\n    return redirect()->route(\'commandes.confirmation\', $commande);\n}' },
+            { t: 'h3', h: 'Notion 4 · Enregistrement : découverte automatique vs explicite' },
             { t: 'code', lang: 'php', code:
 '// Laravel 11+ DÉCOUVRE automatiquement les listeners dans app/Listeners\n// — une classe dont handle() type un événement est abonnée TOUTE SEULE.\n// Zéro câblage, c\'est le mode moderne par défaut.\n\n// L\'enregistrement EXPLICITE (quand tu veux voir la liste, ou des events\n// hors de app/Listeners) — bootstrap/app.php :\n->withEvents(discover: [\n    __DIR__.\'/../app/Listeners\',\n])\n\n// …ou via l\'attribut (moderne, localisé à côté du listener) :\nuse Illuminate\\Events\\Attributes\\AsListener;\n\n#[AsListener(\\App\\Events\\CommandePayee::class)]\nclass EnvoyerConfirmationMail { /* handle()… */ }' },
             { t: 'callout', kind: 'tip', h: 'Tu peux aussi ÉCOUTER les événements du framework : `Registered` (inscription finie — parfait pour le mail de bienvenue personnalisé), `Login`, `Logout`, `Verified`, et tous ceux d\'Eloquent si besoin. La même mécanique, sans rien dispatcher toi-même : tu n\'écris que le listener.' },
-            { t: 'h3', h: 'Synchrone ou en queue : la ligne qui change la latence' },
+            { t: 'h3', h: 'Notion 5 · Synchrone ou en queue : la ligne qui change la latence' },
             { t: 'p', h: 'Par défaut le listener est SYNCHRONE : il s\'exécute dans la requête du client, qui attend. Un mail SMTP de 800 ms × 3 listeners = la confirmation de commande qui « rame » — alors que le client n\'a besoin que de « c\'est enregistré ». La solution est D\'UNE LIGNE : le listener implémente `ShouldQueue` et il part en queue (fiche suivante) — la requête rend aussitôt, les mails partent en arrière-plan. C\'est la frontière d\'usage : « le client a-t-il besoin du RÉSULTAT de cette réaction, maintenant ? » Non → queue.' },
+            { t: 'syntax', title: 'La bascule en arrière-plan', code: 'class EnvoyerConfirmationMail implements ShouldQueue\n{\n    public function handle(CommandePayee $evenement): void { … }\n}', legend: [
+              ['implements ShouldQueue', 'le marqueur : ce listener partira dans LA FILE, exécuté par le worker (fiche Queues)'],
+              ['rien d\'autre ne change', 'même handle(), même événement — seul le MOMENT d\'exécution change'],
+              ['le client', 'reçoit sa réponse immédiatement ; le mail partira quelques centaines de ms plus tard']
+            ] },
             { t: 'code', lang: 'php', code:
 'use Illuminate\\Contracts\\Queue\\ShouldQueue;\n\nclass EnvoyerConfirmationMail implements ShouldQueue   // → la ligne magique\n{\n    public function handle(\\App\\Events\\CommandePayee $evenement): void\n    {\n        // maintenant exécuté par le WORKER, hors de la requête\n    }\n}\n// → la réponse HTTP part en 80 ms ; le mail suit en tâche de fond.\n// La fiche Queues détaille workers, retries et échecs.' },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
@@ -1450,14 +1905,44 @@ DEVDOCS.laravel = {
   <text x="488" y="218" class="dg-t" text-anchor="middle">WORKER (queue:work)</text>
   <text x="488" y="236" class="dg-ms" text-anchor="middle">exécute en arrière-plan, en boucle</text>
 </svg>`, caption: 'Le client n\'a pas besoin du mail pour savoir que sa commande est enregistrée : tout ce qui est LENT et différable part dans la file, et le worker — un processus à part, lancé une fois — la vide en continu. Sans worker, rappelle-toi : la file gonfle en silence (carte d\'erreur en bas).' },
+            { t: 'h3', h: 'Notion 1 · Le job : la classe-tâche (une tâche = une classe)' },
+            { t: 'syntax', title: 'Le squelette d\'un job', file: 'app/Jobs/TraiterImagesProduit.php', code: 'php artisan make:job TraiterImagesProduit\n\nclass TraiterImagesProduit implements ShouldQueue\n{\n    public function __construct(public Produit $produit) {}\n\n    public function handle(): void\n    {\n        // le travail lourd, fait par le WORKER\n    }\n}', legend: [
+              ['implements ShouldQueue', 'le marqueur « exécutable en arrière-plan » — sans lui, tout reste synchrone'],
+              ['__construct(…)', 'les DONNÉES nécessaires à la tâche : sérialisées dans l\'enveloppe (un id de modèle suffit)'],
+              ['handle()', 'la méthode que le worker appellera — TOUT le travail lourd vit ici'],
+              ['$tries / $backoff', 'les garde-fous d\'échec : combien de chances, avec quelles pauses']
+            ] },
             { t: 'code', lang: 'php', code:
-'php artisan make:job TraiterImagesProduit\n→ app/Jobs/TraiterImagesProduit.php\n\nnamespace App\\Jobs;\n\nuse Illuminate\\Contracts\\Queue\\ShouldQueue;\n\nclass TraiterImagesProduit implements ShouldQueue\n{\n    use \\Illuminate\\Bus\\Queueable;                    // le kit standard\n\n    public $tries = 3;              // 3 chances avant l\'échec définitif\n    public $backoff = [30, 120, 600];  // délais entre tentatives : 30 s, 2 min, 10 min\n\n    public function __construct(public readonly \\App\\Models\\Produit $produit) {}\n\n    public function handle(): void\n    {\n        $produit = $this->produit->fresh();       // données du JOUR, pas d\'hier\n        foreach ($produit->images as $image) {\n            $image->redimensionner(1200, 900);\n            $image->genererMiniature();\n        }\n    }\n}\n\n// Dans le contrôleur — la dépose, puis la réponse immédiate :\nTraiterImagesProduit::dispatch($produit);\nreturn redirect()->route(\'produits.show\', $produit)\n    ->with(\'succes\', \'Produit créé — images en préparation.\');' },
-            { t: 'h3', h: 'Configurer : database pour démarrer, Redis pour les sérieux' },
+'php artisan make:job TraiterImagesProduit\n→ app/Jobs/TraiterImagesProduit.php\n\nnamespace App\\Jobs;\n\nuse Illuminate\\Contracts\\Queue\\ShouldQueue;\n\nclass TraiterImagesProduit implements ShouldQueue\n{\n    use \\Illuminate\\Bus\\Queueable;                    // le kit standard\n\n    public $tries = 3;              // 3 chances avant l\'échec définitif\n    public $backoff = [30, 120, 600];  // délais entre tentatives : 30 s, 2 min, 10 min\n\n    public function __construct(public readonly \\App\\Models\\Produit $produit) {}\n\n    public function handle(): void\n    {\n        $produit = $this->produit->fresh();       // données du JOUR, pas d\'hier\n        foreach ($produit->images as $image) {\n            $image->redimensionner(1200, 900);\n            $image->genererMiniature();\n        }\n    }\n}' },
+            { t: 'h3', h: 'Notion 2 · dispatch() : déposer l\'enveloppe (et répondre aussitôt)' },
+            { t: 'syntax', title: 'Programmer la tâche pour le worker', code: 'TraiterImagesProduit::dispatch($produit);\nTraiterImagesProduit::dispatch($produit)->delay(60);\nTraiterImagesProduit::dispatch($produit)->onQueue(\'images\');', legend: [
+              ['::dispatch($produit)', 'dépose l\'enveloppe dans la file — l\'exécution elle-même appartient au worker'],
+              ['->delay(60)', 'dans 60 secondes, pas tout de suite'],
+              ['->onQueue(\'images\')', 'une file NOMMÉE, pour prioriser (le worker traite \'high\' avant \'default\')'],
+              ['dispatch(…)->afterCommit()', 'n\'envoyer l\'enveloppe qu\'APRES le commit de la transaction']
+            ] },
+            { t: 'code', lang: 'php', code:
+'// Dans le contrôleur — la dépose, puis la réponse immédiate :\nTraiterImagesProduit::dispatch($produit);\nreturn redirect()->route(\'produits.show\', $produit)\n    ->with(\'succes\', \'Produit créé — images en préparation.\');' },
+            { t: 'h3', h: 'Notion 3 · Le worker : le facteur qui vide la boîte' },
+            { t: 'syntax', title: 'Lancer la ligne de vie', code: 'php artisan queue:work --queue=high,default --tries=3 --timeout=90', lang: 'bash', legend: [
+              ['queue:work', 'démarre le processus LONG : il lit la file EN BOUCLE et exécute chaque handle()'],
+              ['--queue=high,default', 'l\'ordre de service : la file high passe devant default'],
+              ['--tries=3 --timeout=90', 'garde-fous : 3 chances par job, jamais plus de 90 s par exécution'],
+              ['Ctrl+C quitte', 'en dev tu l\'arrêtes à la main ; en prod, Supervisor le garde vivant (erreur n°1 plus bas)']
+            ] },
+            { t: 'h3', h: 'Notion 4 · Configurer la file : database pour démarrer, Redis pour les sérieux' },
             { t: 'code', lang: 'php', code:
 '# .env — le pilote de file (connection « sync » par défaut en dev) :\nQUEUE_CONNECTION=database        # la table jobs (zéro infra à installer)\n# QUEUE_CONNECTION=redis         # la référence pro (file + cache + verrous)\n\nphp artisan queue:table && php artisan migrate   # la boîte aux lettres\n\n# Le worker — processus LONG, à superviser en production :\nphp artisan queue:work --queue=high,default --tries=3 --timeout=90\n#   --queue=high,default : la file « high » passe AVANT « default »\n#   --tries/--timeout : garde-fous du worker (lisez : ne laisser aucun job\n#   tourner plus de 90 s sans verdict)\n\n# En prod : Supervisor garde le worker VIVANT (redémarrage automatique).\n# En dev : lance-le dans un terminal, il écoute jusqu\'à Ctrl+C.' },
-            { t: 'h3', h: 'Retries, échecs et la morgue des jobs (failed_jobs)' },
+            { t: 'h3', h: 'Notion 5 · Les échecs : retries et la morgue des jobs (failed_jobs)' },
             { t: 'p', h: 'Un job peut échouer : l\'API MTN ne répond pas, l\'image est corrompue, la base un coup de baïonnette. La queue le gère par défaut selon tes règles : `tries` combien de fois, `backoff` entre quelques délais, `retryAfter` quand un timeout frappe. Au bout de la dernière tentative ratée, le job n\'est PAS supprimé : il est rangé dans la table **`failed_jobs`** — la morgue — avec sa trace complète. Tu y lis LE motif (`php artisan queue:failed`), et une fois la cause réparée : `php artisan queue:retry all` repart la file. Rien ne meurt dans le silence — c\'est la différence avec le cron au grenier.' },
-            { t: 'h3', h: 'Sous le capot : pourquoi le job ne peut PAS emporter ton modèle vivant' },
+            { t: 'syntax', title: 'Piloter la morgue : les trois commandes', lang: 'bash', code:
+'php artisan queue:failed\nphp artisan queue:retry 12\nphp artisan queue:retry all', legend: [
+              ['queue:failed', 'dresse la LISTE des jobs morts : id, nom, trace de l\'exception — la nécrologie complète de ta file'],
+              ['queue:retry 12', 'remet UN job précis dans la file (son id, lu dans la liste) — à faire APRÈS avoir réparé la cause'],
+              ['queue:retry all', 'rejoue TOUS les jobs morts d\'un coup — pratique après une panne MTN globale maintenant résolue'],
+              ['queue:flush', 'vide la morgue sans rien relancer — quand les jobs morts sont définitivement obsolètes (à manier comme un serpent)']
+            ]},
+            { t: 'h3', h: 'Notion 6 · Sous le capot : pourquoi le job ne peut PAS emporter ton modèle vivant' },
             { t: 'code', lang: 'php', code:
 '// Le job est SÉRIALISÉ avant d\'entrer dans la file :\ndispatch(new TraiterImagesProduit($produit));\n// → l\'enveloppe stockée en base ne peut contenir que du JSON :\n//   les propriétés publiques, figées à l\'instant du dispatch.\n\n// Le trait SerializesModels ruse intelligemment :\n//   → il ne stocke QUE L\'ID du modèle ({\"produit\":{« id »:42}})\n//   → au réveil, le worker REFAIT Produit::find(42)\n// Conséquences nettes :\n// 1) le produit supprimé entre-temps ? handle() sur un modèle ABSENT\n//    → $this->produit->fresh() renvoie null, ou DeleteWhenMissingModels.\n// 2) les relations chargées au dispatch ne survivent PAS —\n//    recharge avec ->load() dans handle().\n// 3) un objet métier complexe (montant, adresse) :\n//    stocke ses DONNÉES (montant int, adresse string), jamais l\'objet tourbillon.' },
             { t: 'h3', h: 'Ce que les débutants comprennent mal' },
@@ -1520,9 +2005,30 @@ DEVDOCS.laravel = {
   <text x="492" y="160" class="dg-m">"categorie": { … }</text>
   <text x="492" y="184" class="dg-ok" font-size="12">✓ stable, maîtrisé, sans fuite</text>
 </svg>`, caption: 'La resource est un traducteur à LISTE BLANCHE : seuls les champs déclarés dans toArray() franchissent la frontière — les colonnes internes, relations chargées et formats bruts restent dedans. Résultat : les clients API programment contre un contrat stable, et tu peux renommer une colonne en base demain sans rien casser.' },
-            { t: 'h3', h: 'Créer et retourner une resource' },
+            { t: 'h3', h: 'Notion 1 · La resource : une classe qui déclare le contrat (toArray)' },
+            { t: 'p', h: 'Une resource est une classe générée par artisan, avec UNE méthode qui compte : `toArray()`. C\'est la liste blanche en personne — ce qui n\'y figure pas ne franchit jamais la frontière. Décortiquons le squelette minimal, puis l\'exemple complet de la boutique.' },
+            { t: 'syntax', title: 'Le squelette minimal d\'une resource', file: 'app/Http/Resources/ProduitResource.php', lang: 'php', code:
+'// php artisan make:resource ProduitResource   → crée cette classe\nclass ProduitResource extends JsonResource\n{\n    public function toArray($request): array\n    {\n        return [\n            \'id\'  => $this->id,\n            \'nom\' => $this->nom,\n        ];\n    }\n}', legend: [
+              ['php artisan make:resource ProduitResource', 'la commande qui génère la classe dans app/Http/Resources/ — nom au singulier, suffixé Resource'],
+              ['extends JsonResource', 'la classe-mère Laravel : elle apporte toute la mécanique (sérialisation JSON, collections, enveloppe data). Toi, tu ne déclares que la FORME'],
+              ['toArray($request)', 'LA méthode-contrat, appelée automatiquement au moment de la réponse : elle reçoit la requête courante et renvoie le tableau des champs autorisés'],
+              ['\'id\' => $this->id', 'un champ DÉCLARÉ : nom public à gauche, valeur à droite. $this EST le modèle emballé — $this->id lit la colonne id du produit'],
+              ['ce qui n\'est pas listé…', '…ne sort JAMAIS : seuil_interne, fournisseur_id, timestamps restent dedans. La liste blanche est la sécurité, pas un confort']
+            ]},
+            { t: 'p', h: 'L\'exemple complet de la boutique — champs calculés, accessor de la fiche Eloquent, relation imbriquée, liens : remarque que tout reste une simple DÉCLARATION de tableau dans `toArray()`. Rien d\'autre n\'est jamais exécuté ici.' },
             { t: 'code', lang: 'php', code:
-'php artisan make:resource ProduitResource\n→ app/Http/Resources/ProduitResource.php\n\nnamespace App\\Http\\Resources;\n\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass ProduitResource extends JsonResource\n{\n    // La FORME de la sortie — un tableau, dire ce qui sort, et comment :\n    public function toArray($request): array\n    {\n        return [\n            \'id\'         => $this->id,\n            \'nom\'        => $this->nom,\n            \'prix\'       => $this->prix,\n            \'prix_humain\' => $this->prix_formate,             // accessor (fiche Eloquent)\n            \'en_stock\'   => $this->stock > 0,\n            \'categorie\'  => new CategorieResource($this->whenLoaded(\'categorie\')),\n            //            + relation imbriquée, CHARGÉE SEULEMENT si le\n            //              contrôleur l\'a eager-loadée — sinon ABSENTE du JSON,\n            //              jamais null qui gâche le contrat\n            \'liens\'      => [\n                \'fiche\' => route(\'api.produits.show\', $this->id),\n            ],\n        ];\n    }\n}\n\n// Dans le contrôleur — une ligne, le contrat à la place de l\'objet :\npublic function show(Produit $produit)\n{\n    return new ProduitResource($produit->load(\'categorie\'));   // eager-load controlé\n}\n\npublic function index()\n{\n    $produits = Produit::enStock()->paginate(20);\n    return ProduitResource::collection($produits);   // liste + meta de pagination AUTO\n}' },
+'php artisan make:resource ProduitResource\n→ app/Http/Resources/ProduitResource.php\n\nnamespace App\\Http\\Resources;\n\nuse Illuminate\\Http\\Resources\\Json\\JsonResource;\n\nclass ProduitResource extends JsonResource\n{\n    // La FORME de la sortie — un tableau, dire ce qui sort, et comment :\n    public function toArray($request): array\n    {\n        return [\n            \'id\'         => $this->id,\n            \'nom\'        => $this->nom,\n            \'prix\'       => $this->prix,\n            \'prix_humain\' => $this->prix_formate,             // accessor (fiche Eloquent)\n            \'en_stock\'   => $this->stock > 0,\n            \'categorie\'  => new CategorieResource($this->whenLoaded(\'categorie\')),\n            //            + relation imbriquée, CHARGÉE SEULEMENT si le\n            //              contrôleur l\'a eager-loadée — sinon ABSENTE du JSON,\n            //              jamais null qui gâche le contrat\n            \'liens\'      => [\n                \'fiche\' => route(\'api.produits.show\', $this->id),\n            ],\n        ];\n    }\n}' },
+            { t: 'h3', h: 'Notion 2 · Retourner la resource : new …() pour UNE, ::collection() pour une liste' },
+            { t: 'p', h: 'La classe déclarée, il reste à la REMETTRE au client. Deux gestes couvrent tous les cas : emballer UN modèle, ou emballer toute une liste — et Laravel enveloppe le résultat sous une clé `data` automatiquement.' },
+            { t: 'syntax', title: 'Les deux gestes de retour, depuis le contrôleur', lang: 'php', code:
+'return new ProduitResource($produit);\nreturn ProduitResource::collection($produits);', legend: [
+              ['new ProduitResource($produit)', 'emballe UN modèle : au return, Laravel appelle toArray() et répond le JSON déclaré. La fuite « return $produit » est remplacée, point final'],
+              ['ProduitResource::collection($produits)', 'emballe une LISTE : chaque modèle passe dans toArray(), le tout rangé sous data[ ]'],
+              ['avec une pagination', '::collection($paginés) conserve meta + links (page courante, page suivante…) — la pagination API standard, gratuite et versionnée'],
+              ['sous le capot', 'une resource n\'est pas une réponse : c\'est un EMBALLAGE que Laravel sérialise au dernier moment — tu la retournes simplement, il fait le reste']
+            ]},
+            { t: 'code', lang: 'php', code:
+'// Dans le contrôleur — une ligne, le contrat à la place de l\'objet :\npublic function show(Produit $produit)\n{\n    return new ProduitResource($produit->load(\'categorie\'));   // eager-load controlé\n}\n\npublic function index()\n{\n    $produits = Produit::enStock()->paginate(20);\n    return ProduitResource::collection($produits);   // liste + meta de pagination AUTO\n}' },
             { t: 'p', h: 'Note le bonus structurel : `ProduitResource::collection($pagination)` conserve les métadonnées Laravel (`links`, `meta`) — la pagination API standard, versionnée gratuitement. Le client fetch (module JavaScript, fiche fetch) consomme `json.data` et `json.meta.current_page` sans surprises, et ta documentation REST devient la resource elle-même.' },
             { t: 'h3', h: 'Pourquoi c\'est une protection — pas un confort' },
             { t: 'table', head: ['Sans resource', 'Avec resource'], rows: [
@@ -1532,8 +2038,15 @@ DEVDOCS.laravel = {
               ['Timestamps bruts ISO, formats au hasard', 'Formats normalisés : `prix` en int, dates en string FR si tu veux'],
               ['Chaque endpoint expose sa version du même modèle', 'UN contrat partagé par tous les endpoints (index, show, search)']
             ]},
-            { t: 'h3', h: 'Sous le capot : whenLoaded et le N+1 de l\'API' },
+            { t: 'h3', h: 'Notion 3 · Champs conditionnels : whenLoaded() et when() — et le N+1 de l\'API' },
             { t: 'p', h: 'Le problème N+1 (fiche Relations) suit l\'API comme son ombre : une resource qui touche `$this->categorie` sur CHAQUE ligne d\'une collection de 20 provoque 20 requêtes SQL si la relation n\'est pas pré-chargée. Le mécanisme `whenLoaded` joue ici en double : il rend l\'ABSENCE propre quand la relation n\'est pas chargée (pas de `null` forcé, pas d\'erreur, simplement le champ absent du contrat), ET il rend VISIBLE le lazy loading — si le champ catégorie de votre console disparaît du JSON, c\'est que le contrôleur a oublié son `with()` — le symptôme t\'alerte avant la dégradation de latence, exactement comme `preventLazyLoading` côté web.' },
+            { t: 'syntax', title: 'Les deux aiguilleurs de champs, token par token', lang: 'php', code:
+'\'categorie\' => new CategorieResource($this->whenLoaded(\'categorie\')),\n\'seuil\'     => $this->when($request->user()?->isGestionnaire(), $this->seuil_interne),', legend: [
+              ['$this->whenLoaded(\'categorie\')', 'renvoie la relation SI le contrôleur l\'a eager-loadée avec with() — sinon le champ DISPARAÎT du JSON : jamais de null forcé, jamais de requête surprise'],
+              ['new CategorieResource(…)', 'la relation sort ELLE AUSSI emballée dans sa propre resource : liste blanche récursive, la fuite ne passe pas par la porte voisine'],
+              ['$this->when(condition, valeur)', 'champ présent seulement si la condition est vraie — ici le seuil interne réservé aux gestionnaires connectés, invisible pour les clients'],
+              ['$request', 'la requête courante, offerte par toArray() : c\'est elle qui dit QUI demande, donc ce qu\'on a le droit de montrer']
+            ]},
             { t: 'code', lang: 'php', code:
 '// Le contrôleur commande le chargement — la resource ne requête JAMAIS :\npublic function index()\n{\n    $produits = Produit::enStock()\n        ->with(\'categorie:id,nom\')          // 2 requêtes, pas 21\n        ->paginate(20);\n    return ProduitResource::collection($produits);\n}\n\n// La resource lit les relations SANS déclencher de requêtes\n// (whenLoaded), et peut même réutiliser des sous-resources :\n\'categorie\' => new CategorieResource($this->whenLoaded(\'categorie\')),\n\'avis\'      => AvisResource::collection($this->whenLoaded(\'avis\')),\n\'note_moyenne\' => $this->when(\n    $this->relationLoaded(\'avis\'),\n    fn () => round($this->avis->avg(\'note\'), 1)\n),' },
             { t: 'callout', kind: 'info', h: 'Versionner plus tard ? La tentation `v1/ProduitResource` peut attendre : le contrat unique sert tant que les champs ne se cassent pas. Quand une v2 arrive VRAIMENT (changement de forme incompatible), tu auras `App\\Http\\Resources\\V2\\ProduitResource` — mais seulement ce jour-là. Ne pré-paie pas une complexité de versionnage que la stabilité du contrat rend superflue aujourd\'hui.' },
@@ -1570,9 +2083,29 @@ DEVDOCS.laravel = {
           blocks: [
             { t: 'h3', h: 'Pourquoi les tests automatisés (et pas « je vérifierai à la main »)' },
             { t: 'p', h: 'Ton site a 30 pages et 12 formulaires : vérifier à la main que « tout marche » avant chaque déploiement prend 45 minutes — et tu le fais donc jamais, ou en diagonale, ou la veille du bug. La boucle d\'or : tu écris le test UNE FOIS (le code qui VÉRITIFIE le comportement), et ensuite il rejoue en secondes, à chaque commit à jamais. Le prix est au début ; la rente est permanente. Et l\'effet secondaire que personne ne prévoit : écrire le test AVANT d\'implémenter te fait CHOISIR l\'API d\'abord (« la commande doit renvoyer vers confirmation après POST /commandes ») — le test éclaire la conception avant de vérifier l\'implémentation.' },
-            { t: 'h3', h: 'Pest : la syntaxe qui donne envie' },
+            { t: 'h3', h: 'Notion 1 · Le squelette d\'un test Pest : it(), la requête factice, l\'assertion' },
+            { t: 'p', h: 'Un test Pest tient en trois gestes : DÉCLARER le scénario (`it`), JOUER la requête comme un vrai client (`$this->get`), CONFRONTER la réponse au contrat (`assertOk`). Voici le minimum vital décortiqué, puis le fichier complet de la boutique.' },
+            { t: 'syntax', title: 'Le test minimal, décortiqué', file: 'tests/Feature/CatalogueTest.php', lang: 'php', code:
+'it(\'affiche le catalogue\', function () {\n    $this->get(\'/boutique\')->assertOk();\n});', legend: [
+              ['it(\'…\', function () {…})', 'déclare UN test : la phrase décrit le comportement attendu (elle apparaît dans le rapport vert/rouge), la fonction joue le scénario'],
+              ['$this->get(\'/boutique\')', 'joue une VRAIE requête GET contre toute l\'application (route, middleware, contrôleur, base de test) — en mémoire, sans serveur, en millisecondes'],
+              ['->assertOk()', 'l\'ASSERTION, le contrat : « la réponse DOIT être un 200 ». Une 500 ou une 404 vire le test au rouge, avec la ligne fautive'],
+              ['php artisan test', 'la commande qui rejoue TOUTE la suite en quelques secondes — l\'antidote au « je vérifierai à la main »']
+            ]},
             { t: 'code', lang: 'php', label: 'tests/Feature/CatalogueTest.php', code:
-'<?php\n\nuse App\\Models\\Categorie;\nuse App\\Models\\Produit;\n\nit(\'affiche le catalogue public\', function () {\n    Categorie::factory()->create([\'nom\' => \'Céréales\']);\n    Produit::factory()->create([\'nom\' => \'Gari premium\', \'stock\' => 8]);\n\n    $this->get(\'/boutique\')\n        ->assertOk()                          // 200\n        ->assertSee(\'Gari premium\')          // contenu présent\n        ->assertSee(\'Céréales\');\n});\n\nit(\'redirige un invité qui veut commander\', function () {\n    $this->post(\'/commandes\', [\'produit_id\' => 1])\n        ->assertRedirect(\'/login\');          // middleware auth d\'abord\n});\n\nit(\'refuse à Awa de supprimer le produit de sa sœur\', function () {\n    $awa = \\App\\Models\\User::factory()->create();\n    $produit = Produit::factory()->create();   // d\'une AUTRE boutique\n\n    $this->actingAs($awa)\n        ->delete(\"/produits/{$produit->id}\")\n        ->assertForbidden();                  // la policy en preuve\n});' },
+'<?php\n\nuse App\\Models\\Categorie;\nuse App\\Models\\Produit;\n\nit(\'affiche le catalogue public\', function () {\n    Categorie::factory()->create([\'nom\' => \'Céréales\']);\n    Produit::factory()->create([\'nom\' => \'Gari premium\', \'stock\' => 8]);\n\n    $this->get(\'/boutique\')\n        ->assertOk()                          // 200\n        ->assertSee(\'Gari premium\')          // contenu présent\n        ->assertSee(\'Céréales\');\n});' },
+            { t: 'h3', h: 'Notion 2 · Jouer un utilisateur, frapper les bons verbes : actingAs, post, delete' },
+            { t: 'p', h: 'Le catalogue public ne suffit pas : le métier vit derrière une connexion, et ses règles derrière des VERBES précis. Pest laisse tout simuler — la session d\'Awa, un POST de formulaire, un DELETE sur la donnée d\'autrui — puis transforme chaque protection des fiches précédentes en une ligne de preuve.' },
+            { t: 'syntax', title: 'La requête simulée, du login au verdict', lang: 'php', code:
+'$this->actingAs($awa)->delete(\"/produits/{$produit->id}\")->assertForbidden();', legend: [
+              ['$this->actingAs($awa)', 'connecte Awa le temps de la requête — sans mot de passe ni formulaire : la session est simulée'],
+              ['->delete(…)', 'le VERBE HTTP frappé : get, post, put, patch, delete — le test rejoue exactement le geste d\'un formulaire ou d\'un fetch'],
+              ['\"/produits/{$produit->id}\"', 'guillemets doubles pour INTERPOLER l\'id du produit fabriqué juste au-dessus — l\'URL est construite à la volée'],
+              ['->assertForbidden()', 'le contrat métier devenu assertion : « la policy DOIT répondre 403 » — la fiche Autorisation, transformée en preuve'],
+              ['->assertRedirect(\'/login\')', 'la variante pour l\'invité : renvoyé vers le login, exactement comme le middleware auth l\'exige']
+            ]},
+            { t: 'code', lang: 'php', label: 'tests/Feature/CatalogueTest.php (suite)', code:
+'it(\'redirige un invité qui veut commander\', function () {\n    $this->post(\'/commandes\', [\'produit_id\' => 1])\n        ->assertRedirect(\'/login\');          // middleware auth d\'abord\n});\n\nit(\'refuse à Awa de supprimer le produit de sa sœur\', function () {\n    $awa = \\App\\Models\\User::factory()->create();\n    $produit = Produit::factory()->create();   // d\'une AUTRE boutique\n\n    $this->actingAs($awa)\n        ->delete(\"/produits/{$produit->id}\")\n        ->assertForbidden();                  // la policy en preuve\n});' },
             { t: 'diagram', title: 'Anatomie d\'un test : Arrange, Act, Assert', svg: `<svg viewBox="0 0 680 172">
   <defs><marker id="lv-t1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dg-fill-e"/></marker></defs>
   <rect x="16" y="52" width="150" height="72" rx="12" class="dg-b"/>
@@ -1597,14 +2130,56 @@ DEVDOCS.laravel = {
 </svg>`, caption: 'Chaque test suit le même scénario en trois temps : on PRÉPARE un mini-monde (factory), on JOUE l\'action (une requête factice à toute l\'application), puis on EXIGE le résultat (les assertions). Si la boutique change un jour et qu\'un comportement promis dévie — le test vire au rouge AVANT la mise en ligne, pas après.' },
             { t: 'callout', kind: 'info', h: 'Mot nouveau — une **assertion** (`assertOk`, `assertSee`, `assertForbidden`…) : un contrat écrit, « cette page DOIT répondre 200 ». Le test exécute le scénario puis confronte la réalité au contrat : conforme → vert ; déviante → rouge, avec la ligne fautive. Une suite verte n\'est pas « rien » : c\'est toutes tes règles du jeu qui tiennent encore, vérifiées en une minute.' },
             { t: 'p', h: 'PHPUnit sous-jacent, Pest au-dessus : les `assertOk()`, `assertRedirect()`, `assertForbidden()`, `assertSee()`, `assertJsonPath()` sont des helpers HTTP Laravel — le test Feature joue TOUTE la pile (route → middleware → contrôleur → policy → base de test), exactement comme un vrai client, mais en mémoire et instantané. C\'est la raison de son efficacité : chaque fiche de ce module (routing, middleware, policy, validation…) devient une LIGNE de preuve possible.' },
-            { t: 'h3', h: 'La base de test : isolée, fraîche, jetable' },
+            { t: 'h3', h: 'Le petit lexique des assertions du quotidien' },
+            { t: 'table', head: ['Assertion', 'Le contrat qu\'elle signe'], rows: [
+              ['`assertOk()`', 'La réponse est un 200 — la page existe et s\'affiche'],
+              ['`assertSee(\'Gari premium\')`', 'Le HTML de la réponse CONTIENT ce texte'],
+              ['`assertRedirect(\'/login\')`', 'La réponse renvoie vers cette URL (l\'invité repoussé au login)'],
+              ['`assertForbidden()`', '403 : la policy a refusé — la fiche Autorisation en preuve'],
+              ['`assertInvalid(\'prix\')`', 'La validation a rejeté ce champ — la fiche Validation en preuve'],
+              ['`assertSessionHasErrors()`', 'La session porte des erreurs : le formulaire est renvoyé à l\'utilisateur'],
+              ['`assertJsonPath(\'data.0.nom\', \'Gari\')`', 'Le JSON de l\'API contient cette valeur, à cet endroit précis'],
+              ['`expect(Produit::count())->toBe(3)`', 'Style Pest pour l\'état de la base après le scénario']
+            ]},
+            { t: 'h3', h: 'Notion 3 · La base de test : SQLite en mémoire + RefreshDatabase' },
+            { t: 'p', h: 'Un test n\'a de valeur que sur une base DÉTERMINISTE : les données attendues doivent être celles créées par le test, pas le souvenir d\'hier. Deux réglages font la bulle — déclarer une base jetable en RAM, et la remettre à zéro avant chaque scénario.' },
+            { t: 'syntax', title: 'Déclarer la base de test : mémoire vive, rien d\'autre', file: 'phpunit.xml', lang: 'xml', code:
+'<env name="DB_CONNECTION" value="sqlite"/>\n<env name="DB_DATABASE" value=":memory:"/>', legend: [
+              ['<env name="…" value="…"/>', 'force une variable d\'environnement PENDANT les tests uniquement — ton .env de développement n\'est jamais relu ici'],
+              ['sqlite', 'une base légère, sans serveur MySQL à installer — parfaite pour le laboratoire'],
+              [':memory:', 'la base vit en RAM : construite à chaque test, détruite à la fin — il est matériellement impossible de polluer ta base de dev'],
+              ['conséquence', 'php artisan test ne touche JAMAIS la boutique — la catastrophe « RefreshDatabase sur la base de dev » (carte en bas) devient impossible']
+            ]},
+            { t: 'syntax', title: 'Le trait qui remet la base à zéro entre les tests', file: 'tests/Pest.php', lang: 'php', code:
+'uses(\\Illuminate\\Foundation\\Testing\\RefreshDatabase::class)->in(\'Feature\');', legend: [
+              ['uses(…)', 'Pest parle : « applique ce trait à tous les tests… »'],
+              ['RefreshDatabase::class', '…le trait qui rejoue les migrations dans la base de test AVANT chaque test : chaque scénario démarre vierge, zéro débris du scénario précédent'],
+              ['->in(\'Feature\')', '…dans le dossier tests/Feature — les tests HTTP complets, ceux de cette fiche'],
+              ['résultat', 'Produit::count() vaut TOUJOURS ce que le test a créé — jamais « 3 + les débris d\'hier »']
+            ]},
             { t: 'code', lang: 'php', label: 'phpunit.xml + le trait RefreshDatabase', code:
 '<!-- phpunit.xml — la config DÉDIÉE AUX TESTS (surcharge .env) -->\n<env name="APP_ENV" value="testing"/>\n<env name="DB_CONNECTION" value="sqlite"/>\n<env name="DB_DATABASE" value=":memory:"/>        <!-- base EN MÉMOIRE,\n                                                      créée vide à chaque test,\n                                                      détruite à sa sortie -->\n\n<?php\n\nuse Illuminate\\Foundation\\Testing\\RefreshDatabase;\n\nuses(RefreshDatabase::class);    // Pest : migrations rejouées avant CHAQUE\n                                   // test dans cette base jetable — zéro fuite\n                                   // d\'un test à l\'autre (l\'isolement parfait)\n\nit(\'compte les produits du catalogue\', function () {\n    Produit::factory()->count(3)->create();\n    expect(Produit::count())->toBe(3);        // toujours 3, jamais 3 + débris\n});' },
             { t: 'callout', kind: 'warn', h: 'La pire erreur possible (carte en bas) : tester sur ta BASE DE DEV. `RefreshDatabase` y réinitialiserait TOUT — et le moindre `User::factory()->count(500)->create()` polluerait ton environnement de développement. La règle de survie : `phpunit.xml` avec SQLite en mémoire, JAMAIS la base du `.env` de dev. Et le test doit se préoccuper de sa base LUI-MÊME (RefreshDatabase), pas d\'un .env à surveiller.' },
-            { t: 'h3', h: 'Les factories : des données réalistes en une ligne' },
+            { t: 'h3', h: 'Notion 4 · Les factories : des données réalistes en une ligne' },
+            { t: 'p', h: 'Chaque scénario a besoin de SES données du jour — trois produits, une catégorie, un stock en promo. La factory est l\'usine qui les fabrique : réalistes (Faker), différentes à chaque exécution (fini le biais « ça marche avec CE jeu »), et combinables à l\'infini.' },
+            { t: 'syntax', title: 'L\'usine à données, token par token', lang: 'php', code:
+'Produit::factory()->count(3)->enStock()->create();', legend: [
+              ['Produit::factory()', 'récupère l\'usine liée au modèle — la convention la trouve dans database/factories/ProduitFactory.php'],
+              ['count(3)', 'combien d\'exemplaires fabriquer — chacun avec des valeurs DIFFÉRENTES tirées par Faker'],
+              ['enStock()', 'un ÉTAT nommé : une méthode de ta factory qui surcharge des attributs (ici stock > 0) — tu définis enStock(), enPromo(), epuise() une fois, tu les réutilises partout'],
+              ['create()', 'PERSISTE en base de test (vrai INSERT) — sa sœur make() construit en mémoire sans écrire, pour tester un calcul pur sans base']
+            ]},
             { t: 'code', lang: 'php', code:
 'php artisan make:factory ProduitFactory --model=Produit\n\nclass ProduitFactory extends Factory\n{\n    public function definition(): array\n    {\n        return [\n            \'nom\'          => fake()->words(3, true),       // Faker francisé\n            \'slug\'         => fn ($attrs) => str()->slug($attrs[\'nom\']),\n            \'prix\'         => fake()->numberBetween(500, 50000),\n            \'stock\'        => fake()->numberBetween(0, 100),\n            \'categorie_id\' => Categorie::factory(),          // le parent auto\n        ];\n    }\n}\n\n// À l\'usage — chaque scénario, ses données du jour :\nProduit::factory()->create();                                // 1\nProduit::factory()->count(10)->create();                     // 10\nProduit::factory()->enStock()->enPromo()->create();          // états nommés\nProduit::factory()->for(Categorie::factory()->create([\'nom\' => \'Huiles\']))->create();\n// → des données DIFFÉRENTES à chaque exécution (pas le biais du\n//   « ça marche avec CE jeu de données »), repliables avec le seed.' },
-            { t: 'h3', h: 'Les fakes : couper le monde extérieur' },
+            { t: 'h3', h: 'Notion 5 · Les fakes : couper le monde extérieur' },
+            { t: 'p', h: 'Tester « le mail de confirmation part après le paiement » ne doit ni envoyer de vrai mail à Awa, ni appeler la vraie API MTN. Chaque façade de Laravel possède une MARIONNETTE : on la met en place, on joue le scénario, puis on exige la preuve que le bon message aurait été envoyé.' },
+            { t: 'syntax', title: 'Le fake : remplacer, jouer, prouver', lang: 'php', code:
+'Mail::fake();\n$this->post(\'/commandes\', $donnees);\nMail::assertQueued(ConfirmationCommande::class);', legend: [
+              ['Mail::fake()', 'remplace le facteur par un enregistreur : RIEN ne part (ni SMTP, ni API), chaque envoi est consigné dans un carnet'],
+              ['$this->post(…)', 'l\'action qui DEVRAIT déclencher le mail — le scénario se joue normalement, de bout en bout'],
+              ['Mail::assertQueued(…)', 'la preuve exigée : « ce mail précis a bien été mis en file par le scénario » — sinon le test vire au rouge'],
+              ['même famille', 'Notification::fake(), Queue::fake(), Event::fake(), Http::fake([…]) — chaque porte vers le monde extérieur a sa marionnette']
+            ]},
             { t: 'code', lang: 'php', code:
 'use Illuminate\\Support\\Facades\\Mail;\nuse Illuminate\\Support\\Facades\\Notification;\nuse Illuminate\\Support\\Facades\\Http;\n\nit(\'envoie la confirmation après le paiement\', function () {\n    Mail::fake();                       // RIEN ne part — tout est ENREGISTRÉ\n    Notification::fake();\n    Http::fake([\n        \'api.mtn.com/*\' => Http::response([\'status\' => \'SUCCESSFUL\'], 200),\n    ]);                                 // l\'API MTN devient une marionnette\n\n    $this->actingAs($client)->post(\'/commandes\', $donnees)->assertOk();\n\n    Mail::assertQueued(ConfirmationCommande::class);        // la preuve\n    Http::assertSent(fn ($req) => $req[\'amount\'] == 15000); // et l\'appel exact\n});' },
             { t: 'h3', h: 'Que tester, dans quel ordre ? La pyramide simple' },

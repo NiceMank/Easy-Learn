@@ -30,6 +30,7 @@ Object.keys(DB).forEach((lang) => DB[lang].categories.forEach((c) => c.fiches.fo
     if (['ul', 'ol'].includes(b.t)) (b.items || []).forEach((it) => scanField(f.id, 'b' + i + '.' + b.t, it, report));
     if (b.t === 'table') (b.rows || []).forEach((r) => r.forEach((cell) => scanField(f.id, 'b' + i + '.cell', cell, report)));
     if (b.t === 'diagram') { scanField(f.id, 'b' + i + '.title', b.title, report); scanField(f.id, 'b' + i + '.caption', b.caption, report); }
+    if (b.t === 'syntax') { scanField(f.id, 'b' + i + '.syntax-title', b.title, report); (b.legend || []).forEach((row) => scanField(f.id, 'b' + i + '.syntax-legend', row[1], report)); }
   });
   (f.errors || []).forEach((e, i) => scanField(f.id, 'err' + i + '.why', e.why, report));
 })));

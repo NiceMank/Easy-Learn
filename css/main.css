@@ -849,6 +849,64 @@ html[data-theme="dark"] .diagram svg .dg-ok   { fill: #30d158; }
 html[data-theme="dark"] .diagram svg .dg-ko   { fill: #ff6961; }
 html[data-theme="dark"] .diagram svg .dg-warn { fill: #ffb340; }
 
+/* ---------- Cartes SYNTAXE (bloc syntax) ----------
+   La forme canonique d'UNE notion, isolée : le code minimal en haut,
+   puis le décorticage morceau par morceau dans la légende.         */
+.syntax {
+  margin: 14px 0 18px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-m);
+  background: var(--bg-elev);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.syntax-head {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 9px 14px;
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--stroke);
+}
+.syntax-head .material-symbols-rounded { font-size: 17px; color: var(--accent); flex-shrink: 0; }
+.syntax-tag {
+  font-size: 10px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase;
+  color: #fff; background: var(--accent);
+  padding: 3px 8px; border-radius: 6px; flex-shrink: 0;
+}
+.syntax-title { font-size: 13.5px; font-weight: 650; color: var(--text); }
+.syntax-file {
+  margin-left: auto;
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px; color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+.syntax-pre {
+  margin: 0;
+  padding: 14px 18px;
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px; line-height: 1.6;
+  background: var(--code-bg); color: var(--code-text);
+  tab-size: 2;
+}
+.syntax-pre::-webkit-scrollbar { height: 8px; }
+.syntax-pre::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
+.syntax-legend {
+  list-style: none; margin: 0; padding: 8px 14px 12px;
+  border-top: 1px dashed var(--stroke);
+}
+.syntax-legend li {
+  display: flex; gap: 10px; align-items: baseline;
+  padding-top: 7px;
+  font-size: 13px; line-height: 1.5; color: var(--text-2);
+}
+.syntax-legend li code.inline {
+  flex-shrink: 0; max-width: 48%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.syntax-legend li > span { min-width: 0; }
+
 /* ---------- Tableaux de doc ---------- */
 .doc-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
 .doc-table th, .doc-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--stroke); }

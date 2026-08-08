@@ -10,7 +10,7 @@ global.window = {}; global.DEVDOCS = window.DEVDOCS = {};
 const dfiles = fs.readdirSync('/home/user/devdocs/js').filter((f) => /^data-.*\.js$/.test(f));
 dfiles.forEach((f) => require('/home/user/devdocs/js/' + f));
 const DB = global.DEVDOCS;
-const KNOWN = new Set(['h3', 'p', 'ul', 'ol', 'code', 'callout', 'table', 'demo', 'diagram']);
+const KNOWN = new Set(['h3', 'p', 'ul', 'ol', 'code', 'callout', 'table', 'demo', 'diagram', 'syntax']);
 let total = 0; const fails = []; const ids = new Map();
 Object.keys(DB).forEach((l) => DB[l].categories.forEach((c) => c.fiches.forEach((f) => {
   total++;
@@ -25,6 +25,12 @@ Object.keys(DB).forEach((l) => DB[l].categories.forEach((c) => c.fiches.forEach(
     if (b.t === 'table' && !((b.head || []).length && (b.rows || []).length)) fails.push(f.id + ' b' + i + ' : table incomplète');
     if (b.t === 'demo' && !b.html) fails.push(f.id + ' b' + i + ' : demo sans html');
     if (b.t === 'diagram' && (typeof b.svg !== 'string' || !b.svg.trim().startsWith('<svg'))) fails.push(f.id + ' b' + i + ' : diagram sans svg');
+    if (b.t === 'syntax') {
+      if (typeof b.code !== 'string' || !b.code.trim()) fails.push(f.id + ' b' + i + ' : syntax sans code');
+      (b.legend || []).forEach((row, j) => {
+        if (!Array.isArray(row) || row.length !== 2 || typeof row[0] !== 'string' || typeof row[1] !== 'string') fails.push(f.id + ' b' + i + ' : syntax legend[' + j + '] doit être [morceau, explication]');
+      });
+    }
     if (b.t === 'callout' && !['tip', 'warn', 'info'].includes(b.kind)) fails.push(f.id + ' b' + i + ' : callout kind inconnu ' + b.kind);
   });
 })));

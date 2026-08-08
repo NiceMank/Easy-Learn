@@ -52,6 +52,7 @@
         case 'table': return (b.head || []).concat((b.rows || []).flat()).join(' ');
         case 'code': return b.code || '';
         case 'diagram': return stripTags(b.title || '') + ' ' + stripTags(b.caption || '');   // titre + légende indexés, jamais le SVG
+        case 'syntax': return stripTags(b.title || '') + ' ' + (b.code || '') + ' ' + (b.legend || []).flat().join(' ');
         default: return '';
       }
     }).join(' ');
@@ -151,6 +152,25 @@
           '<div class="diagram-body" role="img" aria-label="' + High.esc(stripTags(b.title || 'Schéma')) + '">' + b.svg + '</div>' +
           (b.caption ? '<figcaption class="diagram-cap">' + icon('info') + '<span>' + md(b.caption) + '</span></figcaption>' : '') +
         '</figure>';
+      case 'syntax':
+        // Carte « SYNTAXE » : la forme canonique d'UNE notion, isolée de tout
+        // exemple, puis décortiquée morceau par morceau — legend est une
+        // liste de paires [morceau de code, explication]. Le morceau est
+        // ÉCHAPPÉ (affiché tel quel), l'explication passe par md().
+        {
+          const lg = (b.legend || []).map(function (row) {
+            return '<li><code class="inline">' + High.esc(row[0]) + '</code><span>' + md(row[1]) + '</span></li>';
+          }).join('');
+          return '<figure class="syntax reveal">' +
+            '<figcaption class="syntax-head">' + icon('data_object') +
+              '<span class="syntax-tag">Syntaxe</span>' +
+              (b.title ? '<span class="syntax-title">' + md(b.title) + '</span>' : '') +
+              (b.file ? '<code class="syntax-file">' + High.esc(b.file) + '</code>' : '') +
+            '</figcaption>' +
+            '<pre class="syntax-pre"><code>' + High.run(b.code, b.lang || 'php') + '</code></pre>' +
+            (lg ? '<ul class="syntax-legend">' + lg + '</ul>' : '') +
+          '</figure>';
+        }
       default: return '';
     }
   }
